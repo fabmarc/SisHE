@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>indra</groupId>
-	<artifactId>sislam</artifactId>
+	<artifactId>SisHE</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Java EE 6 webapp project</name>
@@ -177,15 +177,16 @@
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901.jdbc3</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- 
-		-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.23</version>
 		</dependency>
+		-->
 		
 		<dependency>
 			<groupId>org.hibernate</groupId>

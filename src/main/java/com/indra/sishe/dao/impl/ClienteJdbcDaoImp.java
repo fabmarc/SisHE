@@ -32,7 +32,7 @@ public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements C
 	@PostConstruct
 	private void init() {
 		setDataSource(dataSource);
-		insertCliente = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cliente").usingGeneratedKeyColumns("id");
+		insertCliente = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cliente").usingGeneratedKeyColumns("id_cliente");
 	}
 	
 	@Override

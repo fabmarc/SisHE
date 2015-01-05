@@ -3,20 +3,18 @@ package com.indra.sishe.service.impl;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.ClienteDAO;
 import com.indra.sishe.entity.Cliente;
 import com.indra.sishe.service.ClienteService;
+import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-@Interceptors(SpringBeanAutowiringInterceptor.class)
-public class ClienteServiceImp implements ClienteService {
+public class ClienteServiceImp extends StatelessServiceAb implements ClienteService {
 
 	private static final long serialVersionUID = 7812505232483080092L;
 
