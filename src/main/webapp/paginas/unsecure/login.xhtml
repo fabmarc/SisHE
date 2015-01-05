@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="menubar" />
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<ui:insert>
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+				<div style="top: 15px; left: 170px; position: relative; width: 250px;">
+					<h:outputLabel value="Login:" /><h:inputText value="#{loginController.username}" />
+					<h:outputLabel value="Senha:" /><h:inputSecret value="#{loginController.password}" />
+					<br />
+					<div style="position: relative; width: 220px;">
+						<h:commandButton style="width:100px; float:left;" action="#{loginController.login}" value="Login" />
+						<h:commandButton style="width:100px; float:right;" action="#{loginController.cancel}" immediate="true" update="mainForm" value="Cancel" />
+					</div>
+				</div>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+
+		<h:form id="mainForm">
+			<!-- 
+			<p:growl id="message" showDetail="true" />
+			-->
+			<p:breadCrumb>
+				<p:menuitem value="Home" action="/index.xhtml?faces-redirect=true" />
+				<p:menuitem value="Cliente" action="#{clienteMnt.irParaConsultar()}" />
+			</p:breadCrumb>
+			<br />
+			<div style="text-align: right; align: right; float: right; width: 100px;">
+				<p:commandLink value="Cadastrar" action="#{clienteMnt.irParaCadastrar()}" />
+			</div>
+			<br />
+			<ui:insert>
+				<p:messages id="messages"  showDetail="true" showSummary="false" />
+				<div style="width: 410px;">
+					<h:outputLabel value="Nome:" style="margin:left; align:left; width:50px;" />
+					<h:inputText value="#{clienteMnt.clienteFiltro.nomeCliente}" maxlength="40" style="height:15px; width:300px;" />
+					<h:commandButton style="float:right;" actionListener="#{clienteMnt.pesquisar}" value="Pesquisar" />
+				</div>
+
+				<p:dataTable style="top:10%;" paginator="true" rows="10" id="clientesDt" var="cliente" value="#{clienteMnt.listaClientes}" emptyMessage="Nenhum registro encontrado.">
+					<f:facet name="header">
+						Clientes
+					</f:facet>
+
+					<p:column headerText="Código" style="width:10%">
+						<h:outputText value="#{cliente.idCliente}" />
+					</p:column>
+					<p:column headerText="Nome">
+						<div>
+							<h:outputText value="#{cliente.nomeCliente}" />
+						</div>
+					</p:column>
+
+					<p:column headerText="Ações" style="width:10%">
+						<p:commandLink id="excluirLink" style="height:20px; width:20px;" onclick="confirmExclusao.show()" value="Excluir">
+							<f:setPropertyActionListener target="#{clienteMnt.clienteSelecionado}" value="#{cliente}" />
+						</p:commandLink>
+						/
+						<p:commandLink id="linkAlterar" value="Alterar" action="#{clienteMnt.irParaAlterar(cliente)}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão de Usuário" message="Deseja realmente excluir o cliente?" widgetVar="confirmExclusao">
+					<p:commandButton value="Sim" actionListener="#{clienteMnt.removerCliente}" oncomplete="confirmExclusao.hide()" update="mainForm:clientesDt messages" />
+					<p:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" />
+				</p:confirmDialog>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html" encoding="UTF-8">
+	<h:head>
+		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/bar_chart_22x22.png" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
+		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
+		
+<style>
+		
+.ui-inputfield {
+	width: 85px !important;
+	float: left !important;
+}
+
+.botao3d {
+	display: block;
+}
+
+.botao3d:hover {
+	position: relative;
+	top: 1px;
+	left: 1px;
+}
+
+.itemMenu:hover {
+	/*transform: rotateY(30deg);*/
+	transform: scale(1.015, 1.015);
+	/*transition: 0.1s;  	*/
+	transform-style: preserve-3d;
+	position: relative;
+}
+</style>
+
+		<ui:insert name="title">
+			<title>Treinamento JSF</title>
+		</ui:insert>
+	</h:head>
+
+	<h:body>
+
+		<div class="container">
+
+			<h2>SisLAM</h2>
+			<p>Este projeto utiliza as seguintes tecnologias: JSF 2.1, Primefaces 3.5, Facelets, EJB 3.1, CDI 1.0 e JPA 2.0</p>
+			
+			<ui:insert name="menubar">
+				<h:form id="logoutForm">
+				<a href="#{request.contextPath}/index.jsf">Home</a>  
+				<h:commandLink value="Logout" action="#{loginController.logout}" />
+				</h:form>
+			</ui:insert>			
+
+			<hr />
+
+			<ui:insert name="content">
+				<h:outputLabel value="[Conteúdo Default, esta região deve ser sobrescrita]" />
+			</ui:insert>
+
+		</div>
+		<!-- /container -->
+
+	</h:body>
+
+</f:view>
+</html>

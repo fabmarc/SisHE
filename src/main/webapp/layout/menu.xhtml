@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputScript library="js" name="menu.js" />
+</h:head>
+
+<h:form styleClass="span8">
+	<div id="menu-superior">
+		<div class="span12 pagination-centered">
+			<div class="btn-group">
+				<h:panelGroup>
+					<span class="dropdown">
+						<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown">
+							<span>Polo</span>
+						</button>
+						<ul class="multiselect-container dropdown-menu">
+							<li><h:link value="Consulta" outcome="/paginas/polo/manter-polo/consulta.xhtml" /></li>
+							<li><h:link value="Mantenedor" outcome="/paginas/polo/mantenedor/consulta.xhtml" /></li>
+							<li><h:link value="Atividade" outcome="/paginas/polo/atividade-polo/consulta.xhtml" /></li>
+
+							<h:panelGroup>
+								<li class="dropdown-submenu"><a href="#" data-toggle="dropdown">Monitoramento</a>
+									<ul class="dropdown-menu">
+										<li><h:link value="Registrar Informações" outcome="/paginas/polo/monitoramento/registrar-monitoramento/lista-monitoramento.xhtml" /></li>
+										<li><h:link value="Consultar" outcome="/paginas/polo/monitoramento/validar-monitoramento/consulta.xml" /></li>
+										<li><h:link value="Agendar" outcome="/paginas/polo/monitoramento/agendar-monitoramento/consulta.xhtml" /></li>
+									</ul></li>
+							</h:panelGroup>
+						</ul>
+					</span>
+				</h:panelGroup>
+
+				<h:panelGroup>
+					<span class="dropdown">
+						<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown">Geral</button>
+						<ul class="multiselect-container dropdown-menu">
+							<li><h:link value="Configuração de Parâmentros CGIE" outcome="/paginas/geral/conf-param-cgie/cadastro.xhtml" /></li>
+							<li><h:link value="Controle de Ofícios" outcome="/paginas/geral/oficio/consulta.xhtml" /></li>
+							<li><h:link value="Controle de Consultores" outcome="/layout/home.xhtml" /></li>
+						</ul>
+					</span>
+				</h:panelGroup>
+			</div>
+		</div>
+	</div>
+</h:form>
+</html>

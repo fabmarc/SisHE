@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<p:breadCrumb>
+				<p:menuitem value="Home" action="/index.xhtml?faces-redirect=true" />
+				<p:menuitem value="Cliente" action="#{clienteCad.irParaConsultar()}" />
+				<p:menuitem value="Alterar" action="#{clienteCad.irParaAlterar()}" />
+			</p:breadCrumb>
+			<br />
+			<ui:insert>
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+				<div style="top: 15px; left: 170px; position: relative; width: 250px;">
+					<h:outputLabel value="Código" />
+					<h:inputText disabled="true" value="#{clienteCad.clienteSelecionado.idCliente}" />
+					<h:outputLabel value="Nome:" />
+					<h:inputText value="#{clienteCad.clienteSelecionado.nomeCliente}" />
+					<br />
+					<div style="position: relative; width: 220px;">
+						<h:commandButton style="width:100px; float:left;" action="#{clienteCad.alterarCliente()}" value="Alterar" />
+						<h:commandButton style="float:right; width:100px;" action="#{clienteCad.cancelar()}" value="Cancelar" />
+					</div>
+				</div>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
