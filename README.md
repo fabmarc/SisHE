@@ -1,4 +1,4 @@
-SisLAM - Sistema de Registro de Lições Aprendidas e Melhorias
+SisHE - Sistema de Hora Extra
 ========================
 
 System requirements
