@@ -1,18 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html" encoding="UTF-8">
 	<h:head>
 		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/bar_chart_22x22.png" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
 		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
-		
-<style>
-		
-.ui-inputfield {
+		<style>
+/*.ui-inputfield {
 	width: 85px !important;
 	float: left !important;
-}
+}*/
 
 .botao3d {
 	display: block;
@@ -31,10 +29,11 @@
 	transform-style: preserve-3d;
 	position: relative;
 }
+
 </style>
 
 		<ui:insert name="title">
-			<title>SisHE - Sistema de Hora Extra</title>
+			<title>Treinamento JSF</title>
 		</ui:insert>
 	</h:head>
 
@@ -42,17 +41,82 @@
 
 		<div class="container">
 
-			<h2>SisHE</h2>
-			<p>Este projeto utiliza as seguintes tecnologias: JSF 2.1, Primefaces 3.5, EJB 3.1, CDI 1.0 e Spring JDBC 3.2.6</p>
-			
-			<ui:insert name="menubar">
-				<h:form id="logoutForm">
-				<a href="#{request.contextPath}/index.jsf">Home</a>  
-				<h:commandLink value="Logout" action="#{loginController.logout}" />
-				</h:form>
-			</ui:insert>			
+			<h2>SisLAM</h2>
+			<p>Este projeto utiliza as seguintes tecnologias: JSF 2.1, Primefaces 3.5, Facelets, EJB 3.1, CDI 1.0 e JPA 2.0</p>
+
 
 			<hr />
+
+			<ui:insert name="menu">
+				<h:form id="logoutForm">
+				<div style="float:left; position:absolute;">
+					<a href="#{request.contextPath}/index.jsf">Home</a>
+				</div>
+				<div style="float:right; position:relative;" >
+					<h:commandLink value="Logout" action="#{loginController.logout}" />
+				</div>
+					
+
+					<p:menubar style="top:20px;">
+						<p:submenu label="Solicitação">
+							<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+							<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+							<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" />
+						</p:submenu>
+
+						<p:submenu label="Projetos">
+							<p:submenu label="Sistema">
+								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Projetos">
+								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Equipe">
+								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+							</p:submenu>
+						</p:submenu>
+
+						<p:submenu label="Funcionário">
+							<p:submenu label="Usuário">
+								<p:menuitem value="Cadastrar" action="/paginas/usuario/cadastrarUsuario.xhtml"  icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" action="/paginas/usuario/consultarUsuario.xhtml" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Cargo">
+								<p:menuitem value="Cadastrar" action="/paginas/cargo/cadastrarCargo.xhtml" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" action="/paginas/cargo/consultarCargo.xhtml" icon="ui-icon-search" />
+							</p:submenu>
+						</p:submenu>
+
+						<p:submenu label="Sindicato">
+							<p:submenu label="Sindicato">
+								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+								<p:menuitem value="Definir Regra" url="#" icon="ui-icon ui-icon-note" />
+							</p:submenu>
+							<p:submenu label="Definições">
+								<p:submenu label="Regra">
+									<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+								</p:submenu>
+								<p:submenu label="Periodo">
+									<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+								</p:submenu>
+							</p:submenu>
+						</p:submenu>
+
+						<p:submenu label="Feriados">
+							<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+							<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+						</p:submenu>
+
+					</p:menubar>
+
+				</h:form>
+			</ui:insert>
 
 			<ui:insert name="content">
 				<h:outputLabel value="[Conteúdo Default, esta região deve ser sobrescrita]" />
@@ -60,6 +124,12 @@
 
 		</div>
 		<!-- /container -->
+		<!-- 
+		<p:dock position="bottom">
+			<p:menuitem value="Home" icon="/resources/demo/imagens/home.png" url="/index.jsf" />
+			<p:menuitem value="Usuário" icon="/resources/demo/imagens/user.png" url="#"/>
+		</p:dock>
+		 -->
 
 	</h:body>
 
