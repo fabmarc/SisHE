@@ -12,6 +12,26 @@
 	float: left !important;
 }*/
 
+.nomeSistema{
+	text-align: right;
+	position: relative;
+	float: right;
+	left: 630px;
+	width: 237px;
+	top: 20px;
+	font-family: 'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;
+}
+
+.teste{
+ 	 background-image: url(resources/images/logoIndra.jpg);
+	 background-position: center;
+	 /*background-attachment:fixed;*/
+	 height: 400px;
+	 background-size: 80%;
+	 opacity: 0.1;
+	 filter: alpha(opacity=10);/* IE8 e anteriores */
+}
+
 .botao3d {
 	display: block;
 }
@@ -40,13 +60,19 @@
 	<h:body>
 
 		<div class="container">
-
-			<h2>SisLAM</h2>
-			<p>Este projeto utiliza as seguintes tecnologias: JSF 2.1, Primefaces 3.5, Facelets, EJB 3.1, CDI 1.0 e JPA 2.0</p>
-
-
-			<hr />
-
+			<div id="cabecalho" style="width: 100px;">
+				<div style="position:absolute;">
+					<p:graphicImage url="/resources/images/ico-indra-cabecalho.png"/>
+				</div>
+				<div class="nomeSistema" style="">
+					<h2><font color="#231F20">Banco de Horas</font> </h2>
+				</div>		
+			
+			</div>
+			<div style="height:84px; position: relative;">					
+			</div>
+			<hr />		
+			<div id="corpo" style="top:0px; position:relative;">
 			<ui:insert name="menu">
 				<h:form id="logoutForm">
 				<div style="float:left; position:absolute;">
@@ -130,7 +156,7 @@
 			<p:menuitem value="Usuário" icon="/resources/demo/imagens/user.png" url="#"/>
 		</p:dock>
 		 -->
-
+		</div>
 	</h:body>
 
 </f:view>
