@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -61,6 +62,16 @@ public class ClienteServiceImp extends StatelessServiceAb implements ClienteServ
 	@Override
 	public List<Cliente> findByFilter(Cliente cliente) {
 		return clienteDao.findByFilter(cliente);
+	}
+
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
+		try {
+			List<Object> pks = new ArrayList<Object>(ids);
+			clienteDao.remove(pks);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cliente");
+		}
 	}
 
 }

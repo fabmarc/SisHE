@@ -18,5 +18,7 @@ public interface BaseDAO<T> {
 
 	public void remove(Object id) throws RegistroInexistenteException;
 
+	public void remove(List<Object> ids) throws RegistroInexistenteException;
+
 	EntityManager getEntityManager();
 }

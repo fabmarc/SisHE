@@ -17,8 +17,6 @@ public class ClienteController extends BaseController implements Serializable {
 
 	public Cliente clienteFiltro;
 	
-	public Cliente clienteSelecionado;
-	
 	protected Boolean searched;
 
 	

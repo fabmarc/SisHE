@@ -70,4 +70,14 @@ public interface BaseService<T> extends Serializable {
 	 */
 	void remove(Long id) throws ApplicationException;
 	
+	/**
+	 * Exclui a entidade do banco de dados
+	 * 
+	 * @param ids
+	 * 		Identificadores da entidade
+	 * 
+	 * @throws ApplicationException 
+	 */
+	void remove(List<Long> ids) throws ApplicationException;
+	
 }
