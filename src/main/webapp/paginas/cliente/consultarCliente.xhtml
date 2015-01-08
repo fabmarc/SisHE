@@ -3,7 +3,7 @@
 
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
 	<ui:define name="content">
-
+		<br />
 		<h:form id="mainForm">
 			<p:breadCrumb>
 				<p:menuitem value="Home" action="/index.xhtml?faces-redirect=true" />
@@ -18,7 +18,7 @@
 					<h:commandButton style="float:right;" actionListener="#{clienteMnt.pesquisar}" value="Pesquisar" />
 				</div>
 
-				<p:dataTable style="top:10%;" rowKey="#{cliente.idCliente}" selection="#{clienteMnt.clientesSelecionados}" paginator="true" rows="10" id="clientesDt" var="cliente" value="#{clienteMnt.listaClientes}" emptyMessage="Nenhum registro encontrado.">
+				<p:dataTable style="top:10%;" rowKey="#{cliente.idCliente}" selection="#{clienteMnt.clientesSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="clientesDt" var="cliente" value="#{clienteMnt.listaClientes}" emptyMessage="Nenhum registro encontrado.">
 					<f:facet name="header">
 						Clientes
 					</f:facet>

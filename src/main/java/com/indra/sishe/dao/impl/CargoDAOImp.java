@@ -3,7 +3,6 @@ package com.indra.sishe.dao.impl;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
@@ -24,7 +23,6 @@ import com.indra.sishe.entity.Cargo;
 public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDAO{
 
 	@Autowired
-	@Resource(mappedName="java:jboss/datasources/SisHE")
 	private DataSource dataSource;
 	
 	private SimpleJdbcInsert insertCargo;
@@ -119,5 +117,9 @@ public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDA
 		if (rows == 0) throw new RegistroInexistenteException();
 	}
 
+	@Override
+	public void remove(List<Object> ids) throws RegistroInexistenteException {
+		// TODO Auto-generated method stub
+	}
 
 }
