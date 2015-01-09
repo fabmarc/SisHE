@@ -8,13 +8,13 @@
 			<ui:insert>
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				<div style="top: 15px; left: 207px; position: relative; width: 230px">
-					<h:outputLabel value="Nome:" style="width:50px;" />
-					<h:inputText type="text" value="#{cargoCad.cargoSelecionado.nome}" maxlength="20" />
+					<p:outputLabel value="Nome:" style="width:50px;" />
+					<p:inputText type="text" value="#{cargoCad.cargoSelecionado.nome}" maxlength="20" />
 					<br />
 					<div style="position: relative; width: 220px;">
-						<h:commandButton style="width:100px; float:left;" action="#{cargoCad.cadastrarCargo()}" value="Cadastrar" rendered="#{cargoCad.modoCadastrar()}"/>
-						<h:commandButton style="width:100px; float:left;" action="#{cargoCad.alterarCargo()}" value="Alterar" rendered="#{!cargoCad.modoCadastrar()}"/>
-						<h:commandButton style="float:right; width:100px;" action="#{cargoCad.cancelar()}" value="Cancelar" />
+						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.cadastrarCargo()}" value="Cadastrar" rendered="#{cargoCad.modoCadastrar()}"/>
+						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.alterarCargo()}" value="Alterar" rendered="#{!cargoCad.modoCadastrar()}"/>
+						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{cargoCad.cancelar()}" value="Cancelar" />
 					</div>
 				</div>
 			</ui:insert>

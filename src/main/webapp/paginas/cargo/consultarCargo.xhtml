@@ -17,8 +17,8 @@
 				<p:messages id="messages"  showDetail="true" showSummary="false" />
 				<div style="width: 410px;">
 					<h:outputLabel value="Nome:" style="margin:left; align:left; width:50px;" />
-					<h:inputText value="#{cargoMnt.cargoFiltro.nome}" maxlength="40" style="height:15px; width:300px;" />
-					<h:commandButton style="float:right;" actionListener="#{cargoMnt.pesquisar}" value="Pesquisar" />
+					<p:inputText value="#{cargoMnt.cargoFiltro.nome}" maxlength="40" style="height:15px; width:300px;" />
+					<h:commandButton styleClass="botao3d" style="float:right;" actionListener="#{cargoMnt.pesquisar}" value="Pesquisar" />
 				</div>
 
 				<p:dataTable style="top:10%;" paginator="true" rows="10" id="cargoDt" var="cargo" value="#{cargoMnt.listaCargos}" emptyMessage="Nenhum registro encontrado.">

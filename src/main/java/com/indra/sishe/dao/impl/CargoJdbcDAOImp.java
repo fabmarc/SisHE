@@ -46,8 +46,17 @@ public class CargoJdbcDAOImp extends NamedParameterJdbcDaoSupport implements Car
 	@Override
 	public Cargo save(Cargo entity) throws RegistroDuplicadoException {
 		try{
+			/* Forma de fazer a inserção
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("nome", entity.getNome());
+			Number key = insertCargo.executeAndReturnKey(params);
+			entity.setId(key.longValue());	
+			*/
+			/* Forma de fazer a inserção, porém não retorna a chave (id)
+			int rows = getJdbcTemplate().update("INSERT INTO CARGO(NOME) VALUES (?) ", entity.getNome());
+			 */
 			Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
-			entity.setId(key.longValue());
+			entity.setId(key.longValue());			
 		}catch(DuplicateKeyException e){
 			throw new RegistroDuplicadoException();
 		}
