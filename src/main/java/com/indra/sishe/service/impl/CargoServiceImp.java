@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -74,6 +75,17 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}		
 	}
-	
+
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
+		try {
+			List<Object> pks = new ArrayList<Object>(ids);
+			cargoDao.remove(pks);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
+		}catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
+		}
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.indra.sishe.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -121,6 +122,21 @@ public class CargoJdbcDAOImp extends NamedParameterJdbcDaoSupport implements Car
 		}catch(DataIntegrityViolationException d){
 			throw new DeletarRegistroViolacaoFK();
 		}			
+	}
+
+	@Override
+	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
+		for (Object id : ids) {
+			Object[] param = new Object[] { id };
+			params.add(param);
+		}
+		try{
+			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM cargo WHERE id = ?", params);
+			for (int rows : affectedRows) if (rows == 0) throw new RegistroInexistenteException();
+		}catch(DataIntegrityViolationException d){
+			throw new DeletarRegistroViolacaoFK();
+		}
 	}
 
 

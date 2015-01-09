@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
+
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
@@ -19,6 +21,8 @@ public class CargoMntController extends CargoController{
 	private static final long serialVersionUID = 8119803534282941375L;
 	
 	private List<Cargo> listaCargos;
+	
+	private List<Cargo> cargosSelecionados;
 	
 	public CargoMntController(){
 	}
@@ -34,25 +38,39 @@ public class CargoMntController extends CargoController{
 		if (cargoFiltro == null) cargoFiltro = new Cargo();
 		
 		if (!searched) listaCargos = new ArrayList<Cargo>();
-		else pesquisar();	
+		else pesquisar();
+	}
+	
+	public void beforeRemoveCargos() {		
+		if (cargosSelecionados.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
+		}
+	}
+	
+	public String removerCargo() {
+		int size = cargosSelecionados.size();
+			ArrayList<Long> ids = new ArrayList<Long>(size);
+			for (Cargo cargo: cargosSelecionados) ids.add(cargo.getId());
+			try {
+				cargoService.remove(ids);
+				if(size>1){
+					messager.info(messageProvider.getMessage("msg.success.registros.excluidos"));
+				}else{
+					messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cargo", cargosSelecionados.get(0).getNome()));
+				}
+			} catch (ApplicationException e) {
+				messager.error(e.getMessage());
+			}		
+		pesquisar();
+		return irParaConsultar();
 	}
 	
 	public void pesquisar() {
 		listaCargos = cargoService.findByFilter(cargoFiltro);
 		Collections.sort(listaCargos);
 		searched = true;
-	}
-	
-	public String removerCargo() {
-		String nome = cargoSelecionado.getNome();
-		try {
-			cargoService.remove((Long) cargoSelecionado.getId());
-			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cargo", nome));
-		} catch (ApplicationException e) {
-			messager.error(e.getMessage());
-		} 
-		pesquisar();
-		return irParaConsultar();
 	}
 	
 	public String irParaAlterar(Cargo cargoSelecionado) {
@@ -74,6 +92,14 @@ public class CargoMntController extends CargoController{
 
 	public void setListaCargos(List<Cargo> listaCargos) {
 		this.listaCargos = listaCargos;
+	}
+
+	public List<Cargo> getCargosSelecionados() {
+		return cargosSelecionados;
+	}
+
+	public void setCargosSelecionados(List<Cargo> cargosSelecionados) {
+		this.cargosSelecionados = cargosSelecionados;
 	}
 	
 }
