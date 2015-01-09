@@ -33,17 +33,20 @@ public class CargoCadController extends CargoController {
 
 	public String cadastrarCargo() {
 		if (validarCargo(cargoSelecionado)) {
-			this.cargoSelecionado = cargoService.save(cargoSelecionado);
-			putFlashAttr("cargoFiltro", cargoFiltro);
-			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cargo"));
-			putFlashAttr("searched", searched);
-			return irParaConsultar();
+			try{
+				this.cargoSelecionado = cargoService.save(cargoSelecionado);
+				putFlashAttr("cargoFiltro", cargoFiltro);
+				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cargo"));
+				putFlashAttr("searched", searched);
+				return irParaConsultar();
+			}catch(ApplicationException e){
+				returnErrorMessage(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	public String alterarCargo() {
-
 		if (validarCargo(cargoSelecionado)) {
 			try {
 				cargoService.update(cargoSelecionado);
@@ -67,7 +70,7 @@ public class CargoCadController extends CargoController {
 
 
 	public boolean modoCadastrar(){
-		if(cargoSelecionado.getId() == null || "".equals(cargoSelecionado.getId())){
+		if(cargoSelecionado == null || cargoSelecionado.getId() == null || "".equals(cargoSelecionado.getId())){
 			return true;
 		}else{
 			return false;

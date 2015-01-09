@@ -7,8 +7,6 @@ import com.indra.sishe.entity.Cargo;
 
 public interface CargoDAO extends BaseDAO<Cargo>{
 	
-	public List<Cargo> findByFilter(Cargo cargoFiltro);
-	
-	public Cargo pesquinarNome(String nome);
+	public List<Cargo> findByFilter(Cargo cargoFiltro);	
 	
 }

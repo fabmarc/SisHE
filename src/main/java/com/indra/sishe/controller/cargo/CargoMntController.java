@@ -9,8 +9,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
-import com.indra.sishe.entity.Cargo;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.Cargo;
 
 @ViewScoped
 @ManagedBean(name = "cargoMnt")
@@ -50,7 +50,7 @@ public class CargoMntController extends CargoController{
 			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cargo", nome));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
-		}//verificar possibilidade de adicionar um catch para erro de SQL, caso o registro esteja em uso.
+		} 
 		pesquisar();
 		return irParaConsultar();
 	}

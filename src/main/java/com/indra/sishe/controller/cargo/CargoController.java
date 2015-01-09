@@ -23,13 +23,14 @@ public class CargoController extends BaseController implements Serializable{
 	
 	
 	public String irParaConsultar() {
-		return "/paginas/cargo/consultarCargo.xhtml";
+		return "/paginas/cargo/consultarCargo.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
+		putFlashAttr("cargoSelecionado", null);//limpar cache;
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("cargoFiltro", this.cargoFiltro);
-		return "/paginas/cargo/cadastrarCargo.xhtml";
+		return "/paginas/cargo/cadastrarCargo.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar(Cargo cargoSelecionado) {
@@ -40,7 +41,7 @@ public class CargoController extends BaseController implements Serializable{
 	}
 	
 	public String irParaAlterar(){
-		return "/paginas/cargo/cadastrarCargo.xhtml";
+		return "/paginas/cargo/cadastrarCargo.xhtml?faces-redirect=true";
 	}
 	
 	public boolean validarCargo(Cargo cargoSelecionado) {
@@ -53,12 +54,7 @@ public class CargoController extends BaseController implements Serializable{
 			// o nome ultrapassa 40 caracteres.
 			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "40"));
 		} else {
-			Cargo temp = cargoService.pesquisarNome(cargoSelecionado.getNome());
-				if(temp == null || temp.getId().equals(cargoSelecionado.getId())){
-					return true;
-				}else{
-					messager.error(messageProvider.getMessage("msg.error.registro.existente"));					
-				}
+			return true;
 		}
 		return false;
 	}

@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -16,12 +18,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.CargoDAO;
 import com.indra.sishe.entity.Cargo;
 
 @Repository
-public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDAO{
+public class CargoJdbcDAOImp extends NamedParameterJdbcDaoSupport implements CargoDAO{
 
 	@Autowired
 	@Resource(mappedName="java:jboss/datasources/SisHE")
@@ -29,7 +33,7 @@ public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDA
 	
 	private SimpleJdbcInsert insertCargo;
 	
-	public CargoDAOImp(){
+	public CargoJdbcDAOImp(){
 		System.out.println("Criou CargoDaoImpl");
 	}
 	
@@ -40,9 +44,13 @@ public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDA
 	}
 	
 	@Override
-	public Cargo save(Cargo entity) {
-		Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
-		entity.setId(key.longValue());
+	public Cargo save(Cargo entity) throws RegistroDuplicadoException {
+		try{
+			Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
+			entity.setId(key.longValue());
+		}catch(DuplicateKeyException e){
+			throw new RegistroDuplicadoException();
+		}
 		return entity;
 	}
 
@@ -56,7 +64,7 @@ public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDA
 
 	@Override
 	public List<Cargo> findAll() {
-		return getJdbcTemplate().query("SELECT id AS idCargo, nome AS nomeCargo"
+		return getJdbcTemplate().query("SELECT id, nome"
 				+ "FROM cargo", new BeanPropertyRowMapper<Cargo>(Cargo.class));
 	}
 
@@ -97,26 +105,13 @@ public class CargoDAOImp extends NamedParameterJdbcDaoSupport implements CargoDA
 	}
 
 	@Override
-	public Cargo pesquinarNome(String nome) {
-		StringBuilder sql = new StringBuilder();
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		
-		sql.append("SELECT id AS idCargo, nome AS nomeCargo ");
-		sql.append("FROM cargo WHERE nome like :nomeCargo");
-		params.addValue("nomeCargo", nome);
-		
-		List<Cargo> listaTemp = getNamedParameterJdbcTemplate().query(sql.toString(), params, new BeanPropertyRowMapper<Cargo>(Cargo.class));
-		if(!listaTemp.isEmpty()){
-			return listaTemp.get(0);
-		}else{
-			return null;
-		}
-	}
-
-	@Override
-	public void remove(Object id) throws RegistroInexistenteException {
-		int rows = getJdbcTemplate().update("DELETE FROM cargo WHERE id = ?", id);
-		if (rows == 0) throw new RegistroInexistenteException();
+	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+		try{
+			int rows = getJdbcTemplate().update("DELETE FROM cargo WHERE id = ?", id);
+			if (rows == 0) throw new RegistroInexistenteException();
+		}catch(DataIntegrityViolationException d){
+			throw new DeletarRegistroViolacaoFK();
+		}			
 	}
 
 

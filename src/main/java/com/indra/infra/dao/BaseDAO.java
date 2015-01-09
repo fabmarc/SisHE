@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 
 public interface BaseDAO<T> {
 
-	public T save(T entity);
+	public T save(T entity) throws RegistroDuplicadoException;
 
 	public T update(T entity) throws RegistroInexistenteException;
 	
@@ -16,7 +18,7 @@ public interface BaseDAO<T> {
 
 	public T findById(Object id) throws RegistroInexistenteException;
 
-	public void remove(Object id) throws RegistroInexistenteException;
+	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK;
 
 	EntityManager getEntityManager();
 }

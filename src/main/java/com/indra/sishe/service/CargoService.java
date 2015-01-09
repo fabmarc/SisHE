@@ -11,7 +11,5 @@ import com.indra.sishe.entity.Cargo;
 public interface CargoService extends BaseService<Cargo>{
 
 	public List<Cargo> findByFilter (Cargo cargoFiltro);
-	
-	public Cargo pesquisarNome(String nome);
-	
+		
 }

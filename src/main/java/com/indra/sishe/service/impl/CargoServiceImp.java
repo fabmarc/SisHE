@@ -6,12 +6,14 @@ import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
+import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.CargoDAO;
 import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.service.CargoService;
 import com.indra.sishe.service.StatelessServiceAb;
-import com.indra.infra.service.exception.ApplicationException;
 
 @Stateless
 public class CargoServiceImp extends StatelessServiceAb implements CargoService{
@@ -26,8 +28,12 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 	}
 	
 	@Override
-	public Cargo save(Cargo entity) {
-		return cargoDao.save(entity);		
+	public Cargo save(Cargo entity) throws ApplicationException {
+		try {
+			return cargoDao.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Cargo");
+		}		
 	}
 
 	@Override
@@ -36,8 +42,7 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 			return cargoDao.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
-		}
-		
+		}		
 	}
 
 	@Override
@@ -60,18 +65,14 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 	}
 
 	@Override
-	public Cargo pesquisarNome(String nome) {
-		return cargoDao.pesquinarNome(nome);
-	}
-
-	@Override
 	public void remove(Long id) throws ApplicationException {
 		try {
 			cargoDao.remove(id);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
-		}
-		
+		}catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
+		}		
 	}
 	
 
