@@ -35,6 +35,10 @@ public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements C
 		insertCliente = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cliente").usingGeneratedKeyColumns("id_cliente");
 	}
 	
+	public ClienteJdbcDaoImp(){
+		System.out.println("Criou ClienteDaoImpl");
+	}
+	
 	@Override
 	public List<Cliente> findByFilter(Cliente cliente) {
 		

@@ -39,7 +39,7 @@ public class LoginController {
 			e.printStackTrace();
 			return null;
 		}
-		return "/index.xhtml";
+		return "/index.xhtml?faces-redirect=true";
 	}
 
 	public String cancel() {
