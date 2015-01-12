@@ -71,4 +71,10 @@ public class UsuarioServiceImp extends StatelessServiceAb implements UsuarioServ
 		}
 	}
 
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

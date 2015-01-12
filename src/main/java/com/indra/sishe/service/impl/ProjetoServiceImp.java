@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.ProjetoDAO;
@@ -21,7 +22,12 @@ public class ProjetoServiceImp implements ProjetoService {
 
 	@Override
 	public Projeto save(Projeto entity) {
-		projetoDao.save(entity);
+		try {
+			projetoDao.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -49,6 +55,12 @@ public class ProjetoServiceImp implements ProjetoService {
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
 		
 	}

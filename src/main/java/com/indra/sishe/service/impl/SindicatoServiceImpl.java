@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.SindicatoDAO;
@@ -25,7 +26,13 @@ public class SindicatoServiceImpl implements SindicatoService {
 	@Override
 	public Sindicato save(Sindicato entity) {
 		// TODO Auto-generated method stub
-		return sindicatoDao.save(entity);
+		try {
+			return sindicatoDao.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -78,6 +85,12 @@ public class SindicatoServiceImpl implements SindicatoService {
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
 		
 	}

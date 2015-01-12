@@ -86,6 +86,9 @@ public class ClienteServiceImp extends StatelessServiceAb implements ClienteServ
 			clienteDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cliente");
+		} catch (DeletarRegistroViolacaoFK e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
