@@ -3,7 +3,6 @@ package com.indra.infra.service;
 import java.io.Serializable;
 import java.util.List;
 
-import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.service.exception.ApplicationException;
 
 /**
@@ -24,9 +23,8 @@ public interface BaseService<T> extends Serializable {
 	 * 
 	 * @return
 	 * 		A entidade que foi persistida no banco
-	 * @throws ApplicationException 
 	 */
-	T save(T entity) throws ApplicationException;
+	T save(T entity);
 	
 	/**
 	 * Atualiza a entidade no banco de dados
@@ -69,7 +67,6 @@ public interface BaseService<T> extends Serializable {
 	 * 		Identificador da entidade
 	 * 
 	 * @throws ApplicationException 
-	 * @throws DeletarRegistroViolacaoFK 
 	 */
 	void remove(Long id) throws ApplicationException;
 	

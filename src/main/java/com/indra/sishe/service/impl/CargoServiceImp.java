@@ -78,6 +78,7 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
+<<<<<<< HEAD
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			cargoDao.remove(pks);
@@ -86,6 +87,9 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 		}catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}
+=======
+		// TODO Auto-generated method stub
+>>>>>>> branch 'master' of https://github.com/fabmarc/SisHE.git
 	}
 
 }
