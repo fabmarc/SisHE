@@ -5,8 +5,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
-import com.indra.sishe.entity.Cargo;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.Cargo;
 
 @ViewScoped
 @ManagedBean(name = "cargoCad")

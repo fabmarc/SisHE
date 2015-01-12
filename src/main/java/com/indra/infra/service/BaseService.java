@@ -24,7 +24,7 @@ public interface BaseService<T> extends Serializable {
 	 * @return
 	 * 		A entidade que foi persistida no banco
 	 */
-	T save(T entity);
+	T save(T entity) throws ApplicationException;
 	
 	/**
 	 * Atualiza a entidade no banco de dados

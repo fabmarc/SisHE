@@ -147,5 +147,11 @@ List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), para
 		return lista;//getNamedParameterJdbcTemplate().query(sql.toString(), params, new BeanPropertyRowMapper<Usuario>(Usuario.class));
 	
 	}
+	
+	@Override
+	public void remove(List<Object> ids) throws RegistroInexistenteException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
