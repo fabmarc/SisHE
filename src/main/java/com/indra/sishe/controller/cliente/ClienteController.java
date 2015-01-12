@@ -17,8 +17,6 @@ public class ClienteController extends BaseController implements Serializable {
 
 	public Cliente clienteFiltro;
 	
-	public Cliente clienteSelecionado;
-	
 	protected Boolean searched;
 
 	
@@ -43,6 +41,7 @@ public class ClienteController extends BaseController implements Serializable {
 
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
+		putFlashAttr("clienteSelecionado", null);		
 		putFlashAttr("clienteFiltro", clienteFiltro);
 		return "/paginas/cliente/cadastrarCliente.xhtml?faces-redirect=true";
 	}

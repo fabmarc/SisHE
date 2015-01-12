@@ -53,6 +53,11 @@ public abstract class BaseDAOImpl<T> extends AbstractBaseDAOImpl implements Base
 		getEntityManager().remove(entity);
 	}
 
+	@Override
+	public void remove(List<Object> ids) throws RegistroInexistenteException {
+		for (Object id : ids) remove(id);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<T> findAll() {
 		return getEntityManager().createQuery(

@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
+
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cliente;
@@ -19,7 +21,9 @@ public class ClienteMntController extends ClienteController {
 	private static final long serialVersionUID = -6166298037225326023L;
 
 	private List<Cliente> listaClientes;
-
+	
+	private List<Cliente> clientesSelecionados;
+	
 	public ClienteMntController() {
 	}
 
@@ -37,12 +41,24 @@ public class ClienteMntController extends ClienteController {
 		if (!searched) listaClientes = new ArrayList<Cliente>();
 		else pesquisar();
 	}
+	
+	public void beforeRemoveCliente() {
+		
+		if (clientesSelecionados.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
+		}
+	}
 
 	public String removerCliente() {
-		String nome = clienteSelecionado.getNomeCliente();
+
+		int size = clientesSelecionados.size();
+		ArrayList<Long> ids = new ArrayList<Long>(size);
+		for (Cliente cliente : clientesSelecionados) ids.add(cliente.getIdCliente());
 		try {
-			clienteService.remove(clienteSelecionado.getIdCliente());
-			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cliente", nome));
+			clienteService.remove(ids);
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cliente"));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
 		}
@@ -85,12 +101,12 @@ public class ClienteMntController extends ClienteController {
 		this.clienteFiltro = clienteFiltro;
 	}
 
-	public Cliente getClienteSelecionado() {
-		return clienteSelecionado;
+	public List<Cliente> getClientesSelecionados() {
+		return clientesSelecionados;
 	}
 
-	public void setClienteSelecionado(Cliente clienteSelecionado) {
-		this.clienteSelecionado = clienteSelecionado;
+	public void setClientesSelecionados(List<Cliente> clientesSelecionados) {
+		this.clientesSelecionados = clientesSelecionados;
 	}
 
 }

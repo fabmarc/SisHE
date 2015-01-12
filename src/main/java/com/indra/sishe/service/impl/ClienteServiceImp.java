@@ -1,11 +1,14 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.ClienteDAO;
@@ -27,7 +30,13 @@ public class ClienteServiceImp extends StatelessServiceAb implements ClienteServ
 	
 	@Override
 	public Cliente save(Cliente entity) {
-		return clienteDao.save(entity);
+		try {
+			return clienteDao.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return entity;
 	}
 
 	@Override
@@ -59,12 +68,25 @@ public class ClienteServiceImp extends StatelessServiceAb implements ClienteServ
 			clienteDao.remove(id);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cliente");
+		} catch (DeletarRegistroViolacaoFK e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public List<Cliente> findByFilter(Cliente cliente) {
 		return clienteDao.findByFilter(cliente);
+	}
+
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
+		try {
+			List<Object> pks = new ArrayList<Object>(ids);
+			clienteDao.remove(pks);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cliente");
+		}
 	}
 
 }

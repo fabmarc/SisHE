@@ -14,6 +14,8 @@ public class ClienteCadController extends ClienteController {
 
 	private static final long serialVersionUID = -7787160113773729958L;
 
+	public Cliente clienteSelecionado;
+	
 	public ClienteCadController() {
 	}
 
