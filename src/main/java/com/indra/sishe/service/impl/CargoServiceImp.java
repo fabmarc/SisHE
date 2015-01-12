@@ -88,4 +88,9 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 		}
 	}
 
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
+		// TODO Auto-generated method stub
+	}
+
 }
