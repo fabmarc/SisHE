@@ -33,16 +33,18 @@ public class ClienteCadController extends ClienteController {
 	}
 
 	public String cadastrarCliente() {
-		try{
-			if (validarCliente(clienteSelecionado)) {
+		
+		if (validarCliente(clienteSelecionado)) {
+			try {
 				clienteService.save(clienteSelecionado);
-				putFlashAttr("clienteFiltro", clienteFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cliente"));			
-				putFlashAttr("searched", searched);			
-				return irParaConsultar();
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}catch(ApplicationException e){
-			returnErrorMessage(e.getMessage());
+			putFlashAttr("clienteFiltro", clienteFiltro);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cliente"));			
+			putFlashAttr("searched", searched);			
+			return irParaConsultar();
 		}
 		return null;
 	}

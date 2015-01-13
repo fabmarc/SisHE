@@ -5,8 +5,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
-import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
+import com.indra.infra.service.exception.ApplicationException;
 
 @ViewScoped
 @ManagedBean(name = "cargoCad")
@@ -15,6 +15,7 @@ public class CargoCadController extends CargoController {
 	private static final long serialVersionUID = -2996122688507056006L;
 
 	public CargoCadController() {
+		System.out.println("Controler CargoCad criado.");
 	}
 
 	@PostConstruct
@@ -33,13 +34,13 @@ public class CargoCadController extends CargoController {
 
 	public String cadastrarCargo() {
 		if (validarCargo(cargoSelecionado)) {
-			try{
+			try {
 				this.cargoSelecionado = cargoService.save(cargoSelecionado);
 				putFlashAttr("cargoFiltro", cargoFiltro);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cargo"));
 				putFlashAttr("searched", searched);
 				return irParaConsultar();
-			}catch(ApplicationException e){
+			} catch (ApplicationException e) {
 				returnErrorMessage(e.getMessage());
 			}
 		}
@@ -65,16 +66,24 @@ public class CargoCadController extends CargoController {
 	public String cancelar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("cargoFiltro", cargoFiltro);
+		putFlashAttr("cargoSelecionado", null);
 		return irParaConsultar();
 	}
 
-
-	public boolean modoCadastrar(){
-		if(cargoSelecionado == null || cargoSelecionado.getId() == null || "".equals(cargoSelecionado.getId())){
+	public boolean modoCadastrar() {
+		if (cargoSelecionado == null || cargoSelecionado.getId() == null || "".equals(cargoSelecionado.getId())) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
+	public String confirmar(){
+		if(modoCadastrar()){
+			return cadastrarCargo();
+		}else{
+			return alterarCargo();
+		}
+	}
+	
 }

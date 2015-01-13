@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -73,8 +74,14 @@ public class UsuarioServiceImp extends StatelessServiceAb implements UsuarioServ
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-		// TODO Auto-generated method stub
-		
+		try {
+			List<Object> pks = new ArrayList<Object>(ids);
+			usuarioDao.remove(pks);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
+		}catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
+		}
 	}
 
 }

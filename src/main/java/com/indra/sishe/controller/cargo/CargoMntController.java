@@ -16,63 +16,65 @@ import com.indra.sishe.entity.Cargo;
 
 @ViewScoped
 @ManagedBean(name = "cargoMnt")
-public class CargoMntController extends CargoController{
+public class CargoMntController extends CargoController {
 
 	private static final long serialVersionUID = 8119803534282941375L;
-	
+
 	private List<Cargo> listaCargos;
-	
+
 	private List<Cargo> cargosSelecionados;
-	
-	public CargoMntController(){
+
+	public CargoMntController() {
+		System.out.println("Controler CargoMnt criado.");
 	}
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null) searched = false;
-		
+		if (searched == null)
+			searched = false;
+
 		cargoFiltro = (Cargo) getFlashAttr("cargoFiltro");
-		if (cargoFiltro == null) cargoFiltro = new Cargo();
-		
-		if (!searched) listaCargos = new ArrayList<Cargo>();
-		else pesquisar();
+		if (cargoFiltro == null)
+			cargoFiltro = new Cargo();
+
+		if (!searched)
+			listaCargos = new ArrayList<Cargo>();
+		else
+			pesquisar();
 	}
-	
-	public void beforeRemoveCargos() {		
+
+	public void beforeRemoveCargos() {
 		if (cargosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
 			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
-	
+
 	public String removerCargo() {
 		int size = cargosSelecionados.size();
-			ArrayList<Long> ids = new ArrayList<Long>(size);
-			for (Cargo cargo: cargosSelecionados) ids.add(cargo.getId());
-			try {
-				cargoService.remove(ids);
-				if(size>1){
-					messager.info(messageProvider.getMessage("msg.success.registros.excluidos"));
-				}else{
-					messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cargo", cargosSelecionados.get(0).getNome()));
-				}
-			} catch (ApplicationException e) {
-				messager.error(e.getMessage());
-			}		
+		ArrayList<Long> ids = new ArrayList<Long>(size);
+		for (Cargo cargo : cargosSelecionados)
+			ids.add(cargo.getId());
+		try {
+			cargoService.remove(ids);
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cargo"));
+		} catch (ApplicationException e) {
+			messager.error(e.getMessage());
+		}
 		pesquisar();
 		return irParaConsultar();
 	}
-	
+
 	public void pesquisar() {
 		listaCargos = cargoService.findByFilter(cargoFiltro);
 		Collections.sort(listaCargos);
 		searched = true;
 	}
-	
+
 	public String irParaAlterar(Cargo cargoSelecionado) {
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("cargoFiltro", this.cargoFiltro);
@@ -101,5 +103,5 @@ public class CargoMntController extends CargoController{
 	public void setCargosSelecionados(List<Cargo> cargosSelecionados) {
 		this.cargosSelecionados = cargosSelecionados;
 	}
-	
+
 }

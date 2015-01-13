@@ -22,7 +22,7 @@ public class ClienteMntController extends ClienteController {
 
 	private List<Cliente> listaClientes;
 	
-	private List<Cliente> clientesSelecionados;
+	private List<Cliente> clientesSelecionados = new ArrayList<Cliente>();
 	
 	public ClienteMntController() {
 	}

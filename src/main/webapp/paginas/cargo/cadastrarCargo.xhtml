@@ -12,8 +12,7 @@
 					<p:inputText type="text" value="#{cargoCad.cargoSelecionado.nome}" maxlength="20" />
 					<br />
 					<div style="position: relative; width: 220px;">
-						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.cadastrarCargo()}" value="Cadastrar" rendered="#{cargoCad.modoCadastrar()}"/>
-						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.alterarCargo()}" value="Alterar" rendered="#{!cargoCad.modoCadastrar()}"/>
+						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.confirmar()}" value="Confirmar" />
 						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{cargoCad.cancelar()}" value="Cancelar" />
 					</div>
 				</div>
