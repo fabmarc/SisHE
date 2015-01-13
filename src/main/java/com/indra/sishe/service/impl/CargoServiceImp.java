@@ -78,7 +78,6 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			cargoDao.remove(pks);
@@ -87,8 +86,6 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 		}catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}
-
-	
 	}
 
 }

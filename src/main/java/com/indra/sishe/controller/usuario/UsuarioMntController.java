@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
+
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Usuario;
@@ -19,6 +21,8 @@ public class UsuarioMntController extends UsuarioController {
 	private static final long serialVersionUID = 4228136065932205095L;
 	
 	private List<Usuario> listaUsuarios;
+	
+	private List<Usuario> usuariosSelecionados;
 
 	public UsuarioMntController() {
 	}
@@ -37,6 +41,14 @@ public class UsuarioMntController extends UsuarioController {
 		else pesquisar();	
 	}
 	
+	public void beforeRemoveUsuarios() {		
+		if (usuariosSelecionados.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
+		}
+	}
+	
 	public void pesquisar() {
 		listaUsuarios = usuarioService.findByFilter(usuarioFiltro);
 		Collections.sort(listaUsuarios);
@@ -44,13 +56,15 @@ public class UsuarioMntController extends UsuarioController {
 	}
 	
 	public String removerUsuario() {
-		String nome = usuarioSelecionado.getNome();
-		try {
-			usuarioService.remove(usuarioSelecionado.getId());
-			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Usuário", nome));
-		} catch (ApplicationException e) {
-			messager.error(e.getMessage());
-		}
+		int size = usuariosSelecionados.size();
+			ArrayList<Long> ids = new ArrayList<Long>(size);
+			for (Usuario usuario: usuariosSelecionados) ids.add(usuario.getId());
+			try {
+				usuarioService.remove(ids);
+				messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Usuário"));				
+			} catch (ApplicationException e) {
+				messager.error(e.getMessage());
+			}		
 		pesquisar();
 		return irParaConsultar();
 	}
@@ -75,4 +89,12 @@ public class UsuarioMntController extends UsuarioController {
 	public void setListaUsuarios(List<Usuario> listaUsuarios) {
 		this.listaUsuarios = listaUsuarios;
 	}
+
+	public List<Usuario> getUsuariosSelecionados() {
+		return usuariosSelecionados;
+	}
+
+	public void setUsuariosSelecionados(List<Usuario> usuariosSelecionados) {
+		this.usuariosSelecionados = usuariosSelecionados;
+	}	
 }

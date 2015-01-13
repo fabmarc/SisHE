@@ -10,10 +10,8 @@ import javax.inject.Inject;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
-import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.CargoService;
-import com.indra.sishe.service.SindicatoService;
 
 
 
@@ -26,8 +24,8 @@ public class UsuarioCadController extends UsuarioController {
 	@Inject
 	protected transient CargoService cargoService;
 	
-	@Inject
-	protected transient SindicatoService sindicatoService;
+	/*@Inject
+	protected transient SindicatoService sindicatoService;*/
 	
 	public UsuarioCadController(){		
 	}
@@ -96,8 +94,8 @@ public class UsuarioCadController extends UsuarioController {
 		return cargoService.findAll();
 	}
 	
-	public List<Sindicato> obterSindicatos(){		
+	/*public List<Sindicato> obterSindicatos(){		
 		return sindicatoService.findAll();
-	}
+	}*/
 	
 }
