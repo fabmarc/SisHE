@@ -39,7 +39,7 @@ public class LoginController {
 			e.printStackTrace();
 			return null;
 		}
-		return "/index.xhtml";
+		return "/index.xhtml?faces-redirect=true";
 	}
 
 	public String cancel() {
@@ -48,7 +48,7 @@ public class LoginController {
 
 	public String logout() {
 		SecurityContextHolder.clearContext();
-		return "/paginas/unsecure/login.jsf";
+		return "/paginas/unsecure/login.jsf?faces-redirect=true";
 	}
 
 	public AuthenticationManager getAuthenticationManager() {
