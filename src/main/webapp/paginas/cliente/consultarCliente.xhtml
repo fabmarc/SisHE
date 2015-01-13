@@ -3,19 +3,12 @@
 
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
 	<ui:define name="content">
-
+		<br />
 		<h:form id="mainForm">
-			<!-- 
-			<p:growl id="message" showDetail="true" />
-			-->
 			<p:breadCrumb>
 				<p:menuitem value="Home" action="/index.xhtml?faces-redirect=true" />
 				<p:menuitem value="Cliente" action="#{clienteMnt.irParaConsultar()}" />
 			</p:breadCrumb>
-			<br />
-			<div style="text-align: right; align: right; float: right; width: 100px;">
-				<p:commandLink value="Cadastrar" action="#{clienteMnt.irParaCadastrar()}" />
-			</div>
 			<br />
 			<ui:insert>
 				<p:messages id="messages"  showDetail="true" showSummary="false" />
@@ -25,12 +18,13 @@
 					<h:commandButton style="float:right;" actionListener="#{clienteMnt.pesquisar}" value="Pesquisar" />
 				</div>
 
-				<p:dataTable style="top:10%;" paginator="true" rows="10" id="clientesDt" var="cliente" value="#{clienteMnt.listaClientes}" emptyMessage="Nenhum registro encontrado.">
+				<p:dataTable style="top:10%;" rowKey="#{cliente.idCliente}" selection="#{clienteMnt.clientesSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="clientesDt" var="cliente" value="#{clienteMnt.listaClientes}" emptyMessage="Nenhum registro encontrado.">
 					<f:facet name="header">
 						Clientes
 					</f:facet>
-
-					<p:column headerText="Código" style="width:10%">
+					<p:column style="width:5px; text-align:center" selectionMode="multiple">
+					</p:column>
+					<p:column headerText="Código" style="width:10%; text-align: center">
 						<h:outputText value="#{cliente.idCliente}" />
 					</p:column>
 					<p:column headerText="Nome">
@@ -38,19 +32,25 @@
 							<h:outputText value="#{cliente.nomeCliente}" />
 						</div>
 					</p:column>
-
-					<p:column headerText="Ações" style="width:10%">
-						<p:commandLink id="excluirLink" style="height:20px; width:20px;" onclick="confirmExclusao.show()" value="Excluir">
-							<f:setPropertyActionListener target="#{clienteMnt.clienteSelecionado}" value="#{cliente}" />
-						</p:commandLink>
-						/
+					<p:column headerText="Ação" style="width:10%">
 						<p:commandLink id="linkAlterar" value="Alterar" action="#{clienteMnt.irParaAlterar(cliente)}" />
 					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: right; width: 100%">
+							<p:commandLink value="Cadastrar" action="#{clienteMnt.irParaCadastrar()}" />
+							/ 
+							<p:commandLink value="Excluir" actionListener="#{clienteMnt.beforeRemoveCliente}" />
+						</div>
+					</f:facet>
 				</p:dataTable>
 
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão de Usuário" message="Deseja realmente excluir o cliente?" widgetVar="confirmExclusao">
-					<p:commandButton value="Sim" actionListener="#{clienteMnt.removerCliente}" oncomplete="confirmExclusao.hide()" update="mainForm:clientesDt messages" />
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+					<p:commandButton value="Sim" actionListener="#{clienteMnt.removerCliente}" onclick="confirmExclusao.hide()" update="mainForm:clientesDt messages" />
 					<p:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" />
+				</p:confirmDialog>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
+					<p:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" />
 				</p:confirmDialog>
 			</ui:insert>
 		</h:form>

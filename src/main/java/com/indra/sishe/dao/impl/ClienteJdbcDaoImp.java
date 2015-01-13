@@ -1,5 +1,6 @@
 package com.indra.sishe.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -90,6 +91,18 @@ public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements C
 	public void remove(Object id) throws RegistroInexistenteException {
 		int rows = getJdbcTemplate().update("DELETE FROM cliente WHERE id_cliente = ?", id);
 		if (rows == 0) throw new RegistroInexistenteException();
+	}
+	
+	@Override
+	public void remove(List<Object> ids) throws RegistroInexistenteException {
+		
+		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
+		for (Object id : ids) {
+			Object[] param = new Object[] { id };
+			params.add(param);
+		}
+		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM cliente WHERE id_cliente = ?", params);
+		for (int rows : affectedRows) if (rows == 0) throw new RegistroInexistenteException();
 	}
 
 	@Override

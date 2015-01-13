@@ -14,6 +14,8 @@ public class ClienteCadController extends ClienteController {
 
 	private static final long serialVersionUID = -7787160113773729958L;
 
+	public Cliente clienteSelecionado;
+	
 	public ClienteCadController() {
 	}
 
@@ -33,7 +35,12 @@ public class ClienteCadController extends ClienteController {
 	public String cadastrarCliente() {
 		
 		if (validarCliente(clienteSelecionado)) {
-			clienteService.save(clienteSelecionado);
+			try {
+				clienteService.save(clienteSelecionado);
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			putFlashAttr("clienteFiltro", clienteFiltro);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cliente"));			
 			putFlashAttr("searched", searched);			
