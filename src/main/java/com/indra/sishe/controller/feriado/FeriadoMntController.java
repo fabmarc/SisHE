@@ -11,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
+import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Feriado;
 
 @ViewScoped
@@ -82,15 +83,14 @@ public void beforeRemoveFeriado() {
 	public String irParaAlterar(Feriado feriado){
 		putFlashAttr("searched", searched);
 		putFlashAttr("feriadoFiltro", feriadoFiltro);
-//		try {
-			//feriadoSelecionado = new Feriado();
-			//feriadoSelecionado = feriadoService.findById(feriado.getId());
+		try {
+			feriado = feriadoService.findById(feriado.getId());
 			putFlashAttr("feriadoSelecionado", feriado);
 			return irParaAlterar();
-//		} catch (ApplicationException e) {
-//			returnErrorMessage(e.getMessage());
-//			return irParaConsultar();
-//		}
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaConsultar();
+		}
 	}
 	
 	public List<Feriado> getListaFeriados() {

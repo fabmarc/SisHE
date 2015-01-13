@@ -7,22 +7,21 @@
 		<h:form id="mainForm">
 
 			<p:messages id="messages" showDetail="true" showSummary="false" />
-			<div style="top: 37px; position: relative; width: 226px; height: 50px;">
+			<div style="top: 17px; position: relative; width: 226px; height: 50px;">
 				<div style="position: relative;">
 					<p:outputLabel value="Nome:" />
-					<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; left: 45px; top: -27px;" />
+					<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; top: -7px;" />
 				</div>
-				<div style="position: relative; left: 221px; top: -64px; width: 263px; height: 41px;">
+				<div style="position: relative; left: 181px; top: -64px; width: 263px; height: 41px;">
 					<p:outputLabel value="Data:" for="calendarioBusca" />
-					<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; left:35px;top: -28px;" />
+					<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -7px;" />
 				</div>
-				<div style="position: relative; top: -106px; position: relative; left: 489px;">
+				<div style="position: relative; top: -86px; position: relative; left: 413px;">
 					<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
 				</div>
 			</div>
-			<br />
-			<br />
 			<ui:insert>
+				<div style="position: relative;top: 38px;">
 				<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado.">
 					<f:facet name="header">Feriados</f:facet>
 
@@ -49,24 +48,15 @@
 					<p:column headerText="Ações" style="width:5%">
 						<p:commandLink id="linkAlterar" title="Editar Feriado" styleClass="ui-icon ui-icon-pencil" action="#{feriadoMnt.irParaAlterar(feriado)}" style="width:20px; left:13px; position: relative; float:center;" />
 					</p:column>
-					<p:column headerText="Ações" style="width:5%">
-						<p:rowToggler />
-					</p:column>
 					<f:facet name="footer">
 						<div style="text-align: right; width: 100%">
 							<p:commandLink value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" />
 							/
 							<p:commandLink value="Excluir" actionListener="#{feriadoMnt.beforeRemoveFeriado()}" />
 						</div>
-						<p:rowExpansion>
-							<p:panelGrid>
-								<h:outputText value="Id:" />
-								<h:outputText value="#{feriado.id}" />
-							</p:panelGrid>
-						</p:rowExpansion>
 					</f:facet>
 				</p:dataTable>
-
+				</div>
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 					<h:commandButton value="Sim" actionListener="#{feriadoMnt.remove()}" onclick="confirmExclusao.hide()" update="mainForm:feriadoDt messages" styleClass="botao3d" />
 					<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" />

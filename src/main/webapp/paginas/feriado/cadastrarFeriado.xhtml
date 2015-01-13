@@ -6,16 +6,16 @@
 		<h:form id="mainForm">
 			<ui:insert>
 				<p:messages id="messages" showDetail="true" showSummary="false" />
-				<div style="top: 15px;left: 268px; position: relative; width: 250px">
+				<div style="top: 15px; left: 268px; position: relative; width: 250px">
 
-				<div>
-					<p:outputLabel value="Nome:" id="nome" />
-					<p:inputText type="text" value="#{feriadoCad.feriadoSelecionado.nome}" maxlength="30" />
-				</div>
-				<div>
-					<p:outputLabel value="Data:" style="width:50px;" />
-					<p:calendar type="text" value="#{feriadoCad.feriadoSelecionado.data}" required="true" requiredMessage="O campo Data é obrigatório." />
-				</div>
+					<div>
+						<p:outputLabel value="Nome:" id="nome" />
+						<p:inputText type="text" value="#{feriadoCad.feriadoSelecionado.nome}" maxlength="30" />
+					</div>
+					<div>
+						<p:outputLabel value="Data:" style="width:50px;" />
+						<p:calendar type="text" value="#{feriadoCad.feriadoSelecionado.data}" required="true" requiredMessage="O campo Data é obrigatório." />
+					</div>
 
 					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 						<p:outputLabel for="tipo" value="Tipo:" />
@@ -24,29 +24,30 @@
 							<f:selectItem itemLabel="Móvel" itemValue="M" />
 						</p:selectOneRadio>
 					</h:panelGrid>
-					
-					<div style="position: relative;top: -13px">
-					<p:outputLabel for="selecionarEstado" value="Estado:" />
-					<p:selectOneMenu id="selecionarEstado" value="#{feriadoCad.feriadoSelecionado.estado}" converter="omnifaces.SelectItemsConverter">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{feriadoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-						<f:ajax event="change" render="mainForm:selecionarCidade"/>
-					</p:selectOneMenu>
-					<p:tooltip id="toolTipEstado" for="selecionarEstado" value="Selecione somente se o feriado for estadual." />
+
+					<div style="position: relative; top: -13px">
+						<p:outputLabel for="selecionarEstado" value="Estado:" />
+						<p:selectOneMenu id="selecionarEstado" value="#{feriadoCad.feriadoSelecionado.estado}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{feriadoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+							<f:ajax event="change" render="mainForm:selecionarCidade" />
+						</p:selectOneMenu>
+						<p:tooltip id="toolTipEstado" for="selecionarEstado" value="Selecione somente se o feriado for estadual." />
 					</div>
 					<div>
-					<p:outputLabel for="selecionarCidade" value="Cidade:" />
-					<p:selectOneMenu id="selecionarCidade" value="#{feriadoCad.feriadoSelecionado.cidade}" converter="omnifaces.SelectItemsConverter">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{feriadoCad.obterCidades()}" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
-					</p:selectOneMenu>
-					<p:tooltip id="toolTipCidade" for="selecionarCidade" value="Selecione somente se o feriado for municipal." />
+						<p:outputLabel for="selecionarCidade" value="Cidade:" />
+						<p:selectOneMenu id="selecionarCidade" value="#{feriadoCad.feriadoSelecionado.cidade}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{feriadoCad.obterCidades()}" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
+						</p:selectOneMenu>
+						<p:tooltip id="toolTipCidade" for="selecionarCidade" value="Selecione somente se o feriado for municipal." />
 					</div>
-					
-					<br /><br />
-					<div style="position: relative; width: 220px;top: -21px;">
-						<h:commandButton style="width:100px; float:left;" action="#{feriadoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d"/>
-						<h:commandButton style="float:right; width:100px;" action="#{feriadoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d"/>
+
+					<br />
+					<br />
+					<div style="position: relative; width: 220px; top: -21px;">
+						<h:commandButton style="width:100px; float:left;" action="#{feriadoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
+						<h:commandButton style="float:right; width:100px;" action="#{feriadoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />
 					</div>
 				</div>
 			</ui:insert>

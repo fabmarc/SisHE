@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.FeriadoDAO;
@@ -15,24 +16,21 @@ import com.indra.sishe.entity.Feriado;
 import com.indra.sishe.service.FeriadoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
-
 @Stateless
-public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoService{
+public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoService {
 
 	private static final long serialVersionUID = -8168464255161850517L;
-	
+
 	@Autowired
 	private FeriadoDAO feriadoDAO;
-	
+
 	@Override
-	public Feriado save(Feriado entity) {
-//		if(entity.getEstado() == null || entity.getEstado().getId() == 0){
-//			entity.getEstado().setId(null);
-//		}
-//		if(entity.getCidade() == null || entity.getCidade().getId() == 0){
-//			entity.getCidade().setId(null);
-//		}
-		return feriadoDAO.save(entity);
+	public Feriado save(Feriado entity) throws ApplicationException {
+		try {
+			return feriadoDAO.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Cargo");
+		}
 	}
 
 	@Override
@@ -63,12 +61,14 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 		try {
 			feriadoDAO.remove(id);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente", "Feriado");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
+		} catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}
 	}
-	
+
 	@Override
-	public void remove(List<Long> ids) throws ApplicationException{
+	public void remove(List<Long> ids) throws ApplicationException {
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			feriadoDAO.remove(pks);
@@ -77,7 +77,7 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 		} catch (DeletarRegistroViolacaoFK e) {
 			throw new ApplicationException(e, "msg.error.registro.", "Feriado");
 		}
-		
+
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import com.indra.sishe.entity.Estado;
 public class CidadeJdbcDaoImp extends NamedParameterJdbcDaoSupport implements CidadeDAO{
 
 	@Autowired
-	@Resource(mappedName="java:jboss/datasources/SisHEDS")
+	@Resource(mappedName="java:jboss/datasources/SisHE")
 	private DataSource dataSource;
 	
 	@PostConstruct

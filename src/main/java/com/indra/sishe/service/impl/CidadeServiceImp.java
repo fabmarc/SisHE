@@ -14,7 +14,7 @@ import com.indra.sishe.service.CidadeService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class CidadeServiceImp extends StatelessServiceAb implements CidadeService{
+public class CidadeServiceImp extends StatelessServiceAb implements CidadeService {
 
 	private static final long serialVersionUID = -2846409558284556285L;
 	@Autowired
@@ -47,18 +47,22 @@ public class CidadeServiceImp extends StatelessServiceAb implements CidadeServic
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public List<Cidade> findByEstado(Estado estado) {
-		return cidadeDAO.findByEstado(estado);
+		if (estado != null) {
+			return cidadeDAO.findByEstado(estado);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

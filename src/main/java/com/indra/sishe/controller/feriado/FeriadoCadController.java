@@ -14,22 +14,21 @@ import com.indra.sishe.entity.Feriado;
 
 @ViewScoped
 @ManagedBean(name = "feriadoCad")
-public class FeriadoCadController extends FeriadoController{
+public class FeriadoCadController extends FeriadoController {
 
 	private static final long serialVersionUID = 3068532582581639566L;
 
 	private List<Estado> listaEstado;
-	
+
 	public Feriado feriadoSelecionado;
-	
-	
+
 	public FeriadoCadController() {
 	}
-	
+
 	@PostConstruct
 	private void init() {
 		MessageProvider.setInstance(messageProvider);
-		
+
 		searched = (Boolean) getFlashAttr("searched");
 		feriadoSelecionado = (Feriado) getFlashAttr("feriadoSelecionado");
 		if (feriadoSelecionado == null) {
@@ -38,29 +37,33 @@ public class FeriadoCadController extends FeriadoController{
 		setListaEstado(obterEstados());
 		feriadoFiltro = (Feriado) getFlashAttr("feriadoFiltro");
 	}
-	
+
 	public String cadastrarFeriado() {
-		if (validarFeriado(feriadoSelecionado)){
-		feriadoService.save(feriadoSelecionado);
-		putFlashAttr("feriadoFiltro", feriadoFiltro);
-		returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Feriado"));
-		putFlashAttr("searched", searched);
-		return irParaConsultar();
+		if (validarFeriado(feriadoSelecionado)) {
+			try {
+				feriadoService.save(feriadoSelecionado);
+				putFlashAttr("feriadoFiltro", feriadoFiltro);
+				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Feriado"));
+				putFlashAttr("searched", searched);
+				return irParaConsultar();
+			} catch (ApplicationException e) {
+				returnErrorMessage(e.getMessage());
+			}
 		}
 		return null;
 	}
-	
+
 	public String confirmar() {
-		if (feriadoSelecionado.getId() == null || "".equals(feriadoSelecionado.getId().toString()) ) {
+		if (feriadoSelecionado.getId() == null || "".equals(feriadoSelecionado.getId().toString())) {
 			cadastrarFeriado();
-		}else{
+		} else {
 			alterarCliente();
-		} 
+		}
 		return irParaConsultar();
 	}
-	
-	public String alterarCliente(){
-		if (validarFeriado(feriadoSelecionado)){
+
+	public String alterarCliente() {
+		if (validarFeriado(feriadoSelecionado)) {
 			try {
 				feriadoService.update(feriadoSelecionado);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Feriado"));
@@ -69,26 +72,26 @@ public class FeriadoCadController extends FeriadoController{
 				return irParaConsultar();
 			} catch (ApplicationException e) {
 				returnErrorMessage(e.getMessage());
-				//return irParaAlterar(feriadoSelecionado.getId());
+				return irParaAlterar(feriadoSelecionado);
 			}
 		}
-		return null;		
+		return null;
 	}
-	
+
 	public String cancelar() {
-		putFlashAttr("searched", searched);			
-		putFlashAttr("clienteFiltro", feriadoFiltro);			
+		putFlashAttr("searched", searched);
+		putFlashAttr("clienteFiltro", feriadoFiltro);
 		return "/paginas/feriado/consultarFeriado.xhtml?faces-redirect=true";
 	}
-	
-	public List<Estado> obterEstados(){
+
+	public List<Estado> obterEstados() {
 		return estadoService.findAll();
 	}
 
-	public List<Cidade> obterCidades(){
+	public List<Cidade> obterCidades() {
 		return cidadeService.findByEstado(feriadoSelecionado.getEstado());
 	}
-	
+
 	public boolean modoCadastrar() {
 		if (feriadoSelecionado.equals(new Feriado())) {
 			return true;
@@ -104,7 +107,7 @@ public class FeriadoCadController extends FeriadoController{
 	public void setFeriadoSelecionado(Feriado feriadoSelecionado) {
 		this.feriadoSelecionado = feriadoSelecionado;
 	}
-	
+
 	public boolean wasSearched() {
 		return searched;
 	}
@@ -112,7 +115,7 @@ public class FeriadoCadController extends FeriadoController{
 	public void setPesquisar(boolean pesquisar) {
 		this.searched = pesquisar;
 	}
-	
+
 	public List<Estado> getListaEstado() {
 		return listaEstado;
 	}
@@ -120,5 +123,5 @@ public class FeriadoCadController extends FeriadoController{
 	public void setListaEstado(List<Estado> listaEstado) {
 		this.listaEstado = listaEstado;
 	}
-	
+
 }

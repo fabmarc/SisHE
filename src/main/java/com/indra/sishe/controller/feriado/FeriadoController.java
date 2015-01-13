@@ -43,18 +43,25 @@ public class FeriadoController extends BaseController implements Serializable {
 	}
 
 	public String irParaConsultar() {
-		return "/paginas/feriado/consultarFeriado.xhtml";
+		return "/paginas/feriado/consultarFeriado.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar() {
-		return "/paginas/feriado/cadastrarFeriado.xhtml";
+		return "/paginas/feriado/cadastrarFeriado.xhtml?faces-redirect=true";
 	}
-
+	
+	public String irParaAlterar(Feriado feriadoSelecionado) {
+		putFlashAttr("searched", searched);
+		putFlashAttr("feriadoFiltro", feriadoFiltro);
+		putFlashAttr("feriadoSelecionado", feriadoSelecionado);
+		return "/paginas/feriado/cadastrarFeriado.xhtml?faces-redirect=true";
+	}
+	
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("feriadoFiltro", feriadoFiltro);
 		putFlashAttr("feriadoSelecionado", null);
-		return "/paginas/feriado/cadastrarFeriado.xhtml";
+		return "/paginas/feriado/cadastrarFeriado.xhtml?faces-redirect=true";
 	}
 
 	public Feriado getFeriadoFiltro() {

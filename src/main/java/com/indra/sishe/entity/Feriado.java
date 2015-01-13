@@ -47,13 +47,6 @@ public class Feriado implements Serializable, Comparable<Feriado>{
 	}
 
 	public String getAbrangencia() {
-//		if((estado.getNome() == null || "".equals(estado.getNome())) && (cidade.getNome() == null || "".equals(cidade.getNome())) ){
-//			abrangencia = "Nacional";
-//		}else if((estado.getNome() != null || !"".equals(estado.getNome())) && (cidade.getNome() == null || "".equals(cidade.getNome())) ){
-//			abrangencia = estado.getNome();
-//		}else{
-//			abrangencia = (cidade.getNome()+" ("+cidade.getEstado().getSigla()+")");
-//		}
 		return abrangencia;
 	}
 
