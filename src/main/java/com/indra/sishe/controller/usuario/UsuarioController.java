@@ -17,8 +17,6 @@ public abstract class UsuarioController extends BaseController implements Serial
 
 	protected Usuario usuarioFiltro;
 
-	protected Usuario usuarioSelecionado;
-
 	protected Boolean searched;
 
 	public String irParaConsultar() {
@@ -26,7 +24,7 @@ public abstract class UsuarioController extends BaseController implements Serial
 	}
 
 	public String irParaCadastrar() {
-		putFlashAttr("usuarioSelecionado", null);//limpar cache;
+		putFlashAttr("usuarioSelecionado", null);
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
 		return "/paginas/usuario/cadastrarUsuario.xhtml";
@@ -44,18 +42,13 @@ public abstract class UsuarioController extends BaseController implements Serial
 	}
 
 	public boolean validarUsuario(Usuario usuarioSelecionado) {
-
 		if (usuarioSelecionado.getNome().isEmpty()) {
-			// nome não foi preenchido.
 			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Nome"));
-
 		} else if (usuarioSelecionado.getNome().length() > 40) {
-			// o nome ultrapassa 40 caracteres.
 			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "40"));
 		} else {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -65,14 +58,6 @@ public abstract class UsuarioController extends BaseController implements Serial
 
 	public void setUsuarioFiltro(Usuario usuarioFiltro) {
 		this.usuarioFiltro = usuarioFiltro;
-	}
-
-	public Usuario getUsuarioSelecionado() {
-		return usuarioSelecionado;
-	}
-
-	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
-		this.usuarioSelecionado = usuarioSelecionado;
 	}
 
 	public Boolean wasSearched() {

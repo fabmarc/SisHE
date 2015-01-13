@@ -17,17 +17,17 @@ import com.indra.sishe.service.ClienteService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class ClienteServiceImp extends StatelessServiceAb implements ClienteService {
+public class ClienteServiceImpl extends StatelessServiceAb implements ClienteService {
 
 	private static final long serialVersionUID = 7812505232483080092L;
 
 	@Autowired
 	private ClienteDAO clienteDao;
 
-	public ClienteServiceImp(){
+	public ClienteServiceImpl() {
 		System.out.println("Criou ClienteServiceImpl");
 	}
-	
+
 	@Override
 	public Cliente save(Cliente entity) {
 		try {

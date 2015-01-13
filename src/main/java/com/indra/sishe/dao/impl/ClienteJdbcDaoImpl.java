@@ -22,12 +22,12 @@ import com.indra.sishe.dao.ClienteDAO;
 import com.indra.sishe.entity.Cliente;
 
 @Repository
-public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements ClienteDAO {
-	
+public class ClienteJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements ClienteDAO {
+
 	@Autowired
-	@Resource(mappedName="java:jboss/datasources/SislamDS") 
+	@Resource(mappedName = "java:jboss/datasources/SislamDS")
 	private DataSource dataSource;
-	
+
 	private SimpleJdbcInsert insertCliente;
 
 	@PostConstruct
@@ -35,20 +35,20 @@ public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements C
 		setDataSource(dataSource);
 		insertCliente = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cliente").usingGeneratedKeyColumns("id_cliente");
 	}
-	
-	public ClienteJdbcDaoImp(){
+
+	public ClienteJdbcDaoImpl() {
 		System.out.println("Criou ClienteDaoImpl");
 	}
-	
+
 	@Override
 	public List<Cliente> findByFilter(Cliente cliente) {
-		
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		
+
 		sql.append("SELECT id_cliente AS idCliente, nome_cliente AS nomeCliente ");
 		sql.append("FROM cliente WHERE 1 = 1");
-		
+
 		if (cliente != null && cliente.getIdCliente() != null) {
 			sql.append("AND id_cliente = :idCliente");
 			params.addValue("idCliente", cliente.getIdCliente());
@@ -69,23 +69,20 @@ public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements C
 
 	@Override
 	public Cliente update(Cliente entity) throws RegistroInexistenteException {
-		int rows = getJdbcTemplate().update("UPDATE cliente SET nome_cliente = ? "
-				+ "WHERE id_cliente = ?", entity.getNomeCliente(), entity.getIdCliente());
+		int rows = getJdbcTemplate().update("UPDATE cliente SET nome_cliente = ? " + "WHERE id_cliente = ?", entity.getNomeCliente(), entity.getIdCliente());
 		if (rows == 0) throw new RegistroInexistenteException();
 		return entity;
 	}
 
 	@Override
 	public List<Cliente> findAll() {
-		return getJdbcTemplate().query("SELECT id_cliente AS idCliente, nome_cliente AS nomeCliente "
-				+ "FROM cliente", new BeanPropertyRowMapper<Cliente>(Cliente.class));
+		return getJdbcTemplate().query("SELECT id_cliente AS idCliente, nome_cliente AS nomeCliente " + "FROM cliente", new BeanPropertyRowMapper<Cliente>(Cliente.class));
 	}
 
 	@Override
 	public Cliente findById(Object id) throws RegistroInexistenteException {
 		try {
-			return getJdbcTemplate().queryForObject("SELECT id_cliente AS idCliente, nome_cliente AS nomeCliente "
-					+ "FROM cliente WHERE id_cliente = ?", new Object[] { id }, new BeanPropertyRowMapper<Cliente>(Cliente.class));
+			return getJdbcTemplate().queryForObject("SELECT id_cliente AS idCliente, nome_cliente AS nomeCliente " + "FROM cliente WHERE id_cliente = ?", new Object[] { id }, new BeanPropertyRowMapper<Cliente>(Cliente.class));
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
 		}
@@ -96,17 +93,18 @@ public class ClienteJdbcDaoImp extends NamedParameterJdbcDaoSupport implements C
 		int rows = getJdbcTemplate().update("DELETE FROM cliente WHERE id_cliente = ?", id);
 		if (rows == 0) throw new RegistroInexistenteException();
 	}
-	
+
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException {
-		
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
 			params.add(param);
 		}
 		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM cliente WHERE id_cliente = ?", params);
-		for (int rows : affectedRows) if (rows == 0) throw new RegistroInexistenteException();
+		for (int rows : affectedRows)
+			if (rows == 0) throw new RegistroInexistenteException();
 	}
 
 	@Override

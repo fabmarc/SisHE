@@ -17,24 +17,24 @@ import com.indra.sishe.service.CargoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class CargoServiceImp extends StatelessServiceAb implements CargoService{
+public class CargoServiceImpl extends StatelessServiceAb implements CargoService {
 
 	private static final long serialVersionUID = 6547321167422397681L;
 
 	@Autowired
 	private CargoDAO cargoDao;
-	
-	public CargoServiceImp(){
+
+	public CargoServiceImpl() {
 		System.out.println("Criou o CargoServiceImpl");
 	}
-	
+
 	@Override
 	public Cargo save(Cargo entity) throws ApplicationException {
 		try {
 			return cargoDao.save(entity);
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Cargo");
-		}		
+		}
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 			return cargoDao.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
-		}		
+		}
 	}
 
 	@Override
@@ -71,9 +71,9 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 			cargoDao.remove(id);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
-		}catch (DeletarRegistroViolacaoFK d) {
+		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
-		}		
+		}
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class CargoServiceImp extends StatelessServiceAb implements CargoService{
 			cargoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
-		}catch (DeletarRegistroViolacaoFK d) {
+		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}
 	}

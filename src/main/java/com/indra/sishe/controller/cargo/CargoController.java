@@ -17,8 +17,6 @@ public abstract class CargoController extends BaseController implements Serializ
 
 	public Cargo cargoFiltro;
 
-	public Cargo cargoSelecionado;
-
 	protected Boolean searched;
 
 	public String irParaConsultar() {
@@ -60,14 +58,6 @@ public abstract class CargoController extends BaseController implements Serializ
 
 	public void setCargoFiltro(Cargo cargoFiltro) {
 		this.cargoFiltro = cargoFiltro;
-	}
-
-	public Cargo getCargoSelecionado() {
-		return cargoSelecionado;
-	}
-
-	public void setCargoSelecionado(Cargo cargoSelecionado) {
-		this.cargoSelecionado = cargoSelecionado;
 	}
 
 	public boolean wasSearched() {

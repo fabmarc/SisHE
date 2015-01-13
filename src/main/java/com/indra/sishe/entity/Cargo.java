@@ -11,20 +11,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cargo")
-public class Cargo implements Serializable, Comparable<Cargo>{
+public class Cargo implements Serializable, Comparable<Cargo> {
 
 	private static final long serialVersionUID = -4975465653456184465L;
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
-	
-	@Column(name="nome", nullable = false)
+
+	@Column(name = "nome", nullable = false)
 	private String nome;
-	
-	public Cargo(){
+
+	public Cargo() {
 	}
 
 	public Long getId() {
@@ -72,12 +71,11 @@ public class Cargo implements Serializable, Comparable<Cargo>{
 		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
-	}	
-	
+	}
+
 	@Override
 	public int compareTo(Cargo o) {
-		int valor = nome.toLowerCase().compareTo(
-				o.nome.toLowerCase());
+		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
 		if (valor != 0) {
 			return valor;
 		} else {

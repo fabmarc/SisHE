@@ -15,60 +15,61 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Usuario;
 
 @ViewScoped
-@ManagedBean(name="usuarioMnt")
+@ManagedBean(name = "usuarioMnt")
 public class UsuarioMntController extends UsuarioController {
 
 	private static final long serialVersionUID = 4228136065932205095L;
-	
+
 	private List<Usuario> listaUsuarios;
-	
+
 	private List<Usuario> usuariosSelecionados;
 
 	public UsuarioMntController() {
 	}
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
-		
+
 		usuarioFiltro = (Usuario) getFlashAttr("usuarioFiltro");
 		if (usuarioFiltro == null) usuarioFiltro = new Usuario();
-		
+
 		if (!searched) listaUsuarios = new ArrayList<Usuario>();
-		else pesquisar();	
+		else pesquisar();
 	}
-	
-	public void beforeRemoveUsuarios() {		
+
+	public void beforeRemoveUsuarios() {
 		if (usuariosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
 			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
-	
+
 	public void pesquisar() {
 		listaUsuarios = usuarioService.findByFilter(usuarioFiltro);
 		Collections.sort(listaUsuarios);
 		searched = true;
 	}
-	
+
 	public String removerUsuario() {
 		int size = usuariosSelecionados.size();
-			ArrayList<Long> ids = new ArrayList<Long>(size);
-			for (Usuario usuario: usuariosSelecionados) ids.add(usuario.getId());
-			try {
-				usuarioService.remove(ids);
-				messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Usuário"));				
-			} catch (ApplicationException e) {
-				messager.error(e.getMessage());
-			}		
+		ArrayList<Long> ids = new ArrayList<Long>(size);
+		for (Usuario usuario : usuariosSelecionados)
+			ids.add(usuario.getId());
+		try {
+			usuarioService.remove(ids);
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Usuário"));
+		} catch (ApplicationException e) {
+			messager.error(e.getMessage());
+		}
 		pesquisar();
 		return irParaConsultar();
 	}
-	
+
 	public String irParaAlterar(Usuario usuarioSelecionado) {
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
@@ -96,5 +97,5 @@ public class UsuarioMntController extends UsuarioController {
 
 	public void setUsuariosSelecionados(List<Usuario> usuariosSelecionados) {
 		this.usuariosSelecionados = usuariosSelecionados;
-	}	
+	}
 }

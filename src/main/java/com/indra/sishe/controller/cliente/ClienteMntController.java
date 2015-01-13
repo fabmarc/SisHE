@@ -21,29 +21,28 @@ public class ClienteMntController extends ClienteController {
 	private static final long serialVersionUID = -6166298037225326023L;
 
 	private List<Cliente> listaClientes;
-	
+
 	private List<Cliente> clientesSelecionados = new ArrayList<Cliente>();
-	
+
 	public ClienteMntController() {
 	}
 
 	@PostConstruct
 	private void init() {
-		
+
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
-		
+
 		clienteFiltro = (Cliente) getFlashAttr("clienteFiltro");
 		if (clienteFiltro == null) clienteFiltro = new Cliente();
-		
+
 		if (!searched) listaClientes = new ArrayList<Cliente>();
 		else pesquisar();
 	}
-	
+
 	public void beforeRemoveCliente() {
-		
 		if (clientesSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -52,7 +51,6 @@ public class ClienteMntController extends ClienteController {
 	}
 
 	public String removerCliente() {
-
 		int size = clientesSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		for (Cliente cliente : clientesSelecionados) ids.add(cliente.getIdCliente());
@@ -92,7 +90,7 @@ public class ClienteMntController extends ClienteController {
 	public void setListaClientes(List<Cliente> listaClientes) {
 		this.listaClientes = listaClientes;
 	}
-	
+
 	public Cliente getClienteFiltro() {
 		return clienteFiltro;
 	}

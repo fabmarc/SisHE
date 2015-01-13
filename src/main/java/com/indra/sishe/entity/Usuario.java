@@ -29,7 +29,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	@OneToOne
 	@JoinColumn(name = "id_sindicato", insertable = true, updatable = true, nullable = true, unique = true)
 	private Sindicato sindicato;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_cidade", insertable = true, updatable = true, nullable = true, unique = true)
 	private Cidade cidade;
@@ -45,104 +45,84 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
 	@Column(name = "matricula", nullable = false)
 	private Integer matricula;
-	
+
 	@Column(name = "email", nullable = false)
 	private String email;
 
-	
-	public Usuario(){		
+	public Usuario() {
 	}
-
 
 	public Long getId() {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public Cargo getCargo() {
 		return cargo;
 	}
 
-
 	public void setCargo(Cargo cargo) {
 		this.cargo = cargo;
 	}
-
 
 	public Sindicato getSindicato() {
 		return sindicato;
 	}
 
-
 	public void setSindicato(Sindicato sindicato) {
 		this.sindicato = sindicato;
 	}
-
 
 	public Cidade getCidade() {
 		return cidade;
 	}
 
-
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
-
 
 	public String getNome() {
 		return nome;
 	}
 
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 	public String getLogin() {
 		return login;
 	}
 
-
 	public void setLogin(String login) {
 		this.login = login;
 	}
-
 
 	public String getSenha() {
 		return senha;
 	}
 
-
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
 
 	public Integer getMatricula() {
 		return matricula;
 	}
 
-
 	public void setMatricula(Integer matricula) {
 		this.matricula = matricula;
 	}
-
 
 	public String getEmail() {
 		return email;
 	}
 
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -155,7 +135,6 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -194,11 +173,9 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 		return true;
 	}
 
-
 	@Override
 	public int compareTo(Usuario o) {
-		int valor = nome.toLowerCase().compareTo(
-				o.nome.toLowerCase());
+		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
 		if (valor != 0) {
 			return valor;
 		} else {

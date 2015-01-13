@@ -17,11 +17,11 @@ import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioService;
 
 @Stateless
-public class UsuarioServiceImp extends StatelessServiceAb implements UsuarioService {
+public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioService {
 
 	private static final long serialVersionUID = 3763809097797645890L;
 
-	@Autowired 
+	@Autowired
 	private UsuarioDAO usuarioDao;
 
 	@Override
@@ -30,7 +30,7 @@ public class UsuarioServiceImp extends StatelessServiceAb implements UsuarioServ
 			return usuarioDao.save(entity);
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Usuário");
-		}	
+		}
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class UsuarioServiceImp extends StatelessServiceAb implements UsuarioServ
 			usuarioDao.remove(id);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Usuário");
-		}catch (DeletarRegistroViolacaoFK d) {
+		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Usuário");
 		}
 	}
@@ -79,7 +79,7 @@ public class UsuarioServiceImp extends StatelessServiceAb implements UsuarioServ
 			usuarioDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
-		}catch (DeletarRegistroViolacaoFK d) {
+		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}
 	}

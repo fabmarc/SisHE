@@ -14,6 +14,8 @@ public class CargoCadController extends CargoController {
 
 	private static final long serialVersionUID = -2996122688507056006L;
 
+	public Cargo cargoSelecionado;
+
 	public CargoCadController() {
 		System.out.println("Controler CargoCad criado.");
 	}
@@ -26,8 +28,7 @@ public class CargoCadController extends CargoController {
 		searched = (Boolean) getFlashAttr("searched");
 
 		cargoSelecionado = (Cargo) getFlashAttr("cargoSelecionado");
-		if (cargoSelecionado == null)
-			cargoSelecionado = new Cargo();
+		if (cargoSelecionado == null) cargoSelecionado = new Cargo();
 
 		cargoFiltro = (Cargo) getFlashAttr("cargoFiltro");
 	}
@@ -70,20 +71,28 @@ public class CargoCadController extends CargoController {
 		return irParaConsultar();
 	}
 
-	public boolean modoCadastrar() {
-		if (cargoSelecionado == null || cargoSelecionado.getId() == null || "".equals(cargoSelecionado.getId())) {
+	private boolean modoCadastrar() {
+		if (cargoSelecionado == null || cargoSelecionado.getId() == null) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public String confirmar(){
-		if(modoCadastrar()){
+	public String confirmar() {
+		if (modoCadastrar()) {
 			return cadastrarCargo();
-		}else{
+		} else {
 			return alterarCargo();
 		}
 	}
-	
+
+	public Cargo getCargoSelecionado() {
+		return cargoSelecionado;
+	}
+
+	public void setCargoSelecionado(Cargo cargoSelecionado) {
+		this.cargoSelecionado = cargoSelecionado;
+	}
+
 }

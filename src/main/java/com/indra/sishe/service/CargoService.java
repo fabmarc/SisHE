@@ -8,8 +8,8 @@ import com.indra.infra.service.BaseService;
 import com.indra.sishe.entity.Cargo;
 
 @Local
-public interface CargoService extends BaseService<Cargo>{
+public interface CargoService extends BaseService<Cargo> {
 
-	public List<Cargo> findByFilter (Cargo cargoFiltro);
-		
+	public List<Cargo> findByFilter(Cargo cargoFiltro);
+
 }

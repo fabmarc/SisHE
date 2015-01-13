@@ -15,7 +15,7 @@ public class ClienteCadController extends ClienteController {
 	private static final long serialVersionUID = -7787160113773729958L;
 
 	public Cliente clienteSelecionado;
-	
+
 	public ClienteCadController() {
 	}
 
@@ -25,38 +25,35 @@ public class ClienteCadController extends ClienteController {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		
+
 		clienteSelecionado = (Cliente) getFlashAttr("clienteSelecionado");
 		if (clienteSelecionado == null) clienteSelecionado = new Cliente();
-		
+
 		clienteFiltro = (Cliente) getFlashAttr("clienteFiltro");
 	}
 
 	public String cadastrarCliente() {
-		
 		if (validarCliente(clienteSelecionado)) {
 			try {
 				clienteService.save(clienteSelecionado);
+				putFlashAttr("clienteFiltro", clienteFiltro);
+				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cliente"));
+				putFlashAttr("searched", searched);
+				return irParaConsultar();
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				returnErrorMessage(e.getMessage());
 			}
-			putFlashAttr("clienteFiltro", clienteFiltro);
-			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cliente"));			
-			putFlashAttr("searched", searched);			
-			return irParaConsultar();
 		}
 		return null;
 	}
-	
+
 	public String alterarCliente() {
-		
 		if (validarCliente(clienteSelecionado)) {
 			try {
 				clienteService.update(clienteSelecionado);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Cliente"));
-				putFlashAttr("clienteFiltro", clienteFiltro);			
-				putFlashAttr("searched", searched);			
+				putFlashAttr("clienteFiltro", clienteFiltro);
+				putFlashAttr("searched", searched);
 				return irParaConsultar();
 			} catch (ApplicationException e) {
 				returnErrorMessage(e.getMessage());
@@ -67,8 +64,8 @@ public class ClienteCadController extends ClienteController {
 	}
 
 	public String cancelar() {
-		putFlashAttr("searched", searched);			
-		putFlashAttr("clienteFiltro", clienteFiltro);			
+		putFlashAttr("searched", searched);
+		putFlashAttr("clienteFiltro", clienteFiltro);
 		return "/paginas/cliente/consultarCliente.xhtml?faces-redirect=true";
 	}
 
@@ -95,5 +92,5 @@ public class ClienteCadController extends ClienteController {
 	public void setPesquisar(boolean pesquisar) {
 		this.searched = pesquisar;
 	}
-	
+
 }
