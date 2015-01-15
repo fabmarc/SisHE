@@ -93,3 +93,24 @@
 	width: 100%;
 	text-align: center;
 }
+
+.divLogin{
+	top: 70px;
+	left: 200px;
+	position: relative;
+	width: 327px;
+	height: 230px;
+	border: 1px solid rgba(134, 134, 134, 0.48); 
+	-moz-box-shadow: 5px 5px 5px #ADADAD; 
+	-webkit-box-shadow: 5px 5px 5px #ADADAD; 
+	border-radius: 21px;
+}
+
+.divLoginCenter{
+	position: relative;
+	width: 250px;
+	position: absolute;
+	top: 33%;left: 30%;
+	margin-top: -50px;
+	margin-left: -50px;
+}
