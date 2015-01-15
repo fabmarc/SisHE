@@ -42,7 +42,7 @@
 
 					<p:column headerText="Ações" style="width:10%">
 						<p:commandLink id="excluirLink" onclick="confirmExclusao.show()" title="Excluir Usuario" styleClass="ui-icon ui-icon-closethick" style="width:20px; position: relative; float:left;">
-							<f:setPropertyActionListener target="#{usuarioMnt.usuarioSelecionado}" value="#{usuario}" />
+							<f:setPropertyActionListener target="#{usuarioMnt.usuariosSelecionados}" value="#{usuario}" />
 						</p:commandLink>
 						
 						<h:outputLabel value="/" style="width:5px; position: relative; float:left;" />

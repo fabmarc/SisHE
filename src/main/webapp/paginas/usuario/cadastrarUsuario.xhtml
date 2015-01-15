@@ -29,11 +29,11 @@
 						</div>
 							
 						<div style="position:absolute; float:right; left:235px;">
-							<h:outputLabel value="Sindicato" for="sindicatoIpt"/>
-								<h:selectOneMenu id="sindicatoIpt" value="#{usuarioCad.usuarioSelecionado.sindicato}" converter="omnifaces.SelectItemsConverter">
-									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-									<f:selectItems value="#{usuarioCad.obterSindicatos()}" var="sindicato" itemLabel="#{sindicato.estado.sigla}" itemValue="#{sindicato}" />
-								</h:selectOneMenu>
+							<h:outputLabel value="Sindicato" for="sindicatoIpt" />
+							<h:selectOneMenu id="sindicatoIpt" value="#{usuarioCad.usuarioSelecionado.sindicato}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{usuarioCad.obterSindicatos()}" var="sindicato" itemLabel="#{sindicato.descricao}" itemValue="#{sindicato}" />
+							</h:selectOneMenu>
 						</div>
 					</div>
 					
@@ -42,8 +42,8 @@
 						<div style="position:absolute; float:left;">
 							<p:outputLabel value="Login:" for="loginIpt" style="width:50px;" />
 							<p:inputText id="loginIpt" type="text" value="#{usuarioCad.usuarioSelecionado.login}" maxlength="20" />
-					
 						</div>
+						
 						<div style="position:absolute; float:right; left:235px;">
 							<p:outputLabel value="Senha:" for="senhaIpt" style="width:50px;" />
 							<p:inputText id="senhaIpt" type="password" value="#{usuarioCad.usuarioSelecionado.senha}" maxlength="20" />
@@ -52,8 +52,7 @@
 					
 					<br />
 					<div style="position: relative; width: 220px; top:190px; left:117px;">
-						<h:commandButton style="width:100px; float:left;" action="#{usuarioCad.cadastrarUsuario()}" value="Cadastrar" rendered="#{usuarioCad.modoCadastrar()}"/>
-						<h:commandButton style="width:100px; float:left;" action="#{usuarioCad.alterarUsuario()}" value="Alterar" rendered="#{!usuarioCad.modoCadastrar()}"/>
+						<h:commandButton style="width:100px; float:left;" action="#{usuarioCad.confirmar()}" value="Confirmar" />
 						<h:commandButton style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" />
 					</div>
 				</div>
