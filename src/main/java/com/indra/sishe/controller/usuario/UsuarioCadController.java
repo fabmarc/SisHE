@@ -10,8 +10,10 @@ import javax.inject.Inject;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
+import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.CargoService;
+import com.indra.sishe.service.SindicatoService;
 
 @ViewScoped
 @ManagedBean(name = "usuarioCad")
@@ -24,9 +26,9 @@ public class UsuarioCadController extends UsuarioController {
 
 	protected Usuario usuarioSelecionado;
 
-	/*
-	 * @Inject protected transient SindicatoService sindicatoService;
-	 */
+	@Inject 
+	protected transient SindicatoService sindicatoService;
+	
 
 	public UsuarioCadController() {
 	}
@@ -109,8 +111,8 @@ public class UsuarioCadController extends UsuarioController {
 		this.usuarioSelecionado = usuarioSelecionado;
 	}
 
-	/*
-	 * public List<Sindicato> obterSindicatos(){ return
-	 * sindicatoService.findAll(); }
-	 */
+	public List<Sindicato> obterSindicatos() {
+		return sindicatoService.findAll();
+	}
+
 }

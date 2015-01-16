@@ -103,19 +103,19 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) WHERE 1 = 1");
 
 		if (usuarioFiltro != null && usuarioFiltro.getId() != null) {
-			sql.append("AND id = :idUsuario");
+			sql.append("AND usuario.id = :idUsuario");
 			params.addValue("idUsuario", usuarioFiltro.getId());
 		}
 		if (usuarioFiltro != null && usuarioFiltro.getNome() != null && !usuarioFiltro.getNome().isEmpty()) {
-			sql.append("AND LOWER(nome) LIKE '%' || :nomeUsuario || '%'");
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%'");
 			params.addValue("nomeUsuario", usuarioFiltro.getNome().toLowerCase());
 		}
 		if (usuarioFiltro != null && usuarioFiltro.getLogin() != null && !usuarioFiltro.getLogin().isEmpty()) {
-			sql.append("AND LOWER(login) LIKE '%' || :loginUsuario || '%'");
+			sql.append("AND LOWER(usuario.login) LIKE '%' || :loginUsuario || '%'");
 			params.addValue("loginUsuario", usuarioFiltro.getLogin().toLowerCase());
 		}
 		if (usuarioFiltro != null && usuarioFiltro.getMatricula() != null && !usuarioFiltro.getMatricula().toString().isEmpty()) {
-			sql.append("AND matricula = :matriculaUsuario");
+			sql.append("AND usuario.matricula = :matriculaUsuario");
 			params.addValue("matriculaUsuario", usuarioFiltro.getMatricula());
 		}
 

@@ -8,8 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import org.primefaces.context.RequestContext;
-
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cliente;
@@ -22,41 +20,29 @@ public class ClienteMntController extends ClienteController {
 
 	private List<Cliente> listaClientes;
 
-	private List<Cliente> clientesSelecionados = new ArrayList<Cliente>();
-
 	public ClienteMntController() {
 	}
 
 	@PostConstruct
 	private void init() {
-
+		
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
-
+		
 		clienteFiltro = (Cliente) getFlashAttr("clienteFiltro");
 		if (clienteFiltro == null) clienteFiltro = new Cliente();
-
+		
 		if (!searched) listaClientes = new ArrayList<Cliente>();
 		else pesquisar();
 	}
 
-	public void beforeRemoveCliente() {
-		if (clientesSelecionados.size() == 0) {
-			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
-		} else {
-			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
-		}
-	}
-
 	public String removerCliente() {
-		int size = clientesSelecionados.size();
-		ArrayList<Long> ids = new ArrayList<Long>(size);
-		for (Cliente cliente : clientesSelecionados) ids.add(cliente.getIdCliente());
+		String nome = clienteSelecionado.getNomeCliente();
 		try {
-			clienteService.remove(ids);
-			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cliente"));
+			clienteService.remove(clienteSelecionado.getIdCliente());
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Cliente", nome));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
 		}
@@ -90,7 +76,7 @@ public class ClienteMntController extends ClienteController {
 	public void setListaClientes(List<Cliente> listaClientes) {
 		this.listaClientes = listaClientes;
 	}
-
+	
 	public Cliente getClienteFiltro() {
 		return clienteFiltro;
 	}
@@ -99,12 +85,12 @@ public class ClienteMntController extends ClienteController {
 		this.clienteFiltro = clienteFiltro;
 	}
 
-	public List<Cliente> getClientesSelecionados() {
-		return clientesSelecionados;
+	public Cliente getClienteSelecionado() {
+		return clienteSelecionado;
 	}
 
-	public void setClientesSelecionados(List<Cliente> clientesSelecionados) {
-		this.clientesSelecionados = clientesSelecionados;
+	public void setClienteSelecionado(Cliente clienteSelecionado) {
+		this.clienteSelecionado = clienteSelecionado;
 	}
 
 }

@@ -62,7 +62,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public List<Cargo> findAll() {
-		return getJdbcTemplate().query("SELECT id, nome" + "FROM cargo", new BeanPropertyRowMapper<Cargo>(Cargo.class));
+		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome " + "FROM cargo", new BeanPropertyRowMapper<Cargo>(Cargo.class));
 	}
 
 	@Override
@@ -89,11 +89,11 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		sql.append("FROM cargo WHERE 1 = 1");
 
 		if (cargoFiltro != null && cargoFiltro.getId() != null) {
-			sql.append("AND id = :idCargo");
+			sql.append("AND id = :idCargo ");
 			params.addValue("idCargo", cargoFiltro.getId());
 		}
 		if (cargoFiltro != null && cargoFiltro.getNome() != null && !cargoFiltro.getNome().isEmpty()) {
-			sql.append("AND LOWER(nome) LIKE '%' || :nomeCargo || '%'");
+			sql.append("AND LOWER(nome) LIKE '%' || :nomeCargo || '%' ");
 			params.addValue("nomeCargo", cargoFiltro.getNome().toLowerCase());
 		}
 		return getNamedParameterJdbcTemplate().query(sql.toString(), params, new BeanPropertyRowMapper<Cargo>(Cargo.class));

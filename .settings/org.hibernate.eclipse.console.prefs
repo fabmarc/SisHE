@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 default.configuration=
 eclipse.preferences.version=1
 hibernate3.enabled=true
+=======
+default.configuration=
+eclipse.preferences.version=1
+hibernate3.enabled=true
+>>>>>>> branch 'master' of https://github.com/fabmarc/SisHE.git

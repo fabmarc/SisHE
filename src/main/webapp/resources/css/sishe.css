@@ -1,0 +1,116 @@
+
+.nomeSistema {
+	text-align: right;
+	position: relative;
+	float: right;
+	right: 18px;
+	width: 220px;
+	top: -60px;
+	font-family: 'Franklin Gothic Medium', 'Franklin Gothic',
+		'ITC Franklin Gothic', Arial, sans-serif;
+}
+
+.imagemMarcaDAgua {
+	background-image: url(resources/images/logoIndra.jpg);
+	background-position: center;
+	/*background-attachment:fixed;*/
+	height: 400px;
+	background-size: 80%;
+	opacity: 0.1;
+	filter: alpha(opacity =   10); /* IE8 e anteriores */
+}
+
+.botao3d {
+	/*display: block;*/
+	background: -webkit-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
+	background: -moz-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
+	background: -o-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
+	background: -ms-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
+	background: linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
+	border: 1px solid #A8A8A8;
+	border-radius: 4px;
+	padding: 2px 13px;
+	font-family: 'ITC Franklin Gothic', Arial, sans-serif;
+	text-align: center;
+}
+
+.botao3d:hover {
+	position: relative;
+	top: 1px;
+	left: 1px;
+}
+
+.itemMenu:hover {
+	transform: scale(1.015, 1.015);
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+.logoCabeRight {
+	background-color: black;
+	width: 465px;
+	height: 62px;
+	/*left: 265px;	
+	background: url(https://access.indraweb.net/vpn/images/ctxHeader02.gif) no-repeat center top fixed;
+	position: relative;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;*/
+}
+
+.logoCabeLeft {
+	/*background-image: url(/resources/images/logoIndra.gif);*/
+	position: absolute;
+}
+
+.logoCabeRodape {
+	left: 0px;
+	position: relative;
+	background-color: #5B5B5B;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	width: 100%;
+	height: 25px;
+}
+
+.rodape {
+	text-align: center;
+	width: 100%;
+	color: Black;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	background-color: rgb(243, 243, 243);
+	width: 100%;
+	height: 38px;
+}
+
+.divDialog {
+	position: relative;
+	width: 100%;
+	text-align: center;
+}
+
+.divLogin{
+	top: 70px;
+	left: 200px;
+	position: relative;
+	width: 327px;
+	height: 230px;
+	border: 1px solid rgba(134, 134, 134, 0.48); 
+	-moz-box-shadow: 5px 5px 5px #ADADAD; 
+	-webkit-box-shadow: 5px 5px 5px #ADADAD; 
+	border-radius: 21px;
+}
+
+.divLoginCenter{
+	position: relative;
+	width: 250px;
+	position: absolute;
+	top: 33%;left: 30%;
+	margin-top: -50px;
+	margin-left: -50px;
+}

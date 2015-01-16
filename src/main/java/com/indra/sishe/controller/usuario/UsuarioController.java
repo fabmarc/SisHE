@@ -20,18 +20,18 @@ public abstract class UsuarioController extends BaseController implements Serial
 	protected Boolean searched;
 
 	public String irParaConsultar() {
-		return "/paginas/usuario/consultarUsuario.xhtml";
+		return "/paginas/usuario/consultarUsuario.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
 		putFlashAttr("usuarioSelecionado", null);
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
-		return "/paginas/usuario/cadastrarUsuario.xhtml";
+		return "/paginas/usuario/cadastrarUsuario.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar() {
-		return "/paginas/usuario/cadastrarUsuario.xhtml";
+		return "/paginas/usuario/cadastrarUsuario.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar(Usuario usuarioSelecionado) {
