@@ -13,7 +13,6 @@ import com.indra.sishe.service.SindicatoService;
 
 public class SindicatoController extends BaseController implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 
 	// VARIÁVEL UTILIZADA PARA A UTILIZAÇÃO DOS SERVIÇOS
@@ -23,7 +22,16 @@ public class SindicatoController extends BaseController implements Serializable 
 	@Inject
 	protected transient EstadoService estadoService;
 	protected List<Estado> listaEstado;
-	
+
+	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
+	public Sindicato sindicatoFiltro;
+
+	// VARIÁVEL UTILIZADA PARA EXCLUIR OU ALTERAR
+	public Sindicato sindicatoSelecionado;
+
+	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
+	protected Boolean searched;
+
 	/**
 	 * @return the listaEstado
 	 */
@@ -32,20 +40,12 @@ public class SindicatoController extends BaseController implements Serializable 
 	}
 
 	/**
-	 * @param listaEstado the listaEstado to set
+	 * @param listaEstado
+	 *            the listaEstado to set
 	 */
 	public void setListaEstado(List<Estado> listaEstado) {
 		this.listaEstado = listaEstado;
 	}
-
-	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
-	public Sindicato sindicatoFiltro ;
-
-	// VARIÁVEL UTILIZADA PARA EXCLUIR OU ALTERAR
-	public Sindicato sindicatoSelecionado;
-
-	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
-	protected Boolean searched;
 
 	// VALIDA O SINDICATO PELO TAMANHO DO NOME E SE ESTÁ VAZIO
 	public boolean validarSindicato(Sindicato sindicatoFiltro) {
@@ -100,8 +100,5 @@ public class SindicatoController extends BaseController implements Serializable 
 		putFlashAttr("sindicatoSelecionado", sindicatoSelecionado);
 		return "/paginas/sindicato/alterarSindicato.xhtml";
 	}
-	
-	
 
-	
 }

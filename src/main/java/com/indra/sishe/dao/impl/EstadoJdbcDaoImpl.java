@@ -18,7 +18,7 @@ import com.indra.sishe.dao.EstadoDAO;
 import com.indra.sishe.entity.Estado;
 
 @Repository
-public class EstadoDAOImpl extends NamedParameterJdbcDaoSupport implements
+public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		EstadoDAO {
 
 	@Autowired

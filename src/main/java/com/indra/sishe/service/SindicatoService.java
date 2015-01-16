@@ -11,12 +11,7 @@ import com.indra.sishe.entity.Sindicato;
 @Local
 public interface SindicatoService extends BaseService<Sindicato> {
 
-	// FUNÇÃO QUE PESQUISA UM SINDICATO PELO ESTADO DE ORIGEM E RETORNAR UMA
-	// LISTA
-	public List<Sindicato> pesquisarPorEstado(Sindicato sindicato);
-
 	// FUNÇÃO QUE PESQUISA UM SINDICATO PELO FILTRO INFORMADO
 	public List<Sindicato> findByFilter(Sindicato sindicato);
-	
-	void remove(List<Long> ids) throws ApplicationException;
+
 }
