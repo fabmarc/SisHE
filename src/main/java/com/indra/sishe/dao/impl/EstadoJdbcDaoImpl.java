@@ -33,12 +33,7 @@ public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 				"estado").usingGeneratedKeyColumns("id");
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Estado> pesquisarPorSigla(String sigla) {
 
-		return null;
-	}
 
 	@Override
 	public List<Estado> findAll() {

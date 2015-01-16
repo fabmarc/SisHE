@@ -48,7 +48,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 
 			parms.addValue("id_lider", entity.getUsuario());
-			// parms.addValue("id_projeto", entity.getIdProjeto()));
+			 parms.addValue("id_projeto", entity.getProjeto().getId());
 			parms.addValue("nome", entity.getNome());
 			parms.addValue("descricao", entity.getDescricao());
 
@@ -66,8 +66,8 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 	// ADICIONAR O ATRIBUTO ID_PROJETO AO UPDATE E USAR O GET COMO PARAMETRO
 	public Sistema update(Sistema entity) throws RegistroInexistenteException {
 		int rows = getJdbcTemplate().update(
-				"UPDATE sistema SET id_lider=?, " + " descricao=?, nome=?"
-						+ "WHERE id = ?", entity.getUsuario(),
+				"UPDATE sistema SET id_lider=?, id_projeto, descricao=?, nome=?"
+						+ "WHERE id = ?", entity.getUsuario().getId(),entity.getProjeto().getId(),
 				entity.getDescricao(), entity.getNome());
 
 		if (rows == 0)
