@@ -34,10 +34,14 @@
 			<attribute name="owner.project.facets" value="jboss.m2"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_51">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+=======
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+>>>>>>> branch 'master' of https://github.com/fabmarc/SisHE.git
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

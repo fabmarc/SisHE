@@ -11,12 +11,12 @@ import com.indra.infra.dao.BaseDAOImpl;
 import com.indra.sishe.dao.ClienteDAO;
 import com.indra.sishe.entity.Cliente;
 
-public class ClienteJpaDaoImp extends BaseDAOImpl<Cliente> implements ClienteDAO {
-	
+public class ClienteJpaDaoImpl extends BaseDAOImpl<Cliente> implements ClienteDAO {
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Cliente> findByFilter(Cliente cliente) {
-		
+
 		// consultar com ignore case
 		Criteria c = getSession().createCriteria(Cliente.class);
 		String nomeCliente = cliente.getNomeCliente();

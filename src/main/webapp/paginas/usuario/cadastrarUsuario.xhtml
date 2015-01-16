@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<br />
+			<ui:insert>
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+				<div style="top: 15px; left: 112px; position: relative; width: 230px">
+					<div>
+						<div style="position:absolute; float:left;">
+							<p:outputLabel value="Nome:" for="nomeIpt" style="width:50px;" />
+							<p:inputText id="nomeIpt" type="text" value="#{usuarioCad.usuarioSelecionado.nome}" maxlength="60" />					
+						</div>
+						<div style="position:absolute; float:right; left:235px;">
+							<p:outputLabel value="E-mail:" for="emailIpt" style="width:50px;" />
+							<p:inputText id="emailIpt" type="text" value="#{usuarioCad.usuarioSelecionado.email}" maxlength="30" />
+						</div>
+					</div>
+					
+					<div style="top:63px; position: absolute;">
+						<div style="position:absolute; float:left;">
+							<h:outputLabel value="Cargo:" for="cargoIpt"/>
+							<h:selectOneMenu id="cargoIpt" value="#{usuarioCad.usuarioSelecionado.cargo}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{usuarioCad.obterCargos()}" var="cargo" itemLabel="#{cargo.nome}"	itemValue="#{cargo}" />
+							</h:selectOneMenu>
+						</div>
+							
+						<div style="position:absolute; float:right; left:235px;">
+							<h:outputLabel value="Sindicato" for="sindicatoIpt" />
+							<h:selectOneMenu id="sindicatoIpt" value="#{usuarioCad.usuarioSelecionado.sindicato}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{usuarioCad.obterSindicatos()}" var="sindicato" itemLabel="#{sindicato.descricao}" itemValue="#{sindicato}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					
+					
+					<div style="top:126px; position: absolute;">
+						<div style="position:absolute; float:left;">
+							<p:outputLabel value="Login:" for="loginIpt" style="width:50px;" />
+							<p:inputText id="loginIpt" type="text" value="#{usuarioCad.usuarioSelecionado.login}" maxlength="20" />
+						</div>
+						
+						<div style="position:absolute; float:right; left:235px;">
+							<p:outputLabel value="Senha:" for="senhaIpt" style="width:50px;" />
+							<p:inputText id="senhaIpt" type="password" value="#{usuarioCad.usuarioSelecionado.senha}" maxlength="20" />
+						</div>
+					</div>					
+					
+					<br />
+					<div style="position: relative; width: 220px; top:190px; left:117px;">
+						<h:commandButton style="width:100px; float:left;" action="#{usuarioCad.confirmar()}" value="Confirmar" />
+						<h:commandButton style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" />
+					</div>
+				</div>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

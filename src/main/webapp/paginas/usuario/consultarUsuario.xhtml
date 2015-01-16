@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+
+		<h:form id="mainForm">
+			<br />
+			<br />
+			<ui:insert>
+				<p:messages id="messages"  showDetail="true" showSummary="false" />
+				<div style="width: 410px;">
+					<h:outputLabel value="Nome:" style="margin:left; align:left; width:50px;" />
+					<h:inputText value="#{usuarioMnt.usuarioFiltro.nome}" maxlength="40" style="height:15px; width:300px;" />
+					<h:commandButton style="float:right;" actionListener="#{usuarioMnt.pesquisar}" value="Pesquisar" />
+				</div>
+
+				<p:dataTable style="top:10%;" rowKey="#{usuario.id}" selection="#{usuarioMnt.usuariosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="usuarioDt" var="usuario" value="#{usuarioMnt.listaUsuarios}" emptyMessage="Nenhum registro encontrado.">
+					<f:facet name="header">
+						Usuarios
+					</f:facet>
+					
+					<p:column style="width:5px; text-align:center" selectionMode="multiple">
+					</p:column>
+
+					<p:column headerText="Código" style="width:10%">
+						<h:outputText value="#{usuario.id}" />
+					</p:column>
+					<p:column headerText="Nome">
+						<div>
+							<h:outputText value="#{usuario.nome}" />
+						</div>
+					</p:column>
+					<p:column headerText="Cargo">
+							<h:outputText value="#{usuario.cargo.nome}" />
+					</p:column>
+					<p:column headerText="Matricula" style="width:60px;">
+						<div style="text-align:center;">
+							<h:outputText value="#{usuario.matricula}" />
+						</div>
+					</p:column>
+
+					<p:column headerText="Ações" style="width:10%">
+						<p:commandLink id="excluirLink" onclick="confirmExclusao.show()" title="Excluir Usuario" styleClass="ui-icon ui-icon-closethick" style="width:20px; position: relative; float:left;">
+							<f:setPropertyActionListener target="#{usuarioMnt.usuariosSelecionados}" value="#{usuario}" />
+						</p:commandLink>
+						
+						<h:outputLabel value="/" style="width:5px; position: relative; float:left;" />
+						
+						<p:commandLink title="Editar Usuario" id="alterarLink" style="width:20px; position: relative; float:left;" styleClass="ui-icon ui-icon-pencil" action="#{usuarioMnt.irParaAlterar(usuario)}" />
+					</p:column>
+					
+					<f:facet name="footer">
+						<div style="text-align: right; width: 100%">
+							<p:commandLink value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" />
+							/ 
+							<p:commandLink value="Excluir" actionListener="#{usuarioMnt.beforeRemoveUsuarios()}" />
+						</div>
+					</f:facet>
+				</p:dataTable>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+					<p:commandButton value="Sim" actionListener="#{usuarioMnt.removerUsuario()}" onclick="confirmExclusao.hide()" update="mainForm:usuarioDt messages" />
+					<p:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" />
+				</p:confirmDialog>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
+					<p:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" />
+				</p:confirmDialog>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>
