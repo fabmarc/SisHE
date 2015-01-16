@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<ui:insert>
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+				<div style="top: 15px; left: 268px; position: relative; width: 250px">
+
+					<div>
+						<p:outputLabel value="Nome:" id="nome" />
+						<p:inputText type="text" value="#{projetoCad.projetoSelecionado.nome}" maxlength="50" required="true" requiredMessage="O campo Nome é Obrigatório."/>
+					</div>
+					<div>
+						<p:outputLabel value="Descrição:" />
+						<p:inputTextarea type="text" value="#{projetoCad.projetoSelecionado.descricao}" maxlength="500"/>
+					</div>
+
+					<div style="position: relative; top: -13px">
+						<p:outputLabel for="selecionarGerente" value="Gerente:" />
+						<p:selectOneMenu id="selecionarGerente" value="#{projetoCad.projetoSelecionado.usuario}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						</p:selectOneMenu>
+					</div>
+					<br />
+					<div style="position: relative; width: 220px; top: -21px;">
+						<h:commandButton style="width:100px; float:left;" action="#{projetoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
+						<h:commandButton style="float:right; width:100px;" action="#{projetoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />
+					</div>
+				</div>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
