@@ -9,8 +9,7 @@ public class Sistema implements Serializable, Comparable<Sistema> {
 	private Usuario usuario;
 	private String nome;
 	private String descricao;
-
-	// private Projeto projeto; ENTIDADE SOBRE A RESOPNSABILIDADE DE IGOR
+	 private Projeto projeto; 
 
 	@Override
 	public int hashCode() {
@@ -97,6 +96,14 @@ public class Sistema implements Serializable, Comparable<Sistema> {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Projeto getProjeto() {
+		return projeto;
+	}
+
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
 	}
 
 }
