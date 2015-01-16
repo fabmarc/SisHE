@@ -29,7 +29,7 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 		try {
 			return feriadoDAO.save(entity);
 		} catch (RegistroDuplicadoException e) {
-			throw new ApplicationException(e, "msg.error.registro.duplicado", "Cargo");
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Feriado");
 		}
 	}
 

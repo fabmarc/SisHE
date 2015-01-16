@@ -21,7 +21,6 @@ import com.indra.sishe.entity.Estado;
 public class EstadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements EstadoDAO{
 
 	@Autowired
-	@Resource(mappedName="java:jboss/datasources/SisHE")
 	private DataSource dataSource;
 	
 	@PostConstruct

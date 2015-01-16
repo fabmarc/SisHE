@@ -12,6 +12,7 @@ import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Feriado;
 
 @ViewScoped
@@ -29,6 +30,8 @@ public class FeriadoMntController extends FeriadoController{
 	@PostConstruct
 	private void init(){
 		MessageProvider.setInstance(messageProvider);
+		setListaEstado(obterEstados());
+		getListaEstado().add(0, new Estado(new Long(0), "Nacional", "BR"));
 		
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;

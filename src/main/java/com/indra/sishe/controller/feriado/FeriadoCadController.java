@@ -18,8 +18,6 @@ public class FeriadoCadController extends FeriadoController {
 
 	private static final long serialVersionUID = 3068532582581639566L;
 
-	private List<Estado> listaEstado;
-
 	public Feriado feriadoSelecionado;
 
 	public FeriadoCadController() {
@@ -75,21 +73,21 @@ public class FeriadoCadController extends FeriadoController {
 				return irParaAlterar(feriadoSelecionado);
 			}
 		}
-		return null;
+		return irParaConsultar();
 	}
 
 	public String cancelar() {
 		putFlashAttr("searched", searched);
-		putFlashAttr("clienteFiltro", feriadoFiltro);
-		return "/paginas/feriado/consultarFeriado.xhtml?faces-redirect=true";
-	}
-
-	public List<Estado> obterEstados() {
-		return estadoService.findAll();
+		putFlashAttr("feriadoFiltro", feriadoFiltro);
+		return irParaConsultar();
 	}
 
 	public List<Cidade> obterCidades() {
-		return cidadeService.findByEstado(feriadoSelecionado.getEstado());
+		if (feriadoSelecionado.getEstado().getNome() != null) {
+			return cidadeService.findByEstado(feriadoSelecionado.getEstado());
+		} else {
+			return null;
+		}
 	}
 
 	public boolean modoCadastrar() {
@@ -114,14 +112,6 @@ public class FeriadoCadController extends FeriadoController {
 
 	public void setPesquisar(boolean pesquisar) {
 		this.searched = pesquisar;
-	}
-
-	public List<Estado> getListaEstado() {
-		return listaEstado;
-	}
-
-	public void setListaEstado(List<Estado> listaEstado) {
-		this.listaEstado = listaEstado;
 	}
 
 }

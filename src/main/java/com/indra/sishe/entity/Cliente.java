@@ -9,20 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "cliente")
 public class Cliente implements Serializable, Comparable<Cliente> {
 
 	private static final long serialVersionUID = 596604411492271290L;
 
-	@Id
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_cliente")
-//	@SequenceGenerator(name = "sq_cliente", schema = "public", sequenceName = "sq_cliente", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_cliente", nullable = false)
 	private Long idCliente;
 
-	@Column(name = "nome_cliente")
 	private String nomeCliente;
 
 	public Cliente() {

@@ -1,10 +1,12 @@
 package com.indra.sishe.controller.feriado;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import com.indra.infra.controller.BaseController;
+import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Feriado;
 import com.indra.sishe.service.CidadeService;
 import com.indra.sishe.service.EstadoService;
@@ -24,6 +26,8 @@ public class FeriadoController extends BaseController implements Serializable {
 	protected transient CidadeService cidadeService;
 
 	public Feriado feriadoFiltro;
+	
+	protected List<Estado> listaEstado;
 
 	protected Boolean searched;
 
@@ -42,6 +46,10 @@ public class FeriadoController extends BaseController implements Serializable {
 		return false;
 	}
 
+	public List<Estado> obterEstados() {
+		return estadoService.findAll();
+	}
+	
 	public String irParaConsultar() {
 		return "/paginas/feriado/consultarFeriado.xhtml?faces-redirect=true";
 	}
@@ -70,6 +78,14 @@ public class FeriadoController extends BaseController implements Serializable {
 
 	public void setFeriadoFiltro(Feriado feriadoFiltro) {
 		this.feriadoFiltro = feriadoFiltro;
+	}
+
+	public List<Estado> getListaEstado() {
+		return listaEstado;
+	}
+
+	public void setListaEstado(List<Estado> listaEstado) {
+		this.listaEstado = listaEstado;
 	}
 
 }

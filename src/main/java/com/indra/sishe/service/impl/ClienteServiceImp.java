@@ -25,7 +25,6 @@ public class ClienteServiceImp extends StatelessServiceAb implements ClienteServ
 	private ClienteDAO clienteDao;
 
 	public ClienteServiceImp(){
-		System.out.println("Criou ClienteServiceImpl");
 	}
 	
 	@Override

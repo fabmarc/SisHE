@@ -52,11 +52,7 @@ public class CidadeServiceImp extends StatelessServiceAb implements CidadeServic
 
 	@Override
 	public List<Cidade> findByEstado(Estado estado) {
-		if (estado != null) {
-			return cidadeDAO.findByEstado(estado);
-		} else {
-			return null;
-		}
+		return cidadeDAO.findByEstado(estado);
 	}
 
 	@Override
