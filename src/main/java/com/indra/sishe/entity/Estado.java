@@ -3,17 +3,6 @@ package com.indra.sishe.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "Estado")
 public class Estado implements Serializable {
 
 	/**
@@ -21,21 +10,13 @@ public class Estado implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Id
-	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "nome", nullable = true)
 	private String nome;
 
-	@Column(name = "sigla", nullable = true)
 	private String sigla;
 	
 	
-	//verificar se estar certo
-	@OneToMany
-	@JoinColumn(name = "id_estado", insertable = true, updatable = true, nullable = true, unique = true)
 	private List<Cidade> cidades;
 
 	public Estado() {
@@ -45,18 +26,19 @@ public class Estado implements Serializable {
 	
 
 
+	
+	public Estado(Long id, String nome, String sigla) {
+		this.id = id;
+		this.nome = nome;
+		this.sigla = sigla;
+	}
 
-	/**
-	 * @return the id
-	 */
+
+
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -69,41 +51,22 @@ public class Estado implements Serializable {
 		this.cidades = cidades;
 	}
 
-	/**
-	 * @return the nome
-	 */
 	public String getNome() {
 		return nome;
 	}
 	
-	/**
-	 * @param nome
-	 *            the nome to set
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * @return the sigla
-	 */
 	public String getSigla() {
 		return sigla;
 	}
 
-	/**
-	 * @param sigla
-	 *            the sigla to set
-	 */
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -113,11 +76,6 @@ public class Estado implements Serializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
