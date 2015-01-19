@@ -41,6 +41,10 @@ public class Estado implements Serializable {
 	public Estado() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+
 
 	/**
 	 * @return the id

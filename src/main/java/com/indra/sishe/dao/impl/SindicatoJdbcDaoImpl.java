@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,13 +20,15 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.SindicatoDAO;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 
 @Repository
-public class SindicatoDAOImpl extends NamedParameterJdbcDaoSupport implements
+public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		SindicatoDAO {
 
 	@Autowired
@@ -40,29 +44,6 @@ public class SindicatoDAOImpl extends NamedParameterJdbcDaoSupport implements
 						"id");
 		
 		}
-
-	StringBuilder sql = new StringBuilder();
-	
-	@Override
-	public List<Sindicato> pesquisarPorEstado(Sindicato sindicato) {
-
-		//StringBuilder sql = new StringBuilder();/
-		MapSqlParameterSource params = new MapSqlParameterSource();
-
-		sql.append("SELECT id AS idSindicato , descricao AS nomeSindicato ");
-		sql.append("FROM from sindicato where id_estado in (select id from estado where nome like '%"
-				+ sindicato.getDescricao() + "%')");
-
-		if (sindicato != null && sindicato.getDescricao() != null
-				&& !sindicato.getDescricao().isEmpty()) {
-			sql.append("AND LOWER(descricao) LIKE '%' || :descricao || '%'");
-			params.addValue("descricao", sindicato.getDescricao().toLowerCase());
-		}
-
-		return getNamedParameterJdbcTemplate().query(sql.toString(), params,
-				new BeanPropertyRowMapper<Sindicato>(Sindicato.class));
-
-	}
 
 	
 	@Override
@@ -80,6 +61,13 @@ public class SindicatoDAOImpl extends NamedParameterJdbcDaoSupport implements
 				&& !sindicato.getDescricao().isEmpty()) {
 			sql.append("AND UPPER(s.descricao) LIKE '%' || :descricao || '%'");
 			params.addValue("descricao", sindicato.getDescricao().toUpperCase());
+		}
+		
+		
+		
+		if (sindicato != null && sindicato.getEstado() != null   && !sindicato.getEstado().getNome().isEmpty()) {
+			sql.append("AND e.nome = :nome ");
+			params.addValue("nome", sindicato.getEstado().getNome());
 		}
 		
 		List<Sindicato> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, 
@@ -110,16 +98,19 @@ public class SindicatoDAOImpl extends NamedParameterJdbcDaoSupport implements
 
 
 	@Override
-	public Sindicato save(Sindicato entity) {
+	public Sindicato save(Sindicato entity) throws RegistroDuplicadoException {
 		
-		
-		MapSqlParameterSource parms = new MapSqlParameterSource();
-		parms.addValue("id_estado", entity.getEstado().getId());
-		parms.addValue("descricao", entity.getDescricao());
-		
-		Number key = insertSindicato
-				.executeAndReturnKey(parms);
-		entity.setId(key.longValue()); 
+		try {
+			MapSqlParameterSource parms = new MapSqlParameterSource();
+			parms.addValue("id_estado", entity.getEstado().getId());
+			parms.addValue("descricao", entity.getDescricao());
+			
+			Number key = insertSindicato
+					.executeAndReturnKey(parms);
+			entity.setId(key.longValue()); 
+		} catch (DuplicateKeyException e) {
+			throw new RegistroDuplicadoException();
+		}		
 		
 		return entity;
 	}
@@ -168,10 +159,15 @@ public class SindicatoDAOImpl extends NamedParameterJdbcDaoSupport implements
 	}
 
 	@Override
-	public void remove(Object id) throws RegistroInexistenteException {
+	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
 		// TODO Auto-generated method stub
-		int rows = getJdbcTemplate().update("DELETE FROM sindicato WHERE id = ?", id);
-		if (rows == 0) throw new RegistroInexistenteException();
+		try {
+			int rows = getJdbcTemplate().update("DELETE FROM sindicato WHERE id = ?", id);
+			if (rows == 0) throw new RegistroInexistenteException();
+		} catch (DataIntegrityViolationException d) {
+			throw new DeletarRegistroViolacaoFK();
+		}
+		
 	}
 
 	@Override
@@ -182,18 +178,28 @@ public class SindicatoDAOImpl extends NamedParameterJdbcDaoSupport implements
 
 
 	@Override
-	public void remove(List<Object> ids) throws RegistroInexistenteException {
+	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
 		// TODO Auto-generated method stub
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
 			params.add(param);
 		}
-		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM sindicato WHERE id = ?", params);
-		for (int rows : affectedRows) if (rows == 0) throw new RegistroInexistenteException();
+		try {
+			int[] affectedRows = getJdbcTemplate().batchUpdate(
+					"DELETE FROM sindicato WHERE id = ?", params);
+			for (int rows : affectedRows)
+				if (rows == 0) throw new RegistroInexistenteException();
 
+		} catch (DataIntegrityViolationException d) {
+			
+				throw new DeletarRegistroViolacaoFK();
+			
+			}
+		}
+		
 		
 	}
 
 	
-}
+

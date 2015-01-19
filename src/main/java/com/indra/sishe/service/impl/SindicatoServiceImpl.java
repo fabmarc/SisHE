@@ -17,7 +17,8 @@ import com.indra.sishe.service.SindicatoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class SindicatoServiceImpl extends StatelessServiceAb implements SindicatoService {
+public class SindicatoServiceImpl extends StatelessServiceAb implements
+		SindicatoService {
 
 	/**
 	 * 
@@ -70,14 +71,6 @@ public class SindicatoServiceImpl extends StatelessServiceAb implements Sindicat
 
 	}
 
-	// FUNÇÃO QUE PESQUISA UM SINDICATO PELO ESTADO DE ORIGEM E RETORNAR UMA
-	// LISTA
-	@Override
-	public List<Sindicato> pesquisarPorEstado(Sindicato sindicato) {
-		// TODO Auto-generated method stub
-		return sindicatoDao.pesquisarPorEstado(sindicato);
-	}
-
 	@Override
 	public List<Sindicato> findByFilter(Sindicato sindicato) {
 		// TODO Auto-generated method stub
@@ -106,7 +99,11 @@ public class SindicatoServiceImpl extends StatelessServiceAb implements Sindicat
 			List<Object> pks = new ArrayList<Object>(ids);
 			sindicatoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sindicato");
+			throw new ApplicationException(e, "msg.error.registro.inexistente",
+					"Sindicato");
+		} catch (DeletarRegistroViolacaoFK e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

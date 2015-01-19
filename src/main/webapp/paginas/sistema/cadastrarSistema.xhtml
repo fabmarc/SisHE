@@ -11,17 +11,31 @@
 				
 				<div style="top: 15px; left: 170px; position: relative; width: 250px">
 					
-					<h:outputLabel value="Sindicato:" style="width:50px;" />
-					<h:inputText type="text" value="#{sindicatoCad.sindicatoSelecionado.descricao}" maxlength="40"  required="true" requiredMessage="Informe o nome do Sindicato." />
+					<h:outputLabel value="Sistema" style="width:50px;" />
+					<h:inputText type="text" value="#{sindicatoCad.sindicatoSelecionado.descricao}" maxlength="50"  required="true" requiredMessage="Informe o nome do Sistema." />
 					<br />
 
-					<h:outputLabel value="Estado:" style="width:50px;" />
-					<p:selectOneMenu converter="omnifaces.SelectItemsConverter"  value="#{sindicatoCad.sindicatoSelecionado.estado}" style="width:216px">
+					<h:outputLabel value="Lider:" style="width:50px;" />
+					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o lider." value="#{sindicatoCad.sindicatoSelecionado.estado}" style="width:216px">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />						
 						<f:selectItems value="#{sindicatoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-					</p:selectOneMenu>				
+					</p:selectOneMenu>	
+					<br />
 					
+					<h:outputLabel value="Projeto" style="width:50px;" />
+					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o projeto." value="#{sindicatoCad.sindicatoSelecionado.estado}" style="width:216px">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />						
+						<f:selectItems value="#{sindicatoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+					</p:selectOneMenu>	
+					<br />
+					
+					<h:outputLabel value="Descrição:" style="width:50px;" />
+					<p:inputTextarea rows="8" cols="40" autoResize="false" maxlength="200" />					
 				</div>
+				
+					
+			
+				
 				<br /><br />
 				<div id="divConfirmButtons" style="position: relative; width: 205px; left: 170px;">
 						<h:commandButton styleClass="botao3d" style=" width:100px; float:left;"  action="#{sindicatoCad.modoCadastrar()}" value="Confirmar" />						

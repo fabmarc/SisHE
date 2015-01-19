@@ -7,16 +7,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
 
 import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cliente;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
-import com.indra.sishe.service.EstadoService;
 
 @ViewScoped
 @ManagedBean(name = "sindicatoMnt")
@@ -52,6 +49,10 @@ public class SindicatoMntController extends SindicatoController {
 			listaSindicato = new ArrayList<Sindicato>();
 		else
 			pesquisar();
+		
+		setListaEstado(estadoService.findAll());
+		
+		
 	}
 
 	public String removerSindicato() {
@@ -85,7 +86,7 @@ public class SindicatoMntController extends SindicatoController {
 	
 
 	public void beforeRemoveCliente() {
-
+		
 		if (sindicatosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute(
 					"selectAtleastOne.show()");
@@ -124,7 +125,7 @@ public class SindicatoMntController extends SindicatoController {
 		this.sindicatoFiltro = sindicatoFiltro;
 	}
 
-	public Sindicato getSindcatoSelecionado() {
+	public Sindicato getSindicatoSelecionado() {
 		return sindicatoSelecionado;
 	}
 
@@ -145,5 +146,7 @@ public class SindicatoMntController extends SindicatoController {
 	public void setSindicatosSelecionados(List<Sindicato> sindicatosSelecionados) {
 		this.sindicatosSelecionados = sindicatosSelecionados;
 	}
+ 
+	
 
 }
