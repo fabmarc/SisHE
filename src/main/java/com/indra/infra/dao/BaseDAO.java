@@ -23,5 +23,4 @@ public interface BaseDAO<T> {
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK;
 
 	EntityManager getEntityManager();
-	
 }

@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.service.SistemaService;
+import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class SistemaServiceImpl implements SistemaService{
+public class SistemaServiceImpl extends StatelessServiceAb implements SistemaService{
 
 	
 	/**

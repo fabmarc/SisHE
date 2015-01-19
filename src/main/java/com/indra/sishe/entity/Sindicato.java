@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
+//@Entity
 @Table(name = "Sindicato")
 public class Sindicato implements Serializable, Comparable<Sindicato> {
 

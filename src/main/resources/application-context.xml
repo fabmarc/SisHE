@@ -12,7 +12,6 @@
 	<!-- 
 	-->
 	<jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/SisheDS" />
-
 	<!-- 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
