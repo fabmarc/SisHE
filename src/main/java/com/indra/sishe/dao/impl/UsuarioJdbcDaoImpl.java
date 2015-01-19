@@ -24,6 +24,8 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.UsuarioDAO;
 import com.indra.sishe.entity.Cargo;
+import com.indra.sishe.entity.Cidade;
+import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
 
@@ -113,6 +115,14 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				Cargo cargo = new Cargo();
 				cargo.setId(rs.getLong("id_cargo"));
 				cargo.setNome(rs.getString("nome_cargo"));
+				
+				Cidade cidade = new Cidade();
+				cidade.setId(rs.getLong("id_cidade"));
+				Estado estado = new Estado();
+				estado.setId(rs.getLong("id_cidade_estado"));
+				cidade.setEstado(estado);
+				cidade.setNome(rs.getString("cidade_nome"));
+				
 
 				Sindicato sind = new Sindicato();
 				sind.setId(rs.getLong("id_sindicato"));
@@ -120,6 +130,7 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 				usuario.setCargo(cargo);
 				usuario.setSindicato(sind);
+				usuario.setCidade(cidade);
 				usuario.setId(rs.getLong("id"));
 				usuario.setNome(rs.getString("nome"));
 				usuario.setMatricula(rs.getInt("matricula"));
@@ -137,8 +148,8 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	public List<Usuario> findAll() {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao ");
-		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO)  WHERE 1=1 ");
+		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
+		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
 		return consultar(sql, params);
 	}
 
@@ -146,8 +157,8 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	public List<Usuario> findByCargo(Cargo cargo) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao ");
-		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO)  WHERE 1=1 ");
+		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
+		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
 		sql.append("AND usuario.id_cargo = :idCargo");
 		params.addValue("idCargo", cargo.getId());
 		return consultar(sql, params);
@@ -158,8 +169,8 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
-			sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao ");
-			sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO)  WHERE 1=1 ");
+			sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
+			sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
 			sql.append("AND usuario.id = :idUsuario");
 			params.addValue("idUsuario", id);
 			List<Usuario> lista = consultar(sql, params);
@@ -179,8 +190,8 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao ");
-		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO)  WHERE 1=1 ");
+		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
+		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
 
 		if (usuarioFiltro != null && usuarioFiltro.getId() != null) {
 			sql.append("AND usuario.id = :idUsuario");

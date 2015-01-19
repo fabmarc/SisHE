@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.EstadoDAO;
+import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
 
 @Repository
@@ -97,5 +99,21 @@ public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 			DeletarRegistroViolacaoFK {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Estado findByCidade(Cidade cidade) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT estado.id as id, estado.nome as nome, estado.sigla as sigla ");
+		sql.append("FROM ESTADO INNER JOIN CIDADE ON (cidade.id_estado = estado.id) WHERE 1=1 ");
+		sql.append("AND cidade.id  = :idCidade");
+		params.addValue("idCidade", cidade.getId());
+		List<Estado> estado = getNamedParameterJdbcTemplate().query(sql.toString(), params, new BeanPropertyRowMapper<Estado>(Estado.class));
+		if(!estado.isEmpty()){
+			return estado.get(0);
+		}else{
+			return null;
+		}
 	}
 }

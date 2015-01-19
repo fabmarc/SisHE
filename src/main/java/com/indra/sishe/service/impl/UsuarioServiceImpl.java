@@ -101,8 +101,7 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 
 	@Override
 	public List<Usuario> findByCargo(Cargo cargo) {
-		// TODO Auto-generated method stub
-		return null;
+		return usuarioDao.findByCargo(cargo);
 	}
 
 }

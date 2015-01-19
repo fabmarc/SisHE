@@ -54,6 +54,10 @@ public class UsuarioCadController extends UsuarioController {
 		}
 
 		usuarioFiltro = (Usuario) getFlashAttr("usuarioFiltro");
+
+		if (!modoCadastrar() && usuarioSelecionado.getCidade() != null) {
+			estadoSelecionado = estadoService.findByCidade(usuarioSelecionado.getCidade());
+		}
 	}
 
 	public String cadastrarUsuario() {
@@ -122,12 +126,6 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public List<Estado> obterEstados() {
-		if (!modoCadastrar()) {
-			// estadoSelecionado =
-			// estadoService.consultarEstadoPorCidade(usuarioSelecionado.getCidade());
-			// //Setar estado selecionado para a cidade do usuario (esperando
-			// Diego fazer "consultarEstadoPorCidade").
-		}
 		return estadoService.findAll();
 	}
 

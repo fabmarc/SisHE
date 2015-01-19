@@ -10,6 +10,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.EstadoDAO;
+import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.StatelessServiceAb;
@@ -88,6 +89,11 @@ public class EstadoServiceImpl extends StatelessServiceAb implements EstadoServi
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Estado findByCidade(Cidade cidade) {
+		return estadoDao.findByCidade(cidade);
 	}
 
 }
