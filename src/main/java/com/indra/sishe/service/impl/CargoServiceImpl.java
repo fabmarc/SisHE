@@ -43,6 +43,8 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 			return cargoDao.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
+		} catch (RegistroDuplicadoException d) {
+			throw new ApplicationException(d, "msg.error.campo.existente", "cargo", "nome");
 		}
 	}
 

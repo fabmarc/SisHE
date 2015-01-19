@@ -9,10 +9,12 @@ import javax.inject.Inject;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cargo;
+import com.indra.sishe.entity.Cidade;
+import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
-import com.indra.sishe.service.CargoService;
+import com.indra.sishe.service.CidadeService;
+import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.SindicatoService;
 
 @ViewScoped
@@ -21,14 +23,18 @@ public class UsuarioCadController extends UsuarioController {
 
 	private static final long serialVersionUID = -7129370270911504298L;
 
-	@Inject
-	protected transient CargoService cargoService;
-
 	protected Usuario usuarioSelecionado;
 
-	@Inject 
+	protected Estado estadoSelecionado;
+
+	@Inject
 	protected transient SindicatoService sindicatoService;
-	
+
+	@Inject
+	protected transient EstadoService estadoService;
+
+	@Inject
+	protected transient CidadeService cidadeService;
 
 	public UsuarioCadController() {
 	}
@@ -41,7 +47,11 @@ public class UsuarioCadController extends UsuarioController {
 		searched = (Boolean) getFlashAttr("searched");
 
 		usuarioSelecionado = (Usuario) getFlashAttr("usuarioSelecionado");
-		if (usuarioSelecionado == null) usuarioSelecionado = new Usuario();
+		if (usuarioSelecionado == null) {
+			usuarioSelecionado = new Usuario();
+		} else {
+			senhaConfirm = usuarioSelecionado.getSenha();
+		}
 
 		usuarioFiltro = (Usuario) getFlashAttr("usuarioFiltro");
 	}
@@ -99,10 +109,6 @@ public class UsuarioCadController extends UsuarioController {
 		}
 	}
 
-	public List<Cargo> obterCargos() {
-		return cargoService.findAll();
-	}
-
 	public Usuario getUsuarioSelecionado() {
 		return usuarioSelecionado;
 	}
@@ -113,6 +119,32 @@ public class UsuarioCadController extends UsuarioController {
 
 	public List<Sindicato> obterSindicatos() {
 		return sindicatoService.findAll();
+	}
+
+	public List<Estado> obterEstados() {
+		if (!modoCadastrar()) {
+			// estadoSelecionado =
+			// estadoService.consultarEstadoPorCidade(usuarioSelecionado.getCidade());
+			// //Setar estado selecionado para a cidade do usuario (esperando
+			// Diego fazer "consultarEstadoPorCidade").
+		}
+		return estadoService.findAll();
+	}
+
+	public Estado getEstadoSelecionado() {
+		return estadoSelecionado;
+	}
+
+	public void setEstadoSelecionado(Estado estadoSelecionado) {
+		this.estadoSelecionado = estadoSelecionado;
+	}
+
+	public List<Cidade> obterCidadePorEstado() {
+		if (estadoSelecionado != null) {
+			return cidadeService.findByEstado(this.estadoSelecionado);
+		} else {
+			return null;
+		}
 	}
 
 }

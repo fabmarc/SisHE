@@ -146,14 +146,11 @@ public class Sindicato implements Serializable, Comparable<Sindicato> {
 
 	@Override
 	public int compareTo(Sindicato o) {
-		// TODO Auto-generated method stub
-		int valor = descricao.toLowerCase().compareTo(
-				o.descricao.toLowerCase());
-		if (valor != 0) {
+		int valor = descricao.toLowerCase().compareTo(o.descricao.toLowerCase());
+		if(valor != 0){
 			return valor;
-		} else {
+		}else{
 			return 1;
 		}
 	}
-
 }

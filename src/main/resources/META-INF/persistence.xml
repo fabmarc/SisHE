@@ -7,7 +7,7 @@
 		<!-- 
 		-->
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<jta-data-source>java:jboss/datasources/SisheDS</jta-data-source>
+		<jta-data-source>java:jboss/datasources/SisHE</jta-data-source>
 		
 		<properties>
 			<!-- 

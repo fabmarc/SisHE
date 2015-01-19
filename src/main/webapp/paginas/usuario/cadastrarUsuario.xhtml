@@ -6,16 +6,18 @@
 		<h:form id="mainForm">
 			<br />
 			<ui:insert>
-				<p:messages id="messages" showDetail="true" showSummary="false" />
-				<div style="top: 15px; left: 112px; position: relative; width: 230px">
+				<div style="top:61px; position:absolute; width: 100%;">
+					<p:messages id="messages" showDetail="true" showSummary="false"  />
+				</div>
+				<div style="top: 35px; left: 112px; position: relative; width: 230px">
 					<div>
 						<div style="position:absolute; float:left;">
 							<p:outputLabel value="Nome:" for="nomeIpt" style="width:50px;" />
 							<p:inputText id="nomeIpt" type="text" value="#{usuarioCad.usuarioSelecionado.nome}" maxlength="60" />					
 						</div>
-						<div style="position:absolute; float:right; left:235px;">
-							<p:outputLabel value="E-mail:" for="emailIpt" style="width:50px;" />
-							<p:inputText id="emailIpt" type="text" value="#{usuarioCad.usuarioSelecionado.email}" maxlength="30" />
+						<div style="position: absolute; float: right; left: 235px;">
+							<p:outputLabel value="Matricula" style="width:50px;" />
+							<p:inputMask mask="9?999999" id="matricula" value="#{usuarioCad.usuarioSelecionado.matricula}" maxlength="20"/>
 						</div>
 					</div>
 					
@@ -36,24 +38,59 @@
 							</h:selectOneMenu>
 						</div>
 					</div>
-					
-					
-					<div style="top:126px; position: absolute;">
+
+					<div style="top: 126px; position: absolute;">
 						<div style="position:absolute; float:left;">
-							<p:outputLabel value="Login:" for="loginIpt" style="width:50px;" />
-							<p:inputText id="loginIpt" type="text" value="#{usuarioCad.usuarioSelecionado.login}" maxlength="20" />
+							<h:outputLabel value="Estado" for="estadoIpt" />
+							<h:selectOneMenu id="estadoIpt" value="#{usuarioCad.estadoSelecionado}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{usuarioCad.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+								<f:ajax event="change" render="mainForm:cidadeIpt"/>
+							</h:selectOneMenu>
 						</div>
 						
 						<div style="position:absolute; float:right; left:235px;">
-							<p:outputLabel value="Senha:" for="senhaIpt" style="width:50px;" />
-							<p:inputText id="senhaIpt" type="password" value="#{usuarioCad.usuarioSelecionado.senha}" maxlength="20" />
+							<h:outputLabel value="Cidade" for="cidadeIpt" />
+							<h:selectOneMenu id="cidadeIpt" value="#{usuarioCad.usuarioSelecionado.cidade}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{usuarioCad.obterCidadePorEstado()}" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
+							</h:selectOneMenu>
+						</div>
+						
+					</div>
+
+					<div style="top: 189px; position: absolute;">
+						<div style="position: absolute; float: left;">
+							<p:outputLabel value="Login:" style="width:50px;" />
+							<p:inputText id="loginIpt" type="text" value="#{usuarioCad.usuarioSelecionado.login}" maxlength="20" />
+						</div>
+
+						<div style="position: absolute; float: right; left: 235px;">
+							<p:outputLabel value="E-mail:" for="emailIpt" style="width:50px;" />
+							<p:inputText id="emailIpt" type="text" value="#{usuarioCad.usuarioSelecionado.email}" maxlength="30" />
+						</div>
+					</div>
+
+					<div style="top:253px; position: absolute;">
+						<div style="position: absolute; float: left;">
+							<p:outputLabel value="Senha:" style="width:50px;" />
+							<!-- Input para limpar o cache do browser -->
+							<p:inputText type="password" style="display:none" />
+							<p:inputText type="password" id="senhaIpt" name="password" value="#{usuarioCad.usuarioSelecionado.senha}" maxlength="20" />
+						</div>
+
+						<div style="position: absolute; float: right; left: 235px;">
+							<p:outputLabel value="Senha Confirmação:" style="width:161px;" />
+							<!-- Input para limpar o cache do browser -->
+							<p:inputText type="password" style="display:none" />
+							<p:inputText type="password" id="senhaConfIpt" name="password" value="#{usuarioCad.senhaConfirm}" maxlength="20" />
 						</div>
 					</div>					
 					
 					<br />
-					<div style="position: relative; width: 220px; top:190px; left:117px;">
-						<h:commandButton style="width:100px; float:left;" action="#{usuarioCad.confirmar()}" value="Confirmar" />
-						<h:commandButton style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" />
+					<div style="position: relative; width: 220px; top:316px; left:117px;">
+						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{usuarioCad.confirmar()}" value="Confirmar" />
+						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" />
 					</div>
 				</div>
 			</ui:insert>

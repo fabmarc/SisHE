@@ -1,10 +1,8 @@
 package com.indra.sishe.service.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,6 +50,8 @@ public class EstadoServiceImlp extends StatelessServiceAb implements EstadoServi
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente",
 					"Estado");
+		} catch (RegistroDuplicadoException e) {
+			throw new ApplicationException(e, "msg.error.campo.existente", "estado", "nome");
 		}
 
 	}

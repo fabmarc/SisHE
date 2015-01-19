@@ -12,6 +12,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.UsuarioDAO;
+import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioService;
@@ -29,6 +30,12 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 		try {
 			return usuarioDao.save(entity);
 		} catch (RegistroDuplicadoException e) {
+			if (e.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) {
+				throw new ApplicationException(e, "msg.error.campo.existente", "usuário", "matrícula");
+			}
+			if (e.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) {
+				throw new ApplicationException(e, "msg.error.campo.existente", "usuário", "login");
+			}
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Usuário");
 		}
 	}
@@ -39,6 +46,14 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			return usuarioDao.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Usuário");
+		} catch (RegistroDuplicadoException d) {
+			if (d.toString().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) {
+				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "matrícula");
+			}
+			if (d.toString().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) {
+				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "login");
+			}
+			throw new ApplicationException(d, "Erro");
 		}
 	}
 
@@ -82,6 +97,12 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
 		}
+	}
+
+	@Override
+	public List<Usuario> findByCargo(Cargo cargo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

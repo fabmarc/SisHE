@@ -12,7 +12,7 @@ public interface BaseDAO<T> {
 
 	public T save(T entity) throws RegistroDuplicadoException;
 
-	public T update(T entity) throws RegistroInexistenteException;
+	public T update(T entity) throws RegistroInexistenteException, RegistroDuplicadoException;
 	
 	public List<T> findAll();
 

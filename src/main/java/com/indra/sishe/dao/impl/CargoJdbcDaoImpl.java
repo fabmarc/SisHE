@@ -48,15 +48,20 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 			Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
 			entity.setId(key.longValue());
 		} catch (DuplicateKeyException e) {
-			throw new RegistroDuplicadoException();
+			throw new RegistroDuplicadoException(e.toString());
 		}
 		return entity;
 	}
 
 	@Override
-	public Cargo update(Cargo entity) throws RegistroInexistenteException {
-		int rows = getJdbcTemplate().update("UPDATE cargo SET nome = ? " + "WHERE id = ?", entity.getNome(), entity.getId());
-		if (rows == 0) throw new RegistroInexistenteException();
+	public Cargo update(Cargo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
+		try {
+			int rows = getJdbcTemplate().update("UPDATE cargo SET nome = ? " + "WHERE id = ?", entity.getNome(), entity.getId());
+			if (rows == 0)
+				throw new RegistroInexistenteException();
+		} catch (DuplicateKeyException e) {
+			throw new RegistroDuplicadoException(e.toString());
+		}
 		return entity;
 	}
 

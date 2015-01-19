@@ -2,51 +2,27 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "usuario")
 public class Usuario implements Serializable, Comparable<Usuario> {
 
 	private static final long serialVersionUID = -4353769998918846888L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "id_cargo", insertable = true, updatable = true, nullable = true, unique = true)
 	private Cargo cargo;
 
-	@OneToOne
-	@JoinColumn(name = "id_sindicato", insertable = true, updatable = true, nullable = true, unique = true)
 	private Sindicato sindicato;
 
-	@OneToOne
-	@JoinColumn(name = "id_cidade", insertable = true, updatable = true, nullable = true, unique = true)
 	private Cidade cidade;
 
-	@Column(name = "nome", nullable = false)
 	private String nome;
 
-	@Column(name = "login", nullable = false)
 	private String login;
 
-	@Column(name = "senha", nullable = false)
 	private String senha;
 
-	@Column(name = "matricula", nullable = false)
 	private Integer matricula;
 
-	@Column(name = "email", nullable = false)
 	private String email;
 
 	public Usuario() {

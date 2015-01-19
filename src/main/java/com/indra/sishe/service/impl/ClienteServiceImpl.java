@@ -45,6 +45,8 @@ public class ClienteServiceImpl extends StatelessServiceAb implements ClienteSer
 			return clienteDao.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cliente");
+		} catch (RegistroDuplicadoException e) {
+			throw new ApplicationException(e, "msg.error.campo.existente", "cliente", "nome");
 		}
 	}
 

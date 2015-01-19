@@ -48,6 +48,8 @@ public class SindicatoServiceImpl extends StatelessServiceAb implements Sindicat
 			// TODO: handle exception
 			throw new ApplicationException(e, "msg.error.registro.inexistente",
 					"Sindicato");
+		} catch (RegistroDuplicadoException e) {
+			throw new ApplicationException(e, "msg.error.campo.existente", "sindicato", "nome");
 		}
 
 	}
