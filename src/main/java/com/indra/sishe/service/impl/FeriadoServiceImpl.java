@@ -39,7 +39,11 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 			return feriadoDAO.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Feriado");
+		} catch (RegistroDuplicadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override

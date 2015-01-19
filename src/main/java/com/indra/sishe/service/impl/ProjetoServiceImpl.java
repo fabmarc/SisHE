@@ -39,7 +39,11 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 			return projetoDAO.update(projeto);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Projeto");
+		} catch (RegistroDuplicadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override

@@ -6,6 +6,9 @@ public class RegistroDuplicadoException extends Exception{
 
 	private String messageCode;
 
+	public RegistroDuplicadoException() {
+	}
+	
 	public String getMessageCode() {
 		return messageCode;
 	}

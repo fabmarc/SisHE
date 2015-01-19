@@ -3,7 +3,6 @@ package com.indra.sishe.service.impl;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

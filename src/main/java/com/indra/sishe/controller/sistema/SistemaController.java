@@ -10,7 +10,6 @@ import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.service.SistemaService;
 
-@SuppressWarnings("serial")
 public class SistemaController extends BaseController implements Serializable {
 
 

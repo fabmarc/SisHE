@@ -74,9 +74,6 @@ public class EstadoServiceImlp extends StatelessServiceAb implements EstadoServi
 		}
 	}
 
-	
-
-	@Override
 	public List<Estado> pesquisarPorSigla(String sigla) {
 		// TODO Auto-generated method stub
 		return estadoDao.pesquisarPorSigla(sigla);

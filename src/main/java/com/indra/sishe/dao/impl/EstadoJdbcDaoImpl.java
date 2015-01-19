@@ -93,4 +93,12 @@ public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		// TODO Auto-generated method stub
 
 	}
+
+
+
+	@Override
+	public List<Estado> pesquisarPorSigla(String sigla) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

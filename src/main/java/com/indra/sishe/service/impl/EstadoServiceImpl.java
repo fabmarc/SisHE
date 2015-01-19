@@ -1,10 +1,8 @@
 package com.indra.sishe.service.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +13,6 @@ import com.indra.sishe.dao.EstadoDAO;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.StatelessServiceAb;
-
 
 @Stateless
 public class EstadoServiceImpl extends StatelessServiceAb implements EstadoService {
@@ -50,10 +47,12 @@ public class EstadoServiceImpl extends StatelessServiceAb implements EstadoServi
 		try {
 			return estadoDao.update(entity);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Estado");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Estado");
+		} catch (RegistroDuplicadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
+		return null;
 	}
 
 	@Override
@@ -68,15 +67,10 @@ public class EstadoServiceImpl extends StatelessServiceAb implements EstadoServi
 		try {
 			return estadoDao.findById(id);
 		} catch (Exception e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Estado");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Estado");
 			// TODO: handle exception
 		}
 	}
-
-	
-
-	
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
@@ -84,17 +78,16 @@ public class EstadoServiceImpl extends StatelessServiceAb implements EstadoServi
 		try {
 			estadoDao.remove(id);
 		} catch (Exception e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Estado");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Estado");
 			// TODO: handle exception
 		}
-		
+
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
