@@ -117,11 +117,11 @@ public class SindicatoCadController extends SindicatoController {
 		this.searched = pesquisar;
 	}
 
-	public List<Estado> obterEstados() {
+	/*public List<Estado> obterEstados() {
 		setListaEstado(estadoService.findAll());
 		return estadoService.findAll();
 		
-	}
+	}*/
 
 	public String modoCadastrar() {
 

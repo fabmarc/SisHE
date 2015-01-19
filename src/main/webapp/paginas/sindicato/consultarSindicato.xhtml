@@ -8,59 +8,75 @@
 			<!-- 
 			<p:growl id="message" showDetail="true" />
 			-->
-			
-			<br />
-			<div style="text-align: right; align: right; float: right; width: 100px;">
-				<p:commandLink value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" />
-			</div>
-			<br />
+
 			<ui:insert>
 				<p:messages id="messages"  showDetail="true" showSummary="false" />
-				<div style="width: 410px;">
-					<h:outputLabel value="Nome:" style="margin:left; align:left; width:50px;" />
-					<h:inputText value="#{sindicatoMnt.sindicatoFiltro.descricao}" maxlength="40" style="height:15px; width:300px;" />
-					<h:commandButton style="float:right;" actionListener="#{sindicatoMnt.pesquisar()}" value="Pesquisar" />
+				
+				<div id="camposPesquisar" style="top: 17px; position: relative; width: 226px;">
+				
+					<div style="position: relative;">
+						<h:outputLabel value="Nome:" style="margin:left; align:left; width:50px;" />
+						<h:inputText value="#{sindicatoMnt.sindicatoFiltro.descricao}" maxlength="40" style="width:150px; position: relative; top: -7px;" />
+					</div>
+	
+					<div style="position: relative; left: 181px; top: -64px; width: 263px; height: 41px;">
+						<h:outputLabel value="Estado:" style="width:50px;" />
+						<p:selectOneMenu converter="omnifaces.SelectItemsConverter" value="#{sindicatoMnt.sindicatoFiltro.estado}" style="position:relative; top: -7px;width:216px;">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{sindicatoMnt.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+						</p:selectOneMenu>
+					</div>
+	
+					<br />
+					<div style="position: relative; top: -104px; position: relative; left: 413px;">
+						<h:commandButton styleClass="botao3d" style="float:left;" actionListener="#{sindicatoMnt.pesquisar()}" value="Pesquisar" />
+						
+					</div>
 				</div>
-
-				<p:dataTable style="top:10%;" rowKey="#{sindicato.id}" selection="#{sindicatoMnt.sindicatosSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sindicatosDt" var="sindicato" value="#{sindicatoMnt.listaSindicato}" emptyMessage="Nenhum registro encontrado.">
-					<f:facet name="header">
-						Sindicatos
-					</f:facet>
-					<p:column style="width:5px; text-align:center" selectionMode="multiple" />
-					<p:column headerText="Código"  style="width:10%; text-align:center; ">
-						<h:outputText value="#{sindicato.id}" />
-					</p:column>
-					<p:column headerText="Nome do Sindicato">
-						<div>
-							<h:outputText value="#{sindicato.descricao}" />
-						</div>
-					</p:column>
-					<p:column headerText="UF" style="width:15%; text-align:center">
-						<div>
-							<h:outputText value="#{sindicato.estado.sigla}" />
-						</div>
-					</p:column>
-
-					<p:column headerText="Ação" style="width:10%; text-align:center"  >
-						<h:commandLink id="linkAlterar" value="Alterar"  styleClass="ui-icon ui-icon-pencil"
-						 action="#{sindicatoMnt.irParaAlterar(sindicato)}" />
-					</p:column>
-					<f:facet name="footer">
-						<div style="text-align: right; width: 100%">
-							<p:commandLink value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" />
-							/ 
-							<p:commandLink value="Excluir" actionListener="#{sindicatoMnt.beforeRemoveCliente}" />
-						</div>
+				<div style="top:-43px; position: relative;">
+					<p:dataTable style="top:10%;" rowKey="#{sindicato.id}" selection="#{sindicatoMnt.sindicatosSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sindicatosDt" var="sindicato" value="#{sindicatoMnt.listaSindicato}" emptyMessage="Nenhum registro encontrado.">
+						<f:facet name="header">
+							Sindicatos
 						</f:facet>
-				</p:dataTable>
-
+						<p:column style="width:5px; text-align:center" selectionMode="multiple" />
+						<p:column headerText="Código"  style="width:10%; text-align:center; ">
+							<h:outputText value="#{sindicato.id}" />
+						</p:column>
+						<p:column headerText="Nome do Sindicato">
+							<div>
+								<h:outputText value="#{sindicato.descricao}" />
+							</div>
+						</p:column>
+						<p:column headerText="UF" style="width:15%; text-align:center">
+							<div>
+								<h:outputText value="#{sindicato.estado.sigla}" />
+							</div>
+						</p:column>
+	
+						<p:column headerText="Ação" style="width:10%; text-align:center"  >
+							<h:commandLink id="linkAlterar" value="Alterar"  styleClass="ui-icon ui-icon-pencil"
+							 action="#{sindicatoMnt.irParaAlterar(sindicato)}" />
+						</p:column>
+						<f:facet name="footer">
+							<div style="text-align: right; width: 100%">
+								<p:commandLink value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" />
+								/ 
+								<p:commandLink value="Excluir" actionListener="#{sindicatoMnt.beforeRemoveCliente}" />
+							</div>
+							</f:facet>
+					</p:dataTable>
+				</div>
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
-					<p:commandButton value="Sim" actionListener="#{sindicatoMnt.removerSindicato()}" onclick="confirmExclusao.hide()" update="mainForm:sindicatosDt messages" />
-					<p:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" />
+					<div class="divDialog">
+						<h:commandButton value="Sim" actionListener="#{sindicatoMnt.removerSindicato()}" onclick="confirmExclusao.hide()" update="mainForm:sindicatosDt messages" styleClass="botao3d" style="width: 109px;" />
+						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
+					</div>
 				</p:confirmDialog>
 				
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
-					<p:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" />
+					<div class="divDialog">
+						<h:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
+					</div>
 				</p:confirmDialog>
 			</ui:insert>
 		</h:form>
