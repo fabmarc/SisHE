@@ -12,6 +12,7 @@ import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 
 @ViewScoped

@@ -13,7 +13,6 @@ import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
 public class SistemaServiceImpl extends StatelessServiceAb implements SistemaService{
-
 	
 	/**
 	 * 

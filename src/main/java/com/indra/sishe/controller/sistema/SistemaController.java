@@ -77,9 +77,7 @@ public class SistemaController extends BaseController implements Serializable {
 		
 	
 	
-	
-	
-	
+		
 	public String irParaConsultar() {
 		return "/paginas/sistema/consultarSistema.xhtml?faces-redirect=true";
 	}
