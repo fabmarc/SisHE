@@ -17,14 +17,14 @@
 					<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
 				</div>
 
-				<div id="DivEstado" style="position: relative;top: -105px;left: 412px;">
-				<p:outputLabel for="selecionarEstado" value="Abrangência:" />
-				<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
-					<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-					<f:selectItems value="#{feriadoMnt.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-				</p:selectOneMenu>
+				<div id="DivEstado" style="position: relative; top: -105px; left: 412px;">
+					<p:outputLabel for="selecionarEstado" value="Abrangência:" />
+					<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{feriadoMnt.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+					</p:selectOneMenu>
 				</div>
-				<div style="top: -139.5px;position: relative;left: 622px;">
+				<div style="top: -139.5px; position: relative; left: 622px;">
 					<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
 				</div>
 			</div>
@@ -55,7 +55,7 @@
 							<h:outputText value="#{feriado.tipoFormatado}" style="width:11px; left:1px; position: relative; float:center;" />
 						</p:column>
 
-						<p:column headerText="Ações" style="width:5%">
+						<p:column headerText="Ação" style="width:5%">
 							<p:commandLink id="linkAlterar" title="Editar Feriado" styleClass="ui-icon ui-icon-pencil" action="#{feriadoMnt.irParaAlterar(feriado)}" style="width:20px; left:13px; position: relative; float:center;" />
 						</p:column>
 						<f:facet name="footer">

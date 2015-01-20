@@ -40,10 +40,8 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Projeto");
 		} catch (RegistroDuplicadoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Projeto");
 		}
-		return null;
 	}
 
 	@Override

@@ -41,12 +41,18 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 	public List<Feriado> findByFilter(Feriado feriado) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, estado.id AS estado_id, estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, id_cidade AS cidade_id, case 	when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' else case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from estado where id = feriado.id_estado)||')' end end as abrangencia ");
-		sql.append("FROM feriado left outer JOIN estado on (estado.id = feriado.id_estado) left outer JOIN cidade on (cidade.id  = feriado.id_cidade) WHERE 1=1 ");
+		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, estado.id AS estado_id, " +
+				"estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, id_cidade AS cidade_id, " +
+				"case when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' else " +
+				"case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where " +
+				"id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from " +
+				"estado where id = feriado.id_estado)||')' end end as abrangencia ");
+		sql.append("FROM feriado left outer JOIN estado on (estado.id = feriado.id_estado) " +
+								"left outer JOIN cidade on (cidade.id  = feriado.id_cidade) WHERE 1=1 ");
 
 		if (feriado != null && feriado.getNome() != null && !"".equals(feriado.getNome())) {
 			sql.append("AND LOWER(feriado.nome) LIKE '%'|| :nomeFeriado || '%' ");
-			params.addValue("nomeFeriado", feriado.getNome());
+			params.addValue("nomeFeriado", feriado.getNome().toLowerCase());
 		}
 
 		if (feriado != null && feriado.getData() != null) {
@@ -117,17 +123,15 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 	@Override
 	public Feriado update(Feriado feriado) throws RegistroInexistenteException {
 		int rows;
-		if (feriado.getEstado() == null) { // Feriado Nacional, define Estado e
-											// Cidade como NULL
-			rows = getJdbcTemplate().update("UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = default, id_cidade = default WHERE id = ?", feriado.getNome(), feriado.getData(),
-					feriado.getTipo(), feriado.getId());
-		} else if (feriado.getCidade() == null) { // Feriado Estadual, define
-													// Cidade como NULL
-			rows = getJdbcTemplate().update("UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = ? WHERE id = ?", feriado.getNome(), feriado.getData(), feriado.getTipo(),
-					feriado.getEstado().getId(), feriado.getId());
+		if (feriado.getEstado() == null) { // Feriado Nacional, define Estado e Cidade como NULL
+			rows = getJdbcTemplate().update("UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = default, " +
+					"id_cidade = default WHERE id = ?", feriado.getNome(), feriado.getData(), feriado.getTipo(), feriado.getId());
+		} else if (feriado.getCidade() == null) { // Feriado Estadual, define Cidade como NULL
+			rows = getJdbcTemplate().update("UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = ? WHERE id = ?",
+					feriado.getNome(), feriado.getData(), feriado.getTipo(), feriado.getEstado().getId(), feriado.getId());
 		} else { // Feriado Municipal
-			rows = getJdbcTemplate().update("UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = ?, id_cidade = ? WHERE id = ?", feriado.getNome(), feriado.getData(), feriado.getTipo(),
-					feriado.getEstado().getId(), feriado.getCidade().getId(), feriado.getId());
+			rows = getJdbcTemplate().update("UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = ?, id_cidade = ? WHERE id = ?", 
+					feriado.getNome(), feriado.getData(), feriado.getTipo(), feriado.getEstado().getId(), feriado.getCidade().getId(), feriado.getId());
 		}
 		if (rows == 0)
 			throw new RegistroInexistenteException();
@@ -138,8 +142,14 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 	public List<Feriado> findAll() {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, estado.id AS estado_id, estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, id_cidade AS cidade_id, case 	when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' else case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from estado where id = feriado.id_estado)||')' end end as abrangencia ");
-		sql.append("FROM feriado left outer JOIN estado on (estado.id = feriado.id_estado) left outer JOIN cidade on (cidade.id  = feriado.id_cidade) WHERE 1=1 ");
+		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, " +
+				"estado.id AS estado_id, estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, " +
+				"id_cidade AS cidade_id, case when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' " +
+				"else case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where " +
+				"id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from " +
+				"estado where id = feriado.id_estado)||')' end end as abrangencia ");
+		sql.append("FROM feriado left outer JOIN estado on (estado.id = feriado.id_estado) " +
+								"left outer JOIN cidade on (cidade.id  = feriado.id_cidade) WHERE 1=1 ");
 
 		sql.append("order by data ");
 
@@ -179,8 +189,14 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
-			sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, estado.id AS estado_id, estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, id_cidade AS cidade_id, case 	when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' else case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from estado where id = feriado.id_estado)||')' end end as abrangencia ");
-			sql.append("FROM feriado left outer JOIN estado on (estado.id = feriado.id_estado) left outer JOIN cidade on (cidade.id  = feriado.id_cidade) WHERE 1=1 ");
+			sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, " +
+					"estado.id AS estado_id, estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, " +
+					"id_cidade AS cidade_id, case when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' " +
+					"else case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where " +
+					"id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from " +
+					"estado where id = feriado.id_estado)||')' end end as abrangencia ");
+			sql.append("FROM feriado left outer JOIN estado on (estado.id = feriado.id_estado) " +
+									"left outer JOIN cidade on (cidade.id  = feriado.id_cidade) WHERE 1=1 ");
 			sql.append("AND feriado.id = :idFeriado ");
 			params.addValue("idFeriado", id);
 

@@ -10,21 +10,22 @@
 
 					<div>
 						<p:outputLabel value="Nome:" id="nome" />
-						<p:inputText type="text" value="#{projetoCad.projetoSelecionado.nome}" maxlength="50" required="true" requiredMessage="O campo Nome é Obrigatório."/>
+						<p:inputText type="text" value="#{projetoCad.projetoSelecionado.nome}" maxlength="50" required="true" requiredMessage="O campo Nome é Obrigatório." />
 					</div>
 					<div>
 						<p:outputLabel value="Descrição:" />
-						<p:inputTextarea type="text" value="#{projetoCad.projetoSelecionado.descricao}" maxlength="500"/>
+						<p:inputTextarea type="text" value="#{projetoCad.projetoSelecionado.descricao}" maxlength="500" style="width:210px" />
 					</div>
 
-					<div style="position: relative; top: -13px">
+					<div style="position: relative; top: 10px">
 						<p:outputLabel for="selecionarGerente" value="Gerente:" />
-						<p:selectOneMenu id="selecionarGerente" value="#{projetoCad.projetoSelecionado.usuario}" converter="omnifaces.SelectItemsConverter">
+						<p:selectOneMenu id="selecionarGerente" value="#{projetoCad.projetoSelecionado.gerente}" converter="omnifaces.SelectItemsConverter" style="width:218px" required="true" requiredMessage="O campo Gerente é Obrigatório">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{projetoCad.listaGerentes}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario}" />
 						</p:selectOneMenu>
 					</div>
 					<br />
-					<div style="position: relative; width: 220px; top: -21px;">
+					<div style="position: relative; width: 220px; top: 5px;">
 						<h:commandButton style="width:100px; float:left;" action="#{projetoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
 						<h:commandButton style="float:right; width:100px;" action="#{projetoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />
 					</div>

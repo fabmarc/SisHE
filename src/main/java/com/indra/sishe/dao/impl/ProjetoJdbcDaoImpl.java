@@ -21,6 +21,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.ProjetoDAO;
 import com.indra.sishe.entity.Projeto;
+import com.indra.sishe.entity.Usuario;
 
 @Repository
 public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements ProjetoDAO {
@@ -39,7 +40,7 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	@Override
 	public Projeto save(Projeto projeto) throws RegistroDuplicadoException {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-//		params.addValue("id_gerente", projeto.getUsuario().getId());
+		params.addValue("id_gerente", projeto.getGerente().getId());
 		params.addValue("nome", projeto.getNome());
 		params.addValue("descricao", projeto.getDescricao());
 
@@ -50,9 +51,8 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Projeto update(Projeto projeto) throws RegistroInexistenteException {
-		int rows = getJdbcTemplate().update("UPDATE projeto SET nome = ?, descricao = ?, id_gerente = ?", projeto.getNome(), projeto.getDescricao(), projeto./*getUsuario().*/getId());
-		if (rows == 0)
-			throw new RegistroInexistenteException();
+		int rows = getJdbcTemplate().update("UPDATE projeto SET nome = ?, descricao = ?, id_gerente = ? WHERE id = ? ", projeto.getNome(), projeto.getDescricao(), projeto.getGerente().getId(), projeto.getId());
+		if (rows == 0) throw new RegistroInexistenteException();
 		return projeto;
 	}
 
@@ -67,13 +67,13 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			@Override
 			public Projeto mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Projeto projeto = new Projeto();
-//				Usuario usuario = new Usuario();
+				Usuario usuario = new Usuario();
 
-//				usuario.setId(rs.getLong("idGerente"));
-//				usuario.setNome(rs.getString("nomeGerente"));
+				usuario.setId(rs.getLong("idGerente"));
+				usuario.setNome(rs.getString("nomeGerente"));
 
 				projeto.setId(rs.getLong("id"));
-//				projeto.setUsuario(usuario);
+				projeto.setGerente(usuario);
 				projeto.setNome("nome");
 				projeto.setDescricao("descricao");
 				return projeto;
@@ -83,10 +83,42 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	}
 
 	@Override
-	public Projeto findById(Object id) throws RegistroInexistenteException {return null;}
+	public Projeto findById(Object id) throws RegistroInexistenteException {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT projeto.id AS id, projeto.nome AS nome, usuario.nome AS nomeGerente, usuario.id AS idGerente, projeto.descricao AS descricao ");
+		sql.append("FROM projeto INNER JOIN usuario ON (projeto.id_gerente=usuario.id) where 1=1 ");
+
+		sql.append("AND projeto.id = :idProjeto ");
+		params.addValue("idProjeto", id);
+
+		List<Projeto> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Projeto>() {
+			@Override
+			public Projeto mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Projeto projeto = new Projeto();
+				Usuario usuario = new Usuario();
+
+				usuario.setId(rs.getLong("idGerente"));
+				usuario.setNome(rs.getString("nomeGerente"));
+
+				projeto.setId(rs.getLong("id"));
+				projeto.setGerente(usuario);
+				projeto.setNome(rs.getString("nome"));
+				projeto.setDescricao(rs.getString("descricao"));
+				return projeto;
+			}
+
+		});
+		if (!lista.isEmpty()) {
+			return lista.get(0);
+		} else {
+			return null;
+		}
+	}
 
 	@Override
-	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK { }
+	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+	}
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
@@ -97,11 +129,14 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		}
 		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM projeto WHERE id = ?", params);
 		for (int rows : affectedRows)
-		if (rows == 0) throw new RegistroInexistenteException();
+			if (rows == 0)
+				throw new RegistroInexistenteException();
 	}
 
 	@Override
-	public EntityManager getEntityManager() { return null; }
+	public EntityManager getEntityManager() {
+		return null;
+	}
 
 	@Override
 	public List<Projeto> findByFilter(Projeto projeto) {
@@ -112,22 +147,23 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 		if (projeto != null && projeto.getNome() != null) {
 			sql.append("AND LOWER(projeto.nome) LIKE '%'|| :nomeProjeto || '%' ");
-			params.addValue("nomeProjeto", projeto.getNome());
+			params.addValue("nomeProjeto", projeto.getNome().toLowerCase());
 		}
-		List<Projeto> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, 
-			new RowMapper<Projeto>() {
+
+		sql.append("ORDER BY projeto.id ");
+		List<Projeto> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Projeto>() {
 			@Override
 			public Projeto mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Projeto projeto = new Projeto();
-//				Usuario usuario = new Usuario();
+				Usuario usuario = new Usuario();
 
-//				usuario.setId(rs.getLong("idGerente"));
-//				usuario.setNome(rs.getString("nomeGerente"));
+				usuario.setId(rs.getLong("idGerente"));
+				usuario.setNome(rs.getString("nomeGerente"));
 
 				projeto.setId(rs.getLong("id"));
-//				projeto.setUsuario(usuario);
-				projeto.setNome("nome");
-				projeto.setDescricao("descricao");
+				projeto.setGerente(usuario);
+				projeto.setNome(rs.getString("nome"));
+				projeto.setDescricao(rs.getString("descricao"));
 				return projeto;
 			}
 

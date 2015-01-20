@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.service.ProjetoService;
+import com.indra.sishe.service.UsuarioService;
 
 public class ProjetoController extends BaseController implements Serializable {
 
@@ -16,21 +17,21 @@ public class ProjetoController extends BaseController implements Serializable {
 	@Inject
 	protected transient ProjetoService projetoService;
 
-//	@Inject
-//	protected transient UsuarioService usuarioService;
+	@Inject
+	protected transient UsuarioService usuarioService;
 
 	public Projeto projetoFiltro;
 
 	public List<Projeto> listaProjetos;
-
-	protected boolean searched;
+	
+	protected Boolean searched;
 
 	public boolean validarProjeto(Projeto projetoSelecionado) {
 		if (projetoSelecionado.getNome().isEmpty()) {
 			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Nome"));
 		} else if (projetoSelecionado.getNome().length() > 50) {
 			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "50"));
-		} else if (projetoSelecionado/*.getUsuario()*/ == null) {
+		} else if (projetoSelecionado.getGerente() == null) {
 			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Gerente"));
 		} else if (projetoSelecionado.getDescricao().length() > 500) {
 			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Descrição", "500"));
@@ -52,7 +53,7 @@ public class ProjetoController extends BaseController implements Serializable {
 		putFlashAttr("searched", searched);
 		putFlashAttr("projetoFiltro", projetoFiltro);
 		putFlashAttr("projetoSelecionado", projetoSelecionado);
-		return "/paginas/projeto/cadastrarProjeto.xhtml?faces-redirect=true";
+		return irParaAlterar();
 	}	
 
 	public String irParaCadastrar(){

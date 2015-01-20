@@ -10,22 +10,10 @@
 			<div style="top: 17px; position: relative; width: 226px; height: 50px;">
 				<div style="position: relative;">
 					<p:outputLabel value="Nome:" />
-					<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; top: -6px;" />
+					<p:inputText value="#{projetoMnt.projetoFiltro.nome}" maxlength="50" style="width:150px; position: relative; top: -6px;" />
 				</div>
-				<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
-					<p:outputLabel value="Data:" for="calendarioBusca" />
-					<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
-				</div>
-
-				<div id="DivEstado" style="position: relative;top: -105px;left: 412px;">
-				<p:outputLabel for="selecionarEstado" value="Abrangência:" />
-				<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
-					<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-					<f:selectItems value="#{feriadoMnt.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-				</p:selectOneMenu>
-				</div>
-				<div style="top: -139.5px;position: relative;left: 622px;">
-					<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
+				<div style="top: -44px; position: relative; left: 179px;">
+					<h:commandButton actionListener="#{projetoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
 				</div>
 			</div>
 
@@ -33,43 +21,55 @@
 
 			<ui:insert>
 				<div style="position: relative; top: 38px;">
-					<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado.">
-						<f:facet name="header">Feriados</f:facet>
+					<p:dataTable style="top:10%;" rowKey="#{projeto.id}" selection="#{projetoMnt.projetosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="projetoDt" var="projeto" value="#{projetoMnt.listaProjetos}" emptyMessage="Nenhum registro encontrado.">
+						<f:facet name="header">Projetos</f:facet>
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<p:column headerText="Data" style="width:10%">
-							<h:outputText value="#{feriado.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
+						<p:column headerText="Código" style="width:10%; text-align:center;">
+							<h:outputText value="#{projeto.id}" />
 						</p:column>
+
 						<p:column headerText="Nome">
-							<h:outputText value="#{feriado.nome}" />
+							<h:outputText value="#{projeto.nome}" />
 						</p:column>
 
-						<p:column headerText="Abrangência">
-							<h:outputText value="#{feriado.abrangencia}" />
+						<p:column headerText="Gerente" style="width: 25%;">
+							<h:outputText value="#{projeto.gerente.nome}" />
 						</p:column>
 
-						<p:column headerText="Tipo" style="width:5%">
-							<h:outputText value="#{feriado.tipoFormatado}" style="width:11px; left:1px; position: relative; float:center;" />
+						<p:column headerText="Descrição" style="max-width:200px;text-overflow:ellipsis;">
+							<h:outputText value="#{projeto.descricao}" />
 						</p:column>
 
 						<p:column headerText="Ações" style="width:5%">
-							<p:commandLink id="linkAlterar" title="Editar Feriado" styleClass="ui-icon ui-icon-pencil" action="#{feriadoMnt.irParaAlterar(feriado)}" style="width:20px; left:13px; position: relative; float:center;" />
+							<p:rowToggler />
+							<p:commandLink id="linkAlterar" title="Editar Projeto" styleClass="ui-icon ui-icon-pencil" action="#{projetoMnt.irParaAlterar(projeto)}" style="left: 22px;top:-16px;position: relative;float: center;" />
 						</p:column>
+						<p:rowExpansion>
+							<p:panelGrid id="panelGridExpand" style="width:707px">
+								<p:row>
+									<p:column style="width: 70px;">
+										<h:outputText value="Descrição" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{projeto.descricao}" style="white-space: normal;" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:rowExpansion>
 						<f:facet name="footer">
 							<div style="text-align: right; width: 100%">
-								<p:commandLink value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" />
+								<p:commandLink value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" />
 								/
-								<p:commandLink value="Excluir" actionListener="#{feriadoMnt.beforeRemoveFeriado()}" />
+								<p:commandLink value="Excluir" actionListener="#{projetoMnt.beforeRemoveProjeto()}" />
 							</div>
 						</f:facet>
 					</p:dataTable>
 				</div>
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 					<div class="divDialog">
-						<h:commandButton value="Sim" actionListener="#{feriadoMnt.remove()}" onclick="confirmExclusao.hide()" update="mainForm:feriadoDt messages" styleClass="botao3d" style="width: 109px;" />
+						<h:commandButton value="Sim" actionListener="#{projetoMnt.remove()}" onclick="confirmExclusao.hide()" update="mainForm:projetoDt messages" styleClass="botao3d" style="width: 109px;" />
 						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 					</div>
 				</p:confirmDialog>

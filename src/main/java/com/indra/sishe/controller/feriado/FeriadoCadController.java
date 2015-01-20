@@ -1,5 +1,6 @@
 package com.indra.sishe.controller.feriado;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -52,12 +53,11 @@ public class FeriadoCadController extends FeriadoController {
 	}
 
 	public String confirmar() {
-		if (feriadoSelecionado.getId() == null || "".equals(feriadoSelecionado.getId().toString())) {
-			cadastrarFeriado();
+		if (modoCadastrar()) {
+			return cadastrarFeriado();
 		} else {
-			alterarCliente();
+			return alterarCliente();
 		}
-		return irParaConsultar();
 	}
 
 	public String alterarCliente() {
@@ -83,10 +83,10 @@ public class FeriadoCadController extends FeriadoController {
 	}
 
 	public List<Cidade> obterCidades() {
-		if (feriadoSelecionado.getEstado().getNome() != null) {
+		if (feriadoSelecionado.getEstado() != null) {
 			return cidadeService.findByEstado(feriadoSelecionado.getEstado());
 		} else {
-			return null;
+			return new ArrayList<Cidade>();
 		}
 	}
 

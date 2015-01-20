@@ -19,7 +19,7 @@
 
 					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 						<p:outputLabel for="tipo" value="Tipo:" />
-						<p:selectOneRadio id="tipo" value="#{feriadoCad.feriadoSelecionado.tipo}" required="True">
+						<p:selectOneRadio id="tipo" value="#{feriadoCad.feriadoSelecionado.tipo}" required="True" requiredMessage="O campo Tipo é obrigatório.">
 							<f:selectItem itemLabel="Fixo &nbsp;" itemValue="F" />
 							<f:selectItem itemLabel="Móvel" itemValue="M" />
 						</p:selectOneRadio>
@@ -43,8 +43,7 @@
 						<p:tooltip id="toolTipCidade" for="selecionarCidade" value="Selecione somente se o feriado for municipal." />
 					</div>
 
-					<br />
-					<br />
+					<br /> <br />
 					<div style="position: relative; width: 220px; top: -21px;">
 						<h:commandButton style="width:100px; float:left;" action="#{feriadoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
 						<h:commandButton style="float:right; width:100px;" action="#{feriadoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />

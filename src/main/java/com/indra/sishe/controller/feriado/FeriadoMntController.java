@@ -49,14 +49,6 @@ public class FeriadoMntController extends FeriadoController{
 		searched = true;
 	}
 	
-public List<Feriado> getFeriadosSelecionados() {
-		return feriadosSelecionados;
-	}
-
-	public void setFeriadosSelecionados(List<Feriado> feriadosSelecionados) {
-		this.feriadosSelecionados = feriadosSelecionados;
-	}
-
 public void beforeRemoveFeriado() {
 		
 		if (feriadosSelecionados.size() == 0) {
@@ -104,12 +96,13 @@ public void beforeRemoveFeriado() {
 		this.listaFeriados = listaFeriados;
 	}
 	
-	public Feriado getFeriadoFiltro() {
-		return feriadoFiltro;
+	
+	public List<Feriado> getFeriadosSelecionados() {
+		return feriadosSelecionados;
 	}
 
-	public void setFeriadoFiltro(Feriado feriadoFiltro) {
-		this.feriadoFiltro = feriadoFiltro;
+	public void setFeriadosSelecionados(List<Feriado> feriadosSelecionados) {
+		this.feriadosSelecionados = feriadosSelecionados;
 	}
-	
+
 }

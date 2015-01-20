@@ -8,15 +8,15 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 
 	private Long id;
 	
-//	private Usuario usuario;
+	private Usuario gerente;
 	
 	private String nome;
 	
 	private String descricao;
 
-//	public Projeto(Usuario usuario) {
-//		this.usuario = usuario;
-//	}
+	public Projeto(Usuario gerente) {
+		this.gerente = gerente;
+	}
 
 	public Projeto() {
 	}
@@ -29,13 +29,13 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 		this.id = id;
 	}
 
-//	public Usuario getUsuario() {
-//		return usuario;
-//	}
-//
-//	public void setUsuario(Usuario usuario) {
-//		this.usuario = usuario;
-//	}
+	public Usuario getGerente() {
+		return gerente;
+	}
+
+	public void setGerente(Usuario usuario) {
+		this.gerente = usuario;
+	}
 
 	public String getNome() {
 		return nome;
@@ -60,7 +60,7 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-//		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+		result = prime * result + ((gerente == null) ? 0 : gerente.hashCode());
 		return result;
 	}
 
@@ -88,18 +88,22 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
-//		if (usuario == null) {
-//			if (other.usuario != null)
-//				return false;
-//		} else if (!usuario.equals(other.usuario))
-//			return false;
+		if (gerente == null) {
+			if (other.gerente != null)
+				return false;
+		} else if (!gerente.equals(other.gerente))
+			return false;
 		return true;
 	}
 
 	@Override
 	public int compareTo(Projeto o) {
-		// TODO Auto-generated method stub
-		return 0;
+		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
+		if (valor != 0){
+			return valor;
+		}else {
+			return 1;
+		}
 	}
 	
 	

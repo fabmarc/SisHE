@@ -62,7 +62,7 @@ public class FeriadoController extends BaseController implements Serializable {
 		putFlashAttr("searched", searched);
 		putFlashAttr("feriadoFiltro", feriadoFiltro);
 		putFlashAttr("feriadoSelecionado", feriadoSelecionado);
-		return "/paginas/feriado/cadastrarFeriado.xhtml?faces-redirect=true";
+		return irParaAlterar();
 	}
 	
 	public String irParaCadastrar() {

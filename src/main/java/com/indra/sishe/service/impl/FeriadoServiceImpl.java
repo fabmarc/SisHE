@@ -39,11 +39,9 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 			return feriadoDAO.update(entity);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Feriado");
-		} catch (RegistroDuplicadoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (RegistroDuplicadoException d) {
+			throw new ApplicationException(d, "msg.error.registro.duplicado", "Feriado", "nome");
 		}
-		return null;
 	}
 
 	@Override
@@ -65,9 +63,9 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 		try {
 			feriadoDAO.remove(id);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Feriado");
 		} catch (DeletarRegistroViolacaoFK d) {
-			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Feriado");
 		}
 	}
 
@@ -79,7 +77,7 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Feriado");
 		} catch (DeletarRegistroViolacaoFK e) {
-			throw new ApplicationException(e, "msg.error.registro.", "Feriado");
+			throw new ApplicationException(e, "msg.error.registro.relacionado", "Feriado");
 		}
 
 	}
