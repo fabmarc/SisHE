@@ -32,7 +32,7 @@ public abstract class CargoController extends BaseController implements Serializ
 
 	public String irParaAlterar(Cargo cargoSelecionado) {
 		putFlashAttr("searched", searched);
-		putFlashAttr("CargoFiltro", cargoFiltro);
+		putFlashAttr("cargoFiltro", cargoFiltro);
 		putFlashAttr("cargoSelecionado", cargoSelecionado);
 		return irParaAlterar();
 	}

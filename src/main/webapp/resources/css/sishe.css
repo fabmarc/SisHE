@@ -79,13 +79,12 @@
 .rodape {
 	text-align: center;
 	width: 100%;
-	color: Black;
-	position: fixed;
-	bottom: 0px;
-	left: 0px;
+	color: Black;	
 	background-color: rgb(243, 243, 243);
-	width: 100%;
 	height: 38px;
+	position: fixed;
+	left: 0px;
+	bottom: 0;
 }
 
 .divDialog {

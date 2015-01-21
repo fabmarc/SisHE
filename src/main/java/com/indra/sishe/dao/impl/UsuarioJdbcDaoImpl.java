@@ -97,7 +97,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
-
 	}
 
 	@Override
@@ -121,8 +120,7 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				Estado estado = new Estado();
 				estado.setId(rs.getLong("id_cidade_estado"));
 				cidade.setEstado(estado);
-				cidade.setNome(rs.getString("cidade_nome"));
-				
+				cidade.setNome(rs.getString("cidade_nome"));				
 
 				Sindicato sind = new Sindicato();
 				sind.setId(rs.getLong("id_sindicato"));
