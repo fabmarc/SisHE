@@ -34,27 +34,27 @@ public class SistemaController extends BaseController implements Serializable {
 	}
 	
 	// FALTA ADICIONAR A VERIFICAÇÃO PARA PROJETO
-	public boolean validarSistema(Sistema sistemaFiltro) {
+	public boolean validarSistema(Sistema sistemaSelecionado) {
 		
-		if( sistemaFiltro != null) {
+		if( sistemaSelecionado != null) {
 			
-			if (sistemaFiltro.getDescricao().length() > 200) {
+			if (sistemaSelecionado.getDescricao().length() > 200) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.maior.esperado", "Descrição"));
 				return false;
-			}else if (sistemaFiltro.getDescricao() == null) {
+			}else if (sistemaSelecionado.getDescricao() == null) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.obrigatorio", "Descrição"));
 				return false;
-			} else if (sistemaFiltro.getNome().length() > 50) {
+			} else if (sistemaSelecionado.getNome().length() > 50) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.maior.esperado", "Nome"));
 				return false;
-			}else if (sistemaFiltro.getNome() == null) {
+			}else if (sistemaSelecionado.getNome() == null) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.obrigatorio", "Nome"));
 				return false;
-			}else if (sistemaFiltro.getUsuario() == null) {
+			}else if (sistemaSelecionado.getUsuario() == null) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.maior.esperado", "Lider"));
 				return false;
@@ -91,7 +91,7 @@ public class SistemaController extends BaseController implements Serializable {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sistemaFiltro", sistemaFiltro);
 		putFlashAttr("sistemaSelecionado", sistemaSelecionado);
-		return "/paginas/sistema/alterarSistema.xhtml";
+		return "/paginas/sistema/cadastrarrSistema.xhtml";
 	}
 	
 	
