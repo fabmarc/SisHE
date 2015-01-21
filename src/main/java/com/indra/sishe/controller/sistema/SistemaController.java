@@ -6,7 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.indra.infra.controller.BaseController;
-import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.service.SistemaService;
 
@@ -22,10 +21,10 @@ public class SistemaController extends BaseController implements Serializable {
 	protected List<Sistema> listaSistema;
 	
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
-	public Sindicato sistemaFiltro ;
+	public Sistema sistemaFiltro ;
 
 	// VARIÁVEL UTILIZADA PARA EXCLUIR OU ALTERAR
-	public Sindicato sitemaSelecionado;
+	public Sistema sistemaSelecionado;
 
 	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
 	protected Boolean searched;
@@ -84,14 +83,14 @@ public class SistemaController extends BaseController implements Serializable {
 
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
-		putFlashAttr("sindicatoFiltro", sistemaFiltro);
+		putFlashAttr("sistemaFiltro", sistemaFiltro);
 		return "/paginas/sistema/cadastrarSistema.xhtml?faces-redirect=true";
 	}
 
-	public String irParaAlterar(Sindicato sindicatoSelecionado) {
+	public String irParaAlterar(Sistema sistemaSelecionado) {
 		putFlashAttr("searched", searched);
-		putFlashAttr("sindicatoFiltro", sistemaFiltro);
-		putFlashAttr("sindicatoSelecionado", sindicatoSelecionado);
+		putFlashAttr("sistemaFiltro", sistemaFiltro);
+		putFlashAttr("sistemaSelecionado", sistemaSelecionado);
 		return "/paginas/sistema/alterarSistema.xhtml";
 	}
 	

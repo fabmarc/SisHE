@@ -1,5 +1,7 @@
 package com.indra.sishe.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -19,7 +22,11 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.SistemaDAO;
+import com.indra.sishe.entity.Estado;
+import com.indra.sishe.entity.Projeto;
+import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
+import com.indra.sishe.entity.Usuario;
 
 @Repository
 public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
@@ -88,6 +95,68 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		return null;
 	}
 
+	public List<Sistema> findByFilter(Sistema sistema) {
+
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao,"
+				+ " s.nome as nomeSistema , u.nome as nomeUsuario, u.id as idUsuario,"
+				+ " p.id as idProjeto, p.nome as nomeProjeto");
+		sql.append(" FROM sistema s");
+		sql.append(" INNER JOIN usuario u ON s.id_lider = u.id");
+		sql.append(" INNER JOIN projeto p ON s.id_projeto = p.id ");
+		sql.append(" WHERE 1 = 1 ");
+		
+			
+		if (!(sistema.getNome() == null) && !sistema.getNome().isEmpty()) {
+			sql.append(" AND UPPER(s.nome) LIKE '%' || :nome || '%'");
+			params.addValue("nome", sistema.getNome().toLowerCase());
+		}
+		
+		if (!(sistema.getUsuario() == null)
+				&& !sistema.getUsuario().getNome().isEmpty()) {
+			sql.append(" AND u.id = :id_lider ");
+			params.addValue("nomeUsuario", sistema.getUsuario().getNome());
+		}
+
+		if (!(sistema.getProjeto() == null)
+				&& !sistema.getProjeto().getNome().isEmpty()) {
+			sql.append(" AND p.id = :id_projeto ");
+			params.addValue("nomeProjeto", sistema.getProjeto().getNome()
+					.isEmpty());
+		}
+
+		List<Sistema> lista = getNamedParameterJdbcTemplate().query(
+				sql.toString(), params,
+
+				new RowMapper<Sistema>() {
+					@Override
+					public Sistema mapRow(ResultSet rs, int idx)
+							throws SQLException {
+
+						Sistema sis = new Sistema();
+						Projeto projeto = new Projeto();
+						Usuario usuario = new Usuario();
+
+						projeto.setId(rs.getLong("idProjeto"));
+						projeto.setNome(rs.getString("nomeProjeto"));
+
+						usuario.setId(rs.getLong("idUsuario"));
+						usuario.setNome(rs.getString("nomeUsuario"));
+
+						sis.setProjeto(projeto);
+						sis.setUsuario(usuario);
+						sis.setId(rs.getLong("idSistema"));
+						sis.setNome(rs.getString("nomeSistema"));
+
+						return sis;
+					}
+				});
+
+		return lista;
+	}
+	
 	// NÃO IMPLEMENTADO
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException,

@@ -6,7 +6,12 @@ import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
+import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.dao.SistemaDAO;
+import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.service.SistemaService;
 import com.indra.sishe.service.StatelessServiceAb;
@@ -24,18 +29,34 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	}
 
 	@Autowired
-	private SistemaService sistemaService;
+	private SistemaDAO sistemaDao;
 
 	@Override
 	public Sistema save(Sistema entity) throws ApplicationException {
-		// TODO Auto-generated method stub
-		return sistemaService.save(entity);
+
+		try {
+			return sistemaDao.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			// TODO: handle exception
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Sistema");
+		}
+
 	}
 
 	@Override
 	public Sistema update(Sistema entity) throws ApplicationException {
 		// TODO Auto-generated method stub
-		return sistemaService.update(entity);
+		try {
+			return sistemaDao.update(entity);
+		} catch (RegistroDuplicadoException e) {
+			// TODO: handle exception
+			throw new ApplicationException(e, "msg.error.registro.duplicado");
+		} catch (RegistroInexistenteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.inexistente");
+		}
+		
 	}
 
 	@Override
@@ -44,6 +65,11 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 		return null;
 	}
 
+	@Override
+	public List<Sistema> findByFilter(Sistema sistema) {
+		return sistemaDao.findByFilter(sistema);
+	}
+	
 	@Override
 	public Sistema findById(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
@@ -59,7 +85,15 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
-		sistemaService.remove(ids);
+		try {
+			sistemaDao.remove(ids);
+		} catch (RegistroInexistenteException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException(e, "msg.error.registro.inexistente","Sistema");
+		} catch (DeletarRegistroViolacaoFK e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException(e,"msg.error.excluir.registro.relacionado","Sistema");
+		}
 	}
 	
 	
