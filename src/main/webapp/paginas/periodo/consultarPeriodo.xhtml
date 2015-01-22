@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+
+		<h:form id="mainForm">
+
+			<br />
+			<br />
+			<ui:insert>
+				<p:messages id="messages"  showDetail="true" showSummary="false" />
+				<div style="width: 410px;">
+					<h:commandButton styleClass="botao3d" style="position:relative;" actionListener="#{periodoMnt.pesquisar()}" value="Pesquisar" />
+				</div>
+				<p:dataTable style="top:10%;" rowKey="#{periodo.id}" selection="#{periodoMnt.periodosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="periodoDt" var="periodo" value="#{periodoMnt.listaPeriodos}" emptyMessage="Nenhum registro encontrado.">
+					<f:facet name="header">
+						Periodos
+					</f:facet>
+					
+					<p:column style="width:5px; text-align:center" selectionMode="multiple">
+					</p:column>
+					
+					<p:column headerText="Código" style="width:10%; text-align:center;">
+						<h:outputText value="#{periodo.id}" />
+					</p:column>
+					<p:column headerText="Dia">
+						<div>
+							<h:outputText value="#{periodoMnt.obterDia(periodo.diaSemana)}" />
+						</div>
+					</p:column>
+					<p:column headerText="Hora Inicio">
+						<div>
+							<h:outputText value="#{periodo.horaInicio}" />
+						</div>
+					</p:column>
+					<p:column headerText="Hora Fim">
+						<div>
+							<h:outputText value="#{periodo.horaFim}" />
+						</div>
+					</p:column>
+					<p:column headerText="Porcentagem">
+						<div>
+							<h:outputText value="#{periodo.porcentagem}" />
+						</div>
+					</p:column>
+					<p:column headerText="Regra">
+						<div>
+							<h:outputText value="#{periodo.regra.descricao}" />
+						</div>
+					</p:column>
+					<!-- 
+					<p:column headerText="Ações" style="width:5%">
+						<p:commandLink title="Editar Periodo" id="alterarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-pencil" action="#{periodoMnt.irParaAlterar(periodo)}" />
+					</p:column>
+					 -->
+					<f:facet name="footer">
+						<div style="text-align: right; width: 100%">
+							<p:commandLink value="Cadastrar" action="#{periodooMnt.irParaCadastrar()}" />
+							/ 
+							<p:commandLink value="Excluir" actionListener="#{periodoMnt.beforeRemovePeriodos()}" />
+						</div>
+					</f:facet>
+				</p:dataTable>
+
+				<p:confirmDialog id="msgExclusao" global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+					<div class="divDialog">
+						<h:commandButton value="Sim" actionListener="#{periodoMnt.removerPeriodo()}" onclick="confirmExclusao.hide()" update="mainForm:periodoDt messages" styleClass="botao3d" style="width: 109px;" />
+						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
+					</div>
+				</p:confirmDialog>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
+					<div class="divDialog">
+						<h:commandButton value="OK" styleClass="botao3d" onclick="selectAtleastOne.hide()" ajax="false" style="width:109px;"/>
+					</div>
+				</p:confirmDialog>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -14,7 +14,7 @@ public class CargoCadController extends CargoController {
 
 	private static final long serialVersionUID = -2996122688507056006L;
 
-	public Cargo cargoSelecionado;
+	protected Cargo cargoSelecionado;
 
 	public CargoCadController() {
 		System.out.println("Controler CargoCad criado.");
