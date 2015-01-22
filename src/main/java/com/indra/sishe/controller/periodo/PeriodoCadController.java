@@ -1,11 +1,16 @@
 package com.indra.sishe.controller.periodo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.DiaSemanaEnum;
 import com.indra.sishe.entity.Periodo;
 
 @ViewScoped
@@ -90,6 +95,11 @@ public class PeriodoCadController extends PeriodoController {
 
 	public void setPeriodoSelecionado(Periodo periodoSelecionado) {
 		this.periodoSelecionado = periodoSelecionado;
+	}
+	
+	public List<DiaSemanaEnum> obterListaDias(){
+		List<DiaSemanaEnum> listaDias = new ArrayList<DiaSemanaEnum>(Arrays.asList(DiaSemanaEnum.values()));
+		return listaDias;
 	}
 
 }

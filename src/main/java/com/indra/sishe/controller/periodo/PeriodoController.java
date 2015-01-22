@@ -42,8 +42,21 @@ public class PeriodoController extends BaseController implements Serializable {
 	}
 
 	public boolean validarPeriodo(Periodo periodoSelecionado) {
+		if (periodoSelecionado.getDiaSemana() == null || periodoSelecionado.getDiaSemana() < 1 || periodoSelecionado.getDiaSemana() > 7) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Dia da semana"));
+		} else if (periodoSelecionado.getHoraInicio() == null) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Hora Inicio"));
+		} else if (periodoSelecionado.getHoraFim() == null) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Hora Fim"));
+		} else if (periodoSelecionado.getHoraInicio().getTime() >= periodoSelecionado.getHoraFim().getTime()) {
+			messager.error(messageProvider.getMessage("msg.error.intervalo.incorreto", "Hora Inicio", "Hora Fim"));
+		} else if (periodoSelecionado.getPorcentagem() == null) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Porcentagem"));
+		} else {
+			return true;
+		}
 
-		return true;
+		return false;
 	}
 
 	public PeriodoService getPeriodoService() {

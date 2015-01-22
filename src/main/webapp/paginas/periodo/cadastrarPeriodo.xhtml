@@ -9,17 +9,22 @@
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				<div style="top: 15px; left: 207px; position: relative; width: 230px">
 					<p:outputLabel value="Dia Semana:" style="width:100px;" />
-					<p:inputText type="text" value="#{periodoCad.periodoSelecionado.diaSemana}" maxlength="1" />
+					<h:selectOneMenu value="#{periodoCad.periodoSelecionado.diaSemana}" converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia}" itemValue="#{dia.numeroDia()}" />
+					</h:selectOneMenu>
 					<p:outputLabel value="Hora Inicio:" style="width:100px;" />
-					<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaInicio}"> 
+					<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaInicio}">
 						<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
-					</p:inputText>					
+					</p:inputText>
 					<p:outputLabel value="Hora Fim:" style="width:100px;" />
 					<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaFim}">
 						<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
 					</p:inputText>
 					<p:outputLabel value="Porcentagem:" style="width:100px;" />
-					<p:inputText type="text" value="#{periodoCad.periodoSelecionado.porcentagem}" maxlength="10" />
+					<p:inputText type="text" value="#{periodoCad.periodoSelecionado.porcentagem}" maxlength="7" >
+						<f:convertNumber type="percent" />
+					</p:inputText>
 					<br />
 					<div style="position: relative; width: 220px;">
 						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{periodoCad.confirmar()}" value="Confirmar" />

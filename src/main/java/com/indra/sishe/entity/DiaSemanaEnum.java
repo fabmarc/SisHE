@@ -9,7 +9,7 @@ public enum DiaSemanaEnum {
 		this.numeroDia = numeroDia;
 	}
 
-	private int numeroDia() {
+	public int numeroDia() {
 		return this.numeroDia;
 	}
 
@@ -19,6 +19,6 @@ public enum DiaSemanaEnum {
 				return dia;
 		}
 		return null;
-	}
+	}	
 
 }
