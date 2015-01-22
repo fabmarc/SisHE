@@ -42,11 +42,11 @@
 					</div>
 				</div>
 				<div style="top:-43px; position: relative;">
-					<p:dataTable style="top:10%;"  paginator="true" paginatorPosition="bottom" rows="10" id="sistemaDt" var="sistema" value="#{sistemaMnt.listaSistema}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="top:10%;" rowKey="#{sistema.id}" selection="#{sistemaMnt.sistemasSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sistemaDt" var="sistema" value="#{sistemaMnt.listaSistema}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">
 							Sistemas
 						</f:facet>
-						
+						<p:column style="width:5px; text-align:center" selectionMode="multiple" />
 						<p:column headerText="Código"  style="width:10%; text-align:center; ">
 							<h:outputText value="#{sistema.id}" />
 						</p:column>

@@ -54,7 +54,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		try {
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 
-			parms.addValue("id_lider", entity.getUsuario());
+			parms.addValue("id_lider", entity.getUsuario().getId());
 			 parms.addValue("id_projeto", entity.getProjeto().getId());
 			parms.addValue("nome", entity.getNome());
 			parms.addValue("descricao", entity.getDescricao());
@@ -111,20 +111,19 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 			
 		if (!(sistema.getNome() == null) && !sistema.getNome().isEmpty()) {
 			sql.append(" AND UPPER(s.nome) LIKE '%' || :nome || '%'");
-			params.addValue("nome", sistema.getNome().toLowerCase());
+			params.addValue("nome", sistema.getNome().toUpperCase());
 		}
 		
 		if (!(sistema.getUsuario() == null)
 				&& !sistema.getUsuario().getNome().isEmpty()) {
-			sql.append(" AND u.id = :id_lider ");
-			params.addValue("nomeUsuario", sistema.getUsuario().getNome());
+			sql.append(" AND u.nome = :nome ");
+			params.addValue("nome", sistema.getUsuario().getNome());
 		}
 
 		if (!(sistema.getProjeto() == null)
 				&& !sistema.getProjeto().getNome().isEmpty()) {
-			sql.append(" AND p.id = :id_projeto ");
-			params.addValue("nomeProjeto", sistema.getProjeto().getNome()
-					.isEmpty());
+			sql.append(" AND p.nome = :nome ");
+			params.addValue("nome", sistema.getProjeto().getNome());
 		}
 
 		List<Sistema> lista = getNamedParameterJdbcTemplate().query(
