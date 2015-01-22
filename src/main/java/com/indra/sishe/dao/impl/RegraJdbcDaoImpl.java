@@ -2,6 +2,7 @@ package com.indra.sishe.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +20,7 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.RegraDAO;
+import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Regra;
 import com.indra.sishe.entity.Sindicato;
 
@@ -27,6 +29,10 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 
 	@Autowired
 	private DataSource dataSource;
+
+	public RegraJdbcDaoImpl() {
+	System.out.print("Criou RegraDAOImpl");
+	}
 
 	private SimpleJdbcInsert insertRegra;
 
@@ -65,6 +71,7 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 
 				regra.setId(rs.getLong("id"));
 				regra.setSindicato(sindicato);
+				regra.setDescricao(rs.getString("descricao"));
 				regra.setDataInicio(rs.getDate("dataInicio"));
 				regra.setDataFim(rs.getDate("dataFim"));
 				regra.setPorcentagem(rs.getDouble("porcentagem"));
@@ -82,7 +89,7 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 		params.addValue("descricao", regra.getDescricao());
 		params.addValue("data_inicio", regra.getDataInicio());
 		params.addValue("data_fim", regra.getDataFim());
-		params.addValue("porcentagem", regra.getPorcentagem());
+		params.addValue("porcentagem_feriado", regra.getPorcentagem());
 		Number key = insertRegra.executeAndReturnKey(params);
 		regra.setId(key.longValue());
 		return regra;
@@ -90,9 +97,8 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 
 	@Override
 	public Regra update(Regra regra) throws RegistroInexistenteException, RegistroDuplicadoException {
-		
-		int rows = getJdbcTemplate().update("UPDATE regra SET id_sindicato = ?, data_inicio = ?, data_fim = ?, descricao = ?, porcentagem_feriado = ?",
-			regra.getSindicato().getId(), regra.getDataInicio(), regra.getDataFim(), regra.getDescricao(), regra.getPorcentagem());
+		int rows = getJdbcTemplate().update("UPDATE regra SET id_sindicato = ?, data_inicio = ?, data_fim = ?, descricao = ?, porcentagem_feriado = ? WHERE id = ?",
+			regra.getSindicato().getId(), regra.getDataInicio(), regra.getDataFim(), regra.getDescricao(), regra.getPorcentagem(), regra.getId());
 		if (rows == 0) throw new RegistroInexistenteException();
 		return regra;
 	}
@@ -128,26 +134,74 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 
 	@Override
 	public Regra findById(Object id) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT regra.id AS id, regra.id_sindicato AS idSindicato, sindicato.descricao AS nomeSindicato, " +
+				"regra.descricao AS descricao, regra.data_inicio AS dataInicio, regra.data_fim AS dataFim, " +
+				"regra.porcentagem_feriado AS porcentagem, estado.id AS idEstado, estado.nome as nomeEstado, " +
+				"estado.sigla as siglaEstado ");
+		sql.append("FROM regra INNER JOIN sindicato ON (regra.id_sindicato = sindicato.id) " +
+							  "INNER JOIN estado ON (sindicato.id_estado = estado.id) WHERE 1=1 ");
+		
+			sql.append("AND regra.id_sindicato = :idSidicato");
+			params.addValue("idSidicato", id);
+		
+		List<Regra> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Regra>() {
+			@Override
+			public Regra mapRow(ResultSet rs, int idx) throws SQLException {
+				Sindicato sindicato = new Sindicato();
+				Regra regra = new Regra();
+				Estado estado = new Estado();
+				
+				estado.setId(rs.getLong("idEstado"));
+				estado.setNome(rs.getString("nomeEstado"));
+				estado.setSigla(rs.getString("siglaEstado"));
+				
+				sindicato.setId(rs.getLong("idSindicato"));
+				sindicato.setDescricao(rs.getString("nomeSindicato"));
+				sindicato.setEstado(estado);
+				
+				regra.setId(rs.getLong("id"));
+				regra.setSindicato(sindicato);
+				regra.setDescricao(rs.getString("descricao"));
+				regra.setDataInicio(rs.getDate("dataInicio"));
+				regra.setDataFim(rs.getDate("dataFim"));
+				regra.setPorcentagem(rs.getDouble("porcentagem"));
+
+				return regra;
+			}
+		});
+		return lista.get(0);
 	}
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		// TODO Auto-generated method stub
-
+		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
+		for (Object id : ids){
+			Object[] param = new Object[] { id };
+			params.add(param);
+		}
+		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM regra WHERE id = ?", params);
+		for (int rows : affectedRows)
+			if (rows == 0) throw new RegistroInexistenteException();
 	}
 
 	@Override
 	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public SimpleJdbcInsert getInsertRegra() {
+		return insertRegra;
+	}
+
+	public void setInsertRegra(SimpleJdbcInsert insertRegra) {
+		this.insertRegra = insertRegra;
 	}
 
 }
