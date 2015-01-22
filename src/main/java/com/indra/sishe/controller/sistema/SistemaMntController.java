@@ -12,8 +12,10 @@ import javax.inject.Inject;
 import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
+import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
+import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.CargoService;
@@ -28,16 +30,16 @@ public class SistemaMntController extends SistemaController {
 	private List<Sistema> listaSistema;
 	private List<Usuario> listaLider = new ArrayList<Usuario>();
 	private List<Projeto> listaProjeto = new ArrayList<Projeto>();
-	
+
 	@Inject
 	private UsuarioService usuarioService;
-	
+
 	@Inject
 	private CargoService cargoService;
-	
+
 	@Inject
 	private ProjetoService projetoService;
-	
+
 	@SuppressWarnings("unused")
 	private List<Sistema> sistemasSelecionados;
 
@@ -61,7 +63,7 @@ public class SistemaMntController extends SistemaController {
 			listaSistema = new ArrayList<Sistema>();
 		else
 			pesquisar();
-		
+
 		listarLideres();
 		listarProjeto();
 	}
@@ -72,8 +74,8 @@ public class SistemaMntController extends SistemaController {
 		searched = true;
 	}
 
-public void beforeRemoveSistema() {
-		
+	public void beforeRemoveSistema() {
+
 		if (sistemasSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute(
 					"selectAtleastOne.show()");
@@ -82,17 +84,33 @@ public void beforeRemoveSistema() {
 					"confirmExclusao.show()");
 		}
 	}
-	
+
+	public String removerSistema() {
+		int size = sistemasSelecionados.size();
+		ArrayList<Long> ids = new ArrayList<Long>(size);
+		for (Sistema sistema : sistemasSelecionados)
+			ids.add(sistema.getId());
+		try {
+			sistemaService.remove(ids);
+			messager.info(messageProvider.getMessage(
+					"msg.success.registro.excluido", "sistema"));
+		} catch (ApplicationException e) {
+			messager.error(e.getMessage());
+		}
+		pesquisar();
+		return irParaConsultar();
+	}
+
 	public List<Usuario> listarLideres() {
-				
+
 		Cargo cargo = new Cargo();
 		cargo.setNome("Lider");
 		cargo = cargoService.findByFilter(cargo).get(0);
 		listaLider = usuarioService.findByCargo(cargo);
-		
+
 		return listaLider;
 	}
-	
+
 	public List<Projeto> listarProjeto() {
 		listaProjeto = projetoService.findAll();
 		return listaProjeto;
@@ -137,7 +155,7 @@ public void beforeRemoveSistema() {
 	public void setSistemaSelecionado(Sistema sistemaSelecionado) {
 		this.sistemaSelecionado = sistemaSelecionado;
 	}
-	
+
 	public List<Sistema> getSistemasSelecionados() {
 		return sistemasSelecionados;
 	}

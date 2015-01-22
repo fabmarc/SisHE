@@ -82,7 +82,7 @@
 				</div>
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 					<div class="divDialog">
-						<h:commandButton value="Sim" actionListener="#{sindicatoMnt.removerSindicato()}" onclick="confirmExclusao.hide()" update="mainForm:sindicatosDt messages" styleClass="botao3d" style="width: 109px;" />
+						<h:commandButton value="Sim" actionListener="#{sistemaMnt.removerSistema()}" onclick="confirmExclusao.hide()" update="mainForm:sistemaDt messages" styleClass="botao3d" style="width: 109px;" />
 						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 					</div>
 				</p:confirmDialog>

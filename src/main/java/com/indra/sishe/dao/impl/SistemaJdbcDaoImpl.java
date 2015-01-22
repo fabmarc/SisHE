@@ -161,7 +161,14 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 	public void remove(Object id) throws RegistroInexistenteException,
 			DeletarRegistroViolacaoFK {
 		// TODO Auto-generated method stub
-
+		try {
+			int rows = getJdbcTemplate().update(
+					"DELETE FROM sistema WHERE id = ?", id);
+			if (rows == 0)
+				throw new RegistroInexistenteException();
+		} catch (DataIntegrityViolationException d) {
+			throw new DeletarRegistroViolacaoFK();
+		}
 	}
 
 	@Override
