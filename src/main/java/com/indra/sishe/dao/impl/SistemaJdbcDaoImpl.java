@@ -92,7 +92,51 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 	@Override
 	public Sistema findById(Object id) throws RegistroInexistenteException {
 		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao,"
+				+ " s.nome as nomeSistema , u.nome as nomeUsuario, u.id as idUsuario,"
+				+ " p.id as idProjeto, p.nome as nomeProjeto");
+		sql.append(" FROM sistema s");
+		sql.append(" INNER JOIN usuario u ON s.id_lider = u.id");
+		sql.append(" INNER JOIN projeto p ON s.id_projeto = p.id ");
+		sql.append(" WHERE 1 = 1 ");
+		
+		if (id != null && !id.toString().isEmpty()) {
+			sql.append(" AND s.id = :id ");
+			params.addValue("id", id);
+		}
+		
+		List<Sistema> lista = getNamedParameterJdbcTemplate().query(
+				sql.toString(), params,
+
+				new RowMapper<Sistema>() {
+					@Override
+					public Sistema mapRow(ResultSet rs, int idx)
+							throws SQLException {
+
+						Sistema sis = new Sistema();
+						Projeto projeto = new Projeto();
+						Usuario usuario = new Usuario();
+
+						projeto.setId(rs.getLong("idProjeto"));
+						projeto.setNome(rs.getString("nomeProjeto"));
+
+						usuario.setId(rs.getLong("idUsuario"));
+						usuario.setNome(rs.getString("nomeUsuario"));
+
+						sis.setProjeto(projeto);
+						sis.setUsuario(usuario);
+						sis.setId(rs.getLong("idSistema"));
+						sis.setNome(rs.getString("nomeSistema"));
+
+						return sis;
+					}
+				});
+
+		return (Sistema) lista;
+		
 	}
 
 	public List<Sistema> findByFilter(Sistema sistema) {

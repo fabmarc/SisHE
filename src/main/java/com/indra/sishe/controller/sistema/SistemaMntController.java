@@ -101,6 +101,20 @@ public class SistemaMntController extends SistemaController {
 		return irParaConsultar();
 	}
 
+	public String irParaAlterar(Sistema sistemaSelecionado) {
+		putFlashAttr("searched", searched);
+		putFlashAttr("sistemaFiltro", sistemaFiltro);
+		try {
+			sistemaSelecionado = sistemaService
+					.findById(sistemaSelecionado.getId());
+			putFlashAttr("sistemaSelecionado", sistemaSelecionado);
+			return "/paginas/sistema/cadastrarSistema.xhtml?faces-redirect=true";
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaConsultar();
+		}
+	}
+	
 	public List<Usuario> listarLideres() {
 
 		Cargo cargo = new Cargo();

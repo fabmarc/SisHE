@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -86,7 +87,8 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
 		try {
-			sistemaDao.remove(ids);
+			List<Object> pks = new ArrayList<Object>(ids);
+			sistemaDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
 			// TODO Auto-generated catch block
 			throw new ApplicationException(e, "msg.error.registro.inexistente","Sistema");
