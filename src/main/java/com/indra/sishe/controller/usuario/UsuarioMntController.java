@@ -32,13 +32,17 @@ public class UsuarioMntController extends UsuarioController {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null) searched = false;
+		if (searched == null)
+			searched = false;
 
 		usuarioFiltro = (Usuario) getFlashAttr("usuarioFiltro");
-		if (usuarioFiltro == null) usuarioFiltro = new Usuario();
+		if (usuarioFiltro == null)
+			usuarioFiltro = new Usuario();
 
-		if (!searched) listaUsuarios = new ArrayList<Usuario>();
-		else pesquisar();
+		if (!searched)
+			listaUsuarios = new ArrayList<Usuario>();
+		else
+			pesquisar();
 	}
 
 	public void beforeRemoveUsuarios() {
