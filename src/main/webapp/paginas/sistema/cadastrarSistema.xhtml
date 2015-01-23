@@ -12,25 +12,25 @@
 				<div style="top: 15px; left: 170px; position: relative; width: 250px">
 					
 					<h:outputLabel value="Sistema" style="width:50px;" />
-					<h:inputText type="text" value="#{sistemaCad.sindicatoSelecionado.nome}" maxlength="50"  required="true" requiredMessage="Informe o nome do Sistema." />
+					<h:inputText type="text" value="#{sistemaCad.sistemaSelecionado.nome}" maxlength="50"  required="true" requiredMessage="Informe o nome do Sistema." />
 					<br />
 
 					<h:outputLabel value="Lider:" style="width:50px;" />
-					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o lider." value="#{sistemaCad.sindicatoSelecionado.usuario}" style="width:216px">
+					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o lider." value="#{sistemaCad.sistemaSelecionado.usuario}" style="width:216px">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />						
 						<f:selectItems value="#{sistemaCad.listaLider}" var="lider" itemLabel="#{lider.nome}" itemValue="#{lider}" />
 					</p:selectOneMenu>	
 					<br />
 					
 					<h:outputLabel value="Projeto" style="width:50px;" />
-					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o projeto." value="#{sistemaCad.sindicatoSelecionado.projeto}" style="width:216px">
+					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o projeto." value="#{sistemaCad.sistemaSelecionado.projeto}" style="width:216px">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />						
 						<f:selectItems value="#{sistemaCad.listaProjeto}" var="projeto" itemLabel="#{projeto.nome}" itemValue="#{projeto}" />
 					</p:selectOneMenu>	
 					<br />
 					
 					<h:outputLabel value="Descrição:" style="width:50px;" />
-					<p:inputTextarea rows="8" cols="40" autoResize="false" maxlength="200" value="#{sistemaCad.sindicatoSelecionado.descricao}" />					
+					<p:inputTextarea rows="8" cols="40" autoResize="false" maxlength="200" value="#{sistemaCad.sistemaSelecionado.descricao}" />					
 				</div>
 				
 					
