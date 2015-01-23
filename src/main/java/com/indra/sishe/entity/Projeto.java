@@ -53,14 +53,14 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 		this.descricao = descricao;
 	}
 
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((gerente == null) ? 0 : gerente.hashCode());
 		return result;
 	}
 
@@ -73,11 +73,6 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 		if (getClass() != obj.getClass())
 			return false;
 		Projeto other = (Projeto) obj;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -87,11 +82,6 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 			if (other.nome != null)
 				return false;
 		} else if (!nome.equals(other.nome))
-			return false;
-		if (gerente == null) {
-			if (other.gerente != null)
-				return false;
-		} else if (!gerente.equals(other.gerente))
 			return false;
 		return true;
 	}
