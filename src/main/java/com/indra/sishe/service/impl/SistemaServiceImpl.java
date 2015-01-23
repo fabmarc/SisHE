@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -11,14 +12,14 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.SistemaDAO;
-import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.service.SistemaService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class SistemaServiceImpl extends StatelessServiceAb implements SistemaService{
-	
+public class SistemaServiceImpl extends StatelessServiceAb implements
+		SistemaService {
+
 	/**
 	 * 
 	 */
@@ -38,7 +39,8 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 			return sistemaDao.save(entity);
 		} catch (RegistroDuplicadoException e) {
 			// TODO: handle exception
-			throw new ApplicationException(e, "msg.error.registro.duplicado", "Sistema");
+			throw new ApplicationException(e, "msg.error.registro.duplicado",
+					"Sistema");
 		}
 
 	}
@@ -56,7 +58,7 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 			e.printStackTrace();
 			throw new ApplicationException(e, "msg.error.registro.inexistente");
 		}
-		
+
 	}
 
 	@Override
@@ -69,32 +71,42 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	public List<Sistema> findByFilter(Sistema sistema) {
 		return sistemaDao.findByFilter(sistema);
 	}
-	
+
 	@Override
 	public Sistema findById(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			return sistemaDao.findById(id);
+		} catch (RegistroInexistenteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.inexistente",
+					"Sistema");
+		}
+
 	}
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
 		try {
-			sistemaDao.remove(ids);
+			List<Object> pks = new ArrayList<Object>(ids);
+			sistemaDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException(e, "msg.error.registro.inexistente","Sistema");
+			throw new ApplicationException(e, "msg.error.registro.inexistente",
+					"Sistema");
 		} catch (DeletarRegistroViolacaoFK e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException(e,"msg.error.excluir.registro.relacionado","Sistema");
+			throw new ApplicationException(e,
+					"msg.error.excluir.registro.relacionado", "Sistema");
 		}
 	}
-	
-	
+
 }
