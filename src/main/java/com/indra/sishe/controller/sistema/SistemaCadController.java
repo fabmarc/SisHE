@@ -11,14 +11,13 @@ import javax.inject.Inject;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
-import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Projeto;
-import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.CargoService;
 import com.indra.sishe.service.ProjetoService;
 import com.indra.sishe.service.UsuarioService;
+
 @ViewScoped
 @ManagedBean(name = "sistemaCad")
 public class SistemaCadController extends SistemaController {
@@ -30,17 +29,16 @@ public class SistemaCadController extends SistemaController {
 
 	private List<Usuario> listaLider = new ArrayList<Usuario>();
 	private List<Projeto> listaProjeto = new ArrayList<Projeto>();
-	
+
 	@Inject
 	private UsuarioService usuarioService;
-	
+
 	@Inject
 	private CargoService cargoService;
-	
+
 	@Inject
 	private ProjetoService projetoService;
-	
-	
+
 	public SistemaCadController() {
 		// TODO Auto-generated constructor stub
 	}
@@ -55,41 +53,40 @@ public class SistemaCadController extends SistemaController {
 		sistemaSelecionado = (Sistema) getFlashAttr("sistemaSelecionado");
 		if (sistemaSelecionado == null) {
 			sistemaSelecionado = new Sistema();
-			//sistemaSelecionado.setUsuario(new Usuario());
+			// sistemaSelecionado.setUsuario(new Usuario());
 
 		}
 		sistemaFiltro = (Sistema) getFlashAttr("sistemaFiltro");
 		listarLideres();
 		listarProjeto();
 	}
-	
-	
+
 	public List<Usuario> listarLideres() {
-		
+
 		Cargo cargo = new Cargo();
 		cargo.setNome("Lider");
 		cargo = cargoService.findByFilter(cargo).get(0);
 		listaLider = usuarioService.findByCargo(cargo);
-		
+
 		return listaLider;
 	}
-	
+
 	public List<Projeto> listarProjeto() {
 		listaProjeto = projetoService.findAll();
 		return listaProjeto;
 	}
-	
+
 	public String modoCadastrar() {
 
 		if (sistemaSelecionado.getId() == null) {
-			cadastrarSindicato();
+			cadastrarSistema();
 			return irParaConsultar();
-		} else {			
+		} else {
 			alterarSindicato();
 			return irParaConsultar();
 		}
 	}
-	
+
 	public String cadastrarSistema() {
 
 		if (validarSistema(sistemaSelecionado)) {
@@ -111,7 +108,7 @@ public class SistemaCadController extends SistemaController {
 		}
 
 	}
-	
+
 	public String alterarSistema() {
 
 		if (validarSistema(sistemaSelecionado)) {
@@ -129,7 +126,7 @@ public class SistemaCadController extends SistemaController {
 		}
 		return null;
 	}
-	
+
 	public String cadastrarSindicato() {
 
 		if (validarSistema(sistemaSelecionado)) {
@@ -151,7 +148,7 @@ public class SistemaCadController extends SistemaController {
 		}
 
 	}
-	
+
 	public String alterarSindicato() {
 
 		if (validarSistema(sistemaSelecionado)) {
@@ -169,7 +166,7 @@ public class SistemaCadController extends SistemaController {
 		}
 		return null;
 	}
-	
+
 	public String cancelar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sistemaFiltro", sistemaFiltro);
@@ -200,11 +197,11 @@ public class SistemaCadController extends SistemaController {
 		this.sistemaFiltro = sistemaFiltro;
 	}
 
-	public Sistema getSindicatoSelecionado() {
+	public Sistema getSistemaSelecionado() {
 		return sistemaSelecionado;
 	}
 
-	public void setSindicatoSelecionado(Sistema sistemaSelecionado) {
+	public void setSistemaSelecionado(Sistema sistemaSelecionado) {
 		this.sistemaSelecionado = sistemaSelecionado;
 	}
 }

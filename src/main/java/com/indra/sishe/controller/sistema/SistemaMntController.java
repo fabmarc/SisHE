@@ -15,7 +15,6 @@ import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
-import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.CargoService;
@@ -85,6 +84,20 @@ public class SistemaMntController extends SistemaController {
 		}
 	}
 
+	public String irParaAlterar(Sistema sistemaSelecionado) {
+		putFlashAttr("searched", searched);
+		putFlashAttr("sistemaFiltro", sistemaFiltro);
+		try {
+			sistemaSelecionado = sistemaService
+					.findById(sistemaSelecionado.getId());
+			putFlashAttr("sistemaSelecionado", sistemaSelecionado);
+			return "/paginas/sistema/cadastrarSistema.xhtml?faces-redirect=true";
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaConsultar();
+		}
+	}
+	
 	public String removerSistema() {
 		int size = sistemasSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
