@@ -11,38 +11,34 @@ import com.indra.sishe.service.SistemaService;
 
 public class SistemaController extends BaseController implements Serializable {
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2097043422349464567L;
 	@Inject
 	protected transient SistemaService sistemaService;
 	protected List<Sistema> listaSistema;
-	
+
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
-	public Sistema sistemaFiltro ;
+	public Sistema sistemaFiltro;
 
 	// VARIÁVEL UTILIZADA PARA EXCLUIR OU ALTERAR
 	public Sistema sistemaSelecionado;
 
 	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
 	protected Boolean searched;
-	
+
 	public SistemaController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	// FALTA ADICIONAR A VERIFICAÇÃO PARA PROJETO
 	public boolean validarSistema(Sistema sistemaSelecionado) {
-		
-		if( sistemaSelecionado != null) {
-			
+
+		if (sistemaSelecionado != null) {
+
 			if (sistemaSelecionado.getDescricao().length() > 200) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.maior.esperado", "Descrição"));
 				return false;
-			}else if (sistemaSelecionado.getDescricao() == null) {
+			} else if (sistemaSelecionado.getDescricao() == null) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.obrigatorio", "Descrição"));
 				return false;
@@ -50,33 +46,23 @@ public class SistemaController extends BaseController implements Serializable {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.maior.esperado", "Nome"));
 				return false;
-			}else if (sistemaSelecionado.getNome() == null) {
+			} else if (sistemaSelecionado.getNome() == null) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.obrigatorio", "Nome"));
 				return false;
-			}else if (sistemaSelecionado.getUsuario() == null) {
+			} else if (sistemaSelecionado.getUsuario() == null) {
 				messager.error(messageProvider.getMessage(
 						"msg.error.campo.maior.esperado", "Lider"));
 				return false;
-			}			
-			else {
+			} else {
 				return true;
-			}			
-			
-			
-		}else{
+			}
+
+		} else {
 			return true;
 		}
-				
-				//|| validarNome(sistemaFiltro) 
-				//|| sistemaFiltro.getUsuario() != null || sistemaFiltro.getUsuario().getId() != null  ){
-		
-			
-		}
-		
-	
-	
-		
+	}
+
 	public String irParaConsultar() {
 		return "/paginas/sistema/consultarSistema.xhtml?faces-redirect=true";
 	}
@@ -93,7 +79,5 @@ public class SistemaController extends BaseController implements Serializable {
 		putFlashAttr("sistemaSelecionado", sistemaSelecionado);
 		return "/paginas/sistema/cadastrarrSistema.xhtml";
 	}
-	
-	
 
 }

@@ -44,12 +44,13 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 	}
 
 	public SistemaJdbcDaoImpl() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
 	public Sistema save(Sistema entity) throws RegistroDuplicadoException {
 		try {
+
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 
 			parms.addValue("id_lider", entity.getUsuario().getId());
@@ -63,18 +64,16 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException();
 		}
-
 		return entity;
 	}
 
 	@Override
-	// ADICIONAR O ATRIBUTO ID_PROJETO AO UPDATE E USAR O GET COMO PARAMETRO
 	public Sistema update(Sistema entity) throws RegistroInexistenteException {
 		int rows = getJdbcTemplate().update(
-				"UPDATE sistema SET id_lider=?, id_projeto, descricao=?, nome=?"
+				"UPDATE sistema SET id_lider=?, id_projeto = ?, descricao = ?, nome = ?"
 						+ "WHERE id = ?", entity.getUsuario().getId(),
 				entity.getProjeto().getId(), entity.getDescricao(),
-				entity.getNome());
+				entity.getNome(), entity.getId());
 
 		if (rows == 0)
 			throw new RegistroInexistenteException();
@@ -87,16 +86,15 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		return null;
 	}
 
-	// NÃO IMPLEMENTADO
 	@Override
 	public Sistema findById(Object id) throws RegistroInexistenteException {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao,"
+		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao as sistemaDescricao,"
 				+ " s.nome as nomeSistema , u.nome as nomeUsuario, u.id as idUsuario,"
-				+ " p.id as idProjeto, p.nome as nomeProjeto");
+				+ " p.id as idProjeto, p.nome as nomeProjeto ");
 		sql.append(" FROM sistema s");
 		sql.append(" INNER JOIN usuario u ON s.id_lider = u.id");
 		sql.append(" INNER JOIN projeto p ON s.id_projeto = p.id ");
@@ -129,7 +127,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 						sis.setUsuario(usuario);
 						sis.setId(rs.getLong("idSistema"));
 						sis.setNome(rs.getString("nomeSistema"));
-
+						sis.setDescricao(rs.getString("sistemaDescricao"));
 						return sis;
 					}
 				});
@@ -147,9 +145,9 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao,"
+		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao as sistemaDescricao,"
 				+ " s.nome as nomeSistema , u.nome as nomeUsuario, u.id as idUsuario,"
-				+ " p.id as idProjeto, p.nome as nomeProjeto");
+				+ " p.id as idProjeto, p.nome as nomeProjeto ");
 		sql.append(" FROM sistema s");
 		sql.append(" INNER JOIN usuario u ON s.id_lider = u.id");
 		sql.append(" INNER JOIN projeto p ON s.id_projeto = p.id ");
@@ -194,6 +192,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 						sis.setUsuario(usuario);
 						sis.setId(rs.getLong("idSistema"));
 						sis.setNome(rs.getString("nomeSistema"));
+						sis.setDescricao(rs.getString("sistemaDescricao"));
 
 						return sis;
 					}
@@ -202,7 +201,6 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 		return lista;
 	}
 
-	// NÃO IMPLEMENTADO
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException,
 			DeletarRegistroViolacaoFK {
@@ -242,7 +240,6 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 
 	@Override
 	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

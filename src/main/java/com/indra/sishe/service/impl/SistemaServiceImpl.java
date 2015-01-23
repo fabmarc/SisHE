@@ -20,13 +20,9 @@ import com.indra.sishe.service.StatelessServiceAb;
 public class SistemaServiceImpl extends StatelessServiceAb implements
 		SistemaService {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public SistemaServiceImpl() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Autowired
@@ -42,7 +38,6 @@ public class SistemaServiceImpl extends StatelessServiceAb implements
 			throw new ApplicationException(e, "msg.error.registro.duplicado",
 					"Sistema");
 		}
-
 	}
 
 	@Override
@@ -58,7 +53,6 @@ public class SistemaServiceImpl extends StatelessServiceAb implements
 			e.printStackTrace();
 			throw new ApplicationException(e, "msg.error.registro.inexistente");
 		}
-
 	}
 
 	@Override
@@ -83,13 +77,11 @@ public class SistemaServiceImpl extends StatelessServiceAb implements
 			throw new ApplicationException(e, "msg.error.registro.inexistente",
 					"Sistema");
 		}
-
 	}
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

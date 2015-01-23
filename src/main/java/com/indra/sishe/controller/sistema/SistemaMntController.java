@@ -43,7 +43,7 @@ public class SistemaMntController extends SistemaController {
 	private List<Sistema> sistemasSelecionados;
 
 	public SistemaMntController() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@PostConstruct
@@ -88,8 +88,8 @@ public class SistemaMntController extends SistemaController {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sistemaFiltro", sistemaFiltro);
 		try {
-			sistemaSelecionado = sistemaService
-					.findById(sistemaSelecionado.getId());
+			sistemaSelecionado = sistemaService.findById(sistemaSelecionado
+					.getId());
 			putFlashAttr("sistemaSelecionado", sistemaSelecionado);
 			return "/paginas/sistema/cadastrarSistema.xhtml?faces-redirect=true";
 		} catch (ApplicationException e) {
@@ -97,7 +97,7 @@ public class SistemaMntController extends SistemaController {
 			return irParaConsultar();
 		}
 	}
-	
+
 	public String removerSistema() {
 		int size = sistemasSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);

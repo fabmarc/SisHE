@@ -9,7 +9,7 @@ public class Sistema implements Serializable, Comparable<Sistema> {
 	private Usuario usuario;
 	private String nome;
 	private String descricao;
-	 private Projeto projeto; 
+	private Projeto projeto;
 
 	@Override
 	public int hashCode() {
@@ -43,7 +43,7 @@ public class Sistema implements Serializable, Comparable<Sistema> {
 	}
 
 	public Sistema() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Sistema(Long id, Usuario usuario, String nome, String descricao) {
@@ -54,7 +54,6 @@ public class Sistema implements Serializable, Comparable<Sistema> {
 		this.descricao = descricao;
 	}
 
-	
 	@Override
 	public int compareTo(Sistema o) {
 		// TODO Auto-generated method stub

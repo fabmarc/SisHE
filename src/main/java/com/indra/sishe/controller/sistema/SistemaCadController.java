@@ -22,9 +22,6 @@ import com.indra.sishe.service.UsuarioService;
 @ManagedBean(name = "sistemaCad")
 public class SistemaCadController extends SistemaController {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3214994834298229437L;
 
 	private List<Usuario> listaLider = new ArrayList<Usuario>();
@@ -53,8 +50,7 @@ public class SistemaCadController extends SistemaController {
 		sistemaSelecionado = (Sistema) getFlashAttr("sistemaSelecionado");
 		if (sistemaSelecionado == null) {
 			sistemaSelecionado = new Sistema();
-			// sistemaSelecionado.setUsuario(new Usuario());
-
+			
 		}
 		sistemaFiltro = (Sistema) getFlashAttr("sistemaFiltro");
 		listarLideres();
@@ -67,7 +63,6 @@ public class SistemaCadController extends SistemaController {
 		cargo.setNome("Lider");
 		cargo = cargoService.findByFilter(cargo).get(0);
 		listaLider = usuarioService.findByCargo(cargo);
-
 		return listaLider;
 	}
 
@@ -106,7 +101,6 @@ public class SistemaCadController extends SistemaController {
 					"msg.error.registro.nao.cadastrado", "Sistema"));
 			return null;
 		}
-
 	}
 
 	public String alterarSistema() {
@@ -146,7 +140,6 @@ public class SistemaCadController extends SistemaController {
 					"msg.error.registro.nao.cadastrado", "Sindicato"));
 			return null;
 		}
-
 	}
 
 	public String alterarSindicato() {
