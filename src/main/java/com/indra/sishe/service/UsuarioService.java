@@ -14,5 +14,5 @@ public interface UsuarioService extends BaseService<Usuario> {
 	public List<Usuario> findByFilter(Usuario usuarioFiltro);
 
 	public List<Usuario> findByCargo(Cargo cargo);
-	
+
 }

@@ -5,8 +5,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
-import com.indra.sishe.entity.Cargo;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.Cargo;
 
 @ViewScoped
 @ManagedBean(name = "cargoCad")
@@ -28,7 +28,8 @@ public class CargoCadController extends CargoController {
 		searched = (Boolean) getFlashAttr("searched");
 
 		cargoSelecionado = (Cargo) getFlashAttr("cargoSelecionado");
-		if (cargoSelecionado == null) cargoSelecionado = new Cargo();
+		if (cargoSelecionado == null)
+			cargoSelecionado = new Cargo();
 
 		cargoFiltro = (Cargo) getFlashAttr("cargoFiltro");
 	}

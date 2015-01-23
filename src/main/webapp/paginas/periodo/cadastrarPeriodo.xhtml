@@ -22,8 +22,8 @@
 						<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
 					</p:inputText>
 					<p:outputLabel value="Porcentagem:" style="width:100px;" />
-					<p:inputText id="porcentagem" type="text" value="#{periodoCad.periodoSelecionado.porcentagem}" maxlength="6">
-						<f:convertNumber type="percent" maxFractionDigits="2" />
+					<p:inputText id="porcentagem" type="number" value="#{periodoCad.periodoSelecionado.porcentagem}" maxlength="6">
+						<f:convertNumber type="number" maxIntegerDigits="3" />
 					</p:inputText>
 					<br />
 					<div style="position: relative; width: 220px;">

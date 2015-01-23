@@ -11,7 +11,7 @@ public class Periodo implements Serializable, Comparable<Periodo> {
 
 	private Regra regra;
 
-	private Long diaSemana;
+	private Integer diaSemana;
 
 	private Date horaInicio;
 
@@ -38,11 +38,11 @@ public class Periodo implements Serializable, Comparable<Periodo> {
 		this.regra = regra;
 	}
 
-	public Long getDiaSemana() {
+	public Integer getDiaSemana() {
 		return diaSemana;
 	}
 
-	public void setDiaSemana(Long diaSemana) {
+	public void setDiaSemana(Integer diaSemana) {
 		this.diaSemana = diaSemana;
 	}
 

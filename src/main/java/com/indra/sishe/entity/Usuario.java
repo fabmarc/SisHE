@@ -2,7 +2,6 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
-
 public class Usuario implements Serializable, Comparable<Usuario> {
 
 	private static final long serialVersionUID = -4353769998918846888L;

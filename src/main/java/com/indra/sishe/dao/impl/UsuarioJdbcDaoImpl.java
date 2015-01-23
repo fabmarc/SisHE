@@ -114,13 +114,13 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				Cargo cargo = new Cargo();
 				cargo.setId(rs.getLong("id_cargo"));
 				cargo.setNome(rs.getString("nome_cargo"));
-				
+
 				Cidade cidade = new Cidade();
 				cidade.setId(rs.getLong("id_cidade"));
 				Estado estado = new Estado();
 				estado.setId(rs.getLong("id_cidade_estado"));
 				cidade.setEstado(estado);
-				cidade.setNome(rs.getString("cidade_nome"));				
+				cidade.setNome(rs.getString("cidade_nome"));
 
 				Sindicato sind = new Sindicato();
 				sind.setId(rs.getLong("id_sindicato"));

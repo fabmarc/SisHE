@@ -7,15 +7,20 @@
 		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
 		<h:outputStylesheet library="css" name="sishe.css" />
 		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
-		
+		<style>
+html {
+	height: 100%;
+	overflow: auto;
+}
+</style>
 		<ui:insert name="title">
 			<title>Banco de Horas</title>
 		</ui:insert>
 	</h:head>
 
-	<h:body>
+	<h:body style="height:100%; overflow:visible">
 
-		<div class="container">
+		<div class="container" style="height: auto;">
 			<div id="cabecalho" style="width: 100%; position: absolute; left: 0px;">
 				<div class="logoCabeLeft">
 					<p:graphicImage url="/resources/images/logoIndra.gif" />
@@ -27,107 +32,97 @@
 					</h2>
 				</div>
 				<div style="background-color: #818181; width: 100%; position: relative; height: 1px;"></div>
-				<div class="logoCabeRodape"/>
+				<div class="logoCabeRodape" />
 			</div>
 
-			<div style="height: 84px; position: relative;">					
-			</div>
-	
-			<div id="corpo" style="top: 25px; position:relative;">
-			<ui:insert name="menu">
-				<h:form id="logoutForm">
-				
-				<div style="float: right; position: relative; width: 52px;" id="divAcoes">
-					<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">					
-						<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home"/></a>
-					</div>
-					
-					<div style="float:right; position:relative; width: 20px; top: -6px;" id="divLogout" >
-						<h:commandLink action="#{loginController.logout}">
-							<p:graphicImage url="/resources/images/logout.png" title="Logout"/>
-						</h:commandLink>
-					</div>
-				</div>
-				
-					<p:menubar style="top:20px;">
-						<p:submenu label="Solicitação">
-							<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
-							<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
-							<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" />
-						</p:submenu>
+			<div id="corpo" style="top: 100px; position: relative; height: 100%;">
+				<ui:insert name="menu">
+					<h:form id="logoutForm">
 
-						<p:submenu label="Projetos">
-							<p:submenu label="Sistema">
-								<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" icon="ui-icon-search" />
-							</p:submenu>
-							<p:submenu label="Projetos">
-								<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
-							</p:submenu>
-							<p:submenu label="Equipe">
+						<div style="float: right; position: relative; width: 52px;" id="divAcoes">
+							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
+								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
+							</div>
+
+							<div style="float: right; position: relative; width: 20px; top: -6px;" id="divLogout">
+								<h:commandLink action="#{loginController.logout}">
+									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
+								</h:commandLink>
+							</div>
+						</div>
+
+						<p:menubar style="top:20px;">
+							<p:submenu label="Solicitação">
 								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+								<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" />
 							</p:submenu>
-						</p:submenu>
 
-						<p:submenu label="Funcionário">
-							<p:submenu label="Usuário">
-								<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}"  icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" icon="ui-icon-search" />
-							</p:submenu>
-							<p:submenu label="Cargo">
-								<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" icon="ui-icon-search" />
-							</p:submenu>
-						</p:submenu>
-
-						<p:submenu label="Sindicato">
-							<p:submenu label="Sindicato">
-								<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
-								<p:menuitem value="Definir Regra" url="#" icon="ui-icon ui-icon-note" />
-							</p:submenu>
-							<p:submenu label="Definições">
-								<p:submenu label="Regra">
+							<p:submenu label="Projetos">
+								<p:submenu label="Sistema">
+									<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" icon="ui-icon-search" />
+								</p:submenu>
+								<p:submenu label="Projetos">
+									<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
+								</p:submenu>
+								<p:submenu label="Equipe">
 									<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
 									<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
 								</p:submenu>
-								<p:submenu label="Periodo">
-									<p:menuitem value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{periodoMnt.irParaConsultar()}" icon="ui-icon-search" />
+							</p:submenu>
+
+							<p:submenu label="Funcionário">
+								<p:submenu label="Usuário">
+									<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" icon="ui-icon-search" />
+								</p:submenu>
+								<p:submenu label="Cargo">
+									<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
 							</p:submenu>
-						</p:submenu>
 
-						<p:submenu label="Feriados">
-							<p:menuitem value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-							<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" icon="ui-icon-search" />
-						</p:submenu>
+							<p:submenu label="Sindicato">
+								<p:submenu label="Sindicato">
+									<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									<p:menuitem value="Definir Regra" url="#" icon="ui-icon ui-icon-note" />
+								</p:submenu>
+								<p:submenu label="Definições">
+									<p:submenu label="Regra">
+										<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+									</p:submenu>
+									<p:submenu label="Periodo">
+										<p:menuitem value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{periodoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+								</p:submenu>
+							</p:submenu>
 
-					</p:menubar>
+							<p:submenu label="Feriados">
+								<p:menuitem value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" icon="ui-icon-search" />
+							</p:submenu>
 
-				</h:form>
-			</ui:insert>
+						</p:menubar>
 
-			<ui:insert name="content" style="top: -10px; position: relative;">
-				<h:outputLabel value="[Conteúdo Default, esta região deve ser sobrescrita]" />
-			</ui:insert>
-			
-		</div>
-		<!-- /container -->
-		<!-- 
-		<p:dock position="bottom">
-			<p:menuitem value="Home" icon="/resources/demo/imagens/home.png" url="/index.jsf" />
-			<p:menuitem value="Usuário" icon="/resources/demo/imagens/user.png" url="#"/>
-		</p:dock>
-		 -->
-		 <div style="height:60px;"/>
-		 <div class="rodape">
-		 	<div style="top: 10px; position: relative;">
-		 		<font color="#989898" size="2px" style="font-family:'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;">&copy; Indra 2015</font>		 		
-		 	</div>
-		 </div>
+					</h:form>
+				</ui:insert>
+
+				<ui:insert name="content" style="top: -10px; position: relative;">
+					<h:outputLabel value="[Conteúdo Default, esta região deve ser sobrescrita]" />
+				</ui:insert>
+				
+			</div>
+
+			<div class="rodape">
+				<div style="top: 10px; position: relative;">
+					<font color="#989898" size="2px" style="font-family: 'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;">&copy; Indra 2015</font>
+				</div>
+			</div>
 		</div>
 	</h:body>
 

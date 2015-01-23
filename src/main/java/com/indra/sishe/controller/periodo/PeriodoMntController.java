@@ -103,8 +103,8 @@ public class PeriodoMntController extends PeriodoController {
 	public void setPeriodosSelecionados(List<Periodo> periodosSelecionados) {
 		this.periodosSelecionados = periodosSelecionados;
 	}
-	
-	public DiaSemanaEnum obterDia(int diaSemana){
+
+	public DiaSemanaEnum obterDia(int diaSemana) {
 		return DiaSemanaEnum.obterDiaSemana(diaSemana);
 	}
 

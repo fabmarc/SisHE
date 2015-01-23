@@ -5,8 +5,8 @@ import java.util.List;
 import com.indra.infra.dao.BaseDAO;
 import com.indra.sishe.entity.Cargo;
 
-public interface CargoDAO extends BaseDAO<Cargo>{
-	
-	public List<Cargo> findByFilter(Cargo cargoFiltro);	
-	
+public interface CargoDAO extends BaseDAO<Cargo> {
+
+	public List<Cargo> findByFilter(Cargo cargoFiltro);
+
 }

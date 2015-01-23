@@ -96,8 +96,8 @@ public class PeriodoCadController extends PeriodoController {
 	public void setPeriodoSelecionado(Periodo periodoSelecionado) {
 		this.periodoSelecionado = periodoSelecionado;
 	}
-	
-	public List<DiaSemanaEnum> obterListaDias(){
+
+	public List<DiaSemanaEnum> obterListaDias() {
 		List<DiaSemanaEnum> listaDias = new ArrayList<DiaSemanaEnum>(Arrays.asList(DiaSemanaEnum.values()));
 		return listaDias;
 	}

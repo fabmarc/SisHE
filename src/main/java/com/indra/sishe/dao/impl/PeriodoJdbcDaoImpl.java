@@ -65,8 +65,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	@Override
 	public Periodo update(Periodo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
 		try {
-			int rows = getJdbcTemplate()
-					.update("UPDATE periodo SET id_regra = ?, dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? " + "WHERE id = ?", entity.getRegra().getId(), entity.getDiaSemana(), entity.getHoraInicio(), entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
+			int rows = getJdbcTemplate().update("UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? " + "WHERE id = ?", entity.getDiaSemana(), entity.getHoraInicio(), entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
 			if (rows == 0)
 				throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
@@ -180,7 +179,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 				periodo.setRegra(regra);
 				periodo.setId(rs.getLong("id"));
-				periodo.setDiaSemana(rs.getLong("dia_semana"));
+				periodo.setDiaSemana(rs.getInt("dia_semana"));
 				periodo.setHoraInicio(rs.getTime("hora_inicio"));
 				periodo.setHoraFim(rs.getTime("hora_fim"));
 				periodo.setPorcentagem(rs.getDouble("porcentagem"));

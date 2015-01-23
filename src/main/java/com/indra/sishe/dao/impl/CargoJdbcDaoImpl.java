@@ -109,7 +109,8 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM cargo WHERE id = ?", id);
-			if (rows == 0) throw new RegistroInexistenteException();
+			if (rows == 0)
+				throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
@@ -125,7 +126,8 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		try {
 			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM cargo WHERE id = ?", params);
 			for (int rows : affectedRows)
-				if (rows == 0) throw new RegistroInexistenteException();
+				if (rows == 0)
+					throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
