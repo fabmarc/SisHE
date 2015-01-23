@@ -28,7 +28,7 @@
 							<h:outputText value="#{regra.id}" />
 						</p:column>
 
-						<p:column headerText="Nome" style="max-width:200px;text-overflow:ellipsis;">
+						<p:column headerText="Nome" style="max-width:165px;text-overflow:ellipsis;">
 							<h:outputText value="#{regra.descricao}" />
 						</p:column>
 
@@ -37,13 +37,13 @@
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Data Inicial" style="width:10%">
+						<p:column headerText="Data Inicial" style="text-align:center;width:90px">
 							<h:outputText value="#{regra.dataInicio}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Data Inicial" style="width:10%">
+						<p:column headerText="Data Final" style="text-align:center;width:90px">
 							<h:outputText value="#{regra.dataFim}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>

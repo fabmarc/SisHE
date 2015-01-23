@@ -90,8 +90,8 @@
 							</p:submenu>
 							<p:submenu label="Definições">
 								<p:submenu label="Regra">
-									<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+									<p:menuitem value="Cadastrar" action="#{regraMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{regraMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
 								<p:submenu label="Periodo">
 									<p:menuitem value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />

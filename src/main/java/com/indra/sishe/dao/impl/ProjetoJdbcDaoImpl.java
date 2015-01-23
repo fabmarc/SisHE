@@ -74,8 +74,8 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 				projeto.setId(rs.getLong("id"));
 				projeto.setGerente(usuario);
-				projeto.setNome("nome");
-				projeto.setDescricao("descricao");
+				projeto.setNome(rs.getString("nome"));
+				projeto.setDescricao(rs.getString("descricao"));
 				return projeto;
 			}
 		});

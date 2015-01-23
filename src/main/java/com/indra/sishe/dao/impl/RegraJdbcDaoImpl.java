@@ -143,8 +143,8 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 		sql.append("FROM regra INNER JOIN sindicato ON (regra.id_sindicato = sindicato.id) " +
 							  "INNER JOIN estado ON (sindicato.id_estado = estado.id) WHERE 1=1 ");
 		
-			sql.append("AND regra.id_sindicato = :idSidicato");
-			params.addValue("idSidicato", id);
+			sql.append("AND regra.id = :id");
+			params.addValue("id", id);
 		
 		List<Regra> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Regra>() {
 			@Override
@@ -171,7 +171,11 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 				return regra;
 			}
 		});
-		return lista.get(0);
+		if (lista.size() > 0) {
+			return lista.get(0);
+		}else {
+			return null;
+		}
 	}
 
 	@Override
