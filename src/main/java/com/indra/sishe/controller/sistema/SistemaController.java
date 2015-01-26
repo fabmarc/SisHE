@@ -12,8 +12,10 @@ import com.indra.sishe.service.SistemaService;
 public class SistemaController extends BaseController implements Serializable {
 
 	private static final long serialVersionUID = -2097043422349464567L;
+	
 	@Inject
-	protected transient SistemaService sistemaService;
+	protected  SistemaService sistemaService;
+	
 	protected List<Sistema> listaSistema;
 
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
@@ -26,50 +28,34 @@ public class SistemaController extends BaseController implements Serializable {
 	protected Boolean searched;
 
 	public SistemaController() {
-		// TODO Auto-generated constructor stub
+
 	}
 
-	// FALTA ADICIONAR A VERIFICAÇÃO PARA PROJETO
 	public boolean validarSistema(Sistema sistemaSelecionado) {
-
-		if (sistemaSelecionado != null) {
-
-			if (sistemaSelecionado.getDescricao().length() > 200) {
-				messager.error(messageProvider.getMessage(
-						"msg.error.campo.maior.esperado", "Descrição"));
-				return false;
-			} else if (sistemaSelecionado.getDescricao() == null) {
-				messager.error(messageProvider.getMessage(
-						"msg.error.campo.obrigatorio", "Descrição"));
-				return false;
-			} else if (sistemaSelecionado.getNome().length() > 50) {
-				messager.error(messageProvider.getMessage(
-						"msg.error.campo.maior.esperado", "Nome"));
-				return false;
-			} else if (sistemaSelecionado.getNome() == null) {
-				messager.error(messageProvider.getMessage(
-						"msg.error.campo.obrigatorio", "Nome"));
-				return false;
-			} else if (sistemaSelecionado.getUsuario() == null) {
-				messager.error(messageProvider.getMessage(
-						"msg.error.campo.maior.esperado", "Lider"));
-				return false;
-			} else {
-				return true;
-			}
-
+		
+		if (sistemaSelecionado.getNome() == null || sistemaSelecionado.getNome().isEmpty()) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Nome"));
+		} else if (sistemaSelecionado.getNome() == null || sistemaSelecionado.getNome().length() > 50) {
+			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "50"));
+		} else if (sistemaSelecionado.getProjeto().getId() == null) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Projeto"));
+		} else if (sistemaSelecionado.getLider().getId() == null) {
+			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Lider"));
 		} else {
 			return true;
 		}
+		return false;
 	}
 
 	public String irParaConsultar() {
+		putFlashAttr("sistemaSelecionado", null);
 		return "/paginas/sistema/consultarSistema.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sistemaFiltro", sistemaFiltro);
+		putFlashAttr("sistemaSelecionado", null);
 		return "/paginas/sistema/cadastrarSistema.xhtml?faces-redirect=true";
 	}
 
