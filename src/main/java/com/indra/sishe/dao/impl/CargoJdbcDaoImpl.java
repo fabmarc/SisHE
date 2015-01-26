@@ -38,12 +38,15 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@PostConstruct
 	private void init() {
+
 		setDataSource(dataSource);
-		insertCargo = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cargo").usingGeneratedKeyColumns("id");
+		insertCargo = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cargo")
+				.usingGeneratedKeyColumns("id");
 	}
 
 	@Override
 	public Cargo save(Cargo entity) throws RegistroDuplicadoException {
+
 		try {
 			Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
 			entity.setId(key.longValue());
@@ -55,10 +58,11 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public Cargo update(Cargo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
+
 		try {
-			int rows = getJdbcTemplate().update("UPDATE cargo SET nome = ? " + "WHERE id = ?", entity.getNome(), entity.getId());
-			if (rows == 0)
-				throw new RegistroInexistenteException();
+			int rows = getJdbcTemplate().update("UPDATE cargo SET nome = ? " + "WHERE id = ?", entity.getNome(),
+					entity.getId());
+			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}
@@ -67,13 +71,17 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public List<Cargo> findAll() {
-		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome " + "FROM cargo", new BeanPropertyRowMapper<Cargo>(Cargo.class));
+
+		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome " + "FROM cargo",
+				new BeanPropertyRowMapper<Cargo>(Cargo.class));
 	}
 
 	@Override
 	public Cargo findById(Object id) throws RegistroInexistenteException {
+
 		try {
-			return getJdbcTemplate().queryForObject("SELECT id, nome " + "FROM cargo WHERE id = ?", new Object[] { id }, new BeanPropertyRowMapper<Cargo>(Cargo.class));
+			return getJdbcTemplate().queryForObject("SELECT id, nome " + "FROM cargo WHERE id = ?",
+					new Object[] { id }, new BeanPropertyRowMapper<Cargo>(Cargo.class));
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
 		}
@@ -81,6 +89,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public EntityManager getEntityManager() {
+
 		return null;
 	}
 
@@ -101,16 +110,17 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 			sql.append("AND LOWER(nome) LIKE '%' || :nomeCargo || '%' ");
 			params.addValue("nomeCargo", cargoFiltro.getNome().toLowerCase());
 		}
-		return getNamedParameterJdbcTemplate().query(sql.toString(), params, new BeanPropertyRowMapper<Cargo>(Cargo.class));
+		return getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new BeanPropertyRowMapper<Cargo>(Cargo.class));
 
 	}
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM cargo WHERE id = ?", id);
-			if (rows == 0)
-				throw new RegistroInexistenteException();
+			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
@@ -118,6 +128,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
@@ -126,8 +137,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		try {
 			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM cargo WHERE id = ?", params);
 			for (int rows : affectedRows)
-				if (rows == 0)
-					throw new RegistroInexistenteException();
+				if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}

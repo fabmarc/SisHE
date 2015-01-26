@@ -25,27 +25,26 @@ public class UsuarioMntController extends UsuarioController {
 	private List<Usuario> usuariosSelecionados;
 
 	public UsuarioMntController() {
+
 	}
 
 	@PostConstruct
 	public void init() {
+
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		usuarioFiltro = (Usuario) getFlashAttr("usuarioFiltro");
-		if (usuarioFiltro == null)
-			usuarioFiltro = new Usuario();
+		if (usuarioFiltro == null) usuarioFiltro = new Usuario();
 
-		if (!searched)
-			listaUsuarios = new ArrayList<Usuario>();
-		else
-			pesquisar();
+		if (!searched) listaUsuarios = new ArrayList<Usuario>();
+		else pesquisar();
 	}
 
 	public void beforeRemoveUsuarios() {
+
 		if (usuariosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -54,12 +53,14 @@ public class UsuarioMntController extends UsuarioController {
 	}
 
 	public void pesquisar() {
+
 		listaUsuarios = usuarioService.findByFilter(usuarioFiltro);
 		Collections.sort(listaUsuarios);
 		searched = true;
 	}
 
 	public String removerUsuario() {
+
 		int size = usuariosSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		for (Usuario usuario : usuariosSelecionados)
@@ -75,6 +76,7 @@ public class UsuarioMntController extends UsuarioController {
 	}
 
 	public String irParaAlterar(Usuario usuarioSelecionado) {
+
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
 		try {
@@ -88,18 +90,22 @@ public class UsuarioMntController extends UsuarioController {
 	}
 
 	public List<Usuario> getListaUsuarios() {
+
 		return listaUsuarios;
 	}
 
 	public void setListaUsuarios(List<Usuario> listaUsuarios) {
+
 		this.listaUsuarios = listaUsuarios;
 	}
 
 	public List<Usuario> getUsuariosSelecionados() {
+
 		return usuariosSelecionados;
 	}
 
 	public void setUsuariosSelecionados(List<Usuario> usuariosSelecionados) {
+
 		this.usuariosSelecionados = usuariosSelecionados;
 	}
 }

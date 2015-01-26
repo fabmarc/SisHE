@@ -37,15 +37,17 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@PostConstruct
 	private void init() {
+
 		setDataSource(dataSource);
-		insertPeriodo = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("periodo").usingGeneratedKeyColumns("id");
+		insertPeriodo = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("periodo").usingGeneratedKeyColumns(
+				"id");
 	}
 
 	@Override
 	public Periodo save(Periodo entity) throws RegistroDuplicadoException {
+
 		try {
 			MapSqlParameterSource params = new MapSqlParameterSource();
-
 			params.addValue("dia_semana", entity.getDiaSemana());
 			params.addValue("hora_inicio", entity.getHoraInicio());
 			params.addValue("hora_fim", entity.getHoraFim());
@@ -53,7 +55,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			if (entity.getRegra() != null) {
 				params.addValue("id_regra", entity.getRegra().getId());
 			}
-
 			Number key = insertPeriodo.executeAndReturnKey(params);
 			entity.setId(key.longValue());
 		} catch (DuplicateKeyException e) {
@@ -64,10 +65,13 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Periodo update(Periodo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
+
 		try {
-			int rows = getJdbcTemplate().update("UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? " + "WHERE id = ?", entity.getDiaSemana(), entity.getHoraInicio(), entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
-			if (rows == 0)
-				throw new RegistroInexistenteException();
+			int rows = getJdbcTemplate().update(
+					"UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? "
+							+ "WHERE id = ?", entity.getDiaSemana(), entity.getHoraInicio(), entity.getHoraFim(),
+					entity.getPorcentagem(), entity.getId());
+			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}
@@ -76,6 +80,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public List<Periodo> findAll() {
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("Select sindicato.id as id_sindicato, sindicato.descricao as descricao_sindicato, periodo.id, periodo.id_regra as id_regra, regra.descricao as descricao_regra, periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim, periodo.porcentagem ");
@@ -85,6 +90,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Periodo findById(Object id) throws RegistroInexistenteException {
+
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
@@ -92,13 +98,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			sql.append("from periodo left join regra on (periodo.id_regra = regra.id) left join sindicato on (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
 			sql.append("AND periodo.id = :idPeriodo");
 			params.addValue("idPeriodo", id);
-			List<Periodo> lista = consultar(sql, params);
-
-			if (!lista.isEmpty()) {
-				return lista.get(0);
-			} else {
-				return null;
-			}
+			return consultarUmPeriodo(sql, params);
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
 		}
@@ -106,10 +106,10 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM periodo WHERE id = ?", id);
-			if (rows == 0)
-				throw new RegistroInexistenteException();
+			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
@@ -117,6 +117,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
@@ -125,8 +126,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		try {
 			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM periodo WHERE id = ?", params);
 			for (int rows : affectedRows)
-				if (rows == 0)
-					throw new RegistroInexistenteException();
+				if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
@@ -135,11 +135,13 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public EntityManager getEntityManager() {
+
 		return null;
 	}
 
 	@Override
 	public List<Periodo> findByFilter(Periodo entity) {
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -161,8 +163,57 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		return consultar(sql, params);
 	}
 
+	@Override
+	public List<Periodo> findByRegra(Regra entity) {
+
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("Select sindicato.id as id_sindicato, sindicato.descricao as descricao_sindicato, periodo.id, periodo.id_regra as id_regra, regra.descricao as descricao_regra, periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim, periodo.porcentagem ");
+		sql.append("from periodo left join regra on (periodo.id_regra = regra.id) left join sindicato on (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
+
+		if (entity != null && entity.getId() != null) {
+			sql.append("AND periodo.id_regra= :regra");
+			params.addValue("regra", entity.getId());
+		}
+
+		return consultar(sql, params);
+	}
+
 	private List<Periodo> consultar(StringBuilder sql, MapSqlParameterSource params) {
-		List<Periodo> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Periodo>() {
+
+		List<Periodo> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<Periodo>() {
+					@Override
+					public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
+
+						Periodo periodo = new Periodo();
+
+						Sindicato sindicato = new Sindicato();
+						sindicato.setId(rs.getLong("id_sindicato"));
+						sindicato.setDescricao(rs.getString("descricao_sindicato"));
+
+						Regra regra = new Regra();
+						regra.setId(rs.getLong("id_regra"));
+						regra.setDescricao(rs.getString("descricao_regra"));
+						regra.setSindicato(sindicato);
+
+						periodo.setRegra(regra);
+						periodo.setId(rs.getLong("id"));
+						periodo.setDiaSemana(rs.getInt("dia_semana"));
+						periodo.setHoraInicio(rs.getTime("hora_inicio"));
+						periodo.setHoraFim(rs.getTime("hora_fim"));
+						periodo.setPorcentagem(rs.getInt("porcentagem"));
+
+						return periodo;
+					}
+				});
+		return lista;
+	}
+
+	private Periodo consultarUmPeriodo(StringBuilder sql, MapSqlParameterSource params) {
+
+		return getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new RowMapper<Periodo>() {
 			@Override
 			public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
 
@@ -182,28 +233,11 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				periodo.setDiaSemana(rs.getInt("dia_semana"));
 				periodo.setHoraInicio(rs.getTime("hora_inicio"));
 				periodo.setHoraFim(rs.getTime("hora_fim"));
-				periodo.setPorcentagem(rs.getDouble("porcentagem"));
+				periodo.setPorcentagem(rs.getInt("porcentagem"));
 
 				return periodo;
 			}
 		});
-		return lista;
-	}
-
-	@Override
-	public List<Periodo> findByRegra(Regra entity) {
-		StringBuilder sql = new StringBuilder();
-		MapSqlParameterSource params = new MapSqlParameterSource();
-
-		sql.append("Select sindicato.id as id_sindicato, sindicato.descricao as descricao_sindicato, periodo.id, periodo.id_regra as id_regra, regra.descricao as descricao_regra, periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim, periodo.porcentagem ");
-		sql.append("from periodo left join regra on (periodo.id_regra = regra.id) left join sindicato on (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
-
-		if (entity != null && entity.getId() != null) {
-			sql.append("AND periodo.id_regra= :regra");
-			params.addValue("regra", entity.getId());
-		}
-
-		return consultar(sql, params);
 	}
 
 }

@@ -7,28 +7,30 @@
 			<br />
 			<ui:insert>
 				<p:messages id="messages" showDetail="true" showSummary="false" />
-				<div style="top: 15px; left: 207px; position: relative; width: 230px">
-					<p:outputLabel value="Dia Semana:" style="width:100px;" />
-					<h:selectOneMenu value="#{periodoCad.periodoSelecionado.diaSemana}" converter="omnifaces.SelectItemsConverter">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia}" itemValue="#{dia.numeroDia()}" />
-					</h:selectOneMenu>
-					<p:outputLabel value="Hora Inicio:" style="width:100px;" />
-					<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaInicio}">
-						<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
-					</p:inputText>
-					<p:outputLabel value="Hora Fim:" style="width:100px;" />
-					<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaFim}">
-						<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
-					</p:inputText>
-					<p:outputLabel value="Porcentagem:" style="width:100px;" />
-					<p:inputText id="porcentagem" type="number" value="#{periodoCad.periodoSelecionado.porcentagem}" maxlength="6">
-						<f:convertNumber type="number" maxIntegerDigits="3" />
-					</p:inputText>
-					<br />
-					<div style="position: relative; width: 220px;">
-						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{periodoCad.confirmar()}" value="Confirmar" />
-						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{periodoCad.cancelar()}" value="Cancelar" immediate="true" />
+				<div style="position: relative; width: 100%; padding-bottom: 10%;">
+					<div style="top: 15px; left: 207px; position: relative; width: 230px">
+						<p:outputLabel value="Dia Semana:" style="width:100px;" />
+						<h:selectOneMenu value="#{periodoCad.periodoSelecionado.diaSemana}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Campo Dia da Semana é obrigatório.">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia}" itemValue="#{dia.numeroDia()}" />
+						</h:selectOneMenu>
+						<p:outputLabel value="Hora Inicio:" style="width:100px;" />
+						<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaInicio}" required="true" requiredMessage="Campo Hora Inicio é obrigatório.">
+							<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
+						</p:inputText>
+						<p:outputLabel value="Hora Fim:" style="width:100px;" />
+						<p:inputText type="time" value="#{periodoCad.periodoSelecionado.horaFim}" required="true" requiredMessage="Campo Hora Fim é obrigatório.">
+							<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
+						</p:inputText>
+						<p:outputLabel value="Porcentagem:" style="width:100px;" />
+						<p:inputText id="porcentagem" type="number" value="#{periodoCad.periodoSelecionado.porcentagem}" validatorMessage="O campo Porcentagem deve possuir valor entre 0% e 100%." required="true" requiredMessage="Campo Porcentagem é obrigatório.">
+							<f:validateLongRange minimum="0" maximum="100" />
+						</p:inputText>
+						<br />
+						<div style="position: relative; width: 220px;">
+							<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{periodoCad.confirmar()}" value="Confirmar" />
+							<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{periodoCad.cancelar()}" value="Cancelar" immediate="true" />
+						</div>
 					</div>
 				</div>
 			</ui:insert>

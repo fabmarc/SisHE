@@ -10,8 +10,8 @@ import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.DiaSemanaEnum;
 import com.indra.sishe.entity.Periodo;
+import com.indra.sishe.enums.DiaSemanaEnum;
 
 @ViewScoped
 @ManagedBean(name = "periodoCad")
@@ -29,44 +29,41 @@ public class PeriodoCadController extends PeriodoController {
 		searched = (Boolean) getFlashAttr("searched");
 
 		periodoSelecionado = (Periodo) getFlashAttr("periodoSelecionado");
-		if (periodoSelecionado == null)
-			periodoSelecionado = new Periodo();
+		if (periodoSelecionado == null) periodoSelecionado = new Periodo();
 
 		periodoFiltro = (Periodo) getFlashAttr("periodoFiltro");
 	}
 
 	public String cadastrarPeriodo() {
-		if (validarPeriodo(periodoSelecionado)) {
-			try {
-				this.periodoSelecionado = periodoService.save(periodoSelecionado);
-				putFlashAttr("periodoFiltro", periodoFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Periodo"));
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-			}
+
+		try {
+			this.periodoSelecionado = periodoService.save(periodoSelecionado);
+			putFlashAttr("periodoFiltro", periodoFiltro);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Periodo"));
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
 		}
 		return null;
 	}
 
 	public String alterarPeriodo() {
-		if (validarPeriodo(periodoSelecionado)) {
-			try {
-				periodoService.update(periodoSelecionado);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Periodo"));
-				putFlashAttr("periodoFiltro", periodoFiltro);
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-				return irParaAlterar(periodoSelecionado);
-			}
+
+		try {
+			periodoService.update(periodoSelecionado);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Periodo"));
+			putFlashAttr("periodoFiltro", periodoFiltro);
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaAlterar(periodoSelecionado);
 		}
-		return null;
 	}
 
 	public String cancelar() {
+
 		putFlashAttr("searched", searched);
 		putFlashAttr("periodoFiltro", periodoFiltro);
 		putFlashAttr("periodoSelecionado", null);
@@ -74,6 +71,7 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	private boolean modoCadastrar() {
+
 		if (periodoSelecionado == null || periodoSelecionado.getId() == null) {
 			return true;
 		} else {
@@ -82,6 +80,7 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public String confirmar() {
+
 		if (modoCadastrar()) {
 			return cadastrarPeriodo();
 		} else {
@@ -90,14 +89,17 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public Periodo getPeriodoSelecionado() {
+
 		return periodoSelecionado;
 	}
 
 	public void setPeriodoSelecionado(Periodo periodoSelecionado) {
+
 		this.periodoSelecionado = periodoSelecionado;
 	}
 
 	public List<DiaSemanaEnum> obterListaDias() {
+
 		List<DiaSemanaEnum> listaDias = new ArrayList<DiaSemanaEnum>(Arrays.asList(DiaSemanaEnum.values()));
 		return listaDias;
 	}
