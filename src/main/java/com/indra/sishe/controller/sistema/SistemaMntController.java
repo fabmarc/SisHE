@@ -39,11 +39,11 @@ public class SistemaMntController extends SistemaController {
 	@Inject
 	private ProjetoService projetoService;
 
-	@SuppressWarnings("unused")
+	
 	private List<Sistema> sistemasSelecionados;
 
 	public SistemaMntController() {
-		
+
 	}
 
 	@PostConstruct
@@ -52,22 +52,19 @@ public class SistemaMntController extends SistemaController {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		sistemaFiltro = (Sistema) getFlashAttr("sistemaFiltro");
-		if (sistemaFiltro == null)
-			sistemaFiltro = new Sistema();
-		if (!searched)
-			listaSistema = new ArrayList<Sistema>();
-		else
-			pesquisar();
+		if (sistemaFiltro == null) sistemaFiltro = new Sistema();
+		if (!searched) listaSistema = new ArrayList<Sistema>();
+		else pesquisar();
 
 		listarLideres();
 		listarProjeto();
 	}
 
 	public void pesquisar() {
+		
 		listaSistema = sistemaService.findByFilter(sistemaFiltro);
 		Collections.sort(listaSistema);
 		searched = true;
@@ -76,20 +73,18 @@ public class SistemaMntController extends SistemaController {
 	public void beforeRemoveSistema() {
 
 		if (sistemasSelecionados.size() == 0) {
-			RequestContext.getCurrentInstance().execute(
-					"selectAtleastOne.show()");
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
-			RequestContext.getCurrentInstance().execute(
-					"confirmExclusao.show()");
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
 
 	public String irParaAlterar(Sistema sistemaSelecionado) {
+		
 		putFlashAttr("searched", searched);
 		putFlashAttr("sistemaFiltro", sistemaFiltro);
 		try {
-			sistemaSelecionado = sistemaService.findById(sistemaSelecionado
-					.getId());
+			sistemaSelecionado = sistemaService.findById(sistemaSelecionado.getId());
 			putFlashAttr("sistemaSelecionado", sistemaSelecionado);
 			return "/paginas/sistema/cadastrarSistema.xhtml?faces-redirect=true";
 		} catch (ApplicationException e) {
@@ -105,8 +100,7 @@ public class SistemaMntController extends SistemaController {
 			ids.add(sistema.getId());
 		try {
 			sistemaService.remove(ids);
-			messager.info(messageProvider.getMessage(
-					"msg.success.registro.excluido", "sistema"));
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "sistema"));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
 		}

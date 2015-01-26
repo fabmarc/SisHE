@@ -24,8 +24,8 @@ public class SistemaCadController extends SistemaController {
 
 	private static final long serialVersionUID = -3214994834298229437L;
 
-	private List<Usuario> listaLider = new ArrayList<Usuario>();
-	private List<Projeto> listaProjeto = new ArrayList<Projeto>();
+	public List<Usuario> listaLideres = new ArrayList<Usuario>();
+	public List<Projeto> listaProjetos = new ArrayList<Projeto>();
 
 	@Inject
 	private UsuarioService usuarioService;
@@ -37,7 +37,7 @@ public class SistemaCadController extends SistemaController {
 	private ProjetoService projetoService;
 
 	public SistemaCadController() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@PostConstruct
@@ -50,7 +50,7 @@ public class SistemaCadController extends SistemaController {
 		sistemaSelecionado = (Sistema) getFlashAttr("sistemaSelecionado");
 		if (sistemaSelecionado == null) {
 			sistemaSelecionado = new Sistema();
-			
+
 		}
 		sistemaFiltro = (Sistema) getFlashAttr("sistemaFiltro");
 		listarLideres();
@@ -62,54 +62,52 @@ public class SistemaCadController extends SistemaController {
 		Cargo cargo = new Cargo();
 		cargo.setNome("Lider");
 		cargo = cargoService.findByFilter(cargo).get(0);
-		listaLider = usuarioService.findByCargo(cargo);
-		return listaLider;
+		listaLideres = usuarioService.findByCargo(cargo);
+		return listaLideres;
 	}
 
 	public List<Projeto> listarProjeto() {
-		listaProjeto = projetoService.findAll();
-		return listaProjeto;
+		listaProjetos = projetoService.findAll();
+		return listaProjetos;
 	}
 
-	public String modoCadastrar() {
-
-		if (sistemaSelecionado.getId() == null) {
-			cadastrarSistema();
-			return irParaConsultar();
+	private boolean modoCadastrar() {
+		if (sistemaSelecionado == null || sistemaSelecionado.getId() == null) {
+			return true;
 		} else {
-			alterarSindicato();
-			return irParaConsultar();
+			return false;
 		}
 	}
 
+	public String confirmar() {
+		if (modoCadastrar()) {
+			return cadastrarSistema();
+		} else {
+			return alterarSistema();
+		}
+	}
+	
 	public String cadastrarSistema() {
 
 		if (validarSistema(sistemaSelecionado)) {
-			try {
-				sistemaService.save(sistemaSelecionado);
+			 try {
+				this.sistemaSelecionado = sistemaService.save(sistemaSelecionado);
+				putFlashAttr("sistemaFiltro", sistemaFiltro);
+				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Sistema"));
+				putFlashAttr("searched", searched);
+				return irParaConsultar();
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			putFlashAttr("sistemaFiltro", sistemaFiltro);
-			returnInfoMessage(messageProvider.getMessage(
-					"msg.success.registro.cadastrado", "Sistema"));
-			putFlashAttr("searched", searched);
-			return irParaConsultar();
-		} else {
-			returnInfoMessage(messageProvider.getMessage(
-					"msg.error.registro.nao.cadastrado", "Sistema"));
-			return null;
-		}
+				returnErrorMessage(e.getMessage());
+			}				
 	}
-
+		return null;
+	}
 	public String alterarSistema() {
 
 		if (validarSistema(sistemaSelecionado)) {
 			try {
 				sistemaService.update(sistemaSelecionado);
-				returnInfoMessage(messageProvider.getMessage(
-						"msg.success.registro.alterado", "Cliente"));
+				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Sistema"));
 				putFlashAttr("sistemaFiltro", sistemaFiltro);
 				putFlashAttr("searched", searched);
 				return irParaConsultar();
@@ -126,38 +124,17 @@ public class SistemaCadController extends SistemaController {
 		if (validarSistema(sistemaSelecionado)) {
 			try {
 				sistemaService.save(sistemaSelecionado);
-			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
+			} catch (ApplicationException e) {				
 				e.printStackTrace();
 			}
 			putFlashAttr("sistemaFiltro", sistemaFiltro);
-			returnInfoMessage(messageProvider.getMessage(
-					"msg.success.registro.cadastrado", "Sindicato"));
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Sindicato"));
 			putFlashAttr("searched", searched);
 			return irParaConsultar();
 		} else {
-			returnInfoMessage(messageProvider.getMessage(
-					"msg.error.registro.nao.cadastrado", "Sindicato"));
+			returnInfoMessage(messageProvider.getMessage("msg.error.registro.nao.cadastrado", "Sindicato"));
 			return null;
 		}
-	}
-
-	public String alterarSindicato() {
-
-		if (validarSistema(sistemaSelecionado)) {
-			try {
-				sistemaService.update(sistemaSelecionado);
-				returnInfoMessage(messageProvider.getMessage(
-						"msg.success.registro.alterado", "Cliente"));
-				putFlashAttr("clienteFiltro", sistemaFiltro);
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-				return irParaAlterar(sistemaSelecionado);
-			}
-		}
-		return null;
 	}
 
 	public String cancelar() {
@@ -167,19 +144,19 @@ public class SistemaCadController extends SistemaController {
 	}
 
 	public List<Usuario> getListaLider() {
-		return listaLider;
+		return listaLideres;
 	}
 
 	public void setListaLider(List<Usuario> listaLider) {
-		this.listaLider = listaLider;
+		this.listaLideres = listaLider;
 	}
 
 	public List<Projeto> getListaProjeto() {
-		return listaProjeto;
+		return listaProjetos;
 	}
 
 	public void setListaProjeto(List<Projeto> listaProjeto) {
-		this.listaProjeto = listaProjeto;
+		this.listaProjetos = listaProjeto;
 	}
 
 	public Sistema getSistemaFiltro() {
