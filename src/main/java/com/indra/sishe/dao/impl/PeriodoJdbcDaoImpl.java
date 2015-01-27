@@ -160,6 +160,11 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			sql.append("AND periodo.porcentagem = :porcentagem");
 			params.addValue("porcentagem", entity.getPorcentagem());
 		}
+		
+		if(entity != null && entity.getRegra()!=null && entity.getRegra().getId()!=null){
+			sql.append("AND periodo.id_regra = :regra");
+			params.addValue("regra", entity.getRegra().getId());
+		}
 		return consultar(sql, params);
 	}
 

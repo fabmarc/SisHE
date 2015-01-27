@@ -3,7 +3,6 @@ package com.indra.sishe.entity;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,24 +63,19 @@ public class Cidade implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 		Cidade other = (Cidade) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
+			if (other.id != null) return false;
+		} else if (!id.equals(other.id)) return false;
 		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
+			if (other.nome != null) return false;
+		} else if (!nome.equals(other.nome)) return false;
 		return true;
-	}		
+	}
+
+	
 	
 }

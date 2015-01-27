@@ -10,7 +10,6 @@ import javax.faces.bean.ViewScoped;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cidade;
-import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Feriado;
 
 @ViewScoped
@@ -26,18 +25,19 @@ public class FeriadoCadController extends FeriadoController {
 
 	@PostConstruct
 	private void init() {
+		
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
 		feriadoSelecionado = (Feriado) getFlashAttr("feriadoSelecionado");
 		if (feriadoSelecionado == null) {
-			feriadoSelecionado = new Feriado(new Estado(), new Cidade());
+			feriadoSelecionado = new Feriado(new Cidade());
 		}
-		setListaEstado(obterEstados());
 		feriadoFiltro = (Feriado) getFlashAttr("feriadoFiltro");
 	}
 
 	public String cadastrarFeriado() {
+		
 		if (validarFeriado(feriadoSelecionado)) {
 			try {
 				feriadoService.save(feriadoSelecionado);
@@ -53,14 +53,16 @@ public class FeriadoCadController extends FeriadoController {
 	}
 
 	public String confirmar() {
+		
 		if (modoCadastrar()) {
 			return cadastrarFeriado();
 		} else {
-			return alterarCliente();
+			return alterarFeriado();
 		}
 	}
 
-	public String alterarCliente() {
+	public String alterarFeriado() {
+		
 		if (validarFeriado(feriadoSelecionado)) {
 			try {
 				feriadoService.update(feriadoSelecionado);
@@ -77,12 +79,14 @@ public class FeriadoCadController extends FeriadoController {
 	}
 
 	public String cancelar() {
+		
 		putFlashAttr("searched", searched);
 		putFlashAttr("feriadoFiltro", feriadoFiltro);
 		return irParaConsultar();
 	}
 
 	public List<Cidade> obterCidades() {
+		
 		if (feriadoSelecionado.getEstado() != null) {
 			return cidadeService.findByEstado(feriadoSelecionado.getEstado());
 		} else {
@@ -91,6 +95,7 @@ public class FeriadoCadController extends FeriadoController {
 	}
 
 	public boolean modoCadastrar() {
+		
 		if (feriadoSelecionado.equals(new Feriado())) {
 			return true;
 		} else {

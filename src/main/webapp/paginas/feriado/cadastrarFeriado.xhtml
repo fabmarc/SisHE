@@ -28,8 +28,7 @@
 					<div style="position: relative; top: -13px">
 						<p:outputLabel for="selecionarEstado" value="Estado:" />
 						<p:selectOneMenu id="selecionarEstado" value="#{feriadoCad.feriadoSelecionado.estado}" converter="omnifaces.SelectItemsConverter">
-							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{feriadoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+							<f:selectItems value="#{feriadoCad.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
 							<f:ajax event="change" render="mainForm:selecionarCidade" />
 						</p:selectOneMenu>
 						<p:tooltip id="toolTipEstado" for="selecionarEstado" value="Selecione somente se o feriado for estadual." />

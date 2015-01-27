@@ -16,7 +16,7 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.CidadeDAO;
 import com.indra.sishe.entity.Cidade;
-import com.indra.sishe.entity.Estado;
+import com.indra.sishe.enums.EstadoEnum;
 
 @Repository
 public class CidadeJdbcDaoImp extends NamedParameterJdbcDaoSupport implements CidadeDAO{
@@ -66,7 +66,7 @@ public class CidadeJdbcDaoImp extends NamedParameterJdbcDaoSupport implements Ci
 	}
 
 	@Override
-	public List<Cidade> findByEstado(Estado estado) {
+	public List<Cidade> findByEstado(EstadoEnum estado) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT id AS id, nome AS nome ");
@@ -78,7 +78,6 @@ public class CidadeJdbcDaoImp extends NamedParameterJdbcDaoSupport implements Ci
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		// TODO Auto-generated method stub
 		
 	}
 	

@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.Periodo;
+import com.indra.sishe.entity.Regra;
 import com.indra.sishe.service.PeriodoService;
 
 public class PeriodoController extends BaseController implements Serializable {
@@ -15,17 +16,21 @@ public class PeriodoController extends BaseController implements Serializable {
 	@Inject
 	protected transient PeriodoService periodoService;
 
-	public Periodo periodoFiltro;
+	protected Periodo periodoFiltro;
+
+	public Regra regraSelecionada;
 
 	protected Boolean searched;
 
 	public String irParaConsultar() {
 
+		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		return "/paginas/periodo/consultarPeriodo.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
 
+		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		putFlashAttr("periodoSelecionado", null);
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("periodoFiltro", this.periodoFiltro);
@@ -34,6 +39,7 @@ public class PeriodoController extends BaseController implements Serializable {
 
 	public String irParaAlterar(Periodo periodoSelecionado) {
 
+		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		putFlashAttr("searched", searched);
 		putFlashAttr("periodoFiltro", periodoFiltro);
 		putFlashAttr("periodoSelecionado", periodoSelecionado);
@@ -73,6 +79,16 @@ public class PeriodoController extends BaseController implements Serializable {
 	public void setSearched(Boolean searched) {
 
 		this.searched = searched;
+	}
+
+	public Regra getRegraSelecionada() {
+
+		return regraSelecionada;
+	}
+
+	public void setRegraSelecionada(Regra regraSelecionada) {
+
+		this.regraSelecionada = regraSelecionada;
 	}
 
 }

@@ -11,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Periodo;
+import com.indra.sishe.entity.Regra;
 import com.indra.sishe.enums.DiaSemanaEnum;
 
 @ViewScoped
@@ -32,12 +33,16 @@ public class PeriodoCadController extends PeriodoController {
 		if (periodoSelecionado == null) periodoSelecionado = new Periodo();
 
 		periodoFiltro = (Periodo) getFlashAttr("periodoFiltro");
+		
+		regraSelecionada = (Regra) getFlashAttr("regraSelecionadaFiltro");
 	}
 
 	public String cadastrarPeriodo() {
 
 		try {
+			periodoSelecionado.setRegra(regraSelecionada);
 			this.periodoSelecionado = periodoService.save(periodoSelecionado);
+			putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
 			putFlashAttr("periodoFiltro", periodoFiltro);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Periodo"));
 			putFlashAttr("searched", searched);
@@ -53,6 +58,7 @@ public class PeriodoCadController extends PeriodoController {
 		try {
 			periodoService.update(periodoSelecionado);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Periodo"));
+			putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
 			putFlashAttr("periodoFiltro", periodoFiltro);
 			putFlashAttr("searched", searched);
 			return irParaConsultar();
@@ -66,6 +72,7 @@ public class PeriodoCadController extends PeriodoController {
 
 		putFlashAttr("searched", searched);
 		putFlashAttr("periodoFiltro", periodoFiltro);
+		putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
 		putFlashAttr("periodoSelecionado", null);
 		return irParaConsultar();
 	}

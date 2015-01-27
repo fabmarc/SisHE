@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
@@ -10,7 +11,7 @@
 			<br />
 			<ui:insert>
 				<p:messages id="messages" showDetail="true" showSummary="false" />
-				<div style="position: relative; width: 100%; padding-bottom: 29%;">
+				<div style="position: relative; width: 100%; padding-bottom: 5%;">
 					<div style="width: 410px;">
 						<h:outputLabel value="Nome:" style="width:50px;" />
 						<p:inputText value="#{cargoMnt.cargoFiltro.nome}" maxlength="40" style="height:15px; width:300px;" />
@@ -65,4 +66,73 @@
 	</ui:define>
 </ui:composition>
 
+=======
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+
+		<h:form id="mainForm">
+
+			<br />
+			<br />
+			<ui:insert>
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+				<div style="position: relative; width: 100%; padding-bottom: 5%;">
+					<div style="width: 410px;">
+						<h:outputLabel value="Nome:" style="width:50px;" />
+						<p:inputText value="#{cargoMnt.cargoFiltro.nome}" maxlength="40" style="height:15px; width:300px;" />
+						<h:commandButton styleClass="botao3d" style="float:right;" actionListener="#{cargoMnt.pesquisar}" value="Pesquisar" />
+					</div>
+
+					<p:dataTable style="top:10%;" rowKey="#{cargo.id}" selection="#{cargoMnt.cargosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="cargoDt" var="cargo" value="#{cargoMnt.listaCargos}" emptyMessage="Nenhum registro encontrado.">
+						<f:facet name="header">
+						Cargos
+					</f:facet>
+
+						<p:column style="width:5px; text-align:center" selectionMode="multiple">
+						</p:column>
+
+						<p:column headerText="Código" style="width:10%; text-align:center;">
+							<h:outputText value="#{cargo.id}" />
+						</p:column>
+						<p:column headerText="Nome">
+							<div>
+								<h:outputText value="#{cargo.nome}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Ação" style="width:5%">
+							<p:commandLink title="Editar Cargo" id="alterarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-pencil" action="#{cargoMnt.irParaAlterar(cargo)}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<div style="text-align: right; width: 100%">
+								<p:commandLink value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" />
+								/
+								<p:commandLink value="Excluir" actionListener="#{cargoMnt.beforeRemoveCargos()}" />
+							</div>
+						</f:facet>
+					</p:dataTable>
+
+					<p:confirmDialog id="msgExclusao" global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+						<div class="divDialog">
+							<h:commandButton value="Sim" actionListener="#{cargoMnt.removerCargo()}" onclick="confirmExclusao.hide()" update="mainForm:cargoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
+						</div>
+					</p:confirmDialog>
+
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
+						<div class="divDialog">
+							<h:commandButton value="OK" styleClass="botao3d" onclick="selectAtleastOne.hide()" ajax="false" style="width:109px;" />
+						</div>
+					</p:confirmDialog>
+				</div>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+>>>>>>> branch 'master' of https://github.com/fabmarc/SisHE.git
 </html>
