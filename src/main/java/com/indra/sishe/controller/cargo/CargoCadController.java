@@ -35,7 +35,6 @@ public class CargoCadController extends CargoController {
 	}
 
 	public String cadastrarCargo() {
-		if (validarCargo(cargoSelecionado)) {
 			try {
 				this.cargoSelecionado = cargoService.save(cargoSelecionado);
 				putFlashAttr("cargoFiltro", cargoFiltro);
@@ -45,12 +44,10 @@ public class CargoCadController extends CargoController {
 			} catch (ApplicationException e) {
 				returnErrorMessage(e.getMessage());
 			}
-		}
 		return null;
 	}
 
 	public String alterarCargo() {
-		if (validarCargo(cargoSelecionado)) {
 			try {
 				cargoService.update(cargoSelecionado);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Cargo"));
@@ -61,8 +58,6 @@ public class CargoCadController extends CargoController {
 				returnErrorMessage(e.getMessage());
 				return irParaAlterar(cargoSelecionado);
 			}
-		}
-		return null;
 	}
 
 	public String cancelar() {
@@ -94,6 +89,10 @@ public class CargoCadController extends CargoController {
 
 	public void setCargoSelecionado(Cargo cargoSelecionado) {
 		this.cargoSelecionado = cargoSelecionado;
+	}
+	
+	public String msgValidacao(String key, String params){
+		return messageProvider.getMessage(key, params);
 	}
 
 }

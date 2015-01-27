@@ -41,17 +41,6 @@ public abstract class CargoController extends BaseController implements Serializ
 		return "/paginas/cargo/cadastrarCargo.xhtml";
 	}
 
-	public boolean validarCargo(Cargo cargoSelecionado) {
-		if (cargoSelecionado.getNome().isEmpty()) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Nome"));
-		} else if (cargoSelecionado.getNome().length() > 40) {
-			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "40"));
-		} else {
-			return true;
-		}
-		return false;
-	}
-
 	public Cargo getCargoFiltro() {
 		return cargoFiltro;
 	}
