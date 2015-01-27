@@ -1,5 +1,7 @@
 package com.indra.sishe.controller.usuario;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,9 +12,9 @@ import javax.inject.Inject;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cidade;
-import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.enums.EstadoEnum;
 import com.indra.sishe.service.CidadeService;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.SindicatoService;
@@ -25,7 +27,7 @@ public class UsuarioCadController extends UsuarioController {
 
 	protected Usuario usuarioSelecionado;
 
-	protected Estado estadoSelecionado;
+	protected EstadoEnum estadoSelecionado;
 
 	@Inject
 	protected transient SindicatoService sindicatoService;
@@ -127,17 +129,18 @@ public class UsuarioCadController extends UsuarioController {
 		return sindicatoService.findAll();
 	}
 
-	public List<Estado> obterEstados() {
+	public List<EstadoEnum> obterEstados() {
 
-		return estadoService.findAll();
+		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
+		return listaEstados;
 	}
 
-	public Estado getEstadoSelecionado() {
+	public EstadoEnum getEstadoSelecionado() {
 
 		return estadoSelecionado;
 	}
 
-	public void setEstadoSelecionado(Estado estadoSelecionado) {
+	public void setEstadoSelecionado(EstadoEnum estadoSelecionado) {
 
 		this.estadoSelecionado = estadoSelecionado;
 	}

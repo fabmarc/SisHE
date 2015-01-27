@@ -18,6 +18,7 @@ import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.EstadoDAO;
 import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
+import com.indra.sishe.enums.EstadoEnum;
 
 @Repository
 public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
@@ -101,18 +102,13 @@ public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 	}
 
 	@Override
-	public Estado findByCidade(Cidade cidade) {
+	public EstadoEnum findByCidade(Cidade cidade) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT estado.id as id, estado.nome as nome, estado.sigla as sigla ");
 		sql.append("FROM ESTADO INNER JOIN CIDADE ON (cidade.id_estado = estado.id) WHERE 1=1 ");
 		sql.append("AND cidade.id  = :idCidade");
 		params.addValue("idCidade", cidade.getId());
-		List<Estado> estado = getNamedParameterJdbcTemplate().query(sql.toString(), params, new BeanPropertyRowMapper<Estado>(Estado.class));
-		if(!estado.isEmpty()){
-			return estado.get(0);
-		}else{
-			return null;
-		}
+		return EstadoEnum.obterEstado(getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new BeanPropertyRowMapper<Estado>(Estado.class)).getId());	
 	}
 }

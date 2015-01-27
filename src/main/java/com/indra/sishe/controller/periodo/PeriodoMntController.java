@@ -121,7 +121,7 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public String voltarRegra() {
-
+		putFlashAttr("searched", true);
 		return "/paginas/regra/consultarRegra.xhtml";
 	}
 

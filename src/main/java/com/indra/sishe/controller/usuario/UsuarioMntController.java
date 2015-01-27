@@ -81,6 +81,7 @@ public class UsuarioMntController extends UsuarioController {
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
 		try {
 			usuarioSelecionado = usuarioService.findById(usuarioSelecionado.getId());
+			usuarioSelecionado.setSenhaConfirm(usuarioSelecionado.getSenha());
 			putFlashAttr("usuarioSelecionado", usuarioSelecionado);
 			return irParaAlterar();
 		} catch (ApplicationException e) {

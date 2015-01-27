@@ -27,7 +27,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	private String email;
 
 	public Usuario() {
-
+		
 	}
 
 	public Long getId() {

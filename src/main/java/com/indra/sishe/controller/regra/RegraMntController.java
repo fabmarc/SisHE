@@ -60,6 +60,7 @@ public class RegraMntController extends RegraController {
 			RequestContext.getCurrentInstance().execute("selectOne.show()");
 		} else {
 			putFlashAttr("searched", true);
+			putFlashAttr("regraFiltro", regraFiltro);
 			putFlashAttr("regraSelecionadaFiltro", regrasSelecionadas.get(0));
 			return "/paginas/periodo/consultarPeriodo.xhtml";
 		}
