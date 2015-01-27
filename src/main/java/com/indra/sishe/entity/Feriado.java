@@ -111,9 +111,12 @@ public class Feriado implements Serializable, Comparable<Feriado>{
 
 	@Override
 	public int compareTo(Feriado o) {
-		return 0;
+		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
+		if(valor != 0 ){
+			return valor;
+		}else {
+			return 1;
+		}
 	}
 	
-	
-
 }

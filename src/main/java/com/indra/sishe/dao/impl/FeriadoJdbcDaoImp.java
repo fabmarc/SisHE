@@ -100,17 +100,17 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public Feriado save(Feriado feriado) throws RegistroDuplicadoException {
+		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("tipo", feriado.getTipo());
 		params.addValue("data", feriado.getData());
 		params.addValue("nome", feriado.getNome());
-		if (feriado.getCidade() != null) {
-			params.addValue("id_cidade", feriado.getCidade().getId());
-			params.addValue("id_estado", feriado.getEstado().getId());
-		} else if (feriado.getEstado() != null && feriado.getEstado().getId() > 0) {
+		if (feriado.getEstado() != null && feriado.getEstado().getId() > 0) {
 			params.addValue("id_estado", feriado.getEstado().getId());
 		}
-
+		if (feriado.getCidade() != null) {
+			params.addValue("id_cidade", feriado.getCidade().getId());
+		} 
 		Number key = insertFeriado.executeAndReturnKey(params);
 		feriado.setId(key.longValue());
 		return feriado;
@@ -118,11 +118,12 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public Feriado update(Feriado feriado) throws RegistroInexistenteException {
+		
 		Long idEstado = null;
 		Long idCidade = null;
 		if (feriado.getEstado() != null) { 
 			idEstado = feriado.getEstado().getId();
-		} 
+		}
 		if (feriado.getCidade() != null) {
 			 idCidade = feriado.getCidade().getId();
 		}
@@ -137,6 +138,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public List<Feriado> findAll() {
+		
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, "
@@ -177,6 +179,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public Feriado findById(Object id) throws RegistroInexistenteException {
+		
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
@@ -229,6 +232,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException {
+		
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
@@ -237,7 +241,6 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM feriado WHERE id = ?", params);
 		for (int rows : affectedRows)
 			if (rows == 0) throw new RegistroInexistenteException();
-
 	}
 
 }

@@ -36,27 +36,27 @@
 
 				<ui:insert>
 					<div style="position: relative; top: 38px;">
-						<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado.">
+						<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado." sortMode="multiple">
 							<f:facet name="header">Feriados</f:facet>
 
 							<p:column style="width:5px; text-align:center" selectionMode="multiple">
 							</p:column>
 
-							<p:column headerText="Data" style="width:10%">
+							<p:column headerText="Data" style="width:10%" sortBy="#{feriado.data}">
 								<h:outputText value="#{feriado.data}">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</p:column>
 							
-							<p:column headerText="Nome">
+							<p:column headerText="Nome" sortBy="#{feriado.nome}">
 								<h:outputText value="#{feriado.nome}" />
 							</p:column>
 
-							<p:column headerText="Abrangência">
+							<p:column headerText="Abrangência" sortBy="#{feriado.abrangencia}">
 								<h:outputText value="#{feriado.abrangencia}" />
 							</p:column>
 
-							<p:column headerText="Tipo" style="width:5%">
+							<p:column headerText="Tipo" style="width:5%" sortBy="#{feriado.tipo}">
 								<h:outputText value="#{feriadoMnt.obterTipo(feriado.tipo)}" style="width:11px; left:1px; position: relative; float:center;" />
 							</p:column>
 
