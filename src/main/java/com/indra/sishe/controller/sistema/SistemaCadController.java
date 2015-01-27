@@ -1,6 +1,5 @@
 package com.indra.sishe.controller.sistema;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -24,8 +23,8 @@ public class SistemaCadController extends SistemaController {
 
 	private static final long serialVersionUID = -3214994834298229437L;
 
-	public List<Usuario> listaLideres = new ArrayList<Usuario>();
-	public List<Projeto> listaProjetos = new ArrayList<Projeto>();
+	// public List<Usuario> listaLideres = new ArrayList<Usuario>();
+	// public List<Projeto> listaProjetos = new ArrayList<Projeto>();
 
 	@Inject
 	private UsuarioService usuarioService;
@@ -37,7 +36,7 @@ public class SistemaCadController extends SistemaController {
 	private ProjetoService projetoService;
 
 	public SistemaCadController() {
-		
+
 	}
 
 	@PostConstruct
@@ -86,54 +85,33 @@ public class SistemaCadController extends SistemaController {
 			return alterarSistema();
 		}
 	}
-	
+
 	public String cadastrarSistema() {
 
-		if (validarSistema(sistemaSelecionado)) {
-			 try {
-				this.sistemaSelecionado = sistemaService.save(sistemaSelecionado);
-				putFlashAttr("sistemaFiltro", sistemaFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Sistema"));
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-			}				
-	}
-		return null;
-	}
-	public String alterarSistema() {
-
-		if (validarSistema(sistemaSelecionado)) {
-			try {
-				sistemaService.update(sistemaSelecionado);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Sistema"));
-				putFlashAttr("sistemaFiltro", sistemaFiltro);
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-				return irParaAlterar(sistemaSelecionado);
-			}
-		}
-		return null;
-	}
-
-	public String cadastrarSindicato() {
-
-		if (validarSistema(sistemaSelecionado)) {
-			try {
-				sistemaService.save(sistemaSelecionado);
-			} catch (ApplicationException e) {				
-				e.printStackTrace();
-			}
+		try {
+			this.sistemaSelecionado = sistemaService.save(sistemaSelecionado);
 			putFlashAttr("sistemaFiltro", sistemaFiltro);
-			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Sindicato"));
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Sistema"));
 			putFlashAttr("searched", searched);
 			return irParaConsultar();
-		} else {
-			returnInfoMessage(messageProvider.getMessage("msg.error.registro.nao.cadastrado", "Sindicato"));
-			return null;
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+		}
+
+		return null;
+	}
+
+	public String alterarSistema() {
+
+		try {
+			sistemaService.update(sistemaSelecionado);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Sistema"));
+			putFlashAttr("sistemaFiltro", sistemaFiltro);
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaAlterar(sistemaSelecionado);
 		}
 	}
 
@@ -147,16 +125,16 @@ public class SistemaCadController extends SistemaController {
 		return listaLideres;
 	}
 
-	public void setListaLider(List<Usuario> listaLider) {
-		this.listaLideres = listaLider;
+	public void setListaLideres(List<Usuario> listaLideres) {
+		this.listaLideres = listaLideres;
 	}
 
-	public List<Projeto> getListaProjeto() {
+	public List<Projeto> getListaProjetos() {
 		return listaProjetos;
 	}
 
-	public void setListaProjeto(List<Projeto> listaProjeto) {
-		this.listaProjetos = listaProjeto;
+	public void setListaProjetos(List<Projeto> listaProjetos) {
+		this.listaProjetos = listaProjetos;
 	}
 
 	public Sistema getSistemaFiltro() {

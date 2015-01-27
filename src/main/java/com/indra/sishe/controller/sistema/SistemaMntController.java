@@ -27,8 +27,8 @@ import com.indra.sishe.service.UsuarioService;
 public class SistemaMntController extends SistemaController {
 
 	private List<Sistema> listaSistema;
-	private List<Usuario> listaLider = new ArrayList<Usuario>();
-	private List<Projeto> listaProjeto = new ArrayList<Projeto>();
+	//private List<Usuario> listaLider = new ArrayList<Usuario>();
+	//private List<Projeto> listaProjeto = new ArrayList<Projeto>();
 
 	@Inject
 	private UsuarioService usuarioService;
@@ -60,7 +60,7 @@ public class SistemaMntController extends SistemaController {
 		else pesquisar();
 
 		listarLideres();
-		listarProjeto();
+		listarProjetos();
 	}
 
 	public void pesquisar() {
@@ -113,14 +113,14 @@ public class SistemaMntController extends SistemaController {
 		Cargo cargo = new Cargo();
 		cargo.setNome("Lider");
 		cargo = cargoService.findByFilter(cargo).get(0);
-		listaLider = usuarioService.findByCargo(cargo);
+		listaLideres = usuarioService.findByCargo(cargo);
 
-		return listaLider;
+		return listaLideres;
 	}
 
-	public List<Projeto> listarProjeto() {
-		listaProjeto = projetoService.findAll();
-		return listaProjeto;
+	public List<Projeto> listarProjetos() {
+		listaProjetos = projetoService.findAll();
+		return listaProjetos;
 	}
 
 	public List<Sistema> getListaSistema() {
@@ -132,19 +132,19 @@ public class SistemaMntController extends SistemaController {
 	}
 
 	public List<Usuario> getListaLider() {
-		return listaLider;
+		return listaLideres;
 	}
 
 	public void setListaLider(List<Usuario> listaLider) {
-		this.listaLider = listaLider;
+		this.listaLideres = listaLider;
 	}
 
 	public List<Projeto> getListaProjeto() {
-		return listaProjeto;
+		return listaProjetos;
 	}
 
 	public void setListaProjeto(List<Projeto> listaProjeto) {
-		this.listaProjeto = listaProjeto;
+		this.listaProjetos = listaProjeto;
 	}
 
 	public Sistema getSistemaFiltro() {

@@ -31,7 +31,12 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	public Sistema save(Sistema entity) throws ApplicationException {
 
 		try {
-			return sistemaDao.save(entity);
+			if (validarSistema(entity)) {
+				return sistemaDao.save(entity);
+			} else {
+				return null;
+			}
+
 		} catch (RegistroDuplicadoException e) {
 
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Sistema");
@@ -42,7 +47,12 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	public Sistema update(Sistema entity) throws ApplicationException {
 
 		try {
-			return sistemaDao.update(entity);
+			if (validarSistema(entity)) {
+				return sistemaDao.update(entity);
+			} else {
+				return null;
+			}
+
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sistema");
 		} catch (RegistroDuplicadoException d) {
@@ -50,23 +60,40 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 		}
 	}
 
+	public boolean validarSistema(Sistema sistemaSelecionado) throws ApplicationException {
+
+		if (sistemaSelecionado.getNome() == null || sistemaSelecionado.getNome().isEmpty()) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");
+		} else if (sistemaSelecionado.getNome() == null || sistemaSelecionado.getNome().length() > 50) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome", "50");
+
+		} else if (sistemaSelecionado.getProjeto().getId() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Projeto");
+		} else if (sistemaSelecionado.getLider().getId() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Lider");
+		} else {
+			return true;
+		}
+	}
+
 	@Override
 	public List<Sistema> findAll() {
-		return null;
+
+		return sistemaDao.findAll();
 	}
 
 	@Override
 	public List<Sistema> findByFilter(Sistema sistema) {
-		
+
 		return sistemaDao.findByFilter(sistema);
 	}
 
 	@Override
 	public Sistema findById(Long id) throws ApplicationException {
-		
+
 		try {
 			return sistemaDao.findById(id);
-		} catch (RegistroInexistenteException e) {			
+		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sistema");
 		}
 	}
@@ -77,7 +104,7 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-		
+
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			sistemaDao.remove(pks);

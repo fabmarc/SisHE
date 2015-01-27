@@ -11,8 +11,10 @@
 				<div style="position: relative; width: 100%; padding-bottom: 10%;">
 					<div style="top: 15px; left: 170px; position: relative; width: 250px;">
 
-						<h:outputLabel value="Sistema:" style="width:50px;" />
-						<h:inputText type="text" value="#{sistemaCad.sistemaSelecionado.nome}" maxlength="50" required="true" requiredMessage="Informe o nome do Sistema." />
+						<h:outputLabel  value="Sistema:" style="width:50px;" />
+						<h:inputText type="text" value="#{sistemaCad.sistemaSelecionado.nome}" maxlength="50" required="true"  >
+							
+						</h:inputText>
 						<br />
 
 						<h:outputLabel value="Lider:" style="width:50px;" />
@@ -25,12 +27,12 @@
 						<h:outputLabel value="Projeto:" style="width:50px;" />
 						<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o projeto." value="#{sistemaCad.sistemaSelecionado.projeto}" style="width:216px">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{sistemaCad.listaProjeto}" var="projeto" itemLabel="#{projeto.nome}" itemValue="#{projeto}" />
+							<f:selectItems value="#{sistemaCad.listaProjetos}" var="projeto" itemLabel="#{projeto.nome}" itemValue="#{projeto}" />
 						</p:selectOneMenu>
 						<br />
 
 						<h:outputLabel value="Descrição:" style="width:50px;" />
-						<p:inputTextarea rows="8" cols="40" autoResize="false" maxlength="200" value="#{sistemaCad.sistemaSelecionado.descricao}" />
+						<p:inputTextarea rows="3" cols="40" autoResize="false" maxlength="200" value="#{sistemaCad.sistemaSelecionado.descricao}" />
 					</div>
 
 					<br /> <br />

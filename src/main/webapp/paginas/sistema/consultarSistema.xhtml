@@ -46,20 +46,14 @@
 							<h:outputText value="#{sistema.id}" />
 						</p:column>
 						<p:column headerText="Nome" style="max-width:290px; text-overflow:ellipsis;">
-							<div>
-								<h:outputText value="#{sistema.nome}" />
-							</div>
+							<h:outputText value="#{sistema.nome}" />
 						</p:column>
 						<p:column headerText="Líder" style="width:15%; text-align:center">
-							<div>
-								<h:outputText value="#{sistema.lider.nome}" />
-							</div>
+							<h:outputText value="#{sistema.lider.nome}" />
 						</p:column>
 
 						<p:column headerText="Projeto" style="width:15%; text-align:center">
-							<div>
-								<h:outputText value="#{sistema.projeto.nome}" />
-							</div>
+							<h:outputText value="#{sistema.projeto.nome}" />
 						</p:column>
 
 						<p:column headerText="Ação" style="width:10%; text-align:center">
@@ -75,7 +69,7 @@
 						</f:facet>
 					</p:dataTable>
 				</div>
-				
+
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 					<div class="divDialog">
 						<h:commandButton value="Sim" actionListener="#{sistemaMnt.removerSistema()}" onclick="confirmExclusao.hide()" update="mainForm:sistemaDt messages" styleClass="botao3d" style="width: 109px;" />
@@ -88,7 +82,7 @@
 						<h:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
 					</div>
 				</p:confirmDialog>
-				
+
 			</ui:insert>
 		</h:form>
 	</ui:define>

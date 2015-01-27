@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -46,7 +47,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Sistema save(Sistema entity) throws RegistroDuplicadoException {
-		
+
 		try {
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 
@@ -66,7 +67,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Sistema update(Sistema entity) throws RegistroInexistenteException {
-		
+
 		int rows = getJdbcTemplate().update(
 				"UPDATE sistema SET id_lider=?, id_projeto = ?, descricao = ?, nome = ?" + "WHERE id = ?",
 				entity.getLider().getId(), entity.getProjeto().getId(), entity.getDescricao(), entity.getNome(),
@@ -76,15 +77,8 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		return entity;
 	}
 
-	// NÃO IMPLEMENTADO
 	@Override
 	public List<Sistema> findAll() {
-		return null;
-	}
-
-	@Override
-	public Sistema findById(Object id) throws RegistroInexistenteException {
-	
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -95,11 +89,6 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		sql.append(" INNER JOIN usuario u ON s.id_lider = u.id");
 		sql.append(" INNER JOIN projeto p ON s.id_projeto = p.id ");
 		sql.append(" WHERE 1 = 1 ");
-
-		if (id != null) {
-			sql.append(" AND s.id = :id");
-			params.addValue("id", id);
-		}
 
 		List<Sistema> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 
@@ -122,16 +111,52 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				sis.setId(rs.getLong("idSistema"));
 				sis.setNome(rs.getString("nomeSistema"));
 				sis.setDescricao(rs.getString("sistemaDescricao"));
+
 				return sis;
 			}
 		});
 
-		if (lista.size() > 0) {
-			return lista.get(0);
-		} else {
-			return null;
-		}
+		return lista;
+	}
 
+	@Override
+	public Sistema findById(Object id) throws RegistroInexistenteException {
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT s.id as idSistema, s.id_lider as idLider, s.id_projeto as idProjeto, s.descricao as sistemaDescricao,"
+				+ " s.nome as nomeSistema , u.nome as nomeUsuario, u.id as idUsuario,"
+				+ " p.id as idProjeto, p.nome as nomeProjeto ");
+		sql.append(" FROM sistema s");
+		sql.append(" INNER JOIN usuario u ON s.id_lider = u.id");
+		sql.append(" INNER JOIN projeto p ON s.id_projeto = p.id ");
+		sql.append(" WHERE s.id = ?");
+
+		try {
+			return getJdbcTemplate().queryForObject(sql.toString(), new Object[] { id }, new RowMapper<Sistema>() {
+				@Override
+				public Sistema mapRow(ResultSet rs, int idx) throws SQLException {
+
+					Sistema sis = new Sistema();
+					Projeto projeto = new Projeto();
+					Usuario usuario = new Usuario();
+
+					projeto.setId(rs.getLong("idProjeto"));
+					projeto.setNome(rs.getString("nomeProjeto"));
+
+					usuario.setId(rs.getLong("idUsuario"));
+					usuario.setNome(rs.getString("nomeUsuario"));
+
+					sis.setProjeto(projeto);
+					sis.setLider(usuario);
+					sis.setId(rs.getLong("idSistema"));
+					sis.setNome(rs.getString("nomeSistema"));
+					sis.setDescricao(rs.getString("sistemaDescricao"));
+					return sis;
+				}
+			});
+		} catch (EmptyResultDataAccessException e) {
+			throw new RegistroInexistenteException();
+		}
 	}
 
 	public List<Sistema> findByFilter(Sistema sistema) {
@@ -193,7 +218,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		
+
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM sistema WHERE id = ?", id);
 			if (rows == 0) throw new RegistroInexistenteException();
@@ -204,7 +229,7 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
