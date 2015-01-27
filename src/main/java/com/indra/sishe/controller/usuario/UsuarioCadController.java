@@ -13,7 +13,6 @@ import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
-import com.indra.sishe.enums.EstadoEnum;
 import com.indra.sishe.service.CidadeService;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.SindicatoService;
@@ -26,7 +25,7 @@ public class UsuarioCadController extends UsuarioController {
 
 	protected Usuario usuarioSelecionado;
 
-	protected EstadoEnum estadoSelecionado;
+	protected Estado estadoSelecionado;
 
 	@Inject
 	protected transient SindicatoService sindicatoService;
@@ -38,6 +37,7 @@ public class UsuarioCadController extends UsuarioController {
 	protected transient CidadeService cidadeService;
 
 	public UsuarioCadController() {
+
 	}
 
 	@PostConstruct
@@ -50,8 +50,6 @@ public class UsuarioCadController extends UsuarioController {
 		usuarioSelecionado = (Usuario) getFlashAttr("usuarioSelecionado");
 		if (usuarioSelecionado == null) {
 			usuarioSelecionado = new Usuario();
-		} else {
-			senhaConfirm = usuarioSelecionado.getSenha();
 		}
 
 		usuarioFiltro = (Usuario) getFlashAttr("usuarioFiltro");
@@ -62,43 +60,42 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public String cadastrarUsuario() {
-		if (validarUsuario(usuarioSelecionado)) {
-			try {
-				usuarioService.save(usuarioSelecionado);
-				putFlashAttr("usuarioFiltro", usuarioFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Usuario"));
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-			}
+
+		try {
+			usuarioService.save(usuarioSelecionado);
+			putFlashAttr("usuarioFiltro", usuarioFiltro);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Usuario"));
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
 		}
 		return null;
 	}
 
 	public String alterarUsuario() {
-		if (validarUsuario(usuarioSelecionado)) {
-			try {
-				usuarioService.update(usuarioSelecionado);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Usuario"));
-				putFlashAttr("usuarioFiltro", usuarioFiltro);
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-				return irParaAlterar(usuarioSelecionado);
-			}
+
+		try {
+			usuarioService.update(usuarioSelecionado);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Usuario"));
+			putFlashAttr("usuarioFiltro", usuarioFiltro);
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaAlterar(usuarioSelecionado);
 		}
-		return null;
 	}
 
 	public String cancelar() {
+
 		putFlashAttr("searched", searched);
 		putFlashAttr("usuarioFiltro", usuarioFiltro);
 		return irParaConsultar();
 	}
 
 	private boolean modoCadastrar() {
+
 		if (usuarioSelecionado == null || usuarioSelecionado.getId() == null) {
 			return true;
 		} else {
@@ -107,6 +104,7 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public String confirmar() {
+
 		if (modoCadastrar()) {
 			return cadastrarUsuario();
 		} else {
@@ -115,30 +113,37 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public Usuario getUsuarioSelecionado() {
+
 		return usuarioSelecionado;
 	}
 
 	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
+
 		this.usuarioSelecionado = usuarioSelecionado;
 	}
 
 	public List<Sindicato> obterSindicatos() {
+
 		return sindicatoService.findAll();
 	}
 
 	public List<Estado> obterEstados() {
+
 		return estadoService.findAll();
 	}
 
-	public EstadoEnum getEstadoSelecionado() {
+	public Estado getEstadoSelecionado() {
+
 		return estadoSelecionado;
 	}
 
-	public void setEstadoSelecionado(EstadoEnum estadoSelecionado) {
+	public void setEstadoSelecionado(Estado estadoSelecionado) {
+
 		this.estadoSelecionado = estadoSelecionado;
 	}
 
 	public List<Cidade> obterCidadePorEstado() {
+
 		if (estadoSelecionado != null) {
 			return cidadeService.findByEstado(this.estadoSelecionado);
 		} else {
