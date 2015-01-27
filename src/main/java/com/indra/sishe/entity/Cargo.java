@@ -23,26 +23,32 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 	private String nome;
 
 	public Cargo() {
+		
 	}
 
 	public Long getId() {
+		
 		return id;
 	}
 
 	public void setId(Long idCargo) {
+		
 		this.id = idCargo;
 	}
 
 	public String getNome() {
+		
 		return nome;
 	}
 
 	public void setNome(String nomeCargo) {
+		
 		this.nome = nomeCargo;
 	}
 
 	@Override
 	public int hashCode() {
+		
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -52,6 +58,7 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 
 	@Override
 	public boolean equals(Object obj) {
+		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -74,6 +81,7 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 
 	@Override
 	public int compareTo(Cargo o) {
+		
 		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
 		if (valor != 0) {
 			return valor;
