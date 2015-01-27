@@ -117,3 +117,14 @@ html {
 	margin-top: -50px;
 	margin-left: -50px;
 }
+
+.divMsg{
+	position: relative;
+	top: 12px;
+}
+
+.divCorpo{
+	position: relative;
+	width: 100%;
+	top: 40px;
+}
