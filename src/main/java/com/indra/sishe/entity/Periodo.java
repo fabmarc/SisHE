@@ -3,6 +3,8 @@ package com.indra.sishe.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.indra.sishe.enums.DiaSemanaEnum;
+
 public class Periodo implements Serializable, Comparable<Periodo> {
 
 	private static final long serialVersionUID = 4911632352090360894L;
@@ -11,7 +13,7 @@ public class Periodo implements Serializable, Comparable<Periodo> {
 
 	private Regra regra;
 
-	private Integer diaSemana;
+	private DiaSemanaEnum diaSemana;
 
 	private Date horaInicio;
 
@@ -20,72 +22,58 @@ public class Periodo implements Serializable, Comparable<Periodo> {
 	private Integer porcentagem;
 
 	public Periodo() {
-
 	}
 
 	public Long getId() {
-
 		return id;
 	}
 
 	public void setId(Long id) {
-
 		this.id = id;
 	}
 
 	public Regra getRegra() {
-
 		return regra;
 	}
 
 	public void setRegra(Regra regra) {
-
 		this.regra = regra;
 	}
 
-	public Integer getDiaSemana() {
-
+	public DiaSemanaEnum getDiaSemana() {
 		return diaSemana;
 	}
 
-	public void setDiaSemana(Integer diaSemana) {
-
+	public void setDiaSemana(DiaSemanaEnum diaSemana) {
 		this.diaSemana = diaSemana;
 	}
 
 	public Date getHoraInicio() {
-
 		return horaInicio;
 	}
 
 	public void setHoraInicio(Date horaInicio) {
-
 		this.horaInicio = horaInicio;
 	}
 
 	public Date getHoraFim() {
-
 		return horaFim;
 	}
 
 	public void setHoraFim(Date horaFim) {
-
 		this.horaFim = horaFim;
 	}
 
 	public Integer getPorcentagem() {
-
 		return porcentagem;
 	}
 
 	public void setPorcentagem(Integer porcentagem) {
-
 		this.porcentagem = porcentagem;
 	}
 
 	@Override
 	public int hashCode() {
-
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((diaSemana == null) ? 0 : diaSemana.hashCode());
@@ -119,7 +107,6 @@ public class Periodo implements Serializable, Comparable<Periodo> {
 
 	@Override
 	public int compareTo(Periodo o) {
-
 		int valor = diaSemana.compareTo(o.diaSemana);
 		if (valor != 0) {
 			return valor;

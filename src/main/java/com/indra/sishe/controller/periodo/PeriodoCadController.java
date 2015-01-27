@@ -38,7 +38,6 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public String cadastrarPeriodo() {
-
 		try {
 			periodoSelecionado.setRegra(regraSelecionada);
 			this.periodoSelecionado = periodoService.save(periodoSelecionado);
@@ -54,7 +53,6 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public String alterarPeriodo() {
-
 		try {
 			periodoService.update(periodoSelecionado);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Periodo"));
@@ -69,7 +67,6 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public String cancelar() {
-
 		putFlashAttr("searched", searched);
 		putFlashAttr("periodoFiltro", periodoFiltro);
 		putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
@@ -78,7 +75,6 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	private boolean modoCadastrar() {
-
 		if (periodoSelecionado == null || periodoSelecionado.getId() == null) {
 			return true;
 		} else {
@@ -87,7 +83,6 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public String confirmar() {
-
 		if (modoCadastrar()) {
 			return cadastrarPeriodo();
 		} else {
@@ -96,17 +91,14 @@ public class PeriodoCadController extends PeriodoController {
 	}
 
 	public Periodo getPeriodoSelecionado() {
-
 		return periodoSelecionado;
 	}
 
 	public void setPeriodoSelecionado(Periodo periodoSelecionado) {
-
 		this.periodoSelecionado = periodoSelecionado;
 	}
 
 	public List<DiaSemanaEnum> obterListaDias() {
-
 		List<DiaSemanaEnum> listaDias = new ArrayList<DiaSemanaEnum>(Arrays.asList(DiaSemanaEnum.values()));
 		return listaDias;
 	}

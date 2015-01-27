@@ -26,6 +26,7 @@ import com.indra.sishe.dao.PeriodoDAO;
 import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Regra;
 import com.indra.sishe.entity.Sindicato;
+import com.indra.sishe.enums.DiaSemanaEnum;
 
 @Repository
 public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements PeriodoDAO {
@@ -48,7 +49,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 		try {
 			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("dia_semana", entity.getDiaSemana());
+			params.addValue("dia_semana", entity.getDiaSemana().numeroDia());
 			params.addValue("hora_inicio", entity.getHoraInicio());
 			params.addValue("hora_fim", entity.getHoraFim());
 			params.addValue("porcentagem", entity.getPorcentagem());
@@ -65,11 +66,10 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Periodo update(Periodo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
-
 		try {
 			int rows = getJdbcTemplate().update(
 					"UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? "
-							+ "WHERE id = ?", entity.getDiaSemana(), entity.getHoraInicio(), entity.getHoraFim(),
+							+ "WHERE id = ?", entity.getDiaSemana().numeroDia(), entity.getHoraInicio(), entity.getHoraFim(),
 					entity.getPorcentagem(), entity.getId());
 			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
@@ -80,7 +80,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public List<Periodo> findAll() {
-
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("Select sindicato.id as id_sindicato, sindicato.descricao as descricao_sindicato, periodo.id, periodo.id_regra as id_regra, regra.descricao as descricao_regra, periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim, periodo.porcentagem ");
@@ -90,7 +89,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public Periodo findById(Object id) throws RegistroInexistenteException {
-
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
@@ -106,7 +104,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM periodo WHERE id = ?", id);
 			if (rows == 0) throw new RegistroInexistenteException();
@@ -117,7 +114,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
@@ -135,7 +131,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public EntityManager getEntityManager() {
-
 		return null;
 	}
 
@@ -170,7 +165,6 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public List<Periodo> findByRegra(Regra entity) {
-
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -205,7 +199,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 						periodo.setRegra(regra);
 						periodo.setId(rs.getLong("id"));
-						periodo.setDiaSemana(rs.getInt("dia_semana"));
+						periodo.setDiaSemana(DiaSemanaEnum.obterDiaSemana(rs.getInt("dia_semana")));
 						periodo.setHoraInicio(rs.getTime("hora_inicio"));
 						periodo.setHoraFim(rs.getTime("hora_fim"));
 						periodo.setPorcentagem(rs.getInt("porcentagem"));
@@ -235,7 +229,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 				periodo.setRegra(regra);
 				periodo.setId(rs.getLong("id"));
-				periodo.setDiaSemana(rs.getInt("dia_semana"));
+				periodo.setDiaSemana(DiaSemanaEnum.obterDiaSemana(rs.getInt("dia_semana")));
 				periodo.setHoraInicio(rs.getTime("hora_inicio"));
 				periodo.setHoraFim(rs.getTime("hora_fim"));
 				periodo.setPorcentagem(rs.getInt("porcentagem"));

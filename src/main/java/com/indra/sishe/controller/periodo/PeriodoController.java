@@ -23,13 +23,11 @@ public class PeriodoController extends BaseController implements Serializable {
 	protected Boolean searched;
 
 	public String irParaConsultar() {
-
 		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		return "/paginas/periodo/consultarPeriodo.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
-
 		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		putFlashAttr("periodoSelecionado", null);
 		putFlashAttr("searched", this.searched);
@@ -38,7 +36,6 @@ public class PeriodoController extends BaseController implements Serializable {
 	}
 
 	public String irParaAlterar(Periodo periodoSelecionado) {
-
 		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		putFlashAttr("searched", searched);
 		putFlashAttr("periodoFiltro", periodoFiltro);
@@ -47,47 +44,38 @@ public class PeriodoController extends BaseController implements Serializable {
 	}
 
 	public String irParaAlterar() {
-
 		return "/paginas/periodo/cadastrarPeriodo.xhtml?faces-redirect=true";
 	}
 
 	public PeriodoService getPeriodoService() {
-
 		return periodoService;
 	}
 
 	public void setPeriodoService(PeriodoService periodoService) {
-
 		this.periodoService = periodoService;
 	}
 
 	public Periodo getPeriodoFiltro() {
-
 		return periodoFiltro;
 	}
 
 	public void setPeriodoFiltro(Periodo periodoFiltro) {
-
 		this.periodoFiltro = periodoFiltro;
 	}
 
 	public Boolean getSearched() {
-
 		return searched;
 	}
 
 	public void setSearched(Boolean searched) {
-
 		this.searched = searched;
 	}
 
 	public Regra getRegraSelecionada() {
-
 		return regraSelecionada;
 	}
 
 	public void setRegraSelecionada(Regra regraSelecionada) {
-
 		this.regraSelecionada = regraSelecionada;
 	}
 

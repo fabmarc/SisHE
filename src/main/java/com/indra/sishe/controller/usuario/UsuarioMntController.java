@@ -44,7 +44,6 @@ public class UsuarioMntController extends UsuarioController {
 	}
 
 	public void beforeRemoveUsuarios() {
-
 		if (usuariosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -53,7 +52,6 @@ public class UsuarioMntController extends UsuarioController {
 	}
 
 	public void pesquisar() {
-
 		listaUsuarios = usuarioService.findByFilter(usuarioFiltro);
 		Collections.sort(listaUsuarios);
 		searched = true;
@@ -91,22 +89,18 @@ public class UsuarioMntController extends UsuarioController {
 	}
 
 	public List<Usuario> getListaUsuarios() {
-
 		return listaUsuarios;
 	}
 
 	public void setListaUsuarios(List<Usuario> listaUsuarios) {
-
 		this.listaUsuarios = listaUsuarios;
 	}
 
 	public List<Usuario> getUsuariosSelecionados() {
-
 		return usuariosSelecionados;
 	}
 
 	public void setUsuariosSelecionados(List<Usuario> usuariosSelecionados) {
-
 		this.usuariosSelecionados = usuariosSelecionados;
 	}
 }

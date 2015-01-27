@@ -68,13 +68,11 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 
 	@Override
 	public List<Usuario> findAll() {
-
 		return usuarioDao.findAll();
 	}
 
 	@Override
 	public Usuario findById(Long id) throws ApplicationException {
-
 		try {
 			return usuarioDao.findById(id);
 		} catch (RegistroInexistenteException e) {
@@ -84,13 +82,11 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 
 	@Override
 	public List<Usuario> findByFilter(Usuario usuarioFiltro) {
-
 		return usuarioDao.findByFilter(usuarioFiltro);
 	}
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
-
 		try {
 			usuarioDao.remove(id);
 		} catch (RegistroInexistenteException e) {
@@ -102,7 +98,6 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			usuarioDao.remove(pks);
@@ -115,7 +110,6 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 
 	@Override
 	public List<Usuario> findByCargo(Cargo cargo) {
-
 		return usuarioDao.findByCargo(cargo);
 	}
 

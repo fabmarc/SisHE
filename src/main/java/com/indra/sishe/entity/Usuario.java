@@ -27,112 +27,90 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	private String email;
 
 	public Usuario() {
-		
 	}
 
 	public Long getId() {
-
 		return id;
 	}
 
 	public void setId(Long id) {
-
 		this.id = id;
 	}
 
 	public Cargo getCargo() {
-
 		return cargo;
 	}
 
 	public void setCargo(Cargo cargo) {
-
 		this.cargo = cargo;
 	}
 
 	public Sindicato getSindicato() {
-
 		return sindicato;
 	}
 
 	public void setSindicato(Sindicato sindicato) {
-
 		this.sindicato = sindicato;
 	}
 
 	public Cidade getCidade() {
-
 		return cidade;
 	}
 
 	public void setCidade(Cidade cidade) {
-
 		this.cidade = cidade;
 	}
 
 	public String getNome() {
-
 		return nome;
 	}
 
 	public void setNome(String nome) {
-
 		this.nome = nome;
 	}
 
 	public String getLogin() {
-
 		return login;
 	}
 
 	public void setLogin(String login) {
-
 		this.login = login;
 	}
 
 	public String getSenha() {
-
 		return senha;
 	}
 
 	public void setSenha(String senha) {
-
 		this.senha = senha;
 	}
 
 	public String getSenhaConfirm() {
-
 		return senhaConfirm;
 	}
 
 	public void setSenhaConfirm(String senhaConfirm) {
-
 		this.senhaConfirm = senhaConfirm;
 	}
 
 	public Integer getMatricula() {
-
 		return matricula;
 	}
 
 	public void setMatricula(Integer matricula) {
-
 		this.matricula = matricula;
 	}
 
 	public String getEmail() {
-
 		return email;
 	}
 
 	public void setEmail(String email) {
-
 		this.email = email;
 	}
 
 	@Override
 	public int hashCode() {
-
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -158,7 +136,6 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
 	@Override
 	public int compareTo(Usuario o) {
-
 		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
 		if (valor != 0) {
 			return valor;

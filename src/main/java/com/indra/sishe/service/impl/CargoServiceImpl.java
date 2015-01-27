@@ -31,7 +31,6 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 
 	@Override
 	public Cargo save(Cargo entity) throws ApplicationException {
-
 		try {
 			if (validarCargo(entity)) {
 				return cargoDao.save(entity);
@@ -61,13 +60,11 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 
 	@Override
 	public List<Cargo> findAll() {
-
 		return cargoDao.findAll();
 	}
 
 	@Override
 	public Cargo findById(Long id) throws ApplicationException {
-
 		try {
 			return cargoDao.findById(id);
 		} catch (RegistroInexistenteException e) {
@@ -77,13 +74,11 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 
 	@Override
 	public List<Cargo> findByFilter(Cargo cargoFiltro) {
-
 		return cargoDao.findByFilter(cargoFiltro);
 	}
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
-
 		try {
 			cargoDao.remove(id);
 		} catch (RegistroInexistenteException e) {
@@ -95,7 +90,6 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			cargoDao.remove(pks);
@@ -107,7 +101,6 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 	}
 
 	public boolean validarCargo(Cargo entity) throws ApplicationException {
-
 		if (entity.getNome().isEmpty()) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");
 		} else if (entity.getNome().length() > 40) {

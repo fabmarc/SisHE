@@ -39,12 +39,10 @@ public class UsuarioCadController extends UsuarioController {
 	protected transient CidadeService cidadeService;
 
 	public UsuarioCadController() {
-
 	}
 
 	@PostConstruct
 	private void init() {
-
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
@@ -62,7 +60,6 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public String cadastrarUsuario() {
-
 		try {
 			usuarioService.save(usuarioSelecionado);
 			putFlashAttr("usuarioFiltro", usuarioFiltro);
@@ -97,7 +94,6 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	private boolean modoCadastrar() {
-
 		if (usuarioSelecionado == null || usuarioSelecionado.getId() == null) {
 			return true;
 		} else {
@@ -106,7 +102,6 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public String confirmar() {
-
 		if (modoCadastrar()) {
 			return cadastrarUsuario();
 		} else {
@@ -115,38 +110,31 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public Usuario getUsuarioSelecionado() {
-
 		return usuarioSelecionado;
 	}
 
 	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
-
 		this.usuarioSelecionado = usuarioSelecionado;
 	}
 
 	public List<Sindicato> obterSindicatos() {
-
 		return sindicatoService.findAll();
 	}
 
 	public List<EstadoEnum> obterEstados() {
-
 		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
 		return listaEstados;
 	}
 
 	public EstadoEnum getEstadoSelecionado() {
-
 		return estadoSelecionado;
 	}
 
 	public void setEstadoSelecionado(EstadoEnum estadoSelecionado) {
-
 		this.estadoSelecionado = estadoSelecionado;
 	}
 
 	public List<Cidade> obterCidadePorEstado() {
-
 		if (estadoSelecionado != null) {
 			return cidadeService.findByEstado(this.estadoSelecionado);
 		} else {

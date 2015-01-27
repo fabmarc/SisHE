@@ -42,7 +42,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@PostConstruct
 	private void init() {
-
 		setDataSource(dataSource);
 		insertUsuario = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("usuario").usingGeneratedKeyColumns(
 				"id");
@@ -95,7 +94,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM usuario WHERE id = ?", id);
 			if (rows == 0) throw new RegistroInexistenteException();
@@ -106,13 +104,11 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public EntityManager getEntityManager() {
-
 		return null;
 	}
 
 	@Override
 	public List<Usuario> findAll() {
-
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
@@ -122,7 +118,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public List<Usuario> findByCargo(Cargo cargo) {
-
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");

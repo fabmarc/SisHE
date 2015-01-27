@@ -27,7 +27,6 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public Periodo save(Periodo entity) throws ApplicationException {
-
 		try {
 			if (validarPeriodo(entity)) {
 				return periodoDao.save(entity);
@@ -41,7 +40,6 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public Periodo update(Periodo entity) throws ApplicationException {
-
 		try {
 			if (validarPeriodo(entity)) {
 				return periodoDao.update(entity);
@@ -57,13 +55,11 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public List<Periodo> findAll() {
-
 		return periodoDao.findAll();
 	}
 
 	@Override
 	public Periodo findById(Long id) throws ApplicationException {
-
 		try {
 			return periodoDao.findById(id);
 		} catch (RegistroInexistenteException e) {
@@ -73,7 +69,6 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
-
 		try {
 			periodoDao.remove(id);
 		} catch (RegistroInexistenteException e) {
@@ -85,7 +80,6 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			periodoDao.remove(pks);
@@ -98,19 +92,18 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public List<Periodo> findByFilter(Periodo entity) {
-
 		return periodoDao.findByFilter(entity);
 	}
 
 	@Override
 	public List<Periodo> findByRegra(Regra entity) {
-
 		return periodoDao.findByRegra(entity);
 	}
 
 	public boolean validarPeriodo(Periodo entity) throws ApplicationException {
 
-		if (entity.getDiaSemana() == null || entity.getDiaSemana() < 1 || entity.getDiaSemana() > 7) {
+		if (entity.getDiaSemana() == null || entity.getDiaSemana().numeroDia() < 1
+				|| entity.getDiaSemana().numeroDia() > 7) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Dia da semana");
 		} else if (entity.getHoraInicio() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicio");

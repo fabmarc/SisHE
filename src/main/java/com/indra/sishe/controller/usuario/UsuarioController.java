@@ -26,12 +26,10 @@ public abstract class UsuarioController extends BaseController implements Serial
 	protected Boolean searched;
 
 	public String irParaConsultar() {
-		
 		return "/paginas/usuario/consultarUsuario.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
-		
 		putFlashAttr("usuarioSelecionado", null);
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
@@ -39,12 +37,10 @@ public abstract class UsuarioController extends BaseController implements Serial
 	}
 
 	public String irParaAlterar() {
-		
 		return "/paginas/usuario/cadastrarUsuario.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar(Usuario usuarioSelecionado) {
-		
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("usuarioFiltro", this.usuarioFiltro);
 		putFlashAttr("usuarioSelecionado", usuarioSelecionado);
@@ -52,28 +48,23 @@ public abstract class UsuarioController extends BaseController implements Serial
 	}
 
 	public Usuario getUsuarioFiltro() {
-		
 		return usuarioFiltro;
 	}
 
 	public void setUsuarioFiltro(Usuario usuarioFiltro) {
-		
 		this.usuarioFiltro = usuarioFiltro;
 	}
 
 	public Boolean wasSearched() {
-		
 		return searched;
 	}
 
 	public void setSearched(Boolean searched) {
-		
 		this.searched = searched;
 	}
 
 	public List<Cargo> obterCargos() {
-		
 		return cargoService.findAll();
 	}
-	
+
 }

@@ -38,7 +38,6 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@PostConstruct
 	private void init() {
-
 		setDataSource(dataSource);
 		insertCargo = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("cargo")
 				.usingGeneratedKeyColumns("id");
@@ -71,14 +70,12 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public List<Cargo> findAll() {
-
 		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome " + "FROM cargo",
 				new BeanPropertyRowMapper<Cargo>(Cargo.class));
 	}
 
 	@Override
 	public Cargo findById(Object id) throws RegistroInexistenteException {
-
 		try {
 			return getJdbcTemplate().queryForObject("SELECT id, nome " + "FROM cargo WHERE id = ?",
 					new Object[] { id }, new BeanPropertyRowMapper<Cargo>(Cargo.class));
@@ -89,7 +86,6 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public EntityManager getEntityManager() {
-
 		return null;
 	}
 
@@ -117,7 +113,6 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-
 		try {
 			int rows = getJdbcTemplate().update("DELETE FROM cargo WHERE id = ?", id);
 			if (rows == 0) throw new RegistroInexistenteException();

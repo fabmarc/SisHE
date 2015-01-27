@@ -27,7 +27,6 @@ public class PeriodoMntController extends PeriodoController {
 	private List<Periodo> periodosSelecionados;
 
 	public PeriodoMntController() {
-
 	}
 
 	@PostConstruct
@@ -48,7 +47,6 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public void pesquisar() {
-
 		periodoFiltro.setRegra(regraSelecionada);
 		listaPeriodos = periodoService.findByFilter(periodoFiltro);
 		Collections.sort(listaPeriodos);
@@ -56,7 +54,6 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public void beforeRemovePeriodos() {
-
 		if (periodosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -65,7 +62,6 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public String removerPeriodo() {
-
 		int size = periodosSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		for (Periodo periodo : periodosSelecionados)
@@ -81,7 +77,6 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public String irParaAlterar(Periodo periodoSelecionado) {
-
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("periodoFiltro", this.periodoFiltro);
 		try {
@@ -96,27 +91,22 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public List<Periodo> getListaPeriodos() {
-
 		return listaPeriodos;
 	}
 
 	public void setListaPeriodos(List<Periodo> listaPeriodos) {
-
 		this.listaPeriodos = listaPeriodos;
 	}
 
 	public List<Periodo> getPeriodosSelecionados() {
-
 		return periodosSelecionados;
 	}
 
 	public void setPeriodosSelecionados(List<Periodo> periodosSelecionados) {
-
 		this.periodosSelecionados = periodosSelecionados;
 	}
 
 	public DiaSemanaEnum obterDia(int diaSemana) {
-
 		return DiaSemanaEnum.obterDiaSemana(diaSemana);
 	}
 
