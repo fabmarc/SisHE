@@ -27,8 +27,13 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public Periodo save(Periodo entity) throws ApplicationException {
+
 		try {
-			return periodoDao.save(entity);
+			if (validarPeriodo(entity)) {
+				return periodoDao.save(entity);
+			} else {
+				return null;
+			}
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Periodo");
 		}
@@ -36,8 +41,13 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public Periodo update(Periodo entity) throws ApplicationException {
+
 		try {
-			return periodoDao.update(entity);
+			if (validarPeriodo(entity)) {
+				return periodoDao.update(entity);
+			} else {
+				return null;
+			}
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Periodo");
 		} catch (RegistroDuplicadoException d) {
@@ -47,11 +57,13 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public List<Periodo> findAll() {
+
 		return periodoDao.findAll();
 	}
 
 	@Override
 	public Periodo findById(Long id) throws ApplicationException {
+
 		try {
 			return periodoDao.findById(id);
 		} catch (RegistroInexistenteException e) {
@@ -61,6 +73,7 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
+
 		try {
 			periodoDao.remove(id);
 		} catch (RegistroInexistenteException e) {
@@ -72,6 +85,7 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
+
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			periodoDao.remove(pks);
@@ -84,12 +98,33 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 
 	@Override
 	public List<Periodo> findByFilter(Periodo entity) {
+
 		return periodoDao.findByFilter(entity);
 	}
 
 	@Override
 	public List<Periodo> findByRegra(Regra entity) {
+
 		return periodoDao.findByRegra(entity);
+	}
+
+	public boolean validarPeriodo(Periodo entity) throws ApplicationException {
+
+		if (entity.getDiaSemana() == null || entity.getDiaSemana() < 1 || entity.getDiaSemana() > 7) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Dia da semana");
+		} else if (entity.getHoraInicio() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicio");
+		} else if (entity.getHoraFim() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Fim");
+		} else if (entity.getHoraInicio().getTime() >= entity.getHoraFim().getTime()) {
+			throw new ApplicationException("msg.error.intervalo.incorreto", "Hora Inicio", "Hora Fim");
+		} else if (entity.getPorcentagem() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Porcentagem");
+		} else if (entity.getPorcentagem() > 100 || entity.getPorcentagem() < 0) {
+			throw new ApplicationException("msg.error.valor.entre", "Porcentagem", "0%", "100%");
+		} else {
+			return true;
+		}
 	}
 
 }

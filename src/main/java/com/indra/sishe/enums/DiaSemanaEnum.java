@@ -1,4 +1,4 @@
-package com.indra.sishe.entity;
+package com.indra.sishe.enums;
 
 public enum DiaSemanaEnum {
 
@@ -6,19 +6,21 @@ public enum DiaSemanaEnum {
 	private final int numeroDia;
 
 	DiaSemanaEnum(int numeroDia) {
+
 		this.numeroDia = numeroDia;
 	}
 
 	public int numeroDia() {
+
 		return this.numeroDia;
 	}
 
 	public static DiaSemanaEnum obterDiaSemana(int numeroDia) {
+
 		for (DiaSemanaEnum dia : DiaSemanaEnum.values()) {
-			if (numeroDia == dia.numeroDia())
-				return dia;
+			if (numeroDia == dia.numeroDia()) return dia;
 		}
 		return null;
-	}	
+	}
 
 }

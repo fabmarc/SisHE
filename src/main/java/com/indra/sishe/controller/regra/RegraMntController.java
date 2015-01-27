@@ -21,44 +21,55 @@ public class RegraMntController extends RegraController {
 	private static final long serialVersionUID = -6428570700082431997L;
 
 	private List<Regra> regrasSelecionadas;
-	
+
 	protected List<Regra> listaRegras;
-	
+
 	public RegraMntController() {
 	}
 
 	@PostConstruct
-	private void init(){
+	private void init() {
 		MessageProvider.setInstance(messageProvider);
-		
+
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
-		
+
 		regraFiltro = (Regra) getFlashAttr("regraFiltro");
 		if (regraFiltro == null) regraFiltro = new Regra();
-		
+
 		if (!searched) listaRegras = new ArrayList<Regra>();
 		else pesquisar();
 	}
-	
+
 	public void pesquisar() {
 		listaRegras = regraService.findByFilter(regraFiltro);
 		Collections.sort(listaRegras);
 		searched = true;
 	}
-	
+
 	public void beforeRemoveRegra() {
-		if (regrasSelecionadas.size() == 0){
+		if (regrasSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
-		}else {
+		} else {
 			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
-	
+
+	public String irParaPeriodo() {
+		if (regrasSelecionadas.size() != 1) {
+			RequestContext.getCurrentInstance().execute("selectOne.show()");
+		} else {
+			putFlashAttr("searched", true);
+			putFlashAttr("regraSelecionadaFiltro", regrasSelecionadas.get(0));
+			return "/paginas/periodo/consultarPeriodo.xhtml";
+		}
+		return null;
+	}
+
 	public String remove() {
 		int size = regrasSelecionadas.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
-		for (Regra regra: regrasSelecionadas){
+		for (Regra regra : regrasSelecionadas) {
 			ids.add(regra.getId());
 		}
 		try {
@@ -70,7 +81,7 @@ public class RegraMntController extends RegraController {
 		pesquisar();
 		return irParaConsultar();
 	}
-	
+
 	public String irParaAlterar(Regra regra) {
 		putFlashAttr("searched", searched);
 		putFlashAttr("regraFiltro", regraFiltro);
@@ -99,5 +110,5 @@ public class RegraMntController extends RegraController {
 	public void setListaRegras(List<Regra> listaRegras) {
 		this.listaRegras = listaRegras;
 	}
-	
+
 }

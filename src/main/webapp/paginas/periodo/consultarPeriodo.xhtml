@@ -9,70 +9,114 @@
 			<br />
 			<br />
 			<ui:insert>
-				<p:messages id="messages" showDetail="true" showSummary="false" />
-				<div style="width: 410px;">
-					<h:commandButton styleClass="botao3d" style="position:relative;" actionListener="#{periodoMnt.pesquisar()}" value="Pesquisar" />
+				<!-- Div Mensagem -->
+				<div id="divMsg" style="position: relative; top: -15px;">
+					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
-				<p:dataTable style="top:10%;" rowKey="#{periodo.id}" selection="#{periodoMnt.periodosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="periodoDt" var="periodo" value="#{periodoMnt.listaPeriodos}" emptyMessage="Nenhum registro encontrado.">
-					<f:facet name="header">
+
+				<!-- Div Corpo -->
+				<div style="position: relative; width: 100%; padding-bottom: 5%;">
+					<!-- Div Pesquisar -->
+					<div style="width: 410px; position: relative; top: -10px;">
+						<h:commandButton styleClass="botao3d" style="position:relative;" actionListener="#{periodoMnt.pesquisar()}" value="Pesquisar" />
+					</div>
+
+					<!-- Tabela -->
+					<p:dataTable style="top:15%;" rowKey="#{periodo.id}" selection="#{periodoMnt.periodosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="periodoDt" var="periodo" value="#{periodoMnt.listaPeriodos}" emptyMessage="Nenhum registro encontrado.">
+						<!-- Cabeçalho -->
+						<f:facet name="header">
 						Periodos
 					</f:facet>
+						
+						<!-- Checks -->
+						<p:column style="width:5px; text-align:center" selectionMode="multiple">
+						</p:column>
 
-					<p:column style="width:5px; text-align:center" selectionMode="multiple">
-					</p:column>
+						<!-- Código -->
+						<p:column headerText="Código" style="width:10%; text-align:center;">
+							<h:outputText value="#{periodo.id}" />
+						</p:column>
+						
+						<!-- Dia -->
+						<p:column headerText="Dia">
+							<div>
+								<h:outputText value="#{periodoMnt.obterDia(periodo.diaSemana)}" />
+							</div>
+						</p:column>
+						
+						<!-- Hora Inicio -->
+						<p:column headerText="Hora Inicio" style="width:15%;">
+							<div style="text-align: center;">
+								<h:outputText value="#{periodo.horaInicio}" />
+							</div>
+						</p:column>
+						
+						<!-- Hora Fim -->
+						<p:column headerText="Hora Fim" style="width:15%;">
+							<div style="text-align: center;">
+								<h:outputText value="#{periodo.horaFim}" />
+							</div>
+						</p:column>
+						
+						<!-- Porcentagem -->
+						<p:column headerText="Porcentagem" style="width:18%;">
+							<div style="text-align: center;">
+								<h:outputText value="#{periodo.porcentagem}%" />
+							</div>
+						</p:column>
 
-					<p:column headerText="Código" style="width:10%; text-align:center;">
-						<h:outputText value="#{periodo.id}" />
-					</p:column>
-					<p:column headerText="Dia">
-						<div>
-							<h:outputText value="#{periodoMnt.obterDia(periodo.diaSemana)}" />
+						<!-- Ação -->
+						<p:column headerText="Ação" style="width:5%">
+							<p:commandLink title="Editar Periodo" id="alterarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-pencil" action="#{periodoMnt.irParaAlterar(periodo)}" />
+						</p:column>
+	
+						<!-- Rodapé tabela -->
+						<f:facet name="footer">
+							<!-- Div Rodapé -->
+							<div style="width: 100%; height: 23px; position: relative;">
+								<!-- Div Voltar -->
+								<div style="text-align: left; width: 50%; position: relative;">
+									<p:commandLink value="Voltar" action="#{periodoMnt.voltarRegra()}" />
+								</div>
+								<!-- Fim div Voltar -->
+								<!-- Div Açao -->
+								<div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;">
+									<p:commandLink value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" />
+									/
+									<p:commandLink value="Excluir" actionListener="#{periodoMnt.beforeRemovePeriodos()}" />
+								</div>
+								<!-- Fim div ação -->
+							</div>
+							<!-- Fim div rodapé -->
+						</f:facet>
+						<!-- Fim rodapé -->
+					</p:dataTable>
+					<!-- Fim tabela -->
+					
+					<!-- Mensagem Exclusão -->
+					<p:confirmDialog id="msgExclusao" global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+						<!-- Div msg exclusão -->
+						<div class="divDialog">
+							<h:commandButton value="Sim" actionListener="#{periodoMnt.removerPeriodo()}" onclick="confirmExclusao.hide()" update="mainForm:periodoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
-					</p:column>
-					<p:column headerText="Hora Inicio" style="width:15%;">
-						<div style="text-align: center;">
-							<h:outputText value="#{periodo.horaInicio}" />
+						<!-- Fim div exclusão -->
+					</p:confirmDialog>
+					<!-- Fim mensagem exclusão -->
+					
+					<!-- Mensagem de Seleção -->
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
+						<!-- Div msg seleção -->
+						<div class="divDialog">
+							<h:commandButton value="OK" styleClass="botao3d" onclick="selectAtleastOne.hide()" ajax="false" style="width:109px;" />
 						</div>
-					</p:column>
-					<p:column headerText="Hora Fim" style="width:15%;">
-						<div style="text-align: center;">
-							<h:outputText value="#{periodo.horaFim}" />
-						</div>
-					</p:column>
-					<p:column headerText="Porcentagem" style="width:18%;">
-						<div style="text-align: center;">
-							<h:outputText value="#{periodo.porcentagem}%" />
-						</div>
-					</p:column>
-
-					<p:column headerText="Ações" style="width:5%">
-						<p:commandLink title="Editar Periodo" id="alterarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-pencil" action="#{periodoMnt.irParaAlterar(periodo)}" />
-					</p:column>
-
-					<f:facet name="footer">
-						<div style="text-align: right; width: 100%">
-							<p:commandLink value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" />
-							/
-							<p:commandLink value="Excluir" actionListener="#{periodoMnt.beforeRemovePeriodos()}" />
-						</div>
-					</f:facet>
-				</p:dataTable>
-
-				<p:confirmDialog id="msgExclusao" global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
-					<div class="divDialog">
-						<h:commandButton value="Sim" actionListener="#{periodoMnt.removerPeriodo()}" onclick="confirmExclusao.hide()" update="mainForm:periodoDt messages" styleClass="botao3d" style="width: 109px;" />
-						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
-					</div>
-				</p:confirmDialog>
-
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
-					<div class="divDialog">
-						<h:commandButton value="OK" styleClass="botao3d" onclick="selectAtleastOne.hide()" ajax="false" style="width:109px;" />
-					</div>
-				</p:confirmDialog>
+						<!-- Fim div Seleção -->
+					</p:confirmDialog>
+					<!-- Fim mensagem seleção -->
+				</div>
+				<!-- Fim div corpo -->
 			</ui:insert>
 		</h:form>
 	</ui:define>
 </ui:composition>
-
 </html>
