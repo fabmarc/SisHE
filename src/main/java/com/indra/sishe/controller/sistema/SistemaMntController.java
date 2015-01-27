@@ -27,8 +27,7 @@ import com.indra.sishe.service.UsuarioService;
 public class SistemaMntController extends SistemaController {
 
 	private List<Sistema> listaSistema;
-	//private List<Usuario> listaLider = new ArrayList<Usuario>();
-	//private List<Projeto> listaProjeto = new ArrayList<Projeto>();
+	
 
 	@Inject
 	private UsuarioService usuarioService;
@@ -48,7 +47,6 @@ public class SistemaMntController extends SistemaController {
 
 	@PostConstruct
 	private void init() {
-
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
@@ -63,15 +61,13 @@ public class SistemaMntController extends SistemaController {
 		listarProjetos();
 	}
 
-	public void pesquisar() {
-		
+	public void pesquisar() {		
 		listaSistema = sistemaService.findByFilter(sistemaFiltro);
 		Collections.sort(listaSistema);
 		searched = true;
 	}
 
 	public void beforeRemoveSistema() {
-
 		if (sistemasSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -79,8 +75,7 @@ public class SistemaMntController extends SistemaController {
 		}
 	}
 
-	public String irParaAlterar(Sistema sistemaSelecionado) {
-		
+	public String irParaAlterar(Sistema sistemaSelecionado) {		
 		putFlashAttr("searched", searched);
 		putFlashAttr("sistemaFiltro", sistemaFiltro);
 		try {
@@ -109,7 +104,6 @@ public class SistemaMntController extends SistemaController {
 	}
 
 	public List<Usuario> listarLideres() {
-
 		Cargo cargo = new Cargo();
 		cargo.setNome("Lider");
 		cargo = cargoService.findByFilter(cargo).get(0);
