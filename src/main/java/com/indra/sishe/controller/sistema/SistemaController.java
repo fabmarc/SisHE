@@ -1,22 +1,28 @@
 package com.indra.sishe.controller.sistema;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import com.indra.infra.controller.BaseController;
+import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sistema;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.SistemaService;
 
 public class SistemaController extends BaseController implements Serializable {
 
 	private static final long serialVersionUID = -2097043422349464567L;
-	
+
 	@Inject
-	protected  SistemaService sistemaService;
-	
+	protected SistemaService sistemaService;
+
 	protected List<Sistema> listaSistema;
+
+	protected List<Usuario> listaLideres = new ArrayList<Usuario>();
+	protected List<Projeto> listaProjetos = new ArrayList<Projeto>();
 
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
 	public Sistema sistemaFiltro;
@@ -29,22 +35,6 @@ public class SistemaController extends BaseController implements Serializable {
 
 	public SistemaController() {
 
-	}
-
-	public boolean validarSistema(Sistema sistemaSelecionado) {
-		
-		if (sistemaSelecionado.getNome() == null || sistemaSelecionado.getNome().isEmpty()) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Nome"));
-		} else if (sistemaSelecionado.getNome() == null || sistemaSelecionado.getNome().length() > 50) {
-			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "50"));
-		} else if (sistemaSelecionado.getProjeto().getId() == null) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Projeto"));
-		} else if (sistemaSelecionado.getLider().getId() == null) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Lider"));
-		} else {
-			return true;
-		}
-		return false;
 	}
 
 	public String irParaConsultar() {
