@@ -13,6 +13,7 @@ import org.primefaces.context.RequestContext;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Periodo;
+import com.indra.sishe.entity.Regra;
 import com.indra.sishe.enums.DiaSemanaEnum;
 
 @ViewScoped
@@ -40,12 +41,15 @@ public class PeriodoMntController extends PeriodoController {
 		periodoFiltro = (Periodo) getFlashAttr("periodoFiltro");
 		if (periodoFiltro == null) periodoFiltro = new Periodo();
 
+		regraSelecionada = (Regra) getFlashAttr("regraSelecionadaFiltro");
+
 		if (!searched) listaPeriodos = new ArrayList<Periodo>();
 		else pesquisar();
 	}
 
 	public void pesquisar() {
 
+		periodoFiltro.setRegra(regraSelecionada);
 		listaPeriodos = periodoService.findByFilter(periodoFiltro);
 		Collections.sort(listaPeriodos);
 		searched = true;
@@ -82,6 +86,7 @@ public class PeriodoMntController extends PeriodoController {
 		putFlashAttr("periodoFiltro", this.periodoFiltro);
 		try {
 			periodoSelecionado = periodoService.findById(periodoSelecionado.getId());
+			putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 			putFlashAttr("periodoSelecionado", periodoSelecionado);
 			return irParaAlterar();
 		} catch (ApplicationException e) {
@@ -113,6 +118,11 @@ public class PeriodoMntController extends PeriodoController {
 	public DiaSemanaEnum obterDia(int diaSemana) {
 
 		return DiaSemanaEnum.obterDiaSemana(diaSemana);
+	}
+
+	public String voltarRegra() {
+
+		return "/paginas/regra/consultarRegra.xhtml";
 	}
 
 }
