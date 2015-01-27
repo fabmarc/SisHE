@@ -13,6 +13,7 @@ import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.enums.EstadoEnum;
 import com.indra.sishe.service.CidadeService;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.SindicatoService;
@@ -25,7 +26,7 @@ public class UsuarioCadController extends UsuarioController {
 
 	protected Usuario usuarioSelecionado;
 
-	protected Estado estadoSelecionado;
+	protected EstadoEnum estadoSelecionado;
 
 	@Inject
 	protected transient SindicatoService sindicatoService;
@@ -129,11 +130,11 @@ public class UsuarioCadController extends UsuarioController {
 		return estadoService.findAll();
 	}
 
-	public Estado getEstadoSelecionado() {
+	public EstadoEnum getEstadoSelecionado() {
 		return estadoSelecionado;
 	}
 
-	public void setEstadoSelecionado(Estado estadoSelecionado) {
+	public void setEstadoSelecionado(EstadoEnum estadoSelecionado) {
 		this.estadoSelecionado = estadoSelecionado;
 	}
 

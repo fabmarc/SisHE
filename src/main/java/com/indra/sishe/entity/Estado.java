@@ -5,9 +5,6 @@ import java.util.List;
 
 public class Estado implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -20,20 +17,13 @@ public class Estado implements Serializable {
 	private List<Cidade> cidades;
 
 	public Estado() {
-		// TODO Auto-generated constructor stub
 	}
-	
-	
-
-
 	
 	public Estado(Long id, String nome, String sigla) {
 		this.id = id;
 		this.nome = nome;
 		this.sigla = sigla;
 	}
-
-
 
 	public Long getId() {
 		return id;

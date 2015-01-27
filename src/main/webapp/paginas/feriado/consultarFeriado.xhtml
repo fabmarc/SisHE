@@ -5,82 +5,89 @@
 	<ui:define name="content">
 
 		<h:form id="mainForm">
-
 			<p:messages id="messages" showDetail="true" showSummary="false" />
-			<div style="top: 17px; position: relative; width: 226px; height: 50px;">
-				<div style="position: relative;">
-					<p:outputLabel value="Nome:" />
-					<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; top: -6px;" />
-				</div>
-				<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
-					<p:outputLabel value="Data:" for="calendarioBusca" />
-					<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+
+			<div style="position: relative; width: 100%; padding-bottom: 10%;">
+				<div style="top: 17px; position: relative; width: 226px; height: 50px;">
+
+					<div style="position: relative;">
+						<p:outputLabel value="Nome:" />
+						<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; top: -6px;" />
+					</div>
+
+					<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
+						<p:outputLabel value="Data:" for="calendarioBusca" />
+						<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+					</div>
+
+					<div id="DivEstado" style="position: relative; top: -105px; left: 412px;">
+						<p:outputLabel for="selecionarEstado" value="Abrangência:" />
+						<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{feriadoMnt.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div style="top: -139.5px; position: relative; left: 622px;">
+						<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
+					</div>
+				
 				</div>
 
-				<div id="DivEstado" style="position: relative; top: -105px; left: 412px;">
-					<p:outputLabel for="selecionarEstado" value="Abrangência:" />
-					<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{feriadoMnt.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-					</p:selectOneMenu>
-				</div>
-				<div style="top: -139.5px; position: relative; left: 622px;">
-					<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
-				</div>
+				<ui:insert>
+					<div style="position: relative; top: 38px;">
+						<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado.">
+							<f:facet name="header">Feriados</f:facet>
+
+							<p:column style="width:5px; text-align:center" selectionMode="multiple">
+							</p:column>
+
+							<p:column headerText="Data" style="width:10%">
+								<h:outputText value="#{feriado.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Nome">
+								<h:outputText value="#{feriado.nome}" />
+							</p:column>
+
+							<p:column headerText="Abrangência">
+								<h:outputText value="#{feriado.abrangencia}" />
+							</p:column>
+
+							<p:column headerText="Tipo" style="width:5%">
+								<h:outputText value="#{feriadoMnt.obterTipo(feriado.tipo)}" style="width:11px; left:1px; position: relative; float:center;" />
+							</p:column>
+
+							<p:column headerText="Ação" style="width:5%">
+								<p:commandLink id="linkAlterar" title="Editar Feriado" styleClass="ui-icon ui-icon-pencil" action="#{feriadoMnt.irParaAlterar(feriado)}" style="width:20px; left:13px; position: relative; float:center;" />
+							</p:column>
+							
+							<f:facet name="footer">
+								<div style="text-align: right; width: 100%">
+									<p:commandLink value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" />
+									/
+									<p:commandLink value="Excluir" actionListener="#{feriadoMnt.beforeRemoveFeriado()}" />
+								</div>
+							</f:facet>
+						</p:dataTable>
+					</div>
+					
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+						<div class="divDialog">
+							<h:commandButton value="Sim" actionListener="#{feriadoMnt.remove()}" onclick="confirmExclusao.hide()" update="mainForm:feriadoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
+						</div>
+					</p:confirmDialog>
+
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
+						<div class="divDialog">
+							<h:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
+						</div>
+					</p:confirmDialog>
+				</ui:insert>
 			</div>
-
-
-
-			<ui:insert>
-				<div style="position: relative; top: 38px;">
-					<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado.">
-						<f:facet name="header">Feriados</f:facet>
-						<p:column style="width:5px; text-align:center" selectionMode="multiple">
-						</p:column>
-
-						<p:column headerText="Data" style="width:10%">
-							<h:outputText value="#{feriado.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
-						</p:column>
-						<p:column headerText="Nome">
-							<h:outputText value="#{feriado.nome}" />
-						</p:column>
-
-						<p:column headerText="Abrangência">
-							<h:outputText value="#{feriado.abrangencia}" />
-						</p:column>
-
-						<p:column headerText="Tipo" style="width:5%">
-							<h:outputText value="#{feriado.tipoFormatado}" style="width:11px; left:1px; position: relative; float:center;" />
-						</p:column>
-
-						<p:column headerText="Ação" style="width:5%">
-							<p:commandLink id="linkAlterar" title="Editar Feriado" styleClass="ui-icon ui-icon-pencil" action="#{feriadoMnt.irParaAlterar(feriado)}" style="width:20px; left:13px; position: relative; float:center;" />
-						</p:column>
-						<f:facet name="footer">
-							<div style="text-align: right; width: 100%">
-								<p:commandLink value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" />
-								/
-								<p:commandLink value="Excluir" actionListener="#{feriadoMnt.beforeRemoveFeriado()}" />
-							</div>
-						</f:facet>
-					</p:dataTable>
-				</div>
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
-					<div class="divDialog">
-						<h:commandButton value="Sim" actionListener="#{feriadoMnt.remove()}" onclick="confirmExclusao.hide()" update="mainForm:feriadoDt messages" styleClass="botao3d" style="width: 109px;" />
-						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
-					</div>
-				</p:confirmDialog>
-
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
-					<div class="divDialog">
-						<h:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
-					</div>
-				</p:confirmDialog>
-
-			</ui:insert>
 		</h:form>
 	</ui:define>
 </ui:composition>
