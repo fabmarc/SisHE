@@ -20,7 +20,7 @@
 						<p:outputLabel value="Dia Semana:" style="width:100px;" />
 						<h:selectOneMenu value="#{periodoCad.periodoSelecionado.diaSemana}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Campo Dia da Semana é obrigatório.">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia}" itemValue="#{dia}" />
+							<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia.nomeDia()}" itemValue="#{dia}" />
 						</h:selectOneMenu>
 						
 						<!-- Hora Inicio -->

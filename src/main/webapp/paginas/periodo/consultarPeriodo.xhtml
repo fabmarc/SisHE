@@ -13,14 +13,25 @@
 				</div>
 
 				<!-- Div Corpo -->
-				<div class="divCorpo" style="padding-bottom: 5%;">
+				<div class="divCorpo" style="padding-bottom: 8%;">
 					<!-- Div Pesquisar -->
-					<div style="width: 410px; position: relative; top: -10px;">
-						<h:commandButton styleClass="botao3d" style="position:relative;" actionListener="#{periodoMnt.pesquisar()}" value="Pesquisar" />
+					<div style="width: 410px; position: relative; height: 60px;">
+					<!-- Div dia da semana -->
+						<div style="width: 410px; position: relative;">
+							<p:outputLabel value="Dia Semana:" style="width:100px;" />
+							<h:selectOneMenu value="#{periodoMnt.periodoFiltro.diaSemana}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia.nomeDia()}" itemValue="#{dia}" />
+							</h:selectOneMenu>
+						</div>
+						<!-- Div btn pesquisar -->
+						<div style="width: 410px; position: relative; left: 230px; top: -37px;">
+							<h:commandButton styleClass="botao3d" style="position:relative;" actionListener="#{periodoMnt.pesquisar()}" value="Pesquisar" />
+						</div>
 					</div>
-
+					
 					<!-- Tabela -->
-					<p:dataTable style="top:15%;" rowKey="#{periodo.id}" selection="#{periodoMnt.periodosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="periodoDt" var="periodo" value="#{periodoMnt.listaPeriodos}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="top:15px; position:relative;" rowKey="#{periodo.id}" selection="#{periodoMnt.periodosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="periodoDt" var="periodo" value="#{periodoMnt.listaPeriodos}" emptyMessage="Nenhum registro encontrado.">
 						<!-- Cabeçalho -->
 						<f:facet name="header">
 							Periodos
@@ -38,7 +49,7 @@
 						<!-- Dia -->
 						<p:column headerText="Dia">
 							<div>
-								<h:outputText value="#{periodoMnt.obterDia(periodo.diaSemana.numeroDia())}" />
+								<h:outputText value="#{periodoMnt.obterDia(periodo.diaSemana.numeroDia()).nomeDia()}" />
 							</div>
 						</p:column>
 

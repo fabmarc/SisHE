@@ -40,8 +40,8 @@ public class PeriodoMntController extends PeriodoController {
 		periodoFiltro = (Periodo) getFlashAttr("periodoFiltro");
 		if (periodoFiltro == null) periodoFiltro = new Periodo();
 
-		regraSelecionada = (Regra) getFlashAttr("regraSelecionadaFiltro");
-
+		regraSelecionada = (Regra) getSessionAttr("regraSelecionadaFiltro");			
+		
 		if (!searched) listaPeriodos = new ArrayList<Periodo>();
 		else pesquisar();
 	}
@@ -111,8 +111,9 @@ public class PeriodoMntController extends PeriodoController {
 	}
 
 	public String voltarRegra() {
-		putFlashAttr("searched", true);
-		return "/paginas/regra/consultarRegra.xhtml";
+		removeSessionAttr("regraSelecionadaFiltro");
+		putFlashAttr("periodoFiltro", null);
+		return "/paginas/regra/consultarRegra.xhtml?faces-redirect=true";
 	}
 
 }
