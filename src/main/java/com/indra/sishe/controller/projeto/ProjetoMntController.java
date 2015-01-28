@@ -1,7 +1,6 @@
 package com.indra.sishe.controller.projeto;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,48 +15,49 @@ import com.indra.sishe.entity.Projeto;
 
 @ViewScoped
 @ManagedBean(name = "projetoMnt")
-public class ProjetoMntController extends ProjetoController{
+public class ProjetoMntController extends ProjetoController {
 
 	private static final long serialVersionUID = -8555563300052713170L;
 
 	private List<Projeto> listaProjetos;
 	private List<Projeto> projetosSelecionados;
-	
+
 	public ProjetoMntController() {
 	}
 
 	@PostConstruct
-	private void init(){
+	private void init() {
+
 		MessageProvider.setInstance(messageProvider);
-		
+
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
-		
+
 		projetoFiltro = (Projeto) getFlashAttr("projetoFiltro");
 		if (projetoFiltro == null) projetoFiltro = new Projeto();
-		
+
 		if (!searched) listaProjetos = new ArrayList<Projeto>();
 		else pesquisar();
 	}
 
 	public void pesquisar() {
-	listaProjetos = projetoService.findByFilter(projetoFiltro);
-	Collections.sort(listaProjetos);
-	searched = true;
+		listaProjetos = projetoService.findByFilter(projetoFiltro);
+		searched = true;
 	}
 
 	public void beforeRemoveProjeto() {
 		if (projetosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
-		}else{
+		} else {
 			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
-	
+
 	public String remove() {
+
 		int size = projetosSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
-		for (Projeto projeto : projetosSelecionados){
+		for (Projeto projeto : projetosSelecionados) {
 			ids.add(projeto.getId());
 		}
 		try {
@@ -69,8 +69,9 @@ public class ProjetoMntController extends ProjetoController{
 		pesquisar();
 		return irParaConsultar();
 	}
-	
+
 	public String irParaAlterar(Projeto projeto) {
+
 		putFlashAttr("searched", searched);
 		putFlashAttr("projetoFiltro", projetoFiltro);
 		try {
@@ -79,7 +80,8 @@ public class ProjetoMntController extends ProjetoController{
 			return irParaAlterar();
 		} catch (ApplicationException e) {
 			returnErrorMessage(e.getMessage());
-			return irParaConsultar();		}
+			return irParaConsultar();
+		}
 	}
 
 	public List<Projeto> getListaProjetos() {
@@ -97,7 +99,5 @@ public class ProjetoMntController extends ProjetoController{
 	public void setProjetosSelecionados(List<Projeto> projetosSelecionados) {
 		this.projetosSelecionados = projetosSelecionados;
 	}
-	
-	
-	
+
 }

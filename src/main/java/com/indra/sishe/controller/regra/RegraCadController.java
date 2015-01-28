@@ -25,27 +25,29 @@ public class RegraCadController extends RegraController {
 
 	@PostConstruct
 	private void init() {
+
 		MessageProvider.setInstance(messageProvider);
 		setListaSindicatos(obterSindicatos());
+
 		searched = (Boolean) getFlashAttr("searched");
 		regraSelecionada = (Regra) getFlashAttr("regraSelecionada");
 		if (regraSelecionada == null) {
 			regraSelecionada = new Regra();
 		}
+
 		regraFiltro = (Regra) getFlashAttr("regraFiltro");
 	}
 
 	public String cadastrarRegra() {
-		if (validarRegra(regraSelecionada)) {
-			try {
-				regraService.save(regraSelecionada);
-				putFlashAttr("regraFiltro", regraFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Regra"));
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (Exception e) {
-				returnErrorMessage(e.getMessage());
-			}
+
+		try {
+			regraService.save(regraSelecionada);
+			putFlashAttr("regraFiltro", regraFiltro);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Regra"));
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (Exception e) {
+			returnErrorMessage(e.getMessage());
 		}
 		return null;
 	}
@@ -67,25 +69,22 @@ public class RegraCadController extends RegraController {
 	}
 
 	public String alterarRegra() {
-		if (validarRegra(regraSelecionada)) {
-			try {
-				regraService.update(regraSelecionada);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Regra"));
-				putFlashAttr("regraFiltro", regraFiltro);
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (Exception e) {
-				returnErrorMessage(e.getMessage());
-				return irParaAlterar(regraSelecionada);
-			}
+
+		try {
+			regraService.update(regraSelecionada);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Regra"));
+			putFlashAttr("regraFiltro", regraFiltro);
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (Exception e) {
+			returnErrorMessage(e.getMessage());
+			return irParaAlterar(regraSelecionada);
 		}
-		return irParaConsultar();
 	}
 
 	public List<Sindicato> obterSindicatos() {
 		Sindicato sindicato = new Sindicato();
 		return sindicatoService.findByFilter(sindicato);
-		// return sindicatoService.findAll();
 	}
 
 	public String cancelar() {

@@ -3,21 +3,21 @@ package com.indra.sishe.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Regra implements Serializable, Comparable<Regra> {
+public class Regra implements Serializable {
 
 	private static final long serialVersionUID = -7754813837217228348L;
 
 	private Long id;
-	
+
 	private Sindicato sindicato;
-	
+
 	private String descricao;
-	
+
 	private Date dataInicio;
-	
+
 	private Date dataFim;
-	
-	private Double porcentagem;
+
+	private Integer porcentagem;
 
 	public Long getId() {
 		return id;
@@ -59,19 +59,12 @@ public class Regra implements Serializable, Comparable<Regra> {
 		this.dataFim = dataFim;
 	}
 
-	public Double getPorcentagem() {
+	public Integer getPorcentagem() {
 		return porcentagem;
 	}
 
-	public void setPorcentagem(Double porcentagem) {
+	public void setPorcentagem(Integer porcentagem) {
 		this.porcentagem = porcentagem;
 	}
 
-	@Override
-	public int compareTo(Regra o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-	
 }

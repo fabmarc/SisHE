@@ -6,7 +6,7 @@ import java.util.Date;
 import com.indra.sishe.enums.EstadoEnum;
 
 
-public class Feriado implements Serializable, Comparable<Feriado>{
+public class Feriado implements Serializable{
 
 	private static final long serialVersionUID = 3382942206529054226L;
 
@@ -108,15 +108,15 @@ public class Feriado implements Serializable, Comparable<Feriado>{
 		} else if (!id.equals(other.id)) return false;
 		return true;
 	}
-
-	@Override
-	public int compareTo(Feriado o) {
-		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
-		if(valor != 0 ){
-			return valor;
-		}else {
-			return 1;
-		}
-	}
+//, Comparable<Feriado>
+//	@Override
+//	public int compareTo(Feriado o) {
+//		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
+//		if(valor != 0 ){
+//			return valor;
+//		}else {
+//			return 1;
+//		}
+//	}
 	
 }

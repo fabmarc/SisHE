@@ -1,7 +1,6 @@
 package com.indra.sishe.controller.regra;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -29,6 +28,7 @@ public class RegraMntController extends RegraController {
 
 	@PostConstruct
 	private void init() {
+
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
@@ -43,7 +43,6 @@ public class RegraMntController extends RegraController {
 
 	public void pesquisar() {
 		listaRegras = regraService.findByFilter(regraFiltro);
-		Collections.sort(listaRegras);
 		searched = true;
 	}
 
@@ -61,13 +60,14 @@ public class RegraMntController extends RegraController {
 		} else {
 			putFlashAttr("searched", true);
 			putFlashAttr("regraFiltro", regraFiltro);
-			putFlashAttr("regraSelecionadaFiltro", regrasSelecionadas.get(0));
+			putSessionAttr("regraSelecionadaFiltro", regrasSelecionadas.get(0));
 			return "/paginas/periodo/consultarPeriodo.xhtml";
 		}
 		return null;
 	}
 
 	public String remove() {
+
 		int size = regrasSelecionadas.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		for (Regra regra : regrasSelecionadas) {
@@ -84,6 +84,7 @@ public class RegraMntController extends RegraController {
 	}
 
 	public String irParaAlterar(Regra regra) {
+		
 		putFlashAttr("searched", searched);
 		putFlashAttr("regraFiltro", regraFiltro);
 		try {

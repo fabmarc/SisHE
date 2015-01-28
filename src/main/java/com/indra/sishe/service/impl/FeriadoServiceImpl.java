@@ -24,10 +24,28 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 	@Autowired
 	private FeriadoDAO feriadoDAO;
 
+	public boolean validarFeriado(Feriado feriadoSelecionado) throws ApplicationException {
+		if (feriadoSelecionado.getNome().isEmpty()) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");
+		} else if (feriadoSelecionado.getNome().length() > 30) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome", "30");
+		} else if ((feriadoSelecionado.getTipo() != 'F') && (feriadoSelecionado.getTipo() != 'M')) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Tipo");
+		} else if (feriadoSelecionado.getData() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Data");
+		} else {
+			return true;
+		}
+	}
+
 	@Override
 	public Feriado save(Feriado entity) throws ApplicationException {
 		try {
-			return feriadoDAO.save(entity);
+			if (validarFeriado(entity)) {
+				return feriadoDAO.save(entity);
+			} else {
+				return null;
+			}
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Feriado");
 		}
@@ -36,7 +54,11 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 	@Override
 	public Feriado update(Feriado entity) throws ApplicationException {
 		try {
-			return feriadoDAO.update(entity);
+			if (validarFeriado(entity)) {
+				return feriadoDAO.update(entity);
+			} else {
+				return null;
+			}
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Feriado");
 		} catch (RegistroDuplicadoException d) {

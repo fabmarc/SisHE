@@ -1,7 +1,7 @@
 package com.indra.sishe.controller.feriado;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +13,7 @@ import org.primefaces.context.RequestContext;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Feriado;
+import com.indra.sishe.enums.EstadoEnum;
 import com.indra.sishe.enums.TipoFeriadoEnum;
 
 @ViewScoped
@@ -45,7 +46,6 @@ public class FeriadoMntController extends FeriadoController {
 	public void pesquisar() {
 		
 		listaFeriados = feriadoService.findByFilter(feriadoFiltro);
-		Collections.sort(listaFeriados);
 		searched = true;
 	}
 
@@ -105,6 +105,11 @@ public class FeriadoMntController extends FeriadoController {
 		this.feriadosSelecionados = feriadosSelecionados;
 	}
 
+	public List<EstadoEnum> obterEstados() {
+		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
+		return listaEstados;
+	}	
+	
 	public TipoFeriadoEnum obterTipo(Character letraTipo) {
 		return TipoFeriadoEnum.obterTipo(letraTipo);
 	}

@@ -2,7 +2,7 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
-public class Projeto implements Serializable, Comparable<Projeto> {
+public class Projeto implements Serializable{
 
 	private static final long serialVersionUID = 7037450049743453705L;
 
@@ -86,17 +86,4 @@ public class Projeto implements Serializable, Comparable<Projeto> {
 		return true;
 	}
 
-	@Override
-	public int compareTo(Projeto o) {
-		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
-		if (valor != 0){
-			return valor;
-		}else {
-			return 1;
-		}
-	}
-	
-	
-	
-	
 }

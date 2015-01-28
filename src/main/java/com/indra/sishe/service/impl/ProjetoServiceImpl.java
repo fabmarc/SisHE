@@ -17,17 +17,37 @@ import com.indra.sishe.service.ProjetoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoService{
+public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoService {
 
 	private static final long serialVersionUID = 5704865963322848308L;
 
 	@Autowired
 	private ProjetoDAO projetoDAO;
-	
+
+	public boolean validarProjeto(Projeto projetoSelecionado) throws ApplicationException {
+		
+		if (projetoSelecionado.getNome().isEmpty()) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");
+		} else if (projetoSelecionado.getNome().length() > 50) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome", "50");
+		} else if (projetoSelecionado.getGerente() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Gerente");
+		} else if (projetoSelecionado.getDescricao().length() > 500) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Descrição", "500");
+		} else {
+			return true;
+		}
+	}
+
 	@Override
 	public Projeto save(Projeto projeto) throws ApplicationException {
+		
 		try {
-			return projetoDAO.save(projeto);
+			if (validarProjeto(projeto)) {
+				return projetoDAO.save(projeto);
+			} else {
+				return null;
+			}
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Projeto");
 		}
@@ -35,8 +55,13 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 
 	@Override
 	public Projeto update(Projeto projeto) throws ApplicationException {
+		
 		try {
-			return projetoDAO.update(projeto);
+			if (validarProjeto(projeto)) {
+				return projetoDAO.update(projeto);
+			} else {
+				return null;
+			}
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Projeto");
 		} catch (RegistroDuplicadoException e) {
@@ -59,7 +84,8 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 	}
 
 	@Override
-	public void remove(Long id) throws ApplicationException {}
+	public void remove(Long id) throws ApplicationException {
+	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
@@ -71,7 +97,7 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 		} catch (DeletarRegistroViolacaoFK e) {
 			throw new ApplicationException(e, "msg.error.excluir.registro.relacionado", "Projeto");
 		}
-		
+
 	}
 
 	@Override

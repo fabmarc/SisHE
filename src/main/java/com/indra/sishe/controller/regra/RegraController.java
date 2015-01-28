@@ -23,28 +23,6 @@ public class RegraController extends BaseController implements Serializable {
 
 	protected Boolean searched;
 
-	public boolean validarRegra(Regra regra) {
-		if (regra.getDescricao().isEmpty()) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Nome"));
-		} else if (regra.getDescricao().length() > 100) {
-			messager.error(messageProvider.getMessage("msg.error.campo.maior.esperado", "Nome", "100"));
-		} else if (regra.getSindicato() == null) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Sindicato"));
-		} else if (regra.getDataInicio() == null) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Data Inicial"));
-		} else if (regra.getDataFim() == null) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Data Final"));
-		} else if (regra.getDataInicio().after(regra.getDataFim())) {
-			messager.error(messageProvider.getMessage("msg.error.intervalo.incorreto", "Data Inicial",
-					"Data Final"));
-		} else if (regra.getPorcentagem() == null) {
-			messager.error(messageProvider.getMessage("msg.error.campo.obrigatorio", "Porcentagem"));
-		} else {
-			return true;
-		}
-		return false;
-	}
-
 	public String irParaConsultar() {
 		return "/paginas/regra/consultarRegra.xhtml?faces-redirect=true";
 	}

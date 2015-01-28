@@ -43,21 +43,8 @@
 						</p:column>
 
 						<p:column headerText="Ação" style="width:5%">
-							<p:rowToggler />
-							<p:commandLink id="linkAlterar" title="Editar Projeto" styleClass="ui-icon ui-icon-pencil" action="#{projetoMnt.irParaAlterar(projeto)}" style="left: 22px;top:-16px;position: relative;float: center;" />
+							<p:commandLink id="linkAlterar" title="Editar Projeto" styleClass="ui-icon ui-icon-pencil" action="#{projetoMnt.irParaAlterar(projeto)}" style="width:20px; left:30%; position: relative; float:center;" />
 						</p:column>
-						<p:rowExpansion>
-							<p:panelGrid id="panelGridExpand" style="width:707px">
-								<p:row>
-									<p:column style="width: 70px;">
-										<h:outputText value="Descrição" />
-									</p:column>
-									<p:column>
-										<h:outputText value="#{projeto.descricao}" style="white-space: normal;" />
-									</p:column>
-								</p:row>
-							</p:panelGrid>
-						</p:rowExpansion>
 						<f:facet name="footer">
 							<div style="text-align: right; width: 100%">
 								<p:commandLink value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" />

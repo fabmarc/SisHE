@@ -8,5 +8,5 @@ import com.indra.sishe.entity.Regra;
 public interface RegraDAO extends BaseDAO<Regra> {
 
 	public List<Regra> findByFilter(Regra regra);
-	
+
 }

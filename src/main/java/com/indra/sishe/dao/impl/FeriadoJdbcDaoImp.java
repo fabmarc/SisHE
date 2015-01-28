@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.FeriadoDAO;
@@ -40,12 +42,12 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public List<Feriado> findByFilter(Feriado feriado) {
-		
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, estado.id AS id_estado, "
-				+ "estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, id_cidade AS cidade_id, "
-				+ "case when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' else "
+		sql.append("SELECT feriado.id AS id, feriado.data AS data, INITCAP(feriado.nome) AS nome,  feriado.tipo AS tipo, estado.id "
+				+ "AS id_estado, estado.nome AS estado_nome, estado.sigla AS estado_sigla, cidade.nome AS cidade_nome, id_cidade "
+				+ "AS cidade_id, case when feriado.id_estado is null and feriado.id_cidade is null then 'Nacional' else "
 				+ "case when feriado.id_estado is not null and feriado.id_cidade is null then (select nome from estado where "
 				+ "id = feriado.id_estado) else (select nome from cidade where id = feriado.id_cidade)||' ('||(select sigla from "
 				+ "estado where id = feriado.id_estado)||')' end end as abrangencia ");
@@ -80,7 +82,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 			public Feriado mapRow(ResultSet rs, int idx) throws SQLException {
 				Feriado feriado = new Feriado();
 				Cidade cidade = new Cidade();
-				
+
 				cidade.setId(rs.getLong("cidade_id"));
 				cidade.setNome(rs.getString("cidade_nome"));
 
@@ -100,7 +102,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public Feriado save(Feriado feriado) throws RegistroDuplicadoException {
-		
+
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("tipo", feriado.getTipo());
 		params.addValue("data", feriado.getData());
@@ -110,7 +112,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 		}
 		if (feriado.getCidade() != null) {
 			params.addValue("id_cidade", feriado.getCidade().getId());
-		} 
+		}
 		Number key = insertFeriado.executeAndReturnKey(params);
 		feriado.setId(key.longValue());
 		return feriado;
@@ -118,27 +120,27 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public Feriado update(Feriado feriado) throws RegistroInexistenteException {
-		
+
 		Long idEstado = null;
 		Long idCidade = null;
-		if (feriado.getEstado() != null) { 
+		if (feriado.getEstado() != null) {
 			idEstado = feriado.getEstado().getId();
 		}
 		if (feriado.getCidade() != null) {
-			 idCidade = feriado.getCidade().getId();
+			idCidade = feriado.getCidade().getId();
 		}
-			int rows = getJdbcTemplate().update(
-					"UPDATE feriado SET nome = ?, data = ?, tipo = ?, id_estado = ?, id_cidade = ? WHERE id = ?",
-					feriado.getNome(), feriado.getData(), feriado.getTipo(), idEstado, idCidade, feriado.getId());
-		
+		int rows = getJdbcTemplate()
+				.update("UPDATE feriado SET nome = INITCAP(?), data = ?, tipo = ?, id_estado = ?, id_cidade = ? WHERE id = ?",
+						feriado.getNome(), feriado.getData(), feriado.getTipo(), idEstado, idCidade,
+						feriado.getId());
+
 		if (rows == 0) throw new RegistroInexistenteException();
 		return feriado;
 	}
-		
 
 	@Override
 	public List<Feriado> findAll() {
-		
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT feriado.id AS id, feriado.data AS data, feriado.nome AS nome,  feriado.tipo AS tipo, "
@@ -159,7 +161,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 			public Feriado mapRow(ResultSet rs, int idx) throws SQLException {
 				Feriado feriado = new Feriado();
 				Cidade cidade = new Cidade();
-				
+
 				cidade.setId(rs.getLong("cidade_id"));
 				cidade.setNome(rs.getString("cidade_nome"));
 
@@ -179,7 +181,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 	@Override
 	public Feriado findById(Object id) throws RegistroInexistenteException {
-		
+
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
@@ -200,7 +202,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 						public Feriado mapRow(ResultSet rs, int idx) throws SQLException {
 							Feriado feriado = new Feriado();
 							Cidade cidade = new Cidade();
-							
+
 							cidade.setId(rs.getLong("cidade_id"));
 							cidade.setNome(rs.getString("cidade_nome"));
 
@@ -231,16 +233,20 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 	}
 
 	@Override
-	public void remove(List<Object> ids) throws RegistroInexistenteException {
-		
+	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK  {
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
 			params.add(param);
 		}
-		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM feriado WHERE id = ?", params);
-		for (int rows : affectedRows)
-			if (rows == 0) throw new RegistroInexistenteException();
+		try {
+			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM feriado WHERE id = ?", params);
+			for (int rows : affectedRows)
+				if (rows == 0) throw new RegistroInexistenteException();
+		} catch (DataIntegrityViolationException d) {
+			throw new DeletarRegistroViolacaoFK();
+		}
 	}
 
 }
