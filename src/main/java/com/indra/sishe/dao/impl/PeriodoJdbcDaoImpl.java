@@ -144,20 +144,20 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		sql.append("from periodo left join regra on (periodo.id_regra = regra.id) left join sindicato on (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
 
 		if (entity != null && entity.getId() != null) {
-			sql.append("AND periodo.id = :idPeriodo");
+			sql.append("AND periodo.id = :idPeriodo ");
 			params.addValue("idPeriodo", entity.getId());
 		}
 		if (entity != null && entity.getDiaSemana() != null) {
-			sql.append("AND periodo.dia_semana = :diaSemana");
-			params.addValue("diaSemana", entity.getDiaSemana());
+			sql.append("AND periodo.dia_semana = :diaSemana ");
+			params.addValue("diaSemana", entity.getDiaSemana().numeroDia());
 		}
 		if (entity != null && entity.getPorcentagem() != null) {
-			sql.append("AND periodo.porcentagem = :porcentagem");
+			sql.append("AND periodo.porcentagem = :porcentagem ");
 			params.addValue("porcentagem", entity.getPorcentagem());
 		}
 		
 		if(entity != null && entity.getRegra()!=null && entity.getRegra().getId()!=null){
-			sql.append("AND periodo.id_regra = :regra");
+			sql.append("AND periodo.id_regra = :regra ");
 			params.addValue("regra", entity.getRegra().getId());
 		}
 		return consultar(sql, params);

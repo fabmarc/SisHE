@@ -61,7 +61,7 @@ public class RegraMntController extends RegraController {
 		} else {
 			putFlashAttr("searched", true);
 			putFlashAttr("regraFiltro", regraFiltro);
-			putFlashAttr("regraSelecionadaFiltro", regrasSelecionadas.get(0));
+			putSessionAttr("regraSelecionadaFiltro", regrasSelecionadas.get(0));
 			return "/paginas/periodo/consultarPeriodo.xhtml";
 		}
 		return null;

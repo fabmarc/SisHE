@@ -3,6 +3,7 @@ package com.indra.infra.controller;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.util.FacesMessager;
@@ -35,5 +36,20 @@ public class BaseController {
 		return flash.get(key);
 	}
 	
+	private HttpSession getSession() {		  
+        return (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);   
+	}
+	
+	protected void putSessionAttr(String key, Object value){
+		getSession().setAttribute(key, value);
+	}
+	
+	protected Object getSessionAttr(String key){
+		return getSession().getAttribute(key);
+	}
+	
+	protected void removeSessionAttr(String key){
+		getSession().removeAttribute(key);
+	}
 
 }
