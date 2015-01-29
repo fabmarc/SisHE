@@ -1,4 +1,4 @@
-package com.indra.sishe.controller.usuarioPeriodo;
+package com.indra.sishe.controller.usuarioProjeto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +10,10 @@ import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
+import com.indra.sishe.service.CargoService;
+import com.indra.sishe.service.ProjetoService;
 import com.indra.sishe.service.UsuarioProjetoService;
+import com.indra.sishe.service.UsuarioService;
 
 public class usuarioProjetoController extends BaseController implements Serializable {
 
@@ -21,7 +24,16 @@ public class usuarioProjetoController extends BaseController implements Serializ
 
 	protected List<UsuarioProjeto> usuarioProjeto;
 
-	protected List<Usuario> listaLideres = new ArrayList<Usuario>();
+	@Inject
+	protected ProjetoService projetoService;
+
+	@Inject
+	protected UsuarioService usuarioService;
+
+	@Inject
+	protected CargoService cargoService;
+
+	protected List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 	protected List<Projeto> listaProjetos = new ArrayList<Projeto>();
 
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
@@ -53,6 +65,46 @@ public class usuarioProjetoController extends BaseController implements Serializ
 		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
 		putFlashAttr("usuarioProjetoSelecionado", usuarioProjetoSelecionado);
 		return "/paginas/equipe/cadastrarEquipe.xhtml";
+	}
+
+	public List<UsuarioProjeto> getUsuarioProjeto() {
+		return usuarioProjeto;
+	}
+
+	public void setUsuarioProjeto(List<UsuarioProjeto> usuarioProjeto) {
+		this.usuarioProjeto = usuarioProjeto;
+	}
+
+	public List<Usuario> getListaUsuarios() {
+		return listaUsuarios;
+	}
+
+	public void setListaUsuarios(List<Usuario> listaUsuarios) {
+		this.listaUsuarios = listaUsuarios;
+	}
+
+	public List<Projeto> getListaProjetos() {
+		return listaProjetos;
+	}
+
+	public void setListaProjetos(List<Projeto> listaProjetos) {
+		this.listaProjetos = listaProjetos;
+	}
+
+	public UsuarioProjeto getUsuarioProjetoFiltro() {
+		return usuarioProjetoFiltro;
+	}
+
+	public void setUsuarioProjetoFiltro(UsuarioProjeto usuarioProjetoFiltro) {
+		this.usuarioProjetoFiltro = usuarioProjetoFiltro;
+	}
+
+	public UsuarioProjeto getUsuarioProjetoSelecionado() {
+		return usuarioProjetoSelecionado;
+	}
+
+	public void setUsuarioProjetoSelecionado(UsuarioProjeto usuarioProjetoSelecionado) {
+		this.usuarioProjetoSelecionado = usuarioProjetoSelecionado;
 	}
 
 }
