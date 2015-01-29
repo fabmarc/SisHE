@@ -36,7 +36,5 @@
     <sec:jdbc-user-service id="userService" data-source-ref="dataSource"
        users-by-username-query="select login, senha, 'true' as enable from usuario where login=?"
        authorities-by-username-query="SELECT USUARIO.LOGIN, unnest(string_to_array(role, ', ')) FROM USUARIO INNER JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) where login=?" />
-	<!-- 
-	 authorities-by-username-query="select usuario.login, permissao.permissao from usuario inner join cargo on (cargo.id = usuario.id_cargo) inner join cargo_permissao on (cargo_permissao.id_cargo = cargo.id) inner join permissao on (cargo_permissao.id_permissao = permissao.id) where login=?" />
-	 -->
+
 </beans:beans>
