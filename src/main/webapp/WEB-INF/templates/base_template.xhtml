@@ -7,7 +7,7 @@
 		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
 		<h:outputStylesheet library="css" name="sishe.css" />
 		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
-		
+
 		<ui:insert name="title">
 			<title>Banco de Horas</title>
 		</ui:insert>
@@ -80,16 +80,11 @@
 							</p:submenu>
 
 							<p:submenu label="Sindicato">
-								<p:submenu label="Sindicato">
-									<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
-									<p:menuitem value="Definir Regra" url="#" icon="ui-icon ui-icon-note" />
-								</p:submenu>
-								<p:submenu label="Definições">
-									<p:submenu label="Regra">
-										<p:menuitem value="Cadastrar" action="#{regraMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-										<p:menuitem value="Consultar" action="#{regraMnt.irParaConsultar()}" icon="ui-icon-search" />
-									</p:submenu>
+								<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+								<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
+								<p:submenu label="Regra">
+									<p:menuitem value="Cadastrar" action="#{regraMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+									<p:menuitem value="Consultar" action="#{regraMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
 							</p:submenu>
 
@@ -106,7 +101,7 @@
 				<ui:insert name="content" style="top: -10px; position: relative;">
 					<h:outputLabel value="[Conteúdo Default, esta região deve ser sobrescrita]" />
 				</ui:insert>
-				
+
 			</div>
 
 			<div class="rodape">
