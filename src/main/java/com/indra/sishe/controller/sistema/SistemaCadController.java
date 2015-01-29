@@ -22,10 +22,7 @@ import com.indra.sishe.service.UsuarioService;
 public class SistemaCadController extends SistemaController {
 
 	private static final long serialVersionUID = -3214994834298229437L;
-
-	// public List<Usuario> listaLideres = new ArrayList<Usuario>();
-	// public List<Projeto> listaProjetos = new ArrayList<Projeto>();
-
+	
 	@Inject
 	private UsuarioService usuarioService;
 
