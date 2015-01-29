@@ -48,7 +48,7 @@ public class LoginController {
 
 	public String logout() {
 		SecurityContextHolder.clearContext();
-		return "/paginas/unsecure/login.jsf";
+		return "/unsecure/login.jsf";
 	}
 
 	public AuthenticationManager getAuthenticationManager() {
