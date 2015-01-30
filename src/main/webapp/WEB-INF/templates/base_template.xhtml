@@ -29,11 +29,10 @@
 				<div style="background-color: #818181; width: 100%; position: relative; height: 1px;"></div>
 				<div class="logoCabeRodape" />
 			</div>
-
+			
 			<div id="corpo" style="top: 100px; position: relative; height: 100%;">
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
-
 						<div style="float: right; position: relative; width: 52px;" id="divAcoes">
 							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
 								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
@@ -47,18 +46,18 @@
 						</div>
 
 						<p:menubar style="top:20px;">
-							<p:submenu label="Solicitação">
+							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
 								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
-								<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" />
+								<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}"/>
 							</p:submenu>
 
-							<p:submenu label="Projetos">
+							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
 								<p:submenu label="Sistema">
 									<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 									<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
-								<p:submenu label="Projetos">
+								<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
 									<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 									<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
@@ -68,7 +67,7 @@
 								</p:submenu>
 							</p:submenu>
 
-							<p:submenu label="Funcionário">
+							<p:submenu label="Funcionário" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
 								<p:submenu label="Usuário">
 									<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 									<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" icon="ui-icon-search" />
@@ -79,7 +78,7 @@
 								</p:submenu>
 							</p:submenu>
 
-							<p:submenu label="Sindicato">
+							<p:submenu label="Sindicato" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
 								<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
 								<p:submenu label="Regra">
@@ -88,7 +87,7 @@
 								</p:submenu>
 							</p:submenu>
 
-							<p:submenu label="Feriados">
+							<p:submenu label="Feriados" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
 								<p:menuitem value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" icon="ui-icon-search" />
 							</p:submenu>
