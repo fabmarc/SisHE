@@ -46,6 +46,7 @@ public class usuarioProjetoController extends BaseController implements Serializ
 	protected Boolean searched;
 
 	public usuarioProjetoController() {
+
 	}
 
 	public String irParaConsultar() {
