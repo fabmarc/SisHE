@@ -29,7 +29,7 @@ public class LoginController extends BaseController{
 	private FacesMessager messager;
 	
 	@Inject
-	UsuarioService usuarioService;
+	private transient UsuarioService usuarioService;
 
 	public LoginController() {
 	}
