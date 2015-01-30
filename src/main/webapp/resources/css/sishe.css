@@ -16,7 +16,7 @@ html {
 }
 
 .imagemMarcaDAgua {
-	background-image: url(resources/images/logoIndra.jpg);
+	/*background-image: url(resources/images/logoIndra.jpg);*/
 	background-position: center;
 	/*background-attachment:fixed;*/
 	height: 400px;
