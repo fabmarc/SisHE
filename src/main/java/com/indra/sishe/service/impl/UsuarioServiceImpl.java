@@ -133,7 +133,7 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Login", "20");
 		} else if (entity.getLogin().length() < 5) {
 			throw new ApplicationException("msg.error.campo.menor.esperado", "Login", "5");
-		} else if (entity.getSenha() == null) {
+		} else if (entity.getSenha() == null || entity.getSenha().isEmpty()) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Senha");
 		} else if (entity.getSenha().length() > 20) {
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Senha", "20");
@@ -141,8 +141,7 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			throw new ApplicationException("msg.error.campo.menor.esperado", "Senha", "5");
 		} else if (entity.getEmail() != null && entity.getEmail().length() > 30) {
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Email", "30");
-		} else if ((entity.getSenha() == null || entity.getSenha().isEmpty())
-				&& (entity.getSenhaConfirm() == null || entity.getSenhaConfirm().isEmpty())) {
+		} else if (entity.getSenhaConfirm() == null || entity.getSenhaConfirm().isEmpty()) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Senha");
 		} else if (!entity.getSenha().equals(entity.getSenhaConfirm())) {
 			throw new ApplicationException("msg.error.senha.divergente");
@@ -150,7 +149,7 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			return true;
 		}
 	}
-	
+
 	@Override
 	public void alterarSenha(Usuario usuario) {
 		try {
@@ -158,10 +157,10 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 				Usuario usuarioBanco = usuarioDao.findById(usuario.getId());
 				if (usuario.getSenha().equals(usuarioBanco.getSenha())) {
 					usuarioDao.updatePassword(usuario);
-				}else {
+				} else {
 					throw new ApplicationException("msg.error.senha.incorreta");
 				}
-			}else {
+			} else {
 				throw new ApplicationException("msg.error.senha.divergente");
 			}
 		} catch (Exception e) {
