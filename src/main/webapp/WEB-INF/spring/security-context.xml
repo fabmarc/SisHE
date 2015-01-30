@@ -48,3 +48,4 @@
        authorities-by-username-query="SELECT USUARIO.LOGIN, unnest(string_to_array(role, ', ')) FROM USUARIO INNER JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) where login=?" />
 
 </beans:beans>
+

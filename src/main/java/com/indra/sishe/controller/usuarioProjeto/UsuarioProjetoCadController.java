@@ -34,6 +34,10 @@ public class UsuarioProjetoCadController extends usuarioProjetoController {
 		listarProjetos();
 	}
 
+	public void UsuarioProjetoMntController(){
+		
+	}
+	
 	private List<Usuario> listarUsuarios() {
 		listaUsuarios = usuarioService.findAll();
 		return listaUsuarios;

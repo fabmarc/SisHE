@@ -43,10 +43,14 @@ public class UsuarioLogado extends BaseController implements Serializable {
 		return (Long) getSessionAttr("usuario_id");
 	}
 	
+	public String getNome(){
+		return (String) getSessionAttr("usuario_nome");
+	}
+	
 	public String getPermissoes(){
 		return (String) getSessionAttr("usuario_permissoes");
 	}
-	
+		
 	public boolean verificarPermissao(String nivel){
 		if(getPermissoes().contains(nivel)){			
 			return true;
@@ -75,4 +79,5 @@ public class UsuarioLogado extends BaseController implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
 }

@@ -24,16 +24,17 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 	private static final long serialVersionUID = -6925459169473948818L;
 	private List<UsuarioProjeto> listaUsuarioProjeto;
 	private List<UsuarioProjeto> usuariosProjetos;
-	
+
 	@PostConstruct
 	private void init() {
+
 		MessageProvider.setInstance(messageProvider);
 		searched = (Boolean) getFlashAttr("searched");
-		
+
 		if (searched == null) searched = false;
 
 		usuarioProjetoFiltro = (UsuarioProjeto) getFlashAttr("usuarioProjetoFiltro");
-		
+
 		if (usuarioProjetoFiltro == null) usuarioProjetoFiltro = new UsuarioProjeto();
 		if (!searched) listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
 		else pesquisar();
@@ -49,14 +50,14 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
-	
+
 	public void pesquisar() {
 		listaUsuarioProjeto = usuarioProjetoService.findByFilter(usuarioProjetoFiltro);
 		Collections.sort(listaUsuarioProjeto);
 		searched = true;
 	}
 
-	public String irParaAlterar(UsuarioProjeto usuarioProjetoSelecionado) {		
+	public String irParaAlterar(UsuarioProjeto usuarioProjetoSelecionado) {
 		putFlashAttr("searched", searched);
 		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
 		try {
@@ -68,7 +69,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 			return irParaConsultar();
 		}
 	}
-	
+
 	public String removerSistema() {
 		int size = usuariosProjetos.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
@@ -83,7 +84,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 		pesquisar();
 		return irParaConsultar();
 	}
-	
+
 	public List<Projeto> listarProjetos() {
 		listaProjetos = projetoService.findAll();
 		return listaProjetos;
@@ -118,4 +119,13 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 		this.usuariosProjetos = usuariosProjetos;
 	}
 
+	public UsuarioProjeto getUsuarioProjetoFiltro() {
+		return usuarioProjetoFiltro;
+	}
+
+	public void setUsuarioProjeto(List<UsuarioProjeto> usuarioProjetoFiltro) {
+		this.usuarioProjetoFiltro = (UsuarioProjeto) usuarioProjetoFiltro;
+	}
+
+	
 }

@@ -1,14 +1,13 @@
 package com.indra.sishe.entity;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 
 public class UsuarioProjeto implements Serializable, Comparable<UsuarioProjeto> {
 
 	private static final long serialVersionUID = -1700372408472174319L;
 	private Long id;
-	private Usuario usuario;
-	private Projeto projeto;
+	private Usuario usuario = new Usuario();
+	private Projeto projeto = new Projeto();
 
 	public UsuarioProjeto(Long id, Usuario usuario, Projeto projeto) {
 		super();

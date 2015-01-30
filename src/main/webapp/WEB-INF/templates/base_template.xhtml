@@ -27,9 +27,12 @@
 					</h2>
 				</div>
 				<div style="background-color: #818181; width: 100%; position: relative; height: 1px;"></div>
-				<div class="logoCabeRodape" />
+				<div id="userLogado" style="width: 98.5%; position: absolute; height: 25px; z-index: 100; text-align: right;">
+					<h:outputLabel value="Olá, #{usuarioLogado.nome}" style="color: rgb(248, 248, 255); font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px; top: 2px; position: relative;" rendered="#{usuarioLogado.nome != null}" />
+				</div>
+				<div class="logoCabeRodape"></div>
 			</div>
-			
+
 			<div id="corpo" style="top: 100px; position: relative; height: 100%;">
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
@@ -49,7 +52,7 @@
 							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
 								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
-								<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}"/>
+								<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
 							</p:submenu>
 
 							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
@@ -63,7 +66,7 @@
 								</p:submenu>
 								<p:submenu label="Equipe">
 									<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+									<p:menuitem value="Consultar" action="#{usuarioProjetoMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
 							</p:submenu>
 
