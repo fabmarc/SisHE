@@ -150,7 +150,7 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			return true;
 		}
 	}
-
+	
 	@Override
 	public void alterarSenha(Usuario usuario) {
 		try {
