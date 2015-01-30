@@ -44,6 +44,7 @@ public class LoginController extends BaseController{
 			user = usuarioService.findByFilter(user).get(0);
 			putSessionAttr("usuario_login", this.username);	
 			putSessionAttr("usuario_id", user.getId());
+			putSessionAttr("usuario_nome", user.getNome());
 			putSessionAttr("usuario_permissoes", result.getAuthorities().toString());
 		} catch (AuthenticationException e) {
 			messager.error(e.getMessage());
@@ -59,6 +60,10 @@ public class LoginController extends BaseController{
 
 	public String logout() {
 		SecurityContextHolder.clearContext();
+		removeSessionAttr("usuario_login");
+		removeSessionAttr("usuario_id");
+		removeSessionAttr("usuario_nome");
+		removeSessionAttr("usuario_permissoes");
 		return "/unsecure/login.jsf";
 	}
 
