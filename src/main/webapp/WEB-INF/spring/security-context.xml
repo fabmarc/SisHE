@@ -6,31 +6,24 @@
 
 	<!-- Enable method level Spring Security by annotations -->
 	<sec:global-method-security pre-post-annotations="enabled" />
-		
-	<sec:http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
+	
+	
+	
+	<sec:http auto-config="true" authentication-manager-ref="authenticationManager">
 
-		<!-- Page level Spring Security : Intercept access to resources in /paginas/secure/** -->
-		<sec:intercept-url pattern="/paginas/secure/**"
-			access="hasAnyRole('ROLE_MANAGER','ROLE_DEVELOPER')" />
-
-		<!-- Page level Spring Security : Permit access to resources in /paginas/unsecure/** -->
-		<sec:intercept-url pattern="/paginas/unsecure/**"
-			access="permitAll" />
-
-		<!-- Page level Spring Security : Intercept access to resources in /** -->
-		<sec:intercept-url pattern="/**"
-			access="hasAnyRole('ROLE_MANAGER','ROLE_DEVELOPER')" />
-
-		<!-- Page level Spring Security : Enable Primefaces -->
-		<sec:intercept-url pattern="/javax.faces.resource/**"
-			access="permitAll" />
-
-		<!-- Define login page for Spring Security -->
-		<sec:form-login login-page="/paginas/unsecure/login.jsf" />
-
-		<!-- Define logout properties for Spring Security -->
-		<sec:logout invalidate-session="true" delete-cookies="true"
-			logout-success-url="/"></sec:logout>
+		<sec:form-login login-page="/unsecure/login.jsf" default-target-url="/unsecure/login.jsf" authentication-failure-url="/unsecure/login.jsf" />
+            <sec:logout logout-success-url="/paginas/unsecure/login.jsf" />
+                <sec:intercept-url pattern="/index.jsf" access="ROLE_ADMIN, ROLE_FUNCIONARIO, ROLE_GERENTE, ROLE_LIDER" />
+                <sec:intercept-url pattern="/paginas/cargo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/feriado/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/projeto/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/regra/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/periodo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/sindicato/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/sistema/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />  
+                <sec:intercept-url pattern="/paginas/usuario/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <!-- <sec:intercept-url pattern="/paginas/equipe/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
+                
 	</sec:http>
 
 	<!-- Set UserDetailsServiceImpl class as the authentication Manager for Spring Security -->
@@ -41,16 +34,16 @@
 		</sec:authentication-provider>
 	</sec:authentication-manager>
 
+	<!--
 	<sec:user-service id="userService">
 		<sec:user name="manager" password="letmein" authorities="ROLE_MANAGER" />
 		<sec:user name="developer" password="letmein" authorities="ROLE_DEVELOPER" />
 		<sec:user name="admin" password="admin" authorities="ROLE_MANAGER,ROLE_DEVELOPER" />
 	</sec:user-service>	
-	
-	<!--
-    <sec:jdbc-user-service id="userService" data-source-ref="dataSource"
-       users-by-username-query="select username, password, true from user where username=?"
-       authorities-by-username-query="select u.username, r.rolename from role r inner join user u where u.username=?" />
 	-->
 	
+    <sec:jdbc-user-service id="userService" data-source-ref="dataSource"
+       users-by-username-query="select login, senha, 'true' as enable from usuario where login=?"
+       authorities-by-username-query="SELECT USUARIO.LOGIN, unnest(string_to_array(role, ', ')) FROM USUARIO INNER JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) where login=?" />
+
 </beans:beans>
