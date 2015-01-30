@@ -14,4 +14,6 @@ public interface UsuarioDAO extends BaseDAO<Usuario> {
 	public List<Usuario> findByCargo(Cargo cargo);
 
 	public Usuario updatePassword(Usuario entity) throws RegistroInexistenteException;
+
+	public Usuario findByLogin(String login);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.indra.infra.service.BaseService;
+import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Usuario;
 
@@ -14,7 +15,9 @@ public interface UsuarioService extends BaseService<Usuario> {
 	public List<Usuario> findByFilter(Usuario usuarioFiltro);
 
 	public List<Usuario> findByCargo(Cargo cargo);
+
+	public void alterarSenha(Usuario usuario) throws ApplicationException;
 	
-	public void alterarSenha(Usuario usuario);
+	public Usuario findByLogin(String login);
 
 }

@@ -41,7 +41,7 @@ public class LoginController extends BaseController{
 			SecurityContextHolder.getContext().setAuthentication(result);		
 			Usuario user = new Usuario();
 			user.setLogin(this.username);
-			user = usuarioService.findByFilter(user).get(0);
+			user = usuarioService.findByLogin(username);
 			putSessionAttr("usuario_login", this.username);	
 			putSessionAttr("usuario_id", user.getId());
 			putSessionAttr("usuario_permissoes", result.getAuthorities().toString());

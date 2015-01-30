@@ -86,15 +86,6 @@ public class UsuarioCadController extends UsuarioController {
 		}
 	}
 	
-	public String alterarSenha() {
-//		try {
-			usuarioService.alterarSenha(usuarioSelecionado);
-			
-//		} catch (ApplicationException e) {
-//			returnErrorMessage(e.getMessage());
-//		}
-		return "#{request.contextPath}/index.jsf";
-	}
 
 	public String cancelar() {
 

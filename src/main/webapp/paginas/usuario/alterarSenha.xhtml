@@ -9,47 +9,32 @@
 				<div style="position: relative; width: auto;">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
-						<div style="position: absolute; float: left;">
-							<p:outputLabel value="Nome:" for="nomeIpt" style="width:50px;" />
-							<p:inputText id="nomeIpt" type="text" value="#{usuarioCad.usuarioSelecionado.nome}" maxlength="60" required="true" requiredMessage="Preencha o campo Nome" disabled="true" />
-						</div>
-
-
-						<div style="position: absolute; float: left;">
+						<div>
 							<p:outputLabel value="Login:" style="width:50px;" />
-							<p:inputText id="loginIpt" type="text" value="#{usuarioCad.usuarioSelecionado.login}" maxlength="20" required="true" requiredMessage="Preencha o campo Login" />
+							<p:inputText id="loginIpt" type="text" disabled="true" value="#{usuarioLogado.login}"  />
 						</div>
-
-					<div style="top: 253px; position: absolute;">
-						<div style="position: absolute; float: left;">
+						<div >
 							<p:outputLabel value="Senha Atual" style="width:50px;" />
 							<!-- Input para limpar o cache do browser -->
 							<p:inputText type="password" style="display:none" />
-							<p:inputText type="password" id="senhaAtual" name="password" value="#{usuarioCad.usuarioSelecionado.senha}" maxlength="20" required="true" requiredMessage="Preencha o campo Senha" />
+							<p:inputText type="password" id="senhaAtual" name="password" value="#{usuarioLogado.usuario.senhaAtual}" maxlength="20" required="true" requiredMessage="Preencha o campo Senha" />
 						</div>
-
-					<div style="top: 253px; position: absolute;">
-						<div style="position: absolute; float: left;">
+						<div >
 							<p:outputLabel value="Nova senha:" style="width:50px;" />
 							<!-- Input para limpar o cache do browser -->
 							<p:inputText type="password" style="display:none" />
-							<p:inputText type="password" id="senhaIpt" name="password" value="#{usuarioCad.usuarioSelecionado.senhaNova}" maxlength="20" required="true" requiredMessage="Preencha o campo Senha" />
+							<p:inputText type="password" id="senhaIpt" name="password" value="#{usuarioLogado.usuario.senha}" maxlength="20" required="true" requiredMessage="Preencha o campo Senha" />
 						</div>
-
-						<div style="position: absolute; float: right; left: 235px;">
+						<div>
 							<p:outputLabel value="Confirme a nova senha:" style="width:161px;" />
 							<!-- Input para limpar o cache do browser -->
 							<p:inputText type="password" style="display:none" />
-							<p:inputText type="password" id="senhaConfIpt" name="password" value="#{usuarioCad.usuarioSelecionado.senhaConfirm}" maxlength="20" required="true" requiredMessage="Preencha o campo de confirmação de senha" />
+							<p:inputText type="password" id="senhaConfIpt" name="password" value="#{usuarioLogado.usuario.senhaConfirm}" maxlength="20" required="true" requiredMessage="Preencha o campo de confirmação de senha" />
 						</div>
+					<div>
+						<h:commandButton styleClass="botao3d" style="width:100px; " action="#{usuarioLogado.alterarSenha()}" value="Confirmar" />
+						<h:commandButton styleClass="botao3d" style="width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" immediate="true"/>
 					</div>
-
-					<br />
-					<div style="position: relative; width: 220px; top: 316px; left: 117px;">
-						<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{usuarioCad.alterarSenha()}" value="Confirmar" />
-						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" immediate="true"/>
-					</div>
-				</div>
 
 			</ui:insert>
 		</h:form>
