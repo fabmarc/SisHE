@@ -24,7 +24,7 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 	@Autowired
 	private ProjetoDAO projetoDAO;
 
-	public boolean validarProjeto(Projeto projetoSelecionado) throws ApplicationException {
+	private boolean validarProjeto(Projeto projetoSelecionado) throws ApplicationException {
 		
 		if (projetoSelecionado.getNome().isEmpty()) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");

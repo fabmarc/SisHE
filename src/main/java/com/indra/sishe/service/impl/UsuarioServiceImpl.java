@@ -150,5 +150,23 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			return true;
 		}
 	}
+	
+	@Override
+	public void alterarSenha(Usuario usuario) {
+		try {
+			if (usuario.getSenhaNova().equals(usuario.getSenhaConfirm())) {
+				Usuario usuarioBanco = usuarioDao.findById(usuario.getId());
+				if (usuario.getSenha().equals(usuarioBanco.getSenha())) {
+					usuarioDao.updatePassword(usuario);
+				}else {
+					throw new ApplicationException("msg.error.senha.incorreta");
+				}
+			}else {
+				throw new ApplicationException("msg.error.senha.divergente");
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
 
 }

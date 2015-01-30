@@ -1,7 +1,6 @@
 package com.indra.sishe.controller.feriado;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +11,6 @@ import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Feriado;
-import com.indra.sishe.enums.EstadoEnum;
 
 @ViewScoped
 @ManagedBean(name = "feriadoCad")
@@ -84,7 +82,7 @@ public class FeriadoCadController extends FeriadoController {
 
 	public List<Cidade> obterCidades() {
 		
-		if (feriadoSelecionado.getEstado() != null) {
+		if (feriadoSelecionado.getEstado() != null && feriadoSelecionado.getEstado().getId() > 0) {
 			return cidadeService.findByEstado(feriadoSelecionado.getEstado());
 		} else {
 			return new ArrayList<Cidade>();
@@ -98,12 +96,6 @@ public class FeriadoCadController extends FeriadoController {
 		} else {
 			return false;
 		}
-	}
-	
-	public List<EstadoEnum> obterEstados() {
-		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
-		listaEstados.remove(0);
-		return listaEstados;
 	}
 
 	public Feriado getFeriadoSelecionado() {

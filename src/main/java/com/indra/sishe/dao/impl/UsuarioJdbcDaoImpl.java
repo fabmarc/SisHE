@@ -281,7 +281,14 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				return usuario;
 			}
 		});
-
+	}
+	
+	@Override
+	public Usuario updatePassword(Usuario entity) throws RegistroInexistenteException{
+		int rows = 0;
+			rows = getJdbcTemplate().update("UPDATE usuario SET senha = ? WHERE id = ?", entity.getSenha(),  entity.getId());
+			if (rows == 0) throw new RegistroInexistenteException();
+		return entity;
 	}
 
 }
