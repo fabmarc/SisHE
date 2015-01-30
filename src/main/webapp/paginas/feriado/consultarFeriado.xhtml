@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
-
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
 	<ui:define name="content">
 
@@ -17,16 +16,18 @@
 
 					<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
 						<p:outputLabel value="Data:" for="calendarioBusca" />
-						<p:calendar value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+						<p:calendar styleClass="calendario" value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
 					</div>
 
-					<div id="DivEstado" style="position: relative; top: -105px; left: 412px;">
+					<div id="DivEstado" style="position: relative; top: -105px; left: 300px;">
 						<p:outputLabel for="selecionarEstado" value="Abrangência:" />
 						<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{feriadoMnt.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
 						</p:selectOneMenu>
 					</div>
+
+
 
 					<div style="top: -139.5px; position: relative; left: 622px;">
 						<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />

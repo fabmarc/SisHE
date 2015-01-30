@@ -31,37 +31,30 @@ public class CidadeJdbcDaoImp extends NamedParameterJdbcDaoSupport implements Ci
 
 	@Override
 	public Cidade save(Cidade entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Cidade update(Cidade entity) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Cidade> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Cidade findById(Object id) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -21,6 +21,8 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	private String senha;
 
 	private String senhaConfirm;
+	
+	private String senhaNova;
 
 	private Integer matricula;
 
@@ -91,6 +93,14 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
 	public void setSenhaConfirm(String senhaConfirm) {
 		this.senhaConfirm = senhaConfirm;
+	}
+
+	public String getSenhaNova() {
+		return senhaNova;
+	}
+
+	public void setSenhaNova(String senhaNova) {
+		this.senhaNova = senhaNova;
 	}
 
 	public Integer getMatricula() {

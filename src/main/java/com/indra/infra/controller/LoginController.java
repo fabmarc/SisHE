@@ -12,10 +12,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.indra.infra.util.FacesMessager;
+import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.service.UsuarioService;
 
 @ManagedBean
 @RequestScoped
-public class LoginController {
+public class LoginController extends BaseController{
 
 	private String username = null;
 	private String password = null;
@@ -25,6 +27,9 @@ public class LoginController {
 	
 	@Inject
 	private FacesMessager messager;
+	
+	@Inject
+	private transient UsuarioService usuarioService;
 
 	public LoginController() {
 	}
@@ -33,7 +38,14 @@ public class LoginController {
 		try {
 			Authentication request = new UsernamePasswordAuthenticationToken(getUsername(), getPassword());
 			Authentication result = authenticationManager.authenticate(request);
-			SecurityContextHolder.getContext().setAuthentication(result);
+			SecurityContextHolder.getContext().setAuthentication(result);		
+			Usuario user = new Usuario();
+			user.setLogin(this.username);
+			user = usuarioService.findByFilter(user).get(0);
+			putSessionAttr("usuario_login", this.username);	
+			putSessionAttr("usuario_id", user.getId());
+			putSessionAttr("usuario_nome", user.getNome());
+			putSessionAttr("usuario_permissoes", result.getAuthorities().toString());
 		} catch (AuthenticationException e) {
 			messager.error(e.getMessage());
 			e.printStackTrace();
@@ -48,6 +60,10 @@ public class LoginController {
 
 	public String logout() {
 		SecurityContextHolder.clearContext();
+		removeSessionAttr("usuario_login");
+		removeSessionAttr("usuario_id");
+		removeSessionAttr("usuario_nome");
+		removeSessionAttr("usuario_permissoes");
 		return "/unsecure/login.jsf";
 	}
 

@@ -13,8 +13,18 @@
 
 		<sec:form-login login-page="/unsecure/login.jsf" default-target-url="/unsecure/login.jsf" authentication-failure-url="/unsecure/login.jsf" />
             <sec:logout logout-success-url="/paginas/unsecure/login.jsf" />
-                <sec:intercept-url pattern="/paginas/**" access="ROLE_ADMIN, ROLE_FUNCIONARIO, ROLE_GERENTE, ROLE_LIDER" />
                 <sec:intercept-url pattern="/index.jsf" access="ROLE_ADMIN, ROLE_FUNCIONARIO, ROLE_GERENTE, ROLE_LIDER" />
+                <sec:intercept-url pattern="/paginas/cargo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/feriado/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/projeto/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/regra/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/periodo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/sindicato/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/sistema/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />  
+                <sec:intercept-url pattern="/paginas/usuario/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <!-- <sec:intercept-url pattern="/paginas/equipe/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
+                <!-- <sec:intercept-url pattern="/paginas/solicitacao/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
+                
 	</sec:http>
 
 	<!-- Set UserDetailsServiceImpl class as the authentication Manager for Spring Security -->
@@ -36,7 +46,6 @@
     <sec:jdbc-user-service id="userService" data-source-ref="dataSource"
        users-by-username-query="select login, senha, 'true' as enable from usuario where login=?"
        authorities-by-username-query="SELECT USUARIO.LOGIN, unnest(string_to_array(role, ', ')) FROM USUARIO INNER JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) where login=?" />
-	<!-- 
-	 authorities-by-username-query="select usuario.login, permissao.permissao from usuario inner join cargo on (cargo.id = usuario.id_cargo) inner join cargo_permissao on (cargo_permissao.id_cargo = cargo.id) inner join permissao on (cargo_permissao.id_permissao = permissao.id) where login=?" />
-	 -->
+
 </beans:beans>
+
