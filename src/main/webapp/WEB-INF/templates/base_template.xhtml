@@ -34,12 +34,18 @@
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
 
-						<div style="float: right; position: relative; width: 52px;" id="divAcoes">
+						<div style="float: right; position: relative; width: 73px;" id="divAcoes">
 							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
 								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
 							</div>
 
-							<div style="float: right; position: relative; width: 20px; top: -6px;" id="divLogout">
+							<div style="float: right; position: relative; width: 20px; top: -6px; right: 23px;" id="divConfig">
+								<h:commandLink id="usuarioConfig" >
+									<p:graphicImage url="/resources/images/config.png" title="Configurações" />
+								</h:commandLink>
+							</div>
+
+							<div style="float: right; position: relative; width: 20px; top: -6px; right: -21px;" id="divLogout">
 								<h:commandLink action="#{loginController.logout}">
 									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
 								</h:commandLink>
@@ -94,6 +100,10 @@
 							</p:submenu>
 
 						</p:menubar>
+
+						<p:tieredMenu overlay="true" trigger="usuarioConfig" my="left top" at="left bottom" style="width:200px">
+							<p:menuitem value="Alterar Senha"  icon="ui-icon-disk" />
+						</p:tieredMenu>
 
 					</h:form>
 				</ui:insert>

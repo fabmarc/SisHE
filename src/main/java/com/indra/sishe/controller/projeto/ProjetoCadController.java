@@ -29,7 +29,7 @@ public class ProjetoCadController extends ProjetoController {
 	private void init() {
 		
 		MessageProvider.setInstance(messageProvider);
-		setListaGerentes(ObterGerentes());
+		setListaGerentes(obterGerentes());
 		
 		searched = (Boolean) getFlashAttr("searched");
 		projetoSelecionado = (Projeto) getFlashAttr("projetoSelecionado");
@@ -74,7 +74,7 @@ public class ProjetoCadController extends ProjetoController {
 		}
 	}
 
-	public List<Usuario> ObterGerentes() {
+	private List<Usuario> obterGerentes() {
 		Cargo cargo = new Cargo();
 		cargo.setId(new Long(2));
 		return usuarioService.findByCargo(cargo);
