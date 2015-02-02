@@ -10,6 +10,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
+import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
 
@@ -69,8 +70,17 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public void aprovar() {
-		System.out.println("Aprovar");
-		// Implementar;
+		int size = solicitacoesSelecionadas.size();
+		ArrayList<Long> ids = new ArrayList<Long>(size);
+		for (Solicitacao solicitacao : solicitacoesSelecionadas)
+			ids.add(solicitacao.getId());
+		try {
+			solicitacaoService.aprovarSolicitacoes(ids);
+			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
+		} catch (ApplicationException e) {
+			messager.error(e.getMessage());
+		}
+		pesquisar();
 	}
 
 	public void reprovar() {

@@ -5,7 +5,9 @@ import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import com.indra.infra.controller.BaseController;
 import com.indra.infra.resource.MessageProvider;
@@ -39,8 +41,8 @@ public class UsuarioLogado extends BaseController implements Serializable {
 		return (String) getSessionAttr("usuario_login");
 	}
 	
-	public Long getId(){
-		return (Long) getSessionAttr("usuario_id");
+	public static Long getId(){		
+		return (Long) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("usuario_id");//(Long) getSessionAttr("usuario_id");
 	}
 	
 	public String getNome(){

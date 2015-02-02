@@ -2,6 +2,8 @@ package com.indra.sishe.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -9,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
+import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.SolicitacaoDAO;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sistema;
@@ -177,6 +182,27 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void aprovarSolicitacoes(List<Long> ids) throws RegistroInexistenteException {
+		String temp = ids.toString();
+		temp = (String) temp.subSequence(1, temp.length()-1);//remover os caracteres '[' e ']';
+		temp = "(" + temp + ")";
+		System.out.println(temp);
+		
+		getJdbcTemplate().update("UPDATE solicitacao SET id_status_lider = 1,  id_aprovador_lider = ? WHERE id in ?", UsuarioLogado.getId(), temp);
+		/*for (Long id : ids) {
+		}*/
+		//int rows = 0;
+		//rows = getJdbcTemplate().update("UPDATE solicitacao SET id_status_lider = 1,  id_aprovador_lider = ?, data_aprovacao_lider = ? WHERE id in ?", UsuarioLogado.getId(), new Date(),  params);
+		
+		//if (rows == 0) throw new RegistroInexistenteException();
+		
+		
+		/*int[] affectedRows = getJdbcTemplate().batchUpdate("UPDATE solicitacao SET id_status_lider = 1,  id_aprovador_lider = ?, data_aprovacao_lider = ? WHERE id = ?", UsuarioLogado.getId(), new Date(),  params);
+		for (int rows : affectedRows)
+			if (rows == 0) throw new RegistroInexistenteException();	*/	
 	}
 
 }

@@ -54,7 +54,7 @@ public class RegraMntController extends RegraController {
 		}
 	}
 
-	public String irParaPeriodo() {		
+	public String irParaPeriodo() {
 		if (regrasSelecionadas.size() != 1) {
 			RequestContext.getCurrentInstance().execute("selectOne.show()");
 		} else {
@@ -84,7 +84,7 @@ public class RegraMntController extends RegraController {
 	}
 
 	public String irParaAlterar(Regra regra) {
-		
+
 		putFlashAttr("searched", searched);
 		putFlashAttr("regraFiltro", regraFiltro);
 		try {

@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.SolicitacaoDAO;
 import com.indra.sishe.entity.Solicitacao;
@@ -71,6 +72,15 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void aprovarSolicitacoes(List<Long> ids) throws ApplicationException {
+		try {
+			solicitacaoDao.aprovarSolicitacoes(ids);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
+		}
 	}
 
 }
