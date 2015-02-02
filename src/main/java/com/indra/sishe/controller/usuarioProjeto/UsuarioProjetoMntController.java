@@ -22,8 +22,8 @@ import com.indra.sishe.entity.UsuarioProjeto;
 public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 	private static final long serialVersionUID = -6925459169473948818L;
-	private List<UsuarioProjeto> listaUsuarioProjeto;
-	private List<UsuarioProjeto> usuariosProjetos;
+	private List<UsuarioProjeto> listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
+	private List<UsuarioProjeto> usuariosProjetos = new ArrayList<UsuarioProjeto>();
 
 	@PostConstruct
 	private void init() {

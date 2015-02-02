@@ -24,6 +24,7 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.UsuarioProjetoDAO;
+import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
@@ -178,21 +179,22 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 	}
 
 	@Override
-	public EntityManager getEntityManager() {		
+	public EntityManager getEntityManager() {
 		return null;
 	}
 
 	@Override
 	public List<UsuarioProjeto> findByFilter(UsuarioProjeto usuarioProjeto) {
-	
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
 		sql.append("SELECT up.id as idUP,up.id_usuario AS idUsuario,up.id_projeto AS idProjeto,"
-				+ " u.nome AS nomeUsuario, p.nome AS nomeProjeto ");
-		sql.append(" FROM usuario_projeto up");
-		sql.append("INNER JOIN usuario u on u.id = up.id");
-		sql.append("INNER JOIN projeto p on p.id = up.id ");
+				+ " u.nome AS nomeUsuario, c.id AS idCargo,c.nome AS cargoUsuario, p.nome AS nomeProjeto ");
+		sql.append(" FROM usuario_projeto up ");
+		sql.append(" INNER JOIN usuario u on u.id = up.id ");
+		sql.append(" INNER JOIN projeto p on p.id = up.id ");
+		sql.append(" INNER JOIN cargo c on c.id = u.id ");
 		sql.append(" WHERE 1 = 1 ");
 
 		if (!(usuarioProjeto.getUsuario() == null) && !usuarioProjeto.getUsuario().getNome().isEmpty()) {
@@ -212,12 +214,17 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 						UsuarioProjeto up = new UsuarioProjeto();
 						Projeto projeto = new Projeto();
 						Usuario usuario = new Usuario();
+						Cargo cargo = new Cargo();
+
+						cargo.setId(rs.getLong("idCargo"));
+						cargo.setNome(rs.getString("cargoUsuario"));
 
 						projeto.setId(rs.getLong("idProjeto"));
 						projeto.setNome(rs.getString("nomeProjeto"));
 
 						usuario.setId(rs.getLong("idUsuario"));
 						usuario.setNome(rs.getString("nomeUsuario"));
+						usuario.setCargo(cargo);
 
 						up.setProjeto(projeto);
 						up.setUsuario(usuario);

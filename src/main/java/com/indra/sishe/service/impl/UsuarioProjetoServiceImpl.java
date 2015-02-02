@@ -3,6 +3,8 @@ package com.indra.sishe.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
@@ -14,6 +16,7 @@ import com.indra.sishe.entity.UsuarioProjeto;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioProjetoService;
 
+@Stateless
 public class UsuarioProjetoServiceImpl extends StatelessServiceAb implements UsuarioProjetoService {
 
 	private static final long serialVersionUID = -2376148536768097124L;
