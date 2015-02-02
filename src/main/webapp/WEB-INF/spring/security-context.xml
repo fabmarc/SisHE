@@ -22,8 +22,8 @@
                 <sec:intercept-url pattern="/paginas/sindicato/**" access="ROLE_ADMIN, ROLE_GERENTE" />
                 <sec:intercept-url pattern="/paginas/sistema/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />  
                 <sec:intercept-url pattern="/paginas/usuario/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+                <sec:intercept-url pattern="/paginas/solicitacao/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />
                 <!-- <sec:intercept-url pattern="/paginas/equipe/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
-                <!-- <sec:intercept-url pattern="/paginas/solicitacao/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
                 
 	</sec:http>
 
