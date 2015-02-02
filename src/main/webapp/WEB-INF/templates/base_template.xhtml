@@ -36,12 +36,16 @@
 			<div id="corpo" style="top: 100px; position: relative; height: 100%;">
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
-						<div style="float: right; position: relative; width: 52px;" id="divAcoes">
+						<div style="float: right; position: relative; width: 75px;" id="divAcoes">
 							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
 								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
 							</div>
-
-							<div style="float: right; position: relative; width: 20px; top: -6px;" id="divLogout">
+							<div style="float: left; position: relative; width: 20px; top: -6px;left: 5px;" id="divSenha">
+								<h:commandLink action="#{loginController.irParaAlterarSenha()}">
+									<p:graphicImage url="/resources/images/senha.png" title="Alterar Senha" />
+								</h:commandLink>
+							</div>
+							<div style="float: left; position: relative; width: 20px; top: -6px;left: 10px;" id="divLogout">
 								<h:commandLink action="#{loginController.logout}">
 									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
 								</h:commandLink>
@@ -52,7 +56,7 @@
 							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
 								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
-								<p:menuitem value="Pendentes" url="#" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
+								<p:menuitem value="Pendentes" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
 							</p:submenu>
 
 							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
