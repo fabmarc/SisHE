@@ -66,6 +66,10 @@ public class LoginController extends BaseController{
 		removeSessionAttr("usuario_permissoes");
 		return "/unsecure/login.jsf";
 	}
+	
+	public String irParaAlterarSenha() {
+		return "/paginas/usuario/alterarSenha.xhtml?faces-redirect=true";
+	}
 
 	public AuthenticationManager getAuthenticationManager() {
 		return authenticationManager;
