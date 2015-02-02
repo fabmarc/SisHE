@@ -68,7 +68,7 @@ public class LoginController extends BaseController{
 	}
 	
 	public String irParaAlterarSenha() {
-		return "/paginas/usuario/alterarSenha.xhtml?faces-redirect=true";
+		return "/alterarSenha.xhtml?faces-redirect=true";
 	}
 
 	public AuthenticationManager getAuthenticationManager() {
