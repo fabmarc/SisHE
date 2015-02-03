@@ -12,7 +12,6 @@ import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
@@ -92,14 +91,6 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 	private List<Usuario> listarUsuarios() {
 		listaUsuarios = usuarioService.findAll();
-		return listaUsuarios;
-	}
-
-	public List<Usuario> listarUsuariosPorCargo(String nomeCargo) {
-		Cargo cargo = new Cargo();
-		cargo.setNome(nomeCargo);
-		cargo = cargoService.findByFilter(cargo).get(0);
-		listaUsuarios = usuarioService.findByCargo(cargo);
 		return listaUsuarios;
 	}
 

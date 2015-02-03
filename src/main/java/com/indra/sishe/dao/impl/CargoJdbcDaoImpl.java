@@ -70,14 +70,14 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public List<Cargo> findAll() {
-		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome " + "FROM cargo",
+		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome, cargo.role " + "FROM cargo",
 				new BeanPropertyRowMapper<Cargo>(Cargo.class));
 	}
 
 	@Override
 	public Cargo findById(Object id) throws RegistroInexistenteException {
 		try {
-			return getJdbcTemplate().queryForObject("SELECT id, nome " + "FROM cargo WHERE id = ?",
+			return getJdbcTemplate().queryForObject("SELECT id, nome, role " + "FROM cargo WHERE id = ?",
 					new Object[] { id }, new BeanPropertyRowMapper<Cargo>(Cargo.class));
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
@@ -105,6 +105,10 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		if (cargoFiltro != null && cargoFiltro.getNome() != null && !cargoFiltro.getNome().isEmpty()) {
 			sql.append("AND LOWER(nome) LIKE '%' || :nomeCargo || '%' ");
 			params.addValue("nomeCargo", cargoFiltro.getNome().toLowerCase());
+		}
+		if (cargoFiltro != null && cargoFiltro.getRole() != null && !cargoFiltro.getRole().isEmpty()) {
+			sql.append("AND LOWER(nome) LIKE :roleCargo ");
+			params.addValue("roleCargo", cargoFiltro.getRole().toLowerCase());
 		}
 		return getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new BeanPropertyRowMapper<Cargo>(Cargo.class));

@@ -60,7 +60,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 			RequestContext.getCurrentInstance().execute("confirmAprovacao.show()");
 		}
 	}
-	
+
 	public void beforeReprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
@@ -68,15 +68,15 @@ public class SolicitacaoMntController extends SolicitacaoController {
 			RequestContext.getCurrentInstance().execute("confirmReprovacao.show()");
 		}
 	}
-	
+
 	public void aprovar() {
 		acaoAprovarReprovar(1);
 	}
-	
+
 	public void reprovar() {
 		acaoAprovarReprovar(2);
 	}
-	
+
 	private void acaoAprovarReprovar(int status) {
 
 		int size = solicitacoesSelecionadas.size();
