@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.SolicitacaoDAO;
 import com.indra.sishe.entity.Solicitacao;
@@ -14,10 +15,10 @@ import com.indra.sishe.service.SolicitacaoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class SolicitacaoServiceImpl extends StatelessServiceAb implements SolicitacaoService{
+public class SolicitacaoServiceImpl extends StatelessServiceAb implements SolicitacaoService {
 
 	private static final long serialVersionUID = -5541504816519972712L;
-	
+
 	@Autowired
 	private SolicitacaoDAO solicitacaoDao;
 
@@ -48,13 +49,13 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -71,6 +72,24 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void liderAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException {
+		try {
+			solicitacaoDao.liderAcaoSolicitacao(ids, status);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
+		}
+	}
+
+	@Override
+	public void gerenteAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException {
+		try {
+			solicitacaoDao.gerenteAcaoSolicitacao(ids, status);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
+		}
 	}
 
 }
