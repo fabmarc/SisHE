@@ -53,12 +53,12 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 				+ "AS descricao, regra.data_inicio AS dataInicio, regra.data_fim AS dataFim, regra.porcentagem_feriado AS porcentagem ");
 		sql.append("FROM regra INNER JOIN sindicato ON (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
 
-		if (regra != null && regra.getDescricao() != null) {
+		if (regra != null && regra.getDescricao() != null && !"".equals(regra.getDescricao())) {
 			sql.append("AND LOWER(regra.descricao) LIKE '%'|| :nomeRegra || '%' ");
 			params.addValue("nomeRegra", regra.getDescricao().toLowerCase());
 		}
 
-		if (regra != null && regra.getSindicato() != null && regra.getId() != null) {
+		if (regra != null && regra.getSindicato() != null && regra.getSindicato().getId() != null) {
 			sql.append("AND regra.id_sindicato = :idSidicato");
 			params.addValue("idSidicato", regra.getSindicato().getId());
 		}

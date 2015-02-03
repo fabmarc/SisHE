@@ -1,7 +1,5 @@
 package com.indra.sishe.controller.usuario;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -123,8 +121,9 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public List<EstadoEnum> obterEstados() {
-		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
-		return listaEstados;
+//		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
+//		return listaEstados;
+		return EstadoEnum.listaEstados();
 	}
 
 	public EstadoEnum getEstadoSelecionado() {

@@ -9,15 +9,13 @@
 				<div style="top: 15px; left: 268px; position: relative; width: 250px">
 
 					<div>
+						<p:outputLabel value="Sindicato:" id="sindicato"  />
+						<p:inputText type="text" value="#{regraCad.sindicatoSelecionado.descricao}" disabled="true" immediate="true" />
+					</div>
+					
+					<div>
 						<p:outputLabel value="Nome:" id="nome" />
 						<p:inputText type="text" value="#{regraCad.regraSelecionada.descricao}" maxlength="100" required="true" requiredMessage="O campo Nome é Obrigatório." />
-					</div>
-					<div>
-						<p:outputLabel for="selecionarSindicato" value="Sindicato:" />
-						<p:selectOneMenu id="selecionarSindicato" value="#{regraCad.regraSelecionada.sindicato}" converter="omnifaces.SelectItemsConverter" style="width:218px" required="true" requiredMessage="O campo Sindicato é Obrigatório">
-							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{regraCad.listaSindicatos}" var="sindicato" itemLabel="#{sindicato.descricao}" itemValue="#{sindicato}" />
-						</p:selectOneMenu>
 					</div>
 
 					<div style="position: relative; top: 10px">
@@ -32,7 +30,9 @@
 					
 					<div style="position: relative; top: 10px">
 						<p:outputLabel value="Porcentagem de Feriado:" style="width:170px;" />
-						<p:inputText value="#{regraCad.regraSelecionada.porcentagem}" required="true" requiredMessage="O campo Data Final é obrigatório." converterId="javax.faces.Double"/>
+						<p:inputText type="number" value="#{regraCad.regraSelecionada.porcentagem}" required="true" validatorMessage="O campo Porcentagem deve possuir valor entre 0% e 100%." requiredMessage="O campo Data Final é obrigatório." converterId="javax.faces.Double">
+							<f:validateLongRange minimum="0" maximum="100" />
+						</p:inputText>
 					</div>
 					
 					<br />

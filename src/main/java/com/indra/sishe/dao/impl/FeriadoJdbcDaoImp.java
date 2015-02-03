@@ -73,7 +73,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 			sql.append("AND estado.id IS NULL ");
 		}
 
-		sql.append("order by data ");
+		sql.append("ORDER BY data desc ");
 
 		List<Feriado> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 
@@ -123,7 +123,7 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 
 		Long idEstado = null;
 		Long idCidade = null;
-		if (feriado.getEstado() != null) {
+		if (feriado.getEstado() != null && feriado.getEstado().getId() > 0) {
 			idEstado = feriado.getEstado().getId();
 		}
 		if (feriado.getCidade() != null) {

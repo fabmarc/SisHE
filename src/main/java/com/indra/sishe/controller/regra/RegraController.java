@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.Regra;
+import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.service.RegraService;
 import com.indra.sishe.service.SindicatoService;
 
@@ -22,6 +23,8 @@ public class RegraController extends BaseController implements Serializable {
 	protected Regra regraFiltro;
 
 	protected Boolean searched;
+	
+	protected Sindicato sindicatoSelecionado;
 
 	public String irParaConsultar() {
 		return "/paginas/regra/consultarRegra.xhtml?faces-redirect=true";
@@ -53,4 +56,12 @@ public class RegraController extends BaseController implements Serializable {
 		this.regraFiltro = regraFiltro;
 	}
 
+	public Sindicato getSindicatoSelecionado() {
+		return sindicatoSelecionado;
+	}
+
+	public void setSindicatoSelecionado(Sindicato sindicatoSelecionado) {
+		this.sindicatoSelecionado = sindicatoSelecionado;
+	}
+	
 }

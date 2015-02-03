@@ -12,7 +12,6 @@ import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 
 @ViewScoped
@@ -25,11 +24,10 @@ public class SindicatoMntController extends SindicatoController {
 	private static final long serialVersionUID = 1L;
 
 	private List<Sindicato> listaSindicato;
-	
+
 	private List<Sindicato> sindicatosSelecionados;
-	
+
 	public SindicatoMntController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	// INCIACIALIZA O MB APÓS O @INJECT MAS ANTES É INSERIDO NA CLASSE SERVICE
@@ -39,26 +37,22 @@ public class SindicatoMntController extends SindicatoController {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		sindicatoFiltro = (Sindicato) getFlashAttr("sindicatoFiltro");
-		if (sindicatoFiltro == null)
-			sindicatoFiltro = new Sindicato();
-		if (!searched)
-			listaSindicato = new ArrayList<Sindicato>();
-		else
-			pesquisar();
-		
+		if (sindicatoFiltro == null) sindicatoFiltro = new Sindicato();
+		if (!searched) listaSindicato = new ArrayList<Sindicato>();
+		else pesquisar();
+
 		setListaEstado(estadoService.findAll());
-		
-		
+
 	}
 
 	public String removerSindicato() {
 		int size = sindicatosSelecionados.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
-		for (Sindicato sindicato : sindicatosSelecionados) ids.add(sindicato.getId());
+		for (Sindicato sindicato : sindicatosSelecionados)
+			ids.add(sindicato.getId());
 		try {
 			sindicatoService.remove(ids);
 			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "sindicato"));
@@ -73,8 +67,7 @@ public class SindicatoMntController extends SindicatoController {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sindicatoFiltro", sindicatoFiltro);
 		try {
-			sindicatoSelecionado = sindicatoService
-					.findById(sindicatoSelecionado.getId());
+			sindicatoSelecionado = sindicatoService.findById(sindicatoSelecionado.getId());
 			putFlashAttr("sindicatoSelecionado", sindicatoSelecionado);
 			return "/paginas/sindicato/cadastrarSindicato.xhtml?faces-redirect=true";
 		} catch (ApplicationException e) {
@@ -83,16 +76,12 @@ public class SindicatoMntController extends SindicatoController {
 		}
 	}
 
-	
-
 	public void beforeRemoveCliente() {
-		
+
 		if (sindicatosSelecionados.size() == 0) {
-			RequestContext.getCurrentInstance().execute(
-					"selectAtleastOne.show()");
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
-			RequestContext.getCurrentInstance().execute(
-					"confirmExclusao.show()");
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
 	}
 
@@ -102,17 +91,22 @@ public class SindicatoMntController extends SindicatoController {
 		searched = true;
 	}
 
-	/**
-	 * @return the listaSindicato
-	 */
+	public String irParaRegra() {
+		if (sindicatosSelecionados.size() != 1) {
+			RequestContext.getCurrentInstance().execute("selectOne.show()");
+		} else {
+			putFlashAttr("searched", true);
+			putFlashAttr("sindicatoFiltro", sindicatoFiltro);
+			putSessionAttr("sindicadoSelecionadoFiltro", sindicatosSelecionados.get(0));
+			return "/paginas/regra/consultarRegra.xhtml?faces-redirect=true";
+		}
+		return null;
+	}
+
 	public List<Sindicato> getListaSindicato() {
 		return listaSindicato;
 	}
 
-	/**
-	 * @param listaSindicato
-	 *            the listaSindicato to set
-	 */
 	public void setListaSindicato(List<Sindicato> listaSindicato) {
 		this.listaSindicato = listaSindicato;
 	}
@@ -133,20 +127,12 @@ public class SindicatoMntController extends SindicatoController {
 		this.sindicatoSelecionado = sindicatoSelecionado;
 	}
 
-	/**
-	 * @return the sindicatosSelecionados
-	 */
 	public List<Sindicato> getSindicatosSelecionados() {
 		return sindicatosSelecionados;
 	}
 
-	/**
-	 * @param sindicatosSelecionados the sindicatosSelecionados to set
-	 */
 	public void setSindicatosSelecionados(List<Sindicato> sindicatosSelecionados) {
 		this.sindicatosSelecionados = sindicatosSelecionados;
 	}
- 
-	
 
 }
