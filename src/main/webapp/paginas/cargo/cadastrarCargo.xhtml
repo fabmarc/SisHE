@@ -15,12 +15,18 @@
 					<!-- Div conteudo -->
 					<div style="left: 207px; position: relative; width: 100%">
 						<!-- Nome -->
-						<p:outputLabel value="Nome:" style="width:50px;" />
-						<p:inputText type="text" value="#{cargoCad.cargoSelecionado.nome}" maxlength="20" required="true" requiredMessage="#{cargoCad.msgValidacao('msg.error.campo.obrigatorio', 'Nome')}" />
-						<br />
-
+						<div style="position: relative;">
+							<p:outputLabel value="Nome:" style="width:50px;" />
+							<p:inputText type="text" value="#{cargoCad.cargoSelecionado.nome}" maxlength="20" required="true" requiredMessage="#{cargoCad.msgValidacao('msg.error.campo.obrigatorio', 'Nome')}" />
+						</div>
+						<div style="position:relative;top:4px;">
+							<h:outputText value="Permissão:" />
+       						<p:selectOneRadio value="#{cargoCad.cargoSelecionado.role}" layout="pageDirection" columns="2" converter="omnifaces.SelectItemsConverter">
+            					<f:selectItems value="#{cargoCad.obterListaPermissoes()}" var="role" itemLabel="#{role.permissao}" itemValue="#{role}" />
+        					</p:selectOneRadio >
+        				</div>
 						<!-- Div Ações-->
-						<div style="position: relative; width: 220px;">
+						<div style="position: relative; width: 220px; top: 10px;">
 							<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.confirmar()}" value="Confirmar" />
 							<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{cargoCad.cancelar()}" value="Cancelar" immediate="true" />
 						</div>
