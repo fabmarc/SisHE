@@ -30,8 +30,6 @@ public class RegraServiceImpl extends StatelessServiceAb implements RegraService
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");
 		} else if (regra.getDescricao().length() > 100) {
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome", "100");
-		} else if (regra.getSindicato() == null) {
-			throw new ApplicationException("msg.error.campo.obrigatorio", "Sindicato");
 		} else if (regra.getDataInicio() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Data Inicial");
 		} else if (regra.getDataFim() == null) {
