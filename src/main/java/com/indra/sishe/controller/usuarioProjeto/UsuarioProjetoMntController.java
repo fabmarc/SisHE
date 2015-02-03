@@ -12,7 +12,6 @@ import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
@@ -22,8 +21,8 @@ import com.indra.sishe.entity.UsuarioProjeto;
 public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 	private static final long serialVersionUID = -6925459169473948818L;
-	private List<UsuarioProjeto> listaUsuarioProjeto;
-	private List<UsuarioProjeto> usuariosProjetos;
+	private List<UsuarioProjeto> listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
+	private List<UsuarioProjeto> usuariosProjetos = new ArrayList<UsuarioProjeto>();
 
 	@PostConstruct
 	private void init() {
@@ -92,14 +91,6 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 	private List<Usuario> listarUsuarios() {
 		listaUsuarios = usuarioService.findAll();
-		return listaUsuarios;
-	}
-
-	public List<Usuario> listarUsuariosPorCargo(String nomeCargo) {
-		Cargo cargo = new Cargo();
-		cargo.setNome(nomeCargo);
-		cargo = cargoService.findByFilter(cargo).get(0);
-		listaUsuarios = usuarioService.findByCargo(cargo);
 		return listaUsuarios;
 	}
 

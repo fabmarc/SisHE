@@ -8,7 +8,6 @@ import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
@@ -46,14 +45,6 @@ public class UsuarioProjetoCadController extends usuarioProjetoController {
 	public List<Projeto> listarProjetos() {
 		listaProjetos = projetoService.findAll();
 		return listaProjetos;
-	}
-
-	public List<Usuario> listarUsuariosPorCargo(String nomeCargo) {
-		Cargo cargo = new Cargo();
-		cargo.setNome(nomeCargo);
-		cargo = cargoService.findByFilter(cargo).get(0);
-		listaUsuarios = usuarioService.findByCargo(cargo);
-		return listaUsuarios;
 	}
 
 	private boolean modoCadastrar() {

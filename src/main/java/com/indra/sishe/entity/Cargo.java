@@ -22,6 +22,8 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
+	private String role;
+	
 	public Cargo() {		
 	}
 
@@ -39,6 +41,14 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 
 	public void setNome(String nomeCargo) {
 		this.nome = nomeCargo;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override

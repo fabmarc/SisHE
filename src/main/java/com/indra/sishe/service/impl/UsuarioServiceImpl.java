@@ -12,7 +12,6 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.UsuarioDAO;
-import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioService;
@@ -109,8 +108,8 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 	}
 
 	@Override
-	public List<Usuario> findByCargo(Cargo cargo) {
-		return usuarioDao.findByCargo(cargo);
+	public List<Usuario> findByCargo(String role) {
+		return usuarioDao.findByCargo(role);
 	}
 
 	public boolean validarUsuario(Usuario entity) throws ApplicationException {

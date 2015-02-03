@@ -37,7 +37,7 @@ public class usuarioProjetoController extends BaseController implements Serializ
 	protected List<Projeto> listaProjetos = new ArrayList<Projeto>();
 
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
-	public UsuarioProjeto usuarioProjetoFiltro;
+	public UsuarioProjeto usuarioProjetoFiltro ;
 
 	// VARIÁVEL UTILIZADA PARA EXCLUIR OU ALTERAR
 	public UsuarioProjeto usuarioProjetoSelecionado;

@@ -84,7 +84,6 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 
 	@Override
 	public List<Sistema> findByFilter(Sistema sistema) {
-
 		return sistemaDao.findByFilter(sistema);
 	}
 

@@ -51,6 +51,8 @@ public class RegraMntController extends RegraController {
 		listaRegras = regraService.findByFilter(regraFiltro);
 		searched = true;
 	}
+
+
 	
 	public String irParaPeriodo() {		
 		if (regrasSelecionadas.size() != 1) {
@@ -96,7 +98,7 @@ public class RegraMntController extends RegraController {
 	}
 
 	public String irParaAlterar(Regra regra) {
-		
+
 		putFlashAttr("searched", searched);
 		putFlashAttr("regraFiltro", regraFiltro);
 		try {
