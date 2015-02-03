@@ -39,6 +39,8 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 		if (!searched) listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
 		else pesquisar();
 
+		projetoSelecionado = (Projeto) getSessionAttr("projetoSelecionadoFiltro");
+		
 		listarUsuarios();
 		listarProjetos();
 	}
@@ -52,6 +54,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 	}
 
 	public void pesquisar() {
+		usuarioProjetoFiltro.setProjeto(projetoSelecionado);
 		listaUsuarioProjeto = usuarioProjetoService.findByFilter(usuarioProjetoFiltro);
 		Collections.sort(listaUsuarioProjeto);
 		searched = true;

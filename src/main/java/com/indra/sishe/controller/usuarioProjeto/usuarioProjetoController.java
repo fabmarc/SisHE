@@ -42,6 +42,8 @@ public class usuarioProjetoController extends BaseController implements Serializ
 	// VARIÁVEL UTILIZADA PARA EXCLUIR OU ALTERAR
 	public UsuarioProjeto usuarioProjetoSelecionado;
 
+	public Projeto projetoSelecionado;
+	
 	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
 	protected Boolean searched;
 
@@ -106,6 +108,14 @@ public class usuarioProjetoController extends BaseController implements Serializ
 
 	public void setUsuarioProjetoSelecionado(UsuarioProjeto usuarioProjetoSelecionado) {
 		this.usuarioProjetoSelecionado = usuarioProjetoSelecionado;
+	}
+
+	public Projeto getProjetoSelecionado() {
+		return projetoSelecionado;
+	}
+
+	public void setProjetoSelecionado(Projeto projetoSelecionado) {
+		this.projetoSelecionado = projetoSelecionado;
 	}
 
 }
