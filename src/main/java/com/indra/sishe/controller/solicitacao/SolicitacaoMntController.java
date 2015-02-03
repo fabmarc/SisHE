@@ -68,24 +68,32 @@ public class SolicitacaoMntController extends SolicitacaoController {
 			RequestContext.getCurrentInstance().execute("confirmReprovacao.show()");
 		}
 	}
-
+	
 	public void aprovar() {
+		acaoAprovarReprovar(1);
+	}
+	
+	public void reprovar() {
+		acaoAprovarReprovar(2);
+	}
+	
+	private void acaoAprovarReprovar(int status) {
+
 		int size = solicitacoesSelecionadas.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		for (Solicitacao solicitacao : solicitacoesSelecionadas)
 			ids.add(solicitacao.getId());
 		try {
-			solicitacaoService.aprovarSolicitacoes(ids);
+			if (((String) getSessionAttr("usuario_permissoes")).contains("ROLE_GERENTE")) {
+				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
+			} else {
+				solicitacaoService.liderAcaoSolicitacao(ids, status);
+			}
 			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
 		}
-		pesquisar();
-	}
-
-	public void reprovar() {
-		System.out.println("Reprovar");
-		// Implementar;
+		pesquisarPendentes();
 	}
 
 	public void visualizar() {
