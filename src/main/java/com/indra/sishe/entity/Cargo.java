@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.indra.sishe.enums.PermissaoEnum;
+
 //@Entity
 @Table(name = "cargo")
 public class Cargo implements Serializable, Comparable<Cargo> {
@@ -22,6 +24,8 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
+	private PermissaoEnum role;
+	
 	public Cargo() {		
 	}
 
@@ -39,6 +43,14 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 
 	public void setNome(String nomeCargo) {
 		this.nome = nomeCargo;
+	}
+	
+	public PermissaoEnum getRole() {
+		return role;
+	}
+
+	public void setRole(PermissaoEnum role) {
+		this.role = role;
 	}
 
 	@Override

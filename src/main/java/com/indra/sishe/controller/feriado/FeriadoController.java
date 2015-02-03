@@ -48,14 +48,14 @@ public class FeriadoController extends BaseController implements Serializable {
 		putFlashAttr("feriadoSelecionado", feriadoSelecionado);
 		return irParaAlterar();
 	}
-	
+
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("feriadoFiltro", feriadoFiltro);
 		putFlashAttr("feriadoSelecionado", null);
 		return "/paginas/feriado/cadastrarFeriado.xhtml?faces-redirect=true";
 	}
-
+	
 	public List<EstadoEnum> obterEstados() {
 		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
 		return listaEstados;

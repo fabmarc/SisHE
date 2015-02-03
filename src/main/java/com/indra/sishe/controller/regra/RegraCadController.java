@@ -34,13 +34,14 @@ public class RegraCadController extends RegraController {
 		if (regraSelecionada == null) {
 			regraSelecionada = new Regra();
 		}
-
+		sindicatoSelecionado = (Sindicato) getSessionAttr("sindicadoSelecionadoFiltro");
 		regraFiltro = (Regra) getFlashAttr("regraFiltro");
 	}
 
 	public String cadastrarRegra() {
 
 		try {
+			regraSelecionada.setSindicato(sindicatoSelecionado);
 			regraService.save(regraSelecionada);
 			putFlashAttr("regraFiltro", regraFiltro);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Regra"));

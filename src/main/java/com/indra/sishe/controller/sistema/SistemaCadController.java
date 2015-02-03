@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Usuario;
@@ -55,10 +54,7 @@ public class SistemaCadController extends SistemaController {
 
 	public List<Usuario> listarLideres() {
 
-		Cargo cargo = new Cargo();
-		cargo.setNome("Lider");
-		cargo = cargoService.findByFilter(cargo).get(0);
-		listaLideres = usuarioService.findByCargo(cargo);
+		listaLideres = usuarioService.findByCargo("ROLE_LIDER, ROLE_FUNCIONARIO");
 		return listaLideres;
 	}
 

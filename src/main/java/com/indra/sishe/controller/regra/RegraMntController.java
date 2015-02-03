@@ -12,6 +12,7 @@ import org.primefaces.context.RequestContext;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Regra;
+import com.indra.sishe.entity.Sindicato;
 
 @ViewScoped
 @ManagedBean(name = "regraMnt")
@@ -22,6 +23,8 @@ public class RegraMntController extends RegraController {
 	private List<Regra> regrasSelecionadas;
 
 	protected List<Regra> listaRegras;
+	
+	public List<Sindicato> listaSindicatos;
 
 	public RegraMntController() {
 	}
@@ -30,31 +33,28 @@ public class RegraMntController extends RegraController {
 	private void init() {
 
 		MessageProvider.setInstance(messageProvider);
-
+		setListaSindicatos(obterSindicatos());
+		
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
 
 		regraFiltro = (Regra) getFlashAttr("regraFiltro");
 		if (regraFiltro == null) regraFiltro = new Regra();
-
-		if (!searched) listaRegras = new ArrayList<Regra>();
+		
+		sindicatoSelecionado = (Sindicato) getSessionAttr("sindicadoSelecionadoFiltro");
+		if (!searched) listaRegras = new ArrayList<Regra>(); 
 		else pesquisar();
 	}
 
 	public void pesquisar() {
+		regraFiltro.setSindicato(sindicatoSelecionado);
 		listaRegras = regraService.findByFilter(regraFiltro);
 		searched = true;
 	}
 
-	public void beforeRemoveRegra() {
-		if (regrasSelecionadas.size() == 0) {
-			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
-		} else {
-			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
-		}
-	}
 
-	public String irParaPeriodo() {
+	
+	public String irParaPeriodo() {		
 		if (regrasSelecionadas.size() != 1) {
 			RequestContext.getCurrentInstance().execute("selectOne.show()");
 		} else {
@@ -65,6 +65,20 @@ public class RegraMntController extends RegraController {
 		}
 		return null;
 	}
+	
+	public List<Sindicato> obterSindicatos() {
+		Sindicato sindicato = new Sindicato();
+		return sindicatoService.findByFilter(sindicato);
+	}
+
+	public void beforeRemoveRegra() {
+		if (regrasSelecionadas.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
+		}
+	}
+
 
 	public String remove() {
 
@@ -97,6 +111,12 @@ public class RegraMntController extends RegraController {
 		}
 	}
 
+	public String voltarParaSindicato() {
+		removeSessionAttr("sindicadoSelecionadoFiltro");
+		putFlashAttr("regraFiltro", null);
+		return "/paginas/sindicato/consultarSindicato.xhtml?faces-redirect=true";
+	}
+	
 	public List<Regra> getRegrasSelecionadas() {
 		return regrasSelecionadas;
 	}
@@ -111,6 +131,14 @@ public class RegraMntController extends RegraController {
 
 	public void setListaRegras(List<Regra> listaRegras) {
 		this.listaRegras = listaRegras;
+	}
+
+	public List<Sindicato> getListaSindicatos() {
+		return listaSindicatos;
+	}
+
+	public void setListaSindicatos(List<Sindicato> listaSindicatos) {
+		this.listaSindicatos = listaSindicatos;
 	}
 
 }

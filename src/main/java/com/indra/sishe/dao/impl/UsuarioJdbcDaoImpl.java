@@ -47,6 +47,18 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				"id");
 	}
 
+	private void criarBancoHoras(Long idUsuario) {
+
+		SimpleJdbcInsert bancoHoras;
+		bancoHoras = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("banco_horas")
+				.usingGeneratedKeyColumns("id");
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id_usuario", idUsuario);
+		params.addValue("saldo", 0);
+		bancoHoras.executeAndReturnKey(params);
+	}
+
 	@Override
 	public Usuario save(Usuario entity) throws RegistroDuplicadoException {
 
@@ -68,6 +80,7 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			}
 			Number key = insertUsuario.executeAndReturnKey(params);
 			entity.setId(key.longValue());
+			criarBancoHoras(key.longValue());
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}
@@ -109,6 +122,7 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 	@Override
 	public List<Usuario> findAll() {
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
@@ -117,13 +131,14 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	}
 
 	@Override
-	public List<Usuario> findByCargo(Cargo cargo) {
+	public List<Usuario> findByCargo(String role) {
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
 		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
-		sql.append("AND usuario.id_cargo = :idCargo");
-		params.addValue("idCargo", cargo.getId());
+		sql.append("AND cargo.role like :role");
+		params.addValue("role", role);
 		return consultar(sql, params);
 	}
 
@@ -142,18 +157,18 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			throw new RegistroInexistenteException();
 		}
 	}
-	
+
 	@Override
 	public Usuario findByLogin(String login) {
 
-			StringBuilder sql = new StringBuilder();
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
-			sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
-			sql.append("AND usuario.login = :login");
-			params.addValue("login", login);
-			return consultarUmUsuario(sql, params);
-		
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
+		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
+		sql.append("AND usuario.login = :login");
+		params.addValue("login", login);
+		return consultarUmUsuario(sql, params);
+
 	}
 
 	@Override
@@ -295,11 +310,13 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			}
 		});
 	}
-	
+
 	@Override
-	public Usuario updatePassword(Usuario entity) throws RegistroInexistenteException{
-		int rows = getJdbcTemplate().update("UPDATE usuario SET senha = ? WHERE id = ?", entity.getSenha(),  entity.getId());
-			if (rows == 0) throw new RegistroInexistenteException();
+	public Usuario updatePassword(Usuario entity) throws RegistroInexistenteException {
+
+		int rows = getJdbcTemplate().update("UPDATE usuario SET senha = ? WHERE id = ?", entity.getSenha(),
+				entity.getId());
+		if (rows == 0) throw new RegistroInexistenteException();
 		return entity;
 	}
 

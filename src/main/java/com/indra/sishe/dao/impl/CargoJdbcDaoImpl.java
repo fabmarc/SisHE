@@ -1,5 +1,7 @@
 package com.indra.sishe.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -23,6 +25,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.CargoDAO;
 import com.indra.sishe.entity.Cargo;
+import com.indra.sishe.enums.PermissaoEnum;
 
 @Repository
 public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements CargoDAO {
@@ -47,6 +50,16 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 	public Cargo save(Cargo entity) throws RegistroDuplicadoException {
 
 		try {
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("nome", entity.getNome());
+			params.addValue("role", entity.getRole().getPermissao());
+			Number key = insertCargo.executeAndReturnKey(params);
+			entity.setId(key.longValue());
+		} catch (DuplicateKeyException e) {
+			throw new RegistroDuplicadoException(e.toString());
+		}
+
+		try {
 			Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
 			entity.setId(key.longValue());
 		} catch (DuplicateKeyException e) {
@@ -59,8 +72,8 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 	public Cargo update(Cargo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
 
 		try {
-			int rows = getJdbcTemplate().update("UPDATE cargo SET nome = ? " + "WHERE id = ?", entity.getNome(),
-					entity.getId());
+			int rows = getJdbcTemplate().update("UPDATE cargo SET nome = ?, role = ? " + "WHERE id = ?",
+					entity.getNome(), entity.getRole().getRole(), entity.getId());
 			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
@@ -70,15 +83,22 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 
 	@Override
 	public List<Cargo> findAll() {
-		return getJdbcTemplate().query("SELECT cargo.id, cargo.nome " + "FROM cargo",
-				new BeanPropertyRowMapper<Cargo>(Cargo.class));
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT id, nome, role " + "FROM cargo WHERE 1=1 ");
+		
+		return consultar(sql, params);
 	}
 
 	@Override
 	public Cargo findById(Object id) throws RegistroInexistenteException {
 		try {
-			return getJdbcTemplate().queryForObject("SELECT id, nome " + "FROM cargo WHERE id = ?",
-					new Object[] { id }, new BeanPropertyRowMapper<Cargo>(Cargo.class));
+			StringBuilder sql = new StringBuilder();
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			sql.append("SELECT id, nome, role " + "FROM cargo WHERE 1=1 ");
+			sql.append("AND id = :id");
+			params.addValue("id", id);
+			return consultarUmPeriodo(sql, params);
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
 		}
@@ -95,7 +115,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT id, nome ");
+		sql.append("SELECT id, nome, role ");
 		sql.append("FROM cargo WHERE 1 = 1");
 
 		if (cargoFiltro != null && cargoFiltro.getId() != null) {
@@ -106,9 +126,11 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 			sql.append("AND LOWER(nome) LIKE '%' || :nomeCargo || '%' ");
 			params.addValue("nomeCargo", cargoFiltro.getNome().toLowerCase());
 		}
-		return getNamedParameterJdbcTemplate().query(sql.toString(), params,
-				new BeanPropertyRowMapper<Cargo>(Cargo.class));
-
+		if (cargoFiltro != null && cargoFiltro.getRole() != null) {
+			sql.append("AND LOWER(nome) LIKE :roleCargo ");
+			params.addValue("roleCargo", cargoFiltro.getRole().getRole().toLowerCase());
+		}
+		return consultar(sql, params);
 	}
 
 	@Override
@@ -136,6 +158,40 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
+	}
+
+	private List<Cargo> consultar(StringBuilder sql, MapSqlParameterSource params) {
+		List<Cargo> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Cargo>() {
+			@Override
+			public Cargo mapRow(ResultSet rs, int idx) throws SQLException {
+
+				Cargo cargo = new Cargo();
+				cargo.setId(rs.getLong("id"));
+				cargo.setNome(rs.getString("nome"));
+				cargo.setRole(PermissaoEnum.obterPermissao(rs.getString("role")));
+
+				return cargo;
+			}
+		});
+		return lista;
+	}
+
+	private Cargo consultarUmPeriodo(StringBuilder sql, MapSqlParameterSource params) {
+
+		Cargo cargo = getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params,
+				new RowMapper<Cargo>() {
+					@Override
+					public Cargo mapRow(ResultSet rs, int idx) throws SQLException {
+
+						Cargo cargo = new Cargo();
+						cargo.setId(rs.getLong("id"));
+						cargo.setNome(rs.getString("nome"));
+						cargo.setRole(PermissaoEnum.obterPermissao(rs.getString("role")));
+
+						return cargo;
+					}
+				});
+		return cargo;
 	}
 
 }

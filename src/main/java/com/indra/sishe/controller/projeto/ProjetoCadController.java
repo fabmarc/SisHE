@@ -8,7 +8,6 @@ import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
-import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 
@@ -75,9 +74,7 @@ public class ProjetoCadController extends ProjetoController {
 	}
 
 	private List<Usuario> obterGerentes() {
-		Cargo cargo = new Cargo();
-		cargo.setId(new Long(2));
-		return usuarioService.findByCargo(cargo);
+		return usuarioService.findByCargo("ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO");
 	}
 
 	public String cancelar() {
