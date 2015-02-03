@@ -10,14 +10,15 @@ import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
 
 @Local
-public interface SolicitacaoService extends BaseService<Solicitacao>{
-	
-	public List<Solicitacao> findByLider(Usuario lider);
-	
-	public List<Solicitacao> findByGerente(Usuario gerente);
-	
-	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro);
-	
-	public void aprovarSolicitacoes(List<Long> ids) throws ApplicationException;
+public interface SolicitacaoService extends BaseService<Solicitacao> {
 
+	public List<Solicitacao> findByLider(Usuario lider);
+
+	public List<Solicitacao> findByGerente(Usuario gerente);
+
+	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro);
+
+	public void liderAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException;
+
+	public void gerenteAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException;
 }

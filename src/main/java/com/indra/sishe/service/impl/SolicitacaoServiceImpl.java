@@ -15,10 +15,10 @@ import com.indra.sishe.service.SolicitacaoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class SolicitacaoServiceImpl extends StatelessServiceAb implements SolicitacaoService{
+public class SolicitacaoServiceImpl extends StatelessServiceAb implements SolicitacaoService {
 
 	private static final long serialVersionUID = -5541504816519972712L;
-	
+
 	@Autowired
 	private SolicitacaoDAO solicitacaoDao;
 
@@ -49,13 +49,13 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -75,9 +75,18 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 
 	@Override
-	public void aprovarSolicitacoes(List<Long> ids) throws ApplicationException {
+	public void liderAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException {
 		try {
-			solicitacaoDao.aprovarSolicitacoes(ids);
+			solicitacaoDao.liderAcaoSolicitacao(ids, status);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
+		}
+	}
+
+	@Override
+	public void gerenteAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException {
+		try {
+			solicitacaoDao.gerenteAcaoSolicitacao(ids, status);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
 		}
