@@ -10,6 +10,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
+import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
 
@@ -59,7 +60,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 			RequestContext.getCurrentInstance().execute("confirmAprovacao.show()");
 		}
 	}
-	
+
 	public void beforeReprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
@@ -69,13 +70,30 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public void aprovar() {
-		System.out.println("Aprovar");
-		// Implementar;
+		acaoAprovarReprovar(1);
 	}
 
 	public void reprovar() {
-		System.out.println("Reprovar");
-		// Implementar;
+		acaoAprovarReprovar(2);
+	}
+
+	private void acaoAprovarReprovar(int status) {
+
+		int size = solicitacoesSelecionadas.size();
+		ArrayList<Long> ids = new ArrayList<Long>(size);
+		for (Solicitacao solicitacao : solicitacoesSelecionadas)
+			ids.add(solicitacao.getId());
+		try {
+			if (((String) getSessionAttr("usuario_permissoes")).contains("ROLE_GERENTE")) {
+				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
+			} else {
+				solicitacaoService.liderAcaoSolicitacao(ids, status);
+			}
+			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
+		} catch (ApplicationException e) {
+			messager.error(e.getMessage());
+		}
+		pesquisarPendentes();
 	}
 
 	public void visualizar() {
