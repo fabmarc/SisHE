@@ -76,7 +76,7 @@ public class SindicatoMntController extends SindicatoController {
 		}
 	}
 
-	public void beforeRemoveCliente() {
+	public void beforeRemoveSindicato() {
 
 		if (sindicatosSelecionados.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");

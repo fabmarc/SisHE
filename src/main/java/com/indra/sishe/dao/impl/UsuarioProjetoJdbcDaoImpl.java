@@ -237,33 +237,50 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 	}
 
 	@Override
-	public List<Usuario> findByProjeto(Long id) {
+	public List<UsuarioProjeto> findByProjeto(UsuarioProjeto usuarioProjeto) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT u.nome AS nomeUsuario, c.nome AS nomeCargo , up.id_projeto AS idProjeto");
+		sql.append("SELECT u.nome AS nomeUsuario, u.id as usuarioId, c.nome AS nomeCargo ," 
+				+ " up.id_projeto AS idProjeto, up.id_usuario as usuarioDoProjeto, up.id as idUP ,  p.nome as nomeProjeto, p.id as idProjeto");
 		sql.append(" FROM usuario_projeto up");
 		sql.append(" INNER JOIN usuario u ON up.id_usuario = u.id");
-		sql.append(" INNER JOIN cargo c ON c.id = u.id ");
+		sql.append(" INNER JOIN cargo c ON c.id = u.id_cargo ");
+		sql.append(" INNER JOIN projeto p ON p.id = up.id_projeto ");
 		sql.append("WHERE 1 = 1");
 		
-		if (id != null) {
+		if (usuarioProjeto.getProjeto() != null && usuarioProjeto.getProjeto().getId() != null) {
 			sql.append(" AND up.id_projeto = :idProjeto");
-			params.addValue("idProjeto", id);
+			params.addValue("idProjeto", usuarioProjeto.getProjeto().getId());
 		}
 		
-		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
-				new RowMapper<Usuario>() {
+		if (usuarioProjeto.getUsuario() != null && usuarioProjeto.getUsuario().getId() != null) {
+			sql.append(" AND up.id_usuario = :idUsuario");
+			params.addValue("idUsuario", usuarioProjeto.getUsuario().getId());
+		}
+		
+		List<UsuarioProjeto> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<UsuarioProjeto>() {
 					@Override
-					public Usuario mapRow(ResultSet rs, int idx) throws SQLException {
+					public UsuarioProjeto mapRow(ResultSet rs, int idx) throws SQLException {
+						
 						Usuario usuario = new Usuario();
-						Cargo cargo = new Cargo();
-
+						Projeto projeto = new Projeto();
+						Cargo cargo = new Cargo();						
+						UsuarioProjeto up = new UsuarioProjeto();
+						
 						usuario.setNome(rs.getString("nomeUsuario"));
+						usuario.setId(rs.getLong("usuarioId"));
+						
 						cargo.setNome(rs.getString("nomeCargo"));
 						usuario.setCargo(cargo);
-
-						return usuario;
+						
+						projeto.setId(rs.getLong("idProjeto"));
+						
+						up.setUsuario(usuario);
+						up.setProjeto(projeto);
+						up.setId(rs.getLong("idUP"));
+						return up;
 					}
 				});
 		return lista;
