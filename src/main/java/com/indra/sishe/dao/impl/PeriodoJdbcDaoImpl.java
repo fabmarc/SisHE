@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -23,6 +24,7 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.PeriodoDAO;
+import com.indra.sishe.entity.Cliente;
 import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Regra;
 import com.indra.sishe.entity.Sindicato;
@@ -53,11 +55,37 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			params.addValue("hora_inicio", entity.getHoraInicio());
 			params.addValue("hora_fim", entity.getHoraFim());
 			params.addValue("porcentagem", entity.getPorcentagem());
-			if (entity.getRegra() != null) {
-				params.addValue("id_regra", entity.getRegra().getId());
+			params.addValue("id_regra", entity.getRegra().getId());
+			StringBuilder sql = new StringBuilder();
+			MapSqlParameterSource params2 = new MapSqlParameterSource();
+			sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where (((hora_inicio <= :horainicio and hora_fim >= :horainicio) or (hora_fim >= :horafim and hora_inicio <= :horafim)) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date )) ");
+			params2.addValue("horainicio", entity.getHoraInicio());
+			params2.addValue("horafim", entity.getHoraFim());
+			params2.addValue("diasemana", entity.getDiaSemana().numeroDia());
+			params2.addValue("idregra", entity.getRegra().getId());
+
+			List<Periodo> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params2,
+					new RowMapper<Periodo>() {
+						@Override
+						public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
+
+							Periodo periodo = new Periodo();
+
+							Regra regra = new Regra();
+							regra.setId(rs.getLong("id_regra"));
+
+							periodo.setRegra(regra);
+
+							return periodo;
+						}
+					});
+			if (lista.size() > 0) {
+				throw new RegistroDuplicadoException();
+			} else {
+
+				Number key = insertPeriodo.executeAndReturnKey(params);
+				entity.setId(key.longValue());
 			}
-			Number key = insertPeriodo.executeAndReturnKey(params);
-			entity.setId(key.longValue());
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}
@@ -69,8 +97,8 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		try {
 			int rows = getJdbcTemplate().update(
 					"UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? "
-							+ "WHERE id = ?", entity.getDiaSemana().numeroDia(), entity.getHoraInicio(), entity.getHoraFim(),
-					entity.getPorcentagem(), entity.getId());
+							+ "WHERE id = ?", entity.getDiaSemana().numeroDia(), entity.getHoraInicio(),
+					entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
 			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
@@ -84,6 +112,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("Select sindicato.id as id_sindicato, sindicato.descricao as descricao_sindicato, periodo.id, periodo.id_regra as id_regra, regra.descricao as descricao_regra, periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim, periodo.porcentagem ");
 		sql.append("from periodo left join regra on (periodo.id_regra = regra.id) left join sindicato on (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
+		sql.append(" order by periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim ");
 		return consultar(sql, params);
 	}
 
@@ -96,6 +125,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			sql.append("from periodo left join regra on (periodo.id_regra = regra.id) left join sindicato on (regra.id_sindicato = sindicato.id) WHERE 1=1 ");
 			sql.append("AND periodo.id = :idPeriodo");
 			params.addValue("idPeriodo", id);
+			sql.append(" order by periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim ");
 			return consultarUmPeriodo(sql, params);
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
@@ -155,11 +185,12 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			sql.append("AND periodo.porcentagem = :porcentagem ");
 			params.addValue("porcentagem", entity.getPorcentagem());
 		}
-		
-		if(entity != null && entity.getRegra()!=null && entity.getRegra().getId()!=null){
+
+		if (entity != null && entity.getRegra() != null && entity.getRegra().getId() != null) {
 			sql.append("AND periodo.id_regra = :regra ");
 			params.addValue("regra", entity.getRegra().getId());
 		}
+		sql.append(" order by periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim ");
 		return consultar(sql, params);
 	}
 
@@ -175,6 +206,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			sql.append("AND periodo.id_regra= :regra");
 			params.addValue("regra", entity.getId());
 		}
+		sql.append(" order by periodo.dia_semana, periodo.hora_inicio, periodo.hora_fim ");
 
 		return consultar(sql, params);
 	}
