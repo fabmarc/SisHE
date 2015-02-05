@@ -85,6 +85,11 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 		return lista;
 	}
 
+	private boolean validarRegra(){
+		// IMPLEMENTAR
+		return false;
+	}
+	
 	@Override
 	public Regra save(Regra regra) throws RegistroDuplicadoException {
 		

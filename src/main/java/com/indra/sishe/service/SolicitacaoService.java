@@ -17,8 +17,12 @@ public interface SolicitacaoService extends BaseService<Solicitacao> {
 	public List<Solicitacao> findByGerente(Usuario gerente);
 
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro);
+	
+	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro);
 
 	public void liderAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException;
 
 	public void gerenteAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException;
+	
+	void removeSolicitacoes(List<Solicitacao> solicitacoesParaRemover) throws ApplicationException;
 }
