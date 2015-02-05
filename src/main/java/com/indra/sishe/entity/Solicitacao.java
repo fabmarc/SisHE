@@ -13,8 +13,6 @@ public class Solicitacao implements Serializable{
 	
 	private Usuario usuario;
 	
-	private Status status;
-	
 	private Usuario lider;
 	
 	private Status statusLider;
@@ -62,12 +60,22 @@ public class Solicitacao implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public Status getStatus() {
-		return status;
-	}
+	public String getStatus() {
 
-	public void setStatus(Status status) {
-		this.status = status;
+		if (statusLider.getId() != 0 && statusGerente.getId() == 0) {
+			if (statusLider.getId() == 1) {
+				return "Aguardando Gerente";	
+			}else if (statusLider.getId() == 2) {
+				return "Reprovado pelo Líder";
+			}
+		}else if(statusGerente.getId() != null){
+			if (statusGerente.getId() == 1) {
+				return "Concluido";	
+			}else if (statusGerente.getId() == 2) {
+				return "Reprovado pelo Gerente";
+			}
+		}
+		return "Aguardando Líder";
 	}
 
 	public Usuario getLider() {
