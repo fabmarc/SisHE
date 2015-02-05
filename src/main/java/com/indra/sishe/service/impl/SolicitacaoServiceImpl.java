@@ -70,8 +70,7 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 
 	@Override
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro) {
-		// TODO Auto-generated method stub
-		return null;
+		return solicitacaoDao.findByFilter(solicitacaoFiltro);
 	}
 
 	@Override

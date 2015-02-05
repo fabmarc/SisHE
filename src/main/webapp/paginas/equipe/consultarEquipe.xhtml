@@ -6,32 +6,28 @@
 		<h:form id="mainForm">
 			<ui:insert>
 				<p:messages id="messages" showDetail="true" showSummary="false" />
-
-				<div id="camposPesquisar" style="top: 71px; left: -180px; position: relative; width: 226px;">
+				<br />
+				<p:fieldset id="fsEquipe" legend="Dados do Projeto" styleClass="classFieldSet">
 					
-					<div id="divLider" style="position: relative; left: 181px; top: -64px; width: 263px; height: 41px;">
-						<h:outputLabel value="Usuário:" style="margin:left; align:left; width:50px;" />
-						<h:inputText value="#{usuarioProjetoMnt.usuarioProjetoFiltro.usuario.nome}" maxlength="40" style="width:200px; position: relative; top: -7px;" />
-					</div>
+					<div id="divInfoProjeto" class="divInfoProjeto">
+						<div id="divNomeProjeto"  class="divNomeProjeto">
+							<p:outputLabel id="lblNomeProjeto"  value="Nome:"></p:outputLabel>
+							<p:outputLabel id="objNomeProjeto" styleClass="objNomeProjeto" value="#{usuarioProjetoMnt.projetoSelecionado.nome}"></p:outputLabel>
+						</div>
 
-					<div id="divProjeto" style="position: relative; left: 409px; top: -105px; width: 190px; height: 41px;">
-						<h:outputLabel value="Projeto:" style="width:50px;" />
-						<p:selectOneMenu converter="omnifaces.SelectItemsConverter" value="#{usuarioProjetoMnt.usuarioProjetoFiltro.projeto}" style="position:relative; top: -7px;width:216px;">
-							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{usuarioProjetoMnt.listaProjetos}" var="projeto" itemLabel="#{projeto.nome}" itemValue="#{projeto}" />
-						</p:selectOneMenu>
-					</div>
-					<br />
+						<div id="divNomeGerente" class="divNomeGerente">
+							<p:outputLabel id="lblNomeGerente"  value="Gerente:"></p:outputLabel>
+							<p:outputLabel id="objNomeGerente" styleClass="objNomeGerente" value="#{usuarioProjetoMnt.projetoSelecionado.gerente.nome}"></p:outputLabel>
 
-					<div style="position: relative; top: -145px; position: relative; left: 635px;">
-						<h:commandButton styleClass="botao3d" style="float:left;" actionListener="#{usuarioProjetoMnt.pesquisar()}" value="Pesquisar" />
+						</div>
 					</div>
-				</div>
+				</p:fieldset>
+				<br />
 
-				<div id="divDT" style="top: -34px; position: relative;">
-					<p:dataTable style="top:10%;" rowKey="#{usuarioProjeto.id}" selection="#{usuarioProjetoMnt.usuariosProjetos}" 
-						paginator="true" paginatorPosition="bottom" rows="10" id="usuarioProjetoDt" var="usuarioProjeto"
-						value="#{usuarioProjetoMnt.listaUsuarioProjeto}" emptyMessage="Nenhum registro encontrado.">
+				<div id="divDT" style="top: 2px; position: relative;">
+					<p:dataTable style="top:10%;" rowKey="#{usuarioProjeto.id}" scrollable="true" selection="#{usuarioProjetoMnt.usuariosProjetos}" 
+						 rows="10" id="usuarioProjetoDt" var="usuarioProjeto"
+						value="#{usuarioProjetoMnt.listaUsuarios}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">
 							Equipe
 						</f:facet>
@@ -41,10 +37,10 @@
 						</p:column>
 						
 						<p:column headerText="Usuário" style="width:50%; text-align:center">
-							<h:outputText value="#{usuarioProjeto.usuario.nome}" />
+							<h:outputText value="#{usuarioProjeto.nome}" />
 						</p:column>
-						<p:column headerText="Cargo" style="width:30%; text-align:center">
-							<h:outputText value="#{usuarioProjeto.usuario.cargo.nome}" />
+						<p:column headerText="Cargo" style="width:25%; text-align:center">
+							<h:outputText value="#{usuarioProjeto.cargo.nome}" />
 						</p:column>
 						
 						<f:facet name="footer">

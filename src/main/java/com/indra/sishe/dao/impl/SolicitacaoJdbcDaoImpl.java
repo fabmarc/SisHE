@@ -452,3 +452,4 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 	}
 	
 }
+
