@@ -207,11 +207,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			sql.append("AND usuario.id_sindicato = :idSindicato");
 			params.addValue("idSindicato", usuarioFiltro.getSindicato().getId());
 		}
-		if (usuarioFiltro != null && usuarioFiltro.getSindicato() != null
-				&& !usuarioFiltro.getSindicato().getDescricao().isEmpty()) {
-			sql.append("AND usuario.id_sindicato = :idSindicato");
-			params.addValue("idSindicato", usuarioFiltro.getSindicato().getId());
-		}
 
 		return consultar(sql, params);
 	}

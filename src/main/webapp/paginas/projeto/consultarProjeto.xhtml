@@ -46,10 +46,17 @@
 							<p:commandLink id="linkAlterar" title="Editar Projeto" styleClass="ui-icon ui-icon-pencil" action="#{projetoMnt.irParaAlterar(projeto)}" style="width:20px; left:30%; position: relative; float:center;" />
 						</p:column>
 						<f:facet name="footer">
-							<div style="text-align: right; width: 100%">
+						<div style="width: 100%; height: 23px; position: relative;">
+								<div style="text-align: left; width: 50%; position: relative;">
+									<p:commandLink value="Equipe" action="#{projetoMnt.irParaEquipe()}" />
+								</div>
+
+								<div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;">
 								<p:commandLink value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" />
 								/
 								<p:commandLink value="Excluir" actionListener="#{projetoMnt.beforeRemoveProjeto()}" />
+							</div>					
+							
 							</div>
 						</f:facet>
 					</p:dataTable>
@@ -64,6 +71,12 @@
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
 					<div class="divDialog">
 						<h:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
+					</div>
+				</p:confirmDialog>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Periodo" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectOne">
+					<div class="divDialog">
+						<h:commandButton value="OK" onclick="selectOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
 					</div>
 				</p:confirmDialog>
 

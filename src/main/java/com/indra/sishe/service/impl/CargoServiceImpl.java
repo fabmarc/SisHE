@@ -105,6 +105,8 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome");
 		} else if (entity.getNome().length() > 40) {
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome", "40");
+		} else if (entity.getRole() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Permissão");
 		} else {
 			return true;
 		}

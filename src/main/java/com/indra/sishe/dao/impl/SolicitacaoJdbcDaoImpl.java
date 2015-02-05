@@ -22,6 +22,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.SolicitacaoDAO;
+import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
@@ -256,6 +257,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	@Override
 	public void gerenteAcaoSolicitacao(List<Long> ids, int status) throws RegistroInexistenteException {
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { (int) status, (Long) UsuarioLogado.getId(), (Date) new Date(),
@@ -266,8 +268,154 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 				.batchUpdate(
 						"UPDATE solicitacao SET id_status_gerente = ?,  id_aprovador_gerente = ?, data_aprovacao_gerente = ? WHERE id = ?",
 						params);
+
+		if (status == 1) {// se for para aprovar a solicitação, deve-se gerar o
+							// histórico.
+			contabilizarHorasBanco(ids);
+			gerarHistorico(ids);
+		}
+
 		for (int rows : affectedRows)
 			if (rows == 0) throw new RegistroInexistenteException();
 	}
 
+	private void gerarHistorico(List<Long> ids) {
+
+		SimpleJdbcInsert insertHistorico;
+		insertHistorico = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("historico")
+				.usingGeneratedKeyColumns("id");
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		for (Long id : ids) {
+			params.addValue("id_gerente", (Long) UsuarioLogado.getId());
+			params.addValue("id_solicitacao", id);
+			params.addValue("id_banco_hora", obterIdBanco(id));
+			params.addValue("data", new Date());
+			insertHistorico.executeAndReturnKey(params);
+		}
+
+	}
+
+	private Long obterIdBanco(Long idSolicitacao) {
+
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT banco_horas.id as idBanco FROM banco_horas left join solicitacao on (solicitacao.id_usuario = banco_horas.id_usuario) WHERE 1=1 ");
+		sql.append("AND solicitacao.id = :id");
+		params.addValue("id", idSolicitacao);
+
+		return getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new RowMapper<Long>() {
+			@Override
+			public Long mapRow(ResultSet rs, int idx) throws SQLException {
+				return rs.getLong("idBanco");
+			}
+		});
+	}
+
+	private void contabilizarHorasBanco(List<Long> idsSolicitacoes) {
+
+		StringBuilder sql;
+		MapSqlParameterSource params;
+
+		for (Long id : idsSolicitacoes) {
+			sql = new StringBuilder();
+			params = new MapSqlParameterSource();
+			// Consultar data, hora inicio e hora fim da solicitação atual
+			sql.append("SELECT data, hora_inicio, hora_final, id_usuario FROM SOLICITACAO WHERE solicitacao.id = :id ");
+			params.addValue("id", id);
+
+			Solicitacao solicitacao = getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params,
+					new RowMapper<Solicitacao>() {
+						@Override
+						public Solicitacao mapRow(ResultSet rs, int idx) throws SQLException {
+							Solicitacao s = new Solicitacao();
+							s.setData(rs.getDate("data"));
+							s.setHoraInicio(rs.getTime("hora_inicio"));
+							s.setHoraFinal(rs.getTime("hora_final"));
+							Usuario u = new Usuario(rs.getLong("id_usuario"));
+							s.setUsuario(u);
+							return s;
+						}
+					});
+
+			// obter o dia da semana da solicitação
+			int diaSolicitado = solicitacao.getData().getDay() + 1;
+			if (diaSolicitado > 7) {// se for domingo, ele retornará 8, e
+									// domingo tem que ser 1.
+				diaSolicitado = 1;
+			}
+
+			// consultar os periodos que corresponde a data e hora da
+			// solicitação
+			sql = new StringBuilder();
+			params = new MapSqlParameterSource();
+			sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and (hora_inicio >= :horaInicio and hora_fim <=:horaFim) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
+			params.addValue("idUsuario", solicitacao.getUsuario().getId());
+			params.addValue("diaSemana", diaSolicitado);
+			params.addValue("horaInicio", solicitacao.getHoraInicio());
+			params.addValue("horaFim", solicitacao.getHoraFinal());
+			params.addValue("dataSolicitada", solicitacao.getData());
+
+			List<Periodo> periodos = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+					new RowMapper<Periodo>() {
+						@Override
+						public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
+
+							Periodo p = new Periodo();
+							p.setHoraInicio(rs.getTime("hora_inicio"));
+							p.setHoraFim(rs.getTime("hora_fim"));
+							p.setPorcentagem(rs.getInt("porcentagem"));
+							return p;
+						}
+					});
+
+			int minutos = 0;
+			int minutoSolicitacaoFinal;
+			int minutoSolicitacaoInicial;
+			int minutoperiodoFinal;
+			int minutoperiodoInicial;
+			int sobra;
+			int diferenca;
+			int minutoTotal = (int) (solicitacao.getHoraFinal().getHours() * 60)
+					+ solicitacao.getHoraFinal().getMinutes() - (solicitacao.getHoraInicio().getHours() * 60)
+					+ solicitacao.getHoraInicio().getMinutes();
+
+			// Contabilizar saldo em relação a hora da solicitação e
+			// regras/periodos
+			if (periodos.size() < 1) {
+				minutos = minutoTotal;
+			} else {
+				// obter minutos com porcentagem
+				for (Periodo p : periodos) {
+					minutoSolicitacaoInicial = (solicitacao.getHoraInicio().getHours() * 60)
+							+ solicitacao.getHoraInicio().getMinutes();
+					minutoSolicitacaoFinal = (solicitacao.getHoraFinal().getHours() * 60)
+							+ solicitacao.getHoraFinal().getMinutes();
+					minutoperiodoInicial = (p.getHoraInicio().getHours() * 60) + p.getHoraInicio().getMinutes();
+					minutoperiodoFinal = (p.getHoraFim().getHours() * 60) + p.getHoraFim().getMinutes();
+
+					sobra = minutoSolicitacaoFinal - minutoperiodoFinal;
+
+					if (sobra > 0) {
+						diferenca = minutoperiodoFinal - minutoSolicitacaoInicial;
+						minutoTotal = minutoTotal - diferenca;
+						minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
+					} else {
+						diferenca = minutoSolicitacaoFinal - minutoperiodoInicial;
+						minutoTotal = minutoTotal - diferenca;
+						minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
+					}
+				}
+			}
+			// caso exista algum registro sem porcentagem será adicionado os
+			// minutos.
+			if (minutoTotal > 0) {
+				minutos = minutos + minutoTotal;
+			}
+
+			getJdbcTemplate()
+					.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
+							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
+
+		}
+	}
 }

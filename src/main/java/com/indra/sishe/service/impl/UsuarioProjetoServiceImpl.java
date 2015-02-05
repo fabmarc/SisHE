@@ -88,7 +88,6 @@ public class UsuarioProjetoServiceImpl extends StatelessServiceAb implements Usu
 		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Equioe");
 		}
-
 	}
 
 	@Override

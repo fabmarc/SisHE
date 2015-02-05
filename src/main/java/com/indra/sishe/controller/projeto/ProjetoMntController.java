@@ -84,6 +84,18 @@ public class ProjetoMntController extends ProjetoController {
 		}
 	}
 
+	public String irParaEquipe() {
+		if (projetosSelecionados.size() != 1) {
+			RequestContext.getCurrentInstance().execute("selectOne.show()");
+		} else {
+			putFlashAttr("searched", true);
+			putFlashAttr("projetoFiltro", projetoFiltro);
+			putSessionAttr("projetoSelecionadoFiltro", projetosSelecionados.get(0));
+			return "/paginas/equipe/cadastrarEquipe.xhtml?faces-redirect=true";
+		}
+		return null;
+	}
+	
 	public List<Projeto> getListaProjetos() {
 		return listaProjetos;
 	}

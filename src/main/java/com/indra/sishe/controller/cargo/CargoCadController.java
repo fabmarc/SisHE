@@ -1,5 +1,9 @@
 package com.indra.sishe.controller.cargo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -7,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Cargo;
+import com.indra.sishe.enums.PermissaoEnum;
 
 @ViewScoped
 @ManagedBean(name = "cargoCad")
@@ -93,6 +98,11 @@ public class CargoCadController extends CargoController {
 	
 	public String msgValidacao(String key, String params){
 		return messageProvider.getMessage(key, params);
+	}
+	
+	public List<PermissaoEnum> obterListaPermissoes() {
+		List<PermissaoEnum> listapermissoes = new ArrayList<PermissaoEnum>(Arrays.asList(PermissaoEnum.values()));
+		return listapermissoes;
 	}
 
 }
