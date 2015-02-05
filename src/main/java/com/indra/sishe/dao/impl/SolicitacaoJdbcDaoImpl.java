@@ -36,6 +36,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	private SimpleJdbcInsert insertSolicitacao;
 
+	private int porcentagemFeriado;
+
 	@PostConstruct
 	private void init() {
 		setDataSource(dataSource);
@@ -259,12 +261,29 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 		StringBuilder sql;
 		MapSqlParameterSource params;
+		int minutos;
+		int minutoSolicitacaoFinal;
+		int minutoSolicitacaoInicial;
+		int minutoperiodoFinal;
+		int minutoperiodoInicial;
+		int sobra;
+		int diferenca;
+		int minutoTotal;
 
 		for (Long id : idsSolicitacoes) {
+			porcentagemFeriado = 0;
+			minutos = 0;
+			minutoSolicitacaoFinal = 0;
+			minutoSolicitacaoInicial = 0;
+			minutoperiodoFinal = 0;
+			minutoperiodoInicial = 0;
+			sobra = 0;
+			diferenca = 0;
+			minutoTotal = 0;
 			sql = new StringBuilder();
 			params = new MapSqlParameterSource();
 			// Consultar data, hora inicio e hora fim da solicitação atual
-			sql.append("SELECT data, hora_inicio, hora_final, id_usuario FROM SOLICITACAO WHERE solicitacao.id = :id ");
+			sql.append("SELECT	solicitacao.data, hora_inicio, hora_final, id_usuario, feriado.data as data_feriado, CASE WHEN FERIADO.DATA IS NOT NULL THEN (SELECT regra.porcentagem_feriado FROM REGRA WHERE REGRA.ID_SINDICATO = SINDICATO.ID AND REGRA.DATA_FIM > SOLICITACAO.DATA AND REGRA.DATA_INICIO <SOLICITACAO.DATA ORDER BY REGRA.DATA_FIM LIMIT 1) END AS porcentagem FROM SOLICITACAO  LEFT JOIN USUARIO ON (USUARIO.ID = SOLICITACAO.ID_USUARIO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) LEFT JOIN ESTADO ON (ESTADO.ID = CIDADE.ID_ESTADO) LEFT JOIN FERIADO ON (((FERIADO.ID_ESTADO = ESTADO.ID AND FERIADO.ID_CIDADE=CIDADE.ID) OR (FERIADO.ID_ESTADO = ESTADO.ID AND FERIADO.ID_CIDADE IS NULL))AND solicitacao.data = feriado.data) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) WHERE solicitacao.id = :id ");
 			params.addValue("id", id);
 
 			Solicitacao solicitacao = getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params,
@@ -277,6 +296,11 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 							s.setHoraFinal(rs.getTime("hora_final"));
 							Usuario u = new Usuario(rs.getLong("id_usuario"));
 							s.setUsuario(u);
+							if (rs.getDate("data_feriado") != null) {
+								porcentagemFeriado = rs.getInt("porcentagem");
+							} else {
+								porcentagemFeriado = -1;
+							}
 							return s;
 						}
 					});
@@ -287,79 +311,88 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 									// domingo tem que ser 1.
 				diaSolicitado = 1;
 			}
-
-			// consultar os periodos que corresponde a data e hora da
-			// solicitação
-			sql = new StringBuilder();
-			params = new MapSqlParameterSource();
-			sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and (hora_inicio >= :horaInicio and hora_fim <=:horaFim) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
-			params.addValue("idUsuario", solicitacao.getUsuario().getId());
-			params.addValue("diaSemana", diaSolicitado);
-			params.addValue("horaInicio", solicitacao.getHoraInicio());
-			params.addValue("horaFim", solicitacao.getHoraFinal());
-			params.addValue("dataSolicitada", solicitacao.getData());
-
-			List<Periodo> periodos = getNamedParameterJdbcTemplate().query(sql.toString(), params,
-					new RowMapper<Periodo>() {
-						@Override
-						public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
-
-							Periodo p = new Periodo();
-							p.setHoraInicio(rs.getTime("hora_inicio"));
-							p.setHoraFim(rs.getTime("hora_fim"));
-							p.setPorcentagem(rs.getInt("porcentagem"));
-							return p;
-						}
-					});
-
-			int minutos = 0;
-			int minutoSolicitacaoFinal;
-			int minutoSolicitacaoInicial;
-			int minutoperiodoFinal;
-			int minutoperiodoInicial;
-			int sobra;
-			int diferenca;
-			int minutoTotal = (int) (solicitacao.getHoraFinal().getHours() * 60)
-					+ solicitacao.getHoraFinal().getMinutes() - (solicitacao.getHoraInicio().getHours() * 60)
+			// obtém os minutos inicial e final da solicitação
+			minutoSolicitacaoInicial = (solicitacao.getHoraInicio().getHours() * 60)
 					+ solicitacao.getHoraInicio().getMinutes();
+			minutoSolicitacaoFinal = (solicitacao.getHoraFinal().getHours() * 60)
+					+ solicitacao.getHoraFinal().getMinutes();
 
-			// Contabilizar saldo em relação a hora da solicitação e
-			// regras/periodos
-			if (periodos.size() < 1) {
-				minutos = minutoTotal;
-			} else {
-				// obter minutos com porcentagem
-				for (Periodo p : periodos) {
-					minutoSolicitacaoInicial = (solicitacao.getHoraInicio().getHours() * 60)
-							+ solicitacao.getHoraInicio().getMinutes();
-					minutoSolicitacaoFinal = (solicitacao.getHoraFinal().getHours() * 60)
-							+ solicitacao.getHoraFinal().getMinutes();
-					minutoperiodoInicial = (p.getHoraInicio().getHours() * 60) + p.getHoraInicio().getMinutes();
-					minutoperiodoFinal = (p.getHoraFim().getHours() * 60) + p.getHoraFim().getMinutes();
+			// se porcentagem for menor que zero, é porque não existe feriado
+			// para a data da solicitação
+			if (porcentagemFeriado < 0) {
+				// consultar os periodos que corresponde a data e hora da
+				// solicitação
+				sql = new StringBuilder();
+				params = new MapSqlParameterSource();
+				sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and (hora_inicio >= :horaInicio and hora_fim <=:horaFim) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
+				params.addValue("idUsuario", solicitacao.getUsuario().getId());
+				params.addValue("diaSemana", diaSolicitado);
+				params.addValue("horaInicio", solicitacao.getHoraInicio());
+				params.addValue("horaFim", solicitacao.getHoraFinal());
+				params.addValue("dataSolicitada", solicitacao.getData());
 
-					sobra = minutoSolicitacaoFinal - minutoperiodoFinal;
+				List<Periodo> periodos = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+						new RowMapper<Periodo>() {
+							@Override
+							public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
 
-					if (sobra > 0) {
-						diferenca = minutoperiodoFinal - minutoSolicitacaoInicial;
-						minutoTotal = minutoTotal - diferenca;
-						minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
-					} else {
-						diferenca = minutoSolicitacaoFinal - minutoperiodoInicial;
-						minutoTotal = minutoTotal - diferenca;
-						minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
+								Periodo p = new Periodo();
+								p.setHoraInicio(rs.getTime("hora_inicio"));
+								p.setHoraFim(rs.getTime("hora_fim"));
+								p.setPorcentagem(rs.getInt("porcentagem"));
+								return p;
+							}
+						});
+
+				minutoTotal = (int) (solicitacao.getHoraFinal().getHours() * 60)
+						+ solicitacao.getHoraFinal().getMinutes() - (solicitacao.getHoraInicio().getHours() * 60)
+						+ solicitacao.getHoraInicio().getMinutes();
+
+				// Contabilizar saldo em relação a hora da solicitação e
+				// regras/periodos
+				if (periodos.size() < 1) {
+					minutos = minutoTotal;
+				} else {
+					// obter minutos com porcentagem
+					for (Periodo p : periodos) {
+						minutoperiodoInicial = (p.getHoraInicio().getHours() * 60)
+								+ p.getHoraInicio().getMinutes();
+						minutoperiodoFinal = (p.getHoraFim().getHours() * 60) + p.getHoraFim().getMinutes();
+
+						sobra = minutoSolicitacaoFinal - minutoperiodoFinal;
+
+						if (sobra > 0) {
+							if (minutoSolicitacaoInicial >= minutoperiodoInicial) {
+								diferenca = minutoperiodoFinal - minutoSolicitacaoInicial;
+							} else {
+								diferenca = minutoperiodoFinal - minutoperiodoInicial;
+							}
+							minutoTotal = minutoTotal - diferenca;
+							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
+						} else {
+							diferenca = minutoSolicitacaoFinal - minutoperiodoInicial;
+							minutoTotal = minutoTotal - diferenca;
+							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
+						}
 					}
 				}
+				// caso exista algum registro sem porcentagem será adicionado os
+				// minutos.
+				if (minutoTotal > 0) {
+					minutos = minutos + minutoTotal;
+				}
+			} else {
+				// se for feriado calcular de acordo com a porcentagem definida
+				// para o feriado na regra
+				minutoTotal = (int) (solicitacao.getHoraFinal().getHours() * 60)
+						+ solicitacao.getHoraFinal().getMinutes() - (solicitacao.getHoraInicio().getHours() * 60)
+						+ solicitacao.getHoraInicio().getMinutes();
+				minutos = (int) (minutoTotal + (minutoTotal * ((float) porcentagemFeriado / 100)));
 			}
-			// caso exista algum registro sem porcentagem será adicionado os
-			// minutos.
-			if (minutoTotal > 0) {
-				minutos = minutos + minutoTotal;
-			}
-
 			getJdbcTemplate()
 					.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
 							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
-
 		}
 	}
+	
 }

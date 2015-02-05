@@ -49,8 +49,8 @@ public class UsuarioLogado extends BaseController implements Serializable {
 		return (String) getSessionAttr("usuario_nome");
 	}
 	
-	public String getPermissoes(){
-		return (String) getSessionAttr("usuario_permissoes");
+	public static String getPermissoes(){
+		return (String) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("usuario_permissoes");
 	}
 		
 	public boolean verificarPermissao(String nivel){
@@ -72,7 +72,6 @@ public class UsuarioLogado extends BaseController implements Serializable {
 			return null;
 		}
 	}
-	
 	
 	public Usuario getUsuario() {
 		return usuario;
