@@ -91,7 +91,7 @@ public class ProjetoMntController extends ProjetoController {
 			putFlashAttr("searched", true);
 			putFlashAttr("projetoFiltro", projetoFiltro);
 			putSessionAttr("projetoSelecionadoFiltro", projetosSelecionados.get(0));
-			return "/paginas/equipe/cadastrarEquipe.xhtml?faces-redirect=true";
+			return "/paginas/equipe/consultarEquipe.xhtml?faces-redirect=true";
 		}
 		return null;
 	}

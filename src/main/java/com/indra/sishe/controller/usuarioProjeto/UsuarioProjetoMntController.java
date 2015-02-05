@@ -23,7 +23,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 	private static final long serialVersionUID = -6925459169473948818L;
 	private List<UsuarioProjeto> listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
 	private List<UsuarioProjeto> usuariosProjetos = new ArrayList<UsuarioProjeto>();
-
+		
 	@PostConstruct
 	private void init() {
 
@@ -40,7 +40,10 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 		projetoSelecionado = (Projeto) getSessionAttr("projetoSelecionadoFiltro");
 		
-		listarUsuarios();
+		if(projetoSelecionado != null){
+			listarUsuariosDoProjeto(projetoSelecionado.getId());
+		}
+		
 		listarProjetos();
 	}
 
@@ -59,6 +62,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 		searched = true;
 	}
 
+	
 	public String irParaAlterar(UsuarioProjeto usuarioProjetoSelecionado) {
 		putFlashAttr("searched", searched);
 		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
@@ -86,16 +90,21 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 		pesquisar();
 		return irParaConsultar();
 	}
-
+	
+	public List<Usuario> listarUsuariosDoProjeto(Long id){
+		listaUsuarios = usuarioProjetoService.findByProjeto(id);
+		return listaUsuarios;
+	}
+	
 	public List<Projeto> listarProjetos() {
 		listaProjetos = projetoService.findAll();
 		return listaProjetos;
 	}
 
-	private List<Usuario> listarUsuarios() {
+	/*private List<Usuario> listarUsuarios() {
 		listaUsuarios = usuarioService.findAll();
 		return listaUsuarios;
-	}
+	}*/
 
 	public List<UsuarioProjeto> getListaUsuarioProjeto() {
 		return listaUsuarioProjeto;
