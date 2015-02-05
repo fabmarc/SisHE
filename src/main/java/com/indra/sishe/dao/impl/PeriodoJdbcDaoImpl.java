@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -24,7 +23,6 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.PeriodoDAO;
-import com.indra.sishe.entity.Cliente;
 import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Regra;
 import com.indra.sishe.entity.Sindicato;
@@ -46,6 +44,43 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				"id");
 	}
 
+	private boolean validarPeriodos(Periodo entity, String modo) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params2 = new MapSqlParameterSource();
+		sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where (((hora_inicio <= :horainicio and hora_fim >= :horainicio) or (hora_fim >= :horafim and hora_inicio <= :horafim)) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date )) ");
+		params2.addValue("horainicio", entity.getHoraInicio());
+		params2.addValue("horafim", entity.getHoraFim());
+		params2.addValue("diasemana", entity.getDiaSemana().numeroDia());
+		params2.addValue("idregra", entity.getRegra().getId());
+
+		List<Periodo> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params2,
+				new RowMapper<Periodo>() {
+					@Override
+					public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
+						Periodo periodo = new Periodo();
+						Regra regra = new Regra();
+						regra.setId(rs.getLong("id_regra"));
+						periodo.setRegra(regra);
+						periodo.setId(rs.getLong("id_periodo"));
+						return periodo;
+					}
+				});
+		if(modo.equalsIgnoreCase("cadastrar")){
+			if (lista.size() > 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}else{
+			for(Periodo p: lista){
+				if(entity.getId() != p.getId()){
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
 	@Override
 	public Periodo save(Periodo entity) throws RegistroDuplicadoException {
 
@@ -56,35 +91,12 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			params.addValue("hora_fim", entity.getHoraFim());
 			params.addValue("porcentagem", entity.getPorcentagem());
 			params.addValue("id_regra", entity.getRegra().getId());
-			StringBuilder sql = new StringBuilder();
-			MapSqlParameterSource params2 = new MapSqlParameterSource();
-			sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where (((hora_inicio <= :horainicio and hora_fim >= :horainicio) or (hora_fim >= :horafim and hora_inicio <= :horafim)) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date )) ");
-			params2.addValue("horainicio", entity.getHoraInicio());
-			params2.addValue("horafim", entity.getHoraFim());
-			params2.addValue("diasemana", entity.getDiaSemana().numeroDia());
-			params2.addValue("idregra", entity.getRegra().getId());
 
-			List<Periodo> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params2,
-					new RowMapper<Periodo>() {
-						@Override
-						public Periodo mapRow(ResultSet rs, int idx) throws SQLException {
-
-							Periodo periodo = new Periodo();
-
-							Regra regra = new Regra();
-							regra.setId(rs.getLong("id_regra"));
-
-							periodo.setRegra(regra);
-
-							return periodo;
-						}
-					});
-			if (lista.size() > 0) {
-				throw new RegistroDuplicadoException();
-			} else {
-
+			if (validarPeriodos(entity, "cadastrar")) {
 				Number key = insertPeriodo.executeAndReturnKey(params);
 				entity.setId(key.longValue());
+			} else {
+				throw new RegistroDuplicadoException();
 			}
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
@@ -95,11 +107,15 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	@Override
 	public Periodo update(Periodo entity) throws RegistroInexistenteException, RegistroDuplicadoException {
 		try {
-			int rows = getJdbcTemplate().update(
-					"UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? "
-							+ "WHERE id = ?", entity.getDiaSemana().numeroDia(), entity.getHoraInicio(),
-					entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
-			if (rows == 0) throw new RegistroInexistenteException();
+			if (validarPeriodos(entity, "alterar")) {
+				int rows = getJdbcTemplate().update(
+						"UPDATE periodo SET dia_semana = ?, hora_inicio = ?, hora_fim = ?, porcentagem = ? "
+								+ "WHERE id = ?", entity.getDiaSemana().numeroDia(), entity.getHoraInicio(),
+						entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
+				if (rows == 0) throw new RegistroInexistenteException();
+			} else {
+				throw new RegistroDuplicadoException();
+			}
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}
