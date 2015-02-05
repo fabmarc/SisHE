@@ -12,6 +12,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.UsuarioProjetoDAO;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioProjetoService;
@@ -108,5 +109,12 @@ public class UsuarioProjetoServiceImpl extends StatelessServiceAb implements Usu
 			return true;
 		}
 	}
+
+	@Override
+	public List<Usuario> findByProjeto(Long id) {
+		return usuarioProjetoDAO.findByProjeto(id);
+	}
+
+	
 
 }

@@ -236,4 +236,37 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		return lista;
 	}
 
+	@Override
+	public List<Usuario> findByProjeto(Long id) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT u.nome AS nomeUsuario, c.nome AS nomeCargo , up.id_projeto AS idProjeto");
+		sql.append(" FROM usuario_projeto up");
+		sql.append(" INNER JOIN usuario u ON up.id_usuario = u.id");
+		sql.append(" INNER JOIN cargo c ON c.id = u.id ");
+		sql.append("WHERE 1 = 1");
+		
+		if (id != null) {
+			sql.append(" AND up.id_projeto = :idProjeto");
+			params.addValue("idProjeto", id);
+		}
+		
+		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<Usuario>() {
+					@Override
+					public Usuario mapRow(ResultSet rs, int idx) throws SQLException {
+						Usuario usuario = new Usuario();
+						Cargo cargo = new Cargo();
+
+						usuario.setNome(rs.getString("nomeUsuario"));
+						cargo.setNome(rs.getString("nomeCargo"));
+						usuario.setCargo(cargo);
+
+						return usuario;
+					}
+				});
+		return lista;
+	}
+
 }

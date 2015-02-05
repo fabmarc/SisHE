@@ -245,7 +245,9 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	@Override
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro) {
+
 		return null;
+
 	}
 
 	@Override
@@ -473,6 +475,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
 		}
 	}
+
 
 	@Override
 	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro) {

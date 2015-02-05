@@ -133,3 +133,53 @@ html {
 .calendario input{
 	width:90px !important;
 }
+
+/*Incluído por Diego*/
+
+.divNomeProjeto{
+position: relative;
+right: initial;
+top: -24px;
+width: 263px;
+height: 1px;
+}
+.objNomeProjeto{
+	position: relative;
+top: -25px;
+right: -45px;
+text-align: justify;
+text-overflow: initial;
+text-rendering: optimizeLegibility;
+font-weight: bolder;
+}
+
+.objNomeGerente{
+	position: relative;
+top: -25px;
+right: -59px;
+text-align: justify;
+text-overflow: initial;
+text-rendering: optimizeLegibility;
+font-weight: bolder;
+}
+
+.divNomeGerente{
+	position: relative;
+top: -24px;
+right: -250px;
+height: 1px;
+}
+.classFieldSet .ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+top: -1px;
+width: inherit;
+height: 0px;
+text-align: start;
+position: relative;
+text-align: 1px;
+line-height: 1px;
+font-size: small;
+}
+
+
+
+/*Fim Bloco Diego*/
