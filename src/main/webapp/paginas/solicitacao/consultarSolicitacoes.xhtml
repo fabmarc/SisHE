@@ -12,13 +12,13 @@
 				<div class="divCorpo" style="padding-bottom: 5%;">
 				
 				<div style="width: 410px; position: relative; height: 60px;">
-					<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
+					<div style="position: relative;width: 263px; height: 41px;">
 						<p:outputLabel value="Data:" for="calendarioBusca" />
 						<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
 					</div>
 
-					<div style="width: 410px; height: 40px;">	
-						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
+					<div style="width: 100px;top: -20px;left: 118px;height: 40px;position: relative;">	
+						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" value="Pesquisar" />
 					</div>
 				</div>
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
@@ -51,33 +51,24 @@
 						</p:column>
 
 						<p:column headerText="Status" style="min-width: 175px;">
-							<h:outputText value="#{solicitacao.status}" />
+							<h:outputText value="#{solicitacao.status}" id="statusText" />
+						<!-- <p:tooltip id="toolTipVisualizar" for="statusText" value="Aprovado por: #{solicitacao.gerente.nome}" /> -->
 						</p:column>
 
 						<p:column headerText="Ação" style="width:5%">
-							<p:commandLink title="Visualizar Solicitação" id="visualizarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" action="#{solicitacaoMnt.visualizar()}" />
+							<p:commandLink  id="visualizarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" action="#{solicitacaoMnt.visualizar()}" />
 						</p:column>
 
 						<f:facet name="footer">
 							<div style="text-align: right; width: 100%">
-								<p:commandLink id="aprovar" value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}" />
-								/
-								<p:commandLink id="reprovar" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}" />
+								<p:commandLink id="Excluir" value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
 							</div>
 						</f:facet>
-
 					</p:dataTable>
 
-					<p:confirmDialog id="msgAprovar" global="true" showEffect="fade" hideEffect="explode" header="Aprovar" message="Deseja aprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmAprovacao">
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 						<div class="divDialog">
-							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.aprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
-							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
-						</div>
-					</p:confirmDialog>
-
-					<p:confirmDialog id="msgReprovar" global="true" showEffect="fade" hideEffect="explode" header="Reprovar" message="Deseja reprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmReprovacao">
-						<div class="divDialog">
-							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.reprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.remove}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
 							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
 					</p:confirmDialog>

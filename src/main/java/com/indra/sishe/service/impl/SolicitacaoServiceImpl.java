@@ -1,13 +1,16 @@
 package com.indra.sishe.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.SolicitacaoDAO;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
@@ -48,14 +51,38 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
-		// TODO Auto-generated method stub
+	}
 
+	public boolean validarRemove(Solicitacao solicitacao) throws ApplicationException {
+//		if (UsuarioLogado.) {
+			
+//		}
+		if (solicitacao.getStatusLider().getId() > 0) { 
+			throw new ApplicationException("msg.error.excluir.solicitacao.avaliada"); 
+		}else{
+			return true;
+		}
 	}
 
 	@Override
-	public void remove(List<Long> ids) throws ApplicationException {
-		// TODO Auto-generated method stub
+	public void removeSolicitacoes(List<Solicitacao> solicitacoesParaRemover) throws ApplicationException {
 
+		try {
+			int size = solicitacoesParaRemover.size();
+			ArrayList<Long> ids = new ArrayList<Long>(size);
+			for (Solicitacao solicitacao : solicitacoesParaRemover) {
+				if (validarRemove(solicitacao)) {
+					ids.add(solicitacao.getId());
+				}
+			}
+
+			List<Object> pks = new ArrayList<Object>(ids);
+			solicitacaoDao.remove(pks);
+		} catch (RegistroInexistenteException e) {
+			e.printStackTrace();
+		} catch (DeletarRegistroViolacaoFK e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -89,6 +116,15 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
 		}
+	}
+
+	@Override
+	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro) {
+		return solicitacaoDao.findByFilterByUsuario(solicitacaoFiltro);
+	}
+
+	@Override
+	public void remove(List<Long> ids) throws ApplicationException {
 	}
 
 }

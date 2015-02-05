@@ -36,14 +36,14 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
 //		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else 
-		pesquisar();
+		pesquisarPorUsuarioLogado();
 	}
 
-	public void pesquisar() {
+	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
 		usuario.setId((Long) getSessionAttr("usuario_id"));
 		solicitacaoFiltro.setUsuario(usuario);
-		listaSolicitacoes = solicitacaoService.findByFilter(solicitacaoFiltro);
+		listaSolicitacoes = solicitacaoService.findByFilterByUsuario(solicitacaoFiltro);
 		searched = true;
 	}
 
@@ -55,7 +55,41 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		}
 		searched = true;
 	}
+	
 
+
+	public void beforeRemoverSolicitacao() {
+		if (solicitacoesSelecionadas.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
+		}
+	}
+
+	public String remove() {
+		
+//		for (Solicitacao solicitacao : solicitacoesSelecionadas){
+//			if (solicitacao.getLider().getNome() != null) {
+////				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada");
+//				 messager.error(messageProvider.getMessage("msg.error.excluir.solicitacao.avaliada"));
+//			}
+//		}
+		
+		int size = solicitacoesSelecionadas.size();
+		ArrayList<Solicitacao> solicitacoesParaRemover = new ArrayList<Solicitacao>(size);
+		for (Solicitacao solicitacao : solicitacoesSelecionadas){
+			solicitacoesParaRemover.add(solicitacao);
+		}
+		try {
+			solicitacaoService.removeSolicitacoes(solicitacoesParaRemover);
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Solicitação"));
+		} catch (Exception e) {
+			messager.error(e.getMessage());
+		}
+		pesquisarPorUsuarioLogado();
+		return irParaConsultarPorUsuario();
+	}
+	
 	public void beforeAprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
