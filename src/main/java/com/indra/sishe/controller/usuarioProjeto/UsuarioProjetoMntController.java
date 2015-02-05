@@ -13,7 +13,6 @@ import org.primefaces.context.RequestContext;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Projeto;
-import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
 
 @ViewScoped
@@ -40,14 +39,15 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 		projetoSelecionado = (Projeto) getSessionAttr("projetoSelecionadoFiltro");
 		
-		if(projetoSelecionado != null){
-			listarUsuariosDoProjeto(projetoSelecionado.getId());
-		}
-		
-		listarProjetos();
+		if(projetoSelecionado != null && projetoSelecionado.getId() != null){
+			UsuarioProjeto up = new UsuarioProjeto();
+			up.setProjeto(projetoSelecionado);
+			listarUsuariosDoProjeto(up);
+		}		
 	}
 
 	public void beforeRemoveUsuarioProjeto() {
+		
 		if (usuariosProjetos.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -57,7 +57,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 
 	public void pesquisar() {
 		usuarioProjetoFiltro.setProjeto(projetoSelecionado);
-		listaUsuarioProjeto = usuarioProjetoService.findByFilter(usuarioProjetoFiltro);
+		listaUsuarioProjeto = usuarioProjetoService.findByProjeto(usuarioProjetoFiltro);
 		Collections.sort(listaUsuarioProjeto);
 		searched = true;
 	}
@@ -91,21 +91,11 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 		return irParaConsultar();
 	}
 	
-	public List<Usuario> listarUsuariosDoProjeto(Long id){
-		listaUsuarios = usuarioProjetoService.findByProjeto(id);
-		return listaUsuarios;
+	public List<UsuarioProjeto> listarUsuariosDoProjeto(UsuarioProjeto usuarioProjeto){		
+		listaUsuarioProjeto = usuarioProjetoService.findByProjeto(usuarioProjeto);
+		return listaUsuarioProjeto;
 	}
-	
-	public List<Projeto> listarProjetos() {
-		listaProjetos = projetoService.findAll();
-		return listaProjetos;
-	}
-
-	/*private List<Usuario> listarUsuarios() {
-		listaUsuarios = usuarioService.findAll();
-		return listaUsuarios;
-	}*/
-
+		
 	public List<UsuarioProjeto> getListaUsuarioProjeto() {
 		return listaUsuarioProjeto;
 	}

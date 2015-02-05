@@ -101,9 +101,9 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			List<Object> pks = new ArrayList<Object>(ids);
 			usuarioDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente", "Cargo");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Usuário");
 		} catch (DeletarRegistroViolacaoFK d) {
-			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Cargo");
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Usuário");
 		}
 	}
 
