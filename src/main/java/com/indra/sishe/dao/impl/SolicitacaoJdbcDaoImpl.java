@@ -26,6 +26,7 @@ import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
+import com.indra.sishe.entity.Status;
 import com.indra.sishe.entity.Usuario;
 
 @Repository
@@ -181,8 +182,63 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	@Override
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT solicitacao.id AS idSolicitacao, hora_inicio, hora_final, solicitacao.descricao AS descricao, data_aprovacao_lider, data_aprovacao_gerente, data, id_status_lider, id_status_gerente, id_usuario, usuario.nome AS nomeUsuario, id_sistema, sistema.nome AS nomeSistema, id_aprovador_lider, lider.nome AS nomeLider, projeto.nome AS nomeProjeto, projeto.id AS idprojeto, id_aprovador_gerente, gerente.nome AS nomeGerente ");
+		sql.append("FROM solicitacao INNER JOIN usuario ON (usuario.id = solicitacao.id_usuario) INNER JOIN sistema ON (sistema.id = solicitacao.id_sistema) LEFT JOIN usuario lider ON (lider.id = solicitacao.id_aprovador_lider) LEFT JOIN usuario gerente ON (gerente.id = solicitacao.id_aprovador_gerente) INNER JOIN projeto ON (projeto.id = sistema.id_projeto) ");
+		sql.append("WHERE solicitacao.id_usuario = :idUsuario");
+		params.addValue("idUsuario", solicitacaoFiltro.getUsuario().getId());
+
+		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<Solicitacao>() {
+					@Override
+					public Solicitacao mapRow(ResultSet rs, int idx) throws SQLException {
+
+						Projeto projeto = new Projeto();
+						projeto.setNome(rs.getString("nomeProjeto"));
+						projeto.setId(rs.getLong("idprojeto"));
+
+						Sistema sistema = new Sistema();
+						sistema.setId(rs.getLong("id_sistema"));
+						sistema.setNome(rs.getString("nomeSistema"));
+						sistema.setProjeto(projeto);
+
+						Usuario usuario = new Usuario();
+						usuario.setId(rs.getLong("id_usuario"));
+						usuario.setNome(rs.getString("nomeUsuario"));
+
+						Usuario lider = new Usuario();
+						lider.setId(rs.getLong("id_aprovador_lider"));
+						lider.setNome(rs.getString("nomeLider"));
+						
+						Usuario gerente = new Usuario();
+						gerente.setId(rs.getLong("id_aprovador_gerente"));
+						gerente.setNome(rs.getString("nomeGerente"));
+						
+						Status statusLider = new Status();
+						statusLider.setId(rs.getLong("id_status_lider"));
+						Status statusGerente = new Status();
+						statusGerente.setId(rs.getLong("id_status_gerente"));
+						
+						Solicitacao solicitacao = new Solicitacao();
+						solicitacao.setStatusLider(statusLider);
+						solicitacao.setStatusGerente(statusGerente);
+						solicitacao.setUsuario(usuario);
+						solicitacao.setSistema(sistema);
+						solicitacao.setLider(lider);
+						solicitacao.setGerente(gerente);
+						solicitacao.setId(rs.getLong("idSolicitacao"));
+						solicitacao.setHoraInicio(rs.getTime("hora_inicio"));
+						solicitacao.setHoraFinal(rs.getTime("hora_final"));
+						solicitacao.setDescricao(rs.getString("descricao"));
+						solicitacao.setDataAprovacaoLider(rs.getDate("data_aprovacao_lider"));
+						solicitacao.setDataAprovacaoGerente(rs.getDate("data_aprovacao_gerente"));
+						solicitacao.setData(rs.getDate("data"));
+
+						return solicitacao;
+					}
+				});
+		return lista;
 	}
 
 	@Override
