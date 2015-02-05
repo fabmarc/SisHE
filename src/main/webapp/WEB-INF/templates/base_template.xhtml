@@ -55,7 +55,7 @@
 						<p:menubar style="top:20px;">
 							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
 								<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" url="#" icon="ui-icon-search" />
+								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
 								<p:menuitem value="Pendentes" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
 							</p:submenu>
 
