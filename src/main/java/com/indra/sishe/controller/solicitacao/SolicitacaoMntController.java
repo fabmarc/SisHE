@@ -35,11 +35,14 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>();
-		else pesquisar();
+//		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else 
+		pesquisar();
 	}
 
 	public void pesquisar() {
+		Usuario usuario = new Usuario();
+		usuario.setId((Long) getSessionAttr("usuario_id"));
+		solicitacaoFiltro.setUsuario(usuario);
 		listaSolicitacoes = solicitacaoService.findByFilter(solicitacaoFiltro);
 		searched = true;
 	}
@@ -98,7 +101,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void visualizar() {
 		System.out.println("Visualizar");
-		// Implementar;
 	}
 
 	public List<Solicitacao> getListaSolicitacoes() {

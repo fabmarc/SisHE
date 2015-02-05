@@ -22,6 +22,10 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	public String irParaConsultar() {
 		return "/paginas/solicitacao/solicitacoesPendentes.xhtml?faces-redirect=true";
 	}
+	
+	public String irParaConsultarPorUsuario() {
+		return "/paginas/solicitacao/consultarSolicitacoes.xhtml?faces-redirect=true";
+	}
 
 	public String irParaCadastrar() {
 		putFlashAttr("solicitacaoSelecionada", null);
