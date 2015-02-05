@@ -41,17 +41,17 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
-		usuario.setId((Long) getSessionAttr("usuario_id"));
+		usuario.setId(UsuarioLogado.getId());
 		solicitacaoFiltro.setUsuario(usuario);
 		listaSolicitacoes = solicitacaoService.findByFilterByUsuario(solicitacaoFiltro);
 		searched = true;
 	}
 
 	public void pesquisarPendentes() {
-		if (((String) getSessionAttr("usuario_permissoes")).contains("ROLE_GERENTE")) {
-			listaSolicitacoes = solicitacaoService.findByGerente(new Usuario((Long) getSessionAttr("usuario_id")));
+		if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
+			listaSolicitacoes = solicitacaoService.findByGerente(new Usuario(UsuarioLogado.getId()));
 		} else {
-			listaSolicitacoes = solicitacaoService.findByLider(new Usuario((Long) getSessionAttr("usuario_id")));
+			listaSolicitacoes = solicitacaoService.findByLider(new Usuario(UsuarioLogado.getId()));
 		}
 		searched = true;
 	}
@@ -121,7 +121,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		for (Solicitacao solicitacao : solicitacoesSelecionadas)
 			ids.add(solicitacao.getId());
 		try {
-			if (((String) getSessionAttr("usuario_permissoes")).contains("ROLE_GERENTE")) {
+			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
 				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
 			} else {
 				solicitacaoService.liderAcaoSolicitacao(ids, status);
