@@ -3,6 +3,7 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -210,16 +211,16 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						Usuario lider = new Usuario();
 						lider.setId(rs.getLong("id_aprovador_lider"));
 						lider.setNome(rs.getString("nomeLider"));
-						
+
 						Usuario gerente = new Usuario();
 						gerente.setId(rs.getLong("id_aprovador_gerente"));
 						gerente.setNome(rs.getString("nomeGerente"));
-						
+
 						Status statusLider = new Status();
 						statusLider.setId(rs.getLong("id_status_lider"));
 						Status statusGerente = new Status();
 						statusGerente.setId(rs.getLong("id_status_gerente"));
-						
+
 						Solicitacao solicitacao = new Solicitacao();
 						solicitacao.setStatusLider(statusLider);
 						solicitacao.setStatusGerente(statusGerente);
@@ -325,6 +326,17 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		int sobra;
 		int diferenca;
 		int minutoTotal;
+		int horaInicioPeriodo;
+		int minutoInicioPeriodo;
+		int horaFimPeriodo;
+		int minutoFimPeriodo;
+		int horaInicioSolicitacao;
+		int minutoInicioSolicitacao;
+		int horaFimSolicitacao;
+		int minutoFimSolicitacao;
+		int diaSolicitado;
+		Calendar calSolicitacao = Calendar.getInstance();
+		Calendar calPeriodo = Calendar.getInstance();
 
 		for (Long id : idsSolicitacoes) {
 			porcentagemFeriado = 0;
@@ -362,16 +374,18 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 					});
 
 			// obter o dia da semana da solicitação
-			int diaSolicitado = solicitacao.getData().getDay() + 1;
-			if (diaSolicitado > 7) {// se for domingo, ele retornará 8, e
-									// domingo tem que ser 1.
-				diaSolicitado = 1;
-			}
-			// obtém os minutos inicial e final da solicitação
-			minutoSolicitacaoInicial = (solicitacao.getHoraInicio().getHours() * 60)
-					+ solicitacao.getHoraInicio().getMinutes();
-			minutoSolicitacaoFinal = (solicitacao.getHoraFinal().getHours() * 60)
-					+ solicitacao.getHoraFinal().getMinutes();
+			calSolicitacao.setTime(solicitacao.getData());
+			diaSolicitado = calSolicitacao.get(Calendar.DAY_OF_WEEK);
+
+			// obtém minutos da solicitação
+			calSolicitacao.setTime(solicitacao.getHoraInicio());
+			horaInicioSolicitacao = calSolicitacao.get(Calendar.HOUR_OF_DAY);
+			minutoInicioSolicitacao = calSolicitacao.get(Calendar.MINUTE);
+			calSolicitacao.setTime(solicitacao.getHoraFinal());
+			horaFimSolicitacao = calSolicitacao.get(Calendar.HOUR_OF_DAY);
+			minutoFimSolicitacao = calSolicitacao.get(Calendar.MINUTE);
+			minutoSolicitacaoInicial = (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
+			minutoSolicitacaoFinal = (horaFimSolicitacao * 60) + minutoFimSolicitacao;
 
 			// se porcentagem for menor que zero, é porque não existe feriado
 			// para a data da solicitação
@@ -400,9 +414,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 							}
 						});
 
-				minutoTotal = (int) (solicitacao.getHoraFinal().getHours() * 60)
-						+ solicitacao.getHoraFinal().getMinutes() - (solicitacao.getHoraInicio().getHours() * 60)
-						+ solicitacao.getHoraInicio().getMinutes();
+				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
+						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 
 				// Contabilizar saldo em relação a hora da solicitação e
 				// regras/periodos
@@ -411,9 +424,14 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 				} else {
 					// obter minutos com porcentagem
 					for (Periodo p : periodos) {
-						minutoperiodoInicial = (p.getHoraInicio().getHours() * 60)
-								+ p.getHoraInicio().getMinutes();
-						minutoperiodoFinal = (p.getHoraFim().getHours() * 60) + p.getHoraFim().getMinutes();
+						calPeriodo.setTime(p.getHoraInicio());
+						horaInicioPeriodo = calPeriodo.get(Calendar.HOUR_OF_DAY);
+						minutoInicioPeriodo = calPeriodo.get(Calendar.MINUTE);
+						calPeriodo.setTime(p.getHoraFim());
+						horaFimPeriodo = calPeriodo.get(Calendar.HOUR_OF_DAY);
+						minutoFimPeriodo = calPeriodo.get(Calendar.MINUTE);
+						minutoperiodoInicial = (horaInicioPeriodo * 60) + minutoInicioPeriodo;
+						minutoperiodoFinal = (horaFimPeriodo * 60) + minutoFimPeriodo;
 
 						sobra = minutoSolicitacaoFinal - minutoperiodoFinal;
 
@@ -440,9 +458,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			} else {
 				// se for feriado calcular de acordo com a porcentagem definida
 				// para o feriado na regra
-				minutoTotal = (int) (solicitacao.getHoraFinal().getHours() * 60)
-						+ solicitacao.getHoraFinal().getMinutes() - (solicitacao.getHoraInicio().getHours() * 60)
-						+ solicitacao.getHoraInicio().getMinutes();
+				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
+						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 				minutos = (int) (minutoTotal + (minutoTotal * ((float) porcentagemFeriado / 100)));
 			}
 			getJdbcTemplate()
@@ -450,6 +467,5 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
 		}
 	}
-	
-}
 
+}

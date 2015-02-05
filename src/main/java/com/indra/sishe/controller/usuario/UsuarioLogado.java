@@ -15,52 +15,53 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.UsuarioService;
 
-
 @ViewScoped
 @ManagedBean(name = "usuarioLogado")
 public class UsuarioLogado extends BaseController implements Serializable {
 
-
 	private static final long serialVersionUID = 3890881279155488397L;
-	
+
 	private Usuario usuario;
-	
+
 	@Inject
 	private UsuarioService usuarioService;
-	
+
 	@PostConstruct
 	private void init() {
 		MessageProvider.setInstance(messageProvider);
 	}
-	
-	public UsuarioLogado(){
+
+	public UsuarioLogado() {
 		usuario = new Usuario();
 	}
 
 	public String getLogin() {
 		return (String) getSessionAttr("usuario_login");
 	}
-	
-	public static Long getId(){		
-		return (Long) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("usuario_id");//(Long) getSessionAttr("usuario_id");
+
+	public static Long getId() {
+		return (Long) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true))
+				.getAttribute("usuario_id");// (Long)
+											// getSessionAttr("usuario_id");
 	}
-	
-	public String getNome(){
+
+	public String getNome() {
 		return (String) getSessionAttr("usuario_nome");
 	}
-	
-	public static String getPermissoes(){
-		return (String) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("usuario_permissoes");
+
+	public static String getPermissoes() {
+		return (String) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true))
+				.getAttribute("usuario_permissoes");
 	}
-		
-	public boolean verificarPermissao(String nivel){
-		if(getPermissoes().contains(nivel)){			
+
+	public boolean verificarPermissao(String nivel) {
+		if (getPermissoes().contains(nivel)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
+
 	public String alterarSenha() {
 		try {
 			usuario.setId(getId());
@@ -72,13 +73,13 @@ public class UsuarioLogado extends BaseController implements Serializable {
 			return null;
 		}
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
-	
+
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+
 }
