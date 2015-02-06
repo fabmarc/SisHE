@@ -114,6 +114,11 @@ public class UsuarioProjetoServiceImpl extends StatelessServiceAb implements Usu
 		return usuarioProjetoDAO.findByProjeto(usuarioProjeto);
 	}
 
+	@Override
+	public List<UsuarioProjeto> findUserNotInProjeto(UsuarioProjeto usuarioProjeto) {
+		return usuarioProjetoDAO.findUserNotInProjeto(usuarioProjeto);
+	}
+
 	
 
 }

@@ -15,7 +15,7 @@ import com.indra.sishe.service.ProjetoService;
 import com.indra.sishe.service.UsuarioProjetoService;
 import com.indra.sishe.service.UsuarioService;
 
-public class usuarioProjetoController extends BaseController implements Serializable {
+public class UsuarioProjetoController extends BaseController implements Serializable {
 
 	private static final long serialVersionUID = -6245245686300031889L;
 
@@ -23,7 +23,8 @@ public class usuarioProjetoController extends BaseController implements Serializ
 	protected UsuarioProjetoService usuarioProjetoService;
 
 	protected List<UsuarioProjeto> usuarioProjeto;
-
+	protected List<UsuarioProjeto> listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
+	
 	@Inject
 	protected ProjetoService projetoService;
 
@@ -47,7 +48,7 @@ public class usuarioProjetoController extends BaseController implements Serializ
 	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
 	protected Boolean searched;
 
-	public usuarioProjetoController() {
+	public UsuarioProjetoController() {
 
 	}
 
@@ -59,7 +60,7 @@ public class usuarioProjetoController extends BaseController implements Serializ
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
-		putFlashAttr("usuarioProjetoSelecionado", null);
+		putSessionAttr("usuarioProjetoSelecionado", usuarioProjetoSelecionado);
 		return "/paginas/equipe/cadastrarEquipe.xhtml?faces-redirect=true";
 	}
 

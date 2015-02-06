@@ -13,4 +13,6 @@ public interface UsuarioProjetoService extends BaseService<UsuarioProjeto> {
 	public List<UsuarioProjeto> findByFilter(UsuarioProjeto usuarioProjeto);
 
 	public List<UsuarioProjeto> findByProjeto(UsuarioProjeto usuarioProjeto);
+
+	public List<UsuarioProjeto> findUserNotInProjeto(UsuarioProjeto usuarioProjeto);
 }
