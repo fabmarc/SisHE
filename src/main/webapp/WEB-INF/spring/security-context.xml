@@ -13,18 +13,18 @@
 
 		<sec:form-login login-page="/unsecure/login.jsf" default-target-url="/unsecure/login.jsf" authentication-failure-url="/unsecure/login.jsf" />
             <sec:logout logout-success-url="/paginas/unsecure/login.jsf" />
-                <sec:intercept-url pattern="/index.jsf" access="ROLE_ADMIN, ROLE_FUNCIONARIO, ROLE_GERENTE, ROLE_LIDER" />
-                <sec:intercept-url pattern="/paginas/cargo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/feriado/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/projeto/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/regra/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/periodo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/sindicato/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/sistema/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />  
-                <sec:intercept-url pattern="/paginas/usuario/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-                <sec:intercept-url pattern="/paginas/solicitacao/solicitacoesPendentes.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />
-                <sec:intercept-url pattern="/paginas/solicitacao/consultarSolicitacoes.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO" />
-                <!-- <sec:intercept-url pattern="/paginas/equipe/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
+            <sec:intercept-url pattern="/index.jsf" access="ROLE_ADMIN, ROLE_FUNCIONARIO, ROLE_GERENTE, ROLE_LIDER" />
+            <sec:intercept-url pattern="/paginas/cargo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/feriado/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/projeto/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/regra/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/periodo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/sindicato/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/sistema/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />  
+            <sec:intercept-url pattern="/paginas/usuario/**" access="ROLE_ADMIN, ROLE_GERENTE" />
+            <sec:intercept-url pattern="/paginas/solicitacao/solicitacoesPendentes.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />
+            <sec:intercept-url pattern="/paginas/solicitacao/consultarSolicitacoes.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO" />
+            <!-- <sec:intercept-url pattern="/paginas/equipe/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
                 
 	</sec:http>
 

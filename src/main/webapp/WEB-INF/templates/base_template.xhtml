@@ -14,7 +14,6 @@
 	</h:head>
 
 	<h:body style="height:100%; overflow:visible">
-
 		<div class="container" style="height: auto;">
 			<div id="cabecalho" style="width: 100%; position: absolute; left: 0px;">
 				<div class="logoCabeLeft">
@@ -30,7 +29,7 @@
 				<div id="userLogado" style="width: 98.5%; position: absolute; height: 25px; z-index: 100; text-align: right;">
 					<h:outputLabel value="Olá, #{usuarioLogado.nome}" style="color: rgb(248, 248, 255); font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px; top: 2px; position: relative;" rendered="#{usuarioLogado.nome != null}" />
 				</div>
-				<div class="logoCabeRodape"/>
+				<div class="logoCabeRodape" />
 			</div>
 
 			<div id="corpo" style="top: 100px; position: relative; height: 100%;">
@@ -40,12 +39,12 @@
 							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
 								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
 							</div>
-							<div style="float: left; position: relative; width: 20px; top: -6px;left: 5px;" id="divSenha">
+							<div style="float: left; position: relative; width: 20px; top: -6px; left: 5px;" id="divSenha">
 								<h:commandLink action="#{loginController.irParaAlterarSenha()}">
 									<p:graphicImage url="/resources/images/senha.png" title="Alterar Senha" />
 								</h:commandLink>
 							</div>
-							<div style="float: left; position: relative; width: 20px; top: -6px;left: 10px;" id="divLogout">
+							<div style="float: left; position: relative; width: 20px; top: -6px; left: 10px;" id="divLogout">
 								<h:commandLink action="#{loginController.logout}">
 									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
 								</h:commandLink>
@@ -58,7 +57,6 @@
 								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
 								<p:menuitem value="Pendentes" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
 							</p:submenu>
-
 							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
 								<p:submenu label="Sistema">
 									<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
