@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -85,28 +86,71 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 		return lista;
 	}
 
-	private boolean validarRegra(){
-		// IMPLEMENTAR
-		return false;
-	}
-	
-	@Override
-	public Regra save(Regra regra) throws RegistroDuplicadoException {
-		
+	private boolean validarRegra(Regra regra, String modo) {
+		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("id_sindicato", regra.getSindicato().getId());
-		params.addValue("descricao", regra.getDescricao());
-		params.addValue("data_inicio", regra.getDataInicio());
-		params.addValue("data_fim", regra.getDataFim());
-		params.addValue("porcentagem_feriado", regra.getPorcentagem());
-		Number key = insertRegra.executeAndReturnKey(params);
-		regra.setId(key.longValue());
-		return regra;
+		sql.append("SELECT id, id_sindicato, data_inicio, data_fim FROM regra ");
+		sql.append("WHERE ((:dataInicio BETWEEN data_inicio AND data_fim) OR (:dataFinal BETWEEN data_inicio AND data_fim)) ");
+		sql.append("OR ((data_inicio BETWEEN :dataInicio AND :dataFinal) OR (data_fim BETWEEN :dataInicio AND :dataFinal)) ");
+		sql.append("AND id_sindicato = :idSidicato ");
+		params.addValue("idSidicato", regra.getSindicato().getId());
+		params.addValue("dataInicio", regra.getDataInicio());
+		params.addValue("dataFinal", regra.getDataFim());
+		List<Regra> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params, new RowMapper<Regra>() {
+			@Override
+			public Regra mapRow(ResultSet rs, int idx) throws SQLException {
+				Sindicato sindicato = new Sindicato();
+				Regra regra = new Regra();
+				sindicato.setId(rs.getLong("id_sindicato"));
+				regra.setId(rs.getLong("id"));
+				regra.setSindicato(sindicato);
+				regra.setDataInicio(rs.getDate("data_inicio"));
+				regra.setDataFim(rs.getDate("data_fim"));
+				return regra;
+			}
+		});
+		if (modo.equalsIgnoreCase("cadastrar")) {
+			if (lista.size() > 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			for (Regra r : lista) {
+				if (r.getId() != regra.getId()) { return false; }
+			}
+			return true;
+		}
+
 	}
 
 	@Override
+	public Regra save(Regra regra) throws RegistroDuplicadoException {
+
+			try {
+				if (validarRegra(regra, "cadastrar")) {
+					MapSqlParameterSource params = new MapSqlParameterSource();
+					params.addValue("id_sindicato", regra.getSindicato().getId());
+					params.addValue("descricao", regra.getDescricao());
+					params.addValue("data_inicio", regra.getDataInicio());
+					params.addValue("data_fim", regra.getDataFim());
+					params.addValue("porcentagem_feriado", regra.getPorcentagem());
+					Number key = insertRegra.executeAndReturnKey(params);
+					regra.setId(key.longValue());
+					return regra;
+				}else {
+					throw new RegistroDuplicadoException("Intervalo existente");
+				}
+			} catch (DuplicateKeyException e) {
+				throw new RegistroDuplicadoException(e.toString());
+			}
+		}
+
+	
+
+	@Override
 	public Regra update(Regra regra) throws RegistroInexistenteException, RegistroDuplicadoException {
-		
+
 		int rows = getJdbcTemplate().update(
 				"UPDATE regra SET id_sindicato = ?, data_inicio = ?, data_fim = ?, "
 						+ "descricao = ?, porcentagem_feriado = ? WHERE id = ?", regra.getSindicato().getId(),
@@ -118,7 +162,7 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 
 	@Override
 	public List<Regra> findAll() {
-		
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT regra.id AS id, regra.id_sindicato AS idSindicato, sindicato.descricao AS nomeSindicato, "
@@ -200,7 +244,7 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };

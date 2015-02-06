@@ -42,15 +42,14 @@ public class PeriodoMntController extends PeriodoController {
 
 		regraSelecionada = (Regra) getSessionAttr("regraSelecionadaFiltro");			
 		
-		if (!searched) listaPeriodos = new ArrayList<Periodo>();
-		else pesquisar();
+		listaPeriodos = new ArrayList<Periodo>();
+		
 	}
 
 	public void pesquisar() {
 		periodoFiltro.setRegra(regraSelecionada);
 		listaPeriodos = periodoService.findByFilter(periodoFiltro);
 		Collections.sort(listaPeriodos);
-		searched = true;
 	}
 
 	public void beforeRemovePeriodos() {
@@ -93,6 +92,7 @@ public class PeriodoMntController extends PeriodoController {
 	
 	
 	public List<Periodo> getListaPeriodos() {
+		pesquisar();
 		return listaPeriodos;
 	}
 

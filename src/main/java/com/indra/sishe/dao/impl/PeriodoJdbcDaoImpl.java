@@ -47,7 +47,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	private boolean validarPeriodos(Periodo entity, String modo) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params2 = new MapSqlParameterSource();
-		sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where (((hora_inicio <= :horainicio and hora_fim >= :horainicio) or (hora_fim >= :horafim and hora_inicio <= :horafim)) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date )) ");
+		sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where ((((:horainicio between hora_inicio and hora_fim) or (:horafim between hora_inicio and hora_fim)) or ((hora_inicio between :horainicio and :horafim) or (hora_fim between :horainicio and :horafim))) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date)) ");
 		params2.addValue("horainicio", entity.getHoraInicio());
 		params2.addValue("horafim", entity.getHoraFim());
 		params2.addValue("diasemana", entity.getDiaSemana().numeroDia());
@@ -65,17 +65,15 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 						return periodo;
 					}
 				});
-		if(modo.equalsIgnoreCase("cadastrar")){
+		if (modo.equalsIgnoreCase("cadastrar")) {
 			if (lista.size() > 0) {
 				return false;
 			} else {
 				return true;
 			}
-		}else{
-			for(Periodo p: lista){
-				if(entity.getId() != p.getId()){
-					return false;
-				}
+		} else {
+			for (Periodo p : lista) {
+				if (entity.getId() != p.getId()) { return false; }
 			}
 			return true;
 		}
@@ -85,14 +83,13 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	public Periodo save(Periodo entity) throws RegistroDuplicadoException {
 
 		try {
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("dia_semana", entity.getDiaSemana().numeroDia());
-			params.addValue("hora_inicio", entity.getHoraInicio());
-			params.addValue("hora_fim", entity.getHoraFim());
-			params.addValue("porcentagem", entity.getPorcentagem());
-			params.addValue("id_regra", entity.getRegra().getId());
-
 			if (validarPeriodos(entity, "cadastrar")) {
+				MapSqlParameterSource params = new MapSqlParameterSource();
+				params.addValue("dia_semana", entity.getDiaSemana().numeroDia());
+				params.addValue("hora_inicio", entity.getHoraInicio());
+				params.addValue("hora_fim", entity.getHoraFim());
+				params.addValue("porcentagem", entity.getPorcentagem());
+				params.addValue("id_regra", entity.getRegra().getId());
 				Number key = insertPeriodo.executeAndReturnKey(params);
 				entity.setId(key.longValue());
 			} else {
@@ -114,7 +111,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 						entity.getHoraFim(), entity.getPorcentagem(), entity.getId());
 				if (rows == 0) throw new RegistroInexistenteException();
 			} else {
-				throw new RegistroDuplicadoException();
+				throw new RegistroDuplicadoException("msg.error.faixa.tempo.existente");
 			}
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());

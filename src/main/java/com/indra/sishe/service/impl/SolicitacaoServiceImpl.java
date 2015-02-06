@@ -50,17 +50,31 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 
 	@Override
-	public void remove(Long id) throws ApplicationException {
-	}
+	public void remove(Long id) throws ApplicationException { }
 
 	public boolean validarRemove(Solicitacao solicitacao) throws ApplicationException {
-//		if (UsuarioLogado.) {
-			
-//		}
-		if (solicitacao.getStatusLider().getId() > 0) { 
-			throw new ApplicationException("msg.error.excluir.solicitacao.avaliada"); 
+		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
+			if (solicitacao.getStatusGerente().getId() > 0) { 
+				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente"); 
+			}else{
+				return true;
+			}
+		}else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
+			if (solicitacao.getStatusGerente().getId() > 0) { 
+				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente"); 
+			}else{
+				return true;
+			}
+		}else if (UsuarioLogado.getPermissoes().contains("ROLE_FUNCIONARIO")) {
+			if (solicitacao.getStatusGerente().getId() > 0) {
+				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente");
+			}else if (solicitacao.getStatusLider().getId() > 0) { 
+				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Líder"); 
+			}else{
+				return true;
+			}
 		}else{
-			return true;
+			return false;
 		}
 	}
 
@@ -75,7 +89,6 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 					ids.add(solicitacao.getId());
 				}
 			}
-
 			List<Object> pks = new ArrayList<Object>(ids);
 			solicitacaoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {

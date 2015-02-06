@@ -4,8 +4,9 @@
 	<ui:define name="content">
 
 		<h:form id="mainForm">
-			<p:messages id="messages" showDetail="true" showSummary="false" />
-
+			<div class="divMsg">
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+			</div>
 			<div style="position: relative; width: 100%; padding-bottom: 10%;">
 				<div style="top: 17px; position: relative; width: 226px; height: 50px;">
 
@@ -32,7 +33,7 @@
 					<div style="top: -139.5px; position: relative; left: 622px;">
 						<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
 					</div>
-				
+
 				</div>
 
 				<ui:insert>
@@ -48,7 +49,7 @@
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</p:column>
-							
+
 							<p:column headerText="Nome" sortBy="#{feriado.nome}">
 								<h:outputText value="#{feriado.nome}" />
 							</p:column>
@@ -64,7 +65,7 @@
 							<p:column headerText="Ação" style="width:5%">
 								<p:commandLink id="linkAlterar" title="Editar Feriado" styleClass="ui-icon ui-icon-pencil" action="#{feriadoMnt.irParaAlterar(feriado)}" style="width:20px; left:30%; position: relative; float:center;" />
 							</p:column>
-							
+
 							<f:facet name="footer">
 								<div style="text-align: right; width: 100%">
 									<p:commandLink value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" />
@@ -74,7 +75,7 @@
 							</f:facet>
 						</p:dataTable>
 					</div>
-					
+
 					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 						<div class="divDialog">
 							<h:commandButton value="Sim" actionListener="#{feriadoMnt.remove()}" onclick="confirmExclusao.hide()" update="mainForm:feriadoDt messages" styleClass="botao3d" style="width: 109px;" />

@@ -5,8 +5,9 @@
 	<ui:define name="content">
 
 		<h:form id="mainForm">
-
-			<p:messages id="messages" showDetail="true" showSummary="false" />
+			<div class="divMsg">
+				<p:messages id="messages" showDetail="true" showSummary="false" />
+			</div>
 			<div style="top: 17px; position: relative; width: 226px; height: 50px;">
 				<div style="position: relative;">
 					<p:outputLabel value="Nome:" />
@@ -46,17 +47,17 @@
 							<p:commandLink id="linkAlterar" title="Editar Projeto" styleClass="ui-icon ui-icon-pencil" action="#{projetoMnt.irParaAlterar(projeto)}" style="width:20px; left:30%; position: relative; float:center;" />
 						</p:column>
 						<f:facet name="footer">
-						<div style="width: 100%; height: 23px; position: relative;">
+							<div style="width: 100%; height: 23px; position: relative;">
 								<div style="text-align: left; width: 50%; position: relative;">
 									<p:commandLink value="Equipe" action="#{projetoMnt.irParaEquipe()}" />
 								</div>
 
 								<div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;">
-								<p:commandLink value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" />
-								/
-								<p:commandLink value="Excluir" actionListener="#{projetoMnt.beforeRemoveProjeto()}" />
-							</div>					
-							
+									<p:commandLink value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" />
+									/
+									<p:commandLink value="Excluir" actionListener="#{projetoMnt.beforeRemoveProjeto()}" />
+								</div>
+
 							</div>
 						</f:facet>
 					</p:dataTable>
