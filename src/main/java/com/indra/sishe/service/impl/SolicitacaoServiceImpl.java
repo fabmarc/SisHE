@@ -50,8 +50,7 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 
 	@Override
-	public void remove(Long id) throws ApplicationException {
-	}
+	public void remove(Long id) throws ApplicationException { }
 
 	public boolean validarRemove(Solicitacao solicitacao) throws ApplicationException {
 		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
@@ -90,7 +89,6 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 					ids.add(solicitacao.getId());
 				}
 			}
-
 			List<Object> pks = new ArrayList<Object>(ids);
 			solicitacaoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
