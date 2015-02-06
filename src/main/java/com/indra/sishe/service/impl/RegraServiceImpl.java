@@ -53,7 +53,11 @@ public class RegraServiceImpl extends StatelessServiceAb implements RegraService
 				return null;
 			}
 		} catch (RegistroDuplicadoException e) {
-			throw new ApplicationException(e, "msg.error.registro.duplicado", "Regra");
+			if(e.getMessageCode().equalsIgnoreCase("Intervalo existente")){
+				throw new ApplicationException(e, "msg.error.registro.intervalo.duplicado", "uma Regra cadastrada");
+			}else{
+				throw new ApplicationException(e, "msg.error.registro.duplicado", "Regra");
+			}
 		}
 	}
 
