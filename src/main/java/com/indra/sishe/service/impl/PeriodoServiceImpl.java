@@ -34,7 +34,7 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 				return null;
 			}
 		} catch (RegistroDuplicadoException e) {
-			throw new ApplicationException(e, "msg.error.campo.existente", "periodo", "horário");
+			throw new ApplicationException(e, "msg.error.faixa.tempo.existente");
 		}
 	}
 
@@ -49,7 +49,11 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Periodo");
 		} catch (RegistroDuplicadoException d) {
-			throw new ApplicationException(d, "msg.error.campo.existente", "periodo", "horário");
+			if(d.getMessageCode().equalsIgnoreCase("msg.error.faixa.tempo.existente")){
+				throw new ApplicationException(d, "msg.error.faixa.tempo.existente");
+			}else{
+				throw new ApplicationException(d, "msg.error.campo.existente", "periodo", "horário");
+			}
 		}
 	}
 

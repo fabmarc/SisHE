@@ -40,7 +40,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 	private SimpleJdbcInsert insertSolicitacao;
 
 	private int porcentagemFeriado;
-	
+
 	@PostConstruct
 	private void init() {
 		setDataSource(dataSource);
@@ -79,7 +79,6 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT solicitacao.id AS idSolicitacao, hora_inicio, hora_final, solicitacao.descricao AS descricao, data_aprovacao_lider, data_aprovacao_gerente, data, id_status_lider, id_status_gerente, id_usuario, usuario.nome AS nomeUsuario, id_sistema, sistema.nome AS nomeSistema, id_aprovador_lider, lider.nome AS nomeLider, projeto.nome AS nomeProjeto, projeto.id AS idprojeto, id_aprovador_gerente, gerente.nome AS nomeGerente ");
 		sql.append("FROM solicitacao INNER JOIN usuario ON (usuario.id = solicitacao.id_usuario) INNER JOIN sistema ON (sistema.id = solicitacao.id_sistema) LEFT JOIN usuario lider ON (lider.id = solicitacao.id_aprovador_lider) LEFT JOIN usuario gerente ON (gerente.id = solicitacao.id_aprovador_gerente) INNER JOIN projeto ON (projeto.id = sistema.id_projeto) ");
-		
 
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
@@ -102,16 +101,16 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						Usuario lider = new Usuario();
 						lider.setId(rs.getLong("id_aprovador_lider"));
 						lider.setNome(rs.getString("nomeLider"));
-						
+
 						Usuario gerente = new Usuario();
 						gerente.setId(rs.getLong("id_aprovador_gerente"));
 						gerente.setNome(rs.getString("nomeGerente"));
-						
+
 						Status statusLider = new Status();
 						statusLider.setId(rs.getLong("id_status_lider"));
 						Status statusGerente = new Status();
 						statusGerente.setId(rs.getLong("id_status_gerente"));
-						
+
 						Solicitacao solicitacao = new Solicitacao();
 						solicitacao.setStatusLider(statusLider);
 						solicitacao.setStatusGerente(statusGerente);
@@ -281,7 +280,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						params);
 
 		if (status == 1) {// se for para aprovar a solicitação, deve-se gerar o
-							// histórico.
+							// histórico e contabilizar os minutos.
 			contabilizarHorasBanco(ids);
 			gerarHistorico(ids);
 		}
@@ -303,7 +302,6 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.addValue("data", new Date());
 			insertHistorico.executeAndReturnKey(params);
 		}
-
 	}
 
 	private Long obterIdBanco(Long idSolicitacao) {
@@ -327,41 +325,37 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		StringBuilder sql;
 		MapSqlParameterSource params;
 		int minutos;
-		int minutoSolicitacaoFinal;
-		int minutoSolicitacaoInicial;
-		int minutoperiodoFinal;
-		int minutoperiodoInicial;
+		int minutoTotal;			
 		int sobra;
 		int diferenca;
-		int minutoTotal;
-		int horaInicioPeriodo;
-		int minutoInicioPeriodo;
-		int horaFimPeriodo;
-		int minutoFimPeriodo;
-		int horaInicioSolicitacao;
-		int minutoInicioSolicitacao;
-		int horaFimSolicitacao;
-		int minutoFimSolicitacao;
 		int diaSolicitado;
+		int minutoSolicitacaoInicial, minutoSolicitacaoFinal;
+		int horaInicioSolicitacao, horaFimSolicitacao;
+		int minutoInicioSolicitacao, minutoFimSolicitacao;
+		int horaInicioPeriodo, horaFimPeriodo;
+		int minutoInicioPeriodo, minutoFimPeriodo;	
+		
 		Calendar calSolicitacao = Calendar.getInstance();
 		Calendar calPeriodo = Calendar.getInstance();
 
+		//percorrer todas as solicitações selecionadas.
 		for (Long id : idsSolicitacoes) {
 			porcentagemFeriado = 0;
 			minutos = 0;
 			minutoSolicitacaoFinal = 0;
 			minutoSolicitacaoInicial = 0;
-			minutoperiodoFinal = 0;
-			minutoperiodoInicial = 0;
+			minutoFimPeriodo = 0;
+			minutoInicioPeriodo = 0;
 			sobra = 0;
 			diferenca = 0;
 			minutoTotal = 0;
 			sql = new StringBuilder();
 			params = new MapSqlParameterSource();
-			// Consultar data, hora inicio e hora fim da solicitação atual
+			// Consultar data, hora inicio e hora fim da solicitação atual.
 			sql.append("SELECT	solicitacao.data, hora_inicio, hora_final, id_usuario, feriado.data as data_feriado, CASE WHEN FERIADO.DATA IS NOT NULL THEN (SELECT regra.porcentagem_feriado FROM REGRA WHERE REGRA.ID_SINDICATO = SINDICATO.ID AND REGRA.DATA_FIM > SOLICITACAO.DATA AND REGRA.DATA_INICIO <SOLICITACAO.DATA ORDER BY REGRA.DATA_FIM LIMIT 1) END AS porcentagem FROM SOLICITACAO  LEFT JOIN USUARIO ON (USUARIO.ID = SOLICITACAO.ID_USUARIO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) LEFT JOIN ESTADO ON (ESTADO.ID = CIDADE.ID_ESTADO) LEFT JOIN FERIADO ON (((FERIADO.ID_ESTADO = ESTADO.ID AND FERIADO.ID_CIDADE=CIDADE.ID) OR (FERIADO.ID_ESTADO = ESTADO.ID AND FERIADO.ID_CIDADE IS NULL))AND solicitacao.data = feriado.data) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) WHERE solicitacao.id = :id ");
 			params.addValue("id", id);
-
+			
+			//obter uma solicitação.
 			Solicitacao solicitacao = getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params,
 					new RowMapper<Solicitacao>() {
 						@Override
@@ -381,11 +375,11 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						}
 					});
 
-			// obter o dia da semana da solicitação
+			// obter o dia da semana da solicitação.
 			calSolicitacao.setTime(solicitacao.getData());
 			diaSolicitado = calSolicitacao.get(Calendar.DAY_OF_WEEK);
 
-			// obtém minutos da solicitação
+			// obtém minutos da solicitação.
 			calSolicitacao.setTime(solicitacao.getHoraInicio());
 			horaInicioSolicitacao = calSolicitacao.get(Calendar.HOUR_OF_DAY);
 			minutoInicioSolicitacao = calSolicitacao.get(Calendar.MINUTE);
@@ -395,13 +389,14 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			minutoSolicitacaoInicial = (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 			minutoSolicitacaoFinal = (horaFimSolicitacao * 60) + minutoFimSolicitacao;
 
-			// se porcentagem for menor que zero, é porque não existe feriado
-			// para a data da solicitação
+			// se porcentagem do feriado para a regra for menor que zero, é porque não existe feriado
+			// para a data da solicitação.
 			if (porcentagemFeriado < 0) {
-				// consultar os periodos que corresponde a data e hora da
-				// solicitação
+				// consultar os periodos que correspondem a data e hora da
+				// solicitação.
 				sql = new StringBuilder();
 				params = new MapSqlParameterSource();
+				//comando SQL para obter dados do periodo.
 				sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and (hora_inicio >= :horaInicio and hora_fim <=:horaFim) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
 				params.addValue("idUsuario", solicitacao.getUsuario().getId());
 				params.addValue("diaSemana", diaSolicitado);
@@ -409,6 +404,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 				params.addValue("horaFim", solicitacao.getHoraFinal());
 				params.addValue("dataSolicitada", solicitacao.getData());
 
+				//Obter todos os periodos correspondentes.
 				List<Periodo> periodos = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 						new RowMapper<Periodo>() {
 							@Override
@@ -421,61 +417,70 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 								return p;
 							}
 						});
-
+				
+				//Obter minutos da solicitação a serem adicionados.
 				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
 						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 
-				// Contabilizar saldo em relação a hora da solicitação e
-				// regras/periodos
+				// verificar se existe periodos que correspondem a solicitação.
 				if (periodos.size() < 1) {
+					//caso não exista nenhum periodo, será adicionado todos os minutos sem cálculo.
 					minutos = minutoTotal;
-				} else {
-					// obter minutos com porcentagem
-					for (Periodo p : periodos) {
+				} else {// Caso existam periodos.
+					//percorrer todos os periodos.
+					for (Periodo p : periodos) {//Obter dados de um periodo.
 						calPeriodo.setTime(p.getHoraInicio());
 						horaInicioPeriodo = calPeriodo.get(Calendar.HOUR_OF_DAY);
 						minutoInicioPeriodo = calPeriodo.get(Calendar.MINUTE);
 						calPeriodo.setTime(p.getHoraFim());
 						horaFimPeriodo = calPeriodo.get(Calendar.HOUR_OF_DAY);
 						minutoFimPeriodo = calPeriodo.get(Calendar.MINUTE);
-						minutoperiodoInicial = (horaInicioPeriodo * 60) + minutoInicioPeriodo;
-						minutoperiodoFinal = (horaFimPeriodo * 60) + minutoFimPeriodo;
-
-						sobra = minutoSolicitacaoFinal - minutoperiodoFinal;
-
-						if (sobra > 0) {
-							if (minutoSolicitacaoInicial >= minutoperiodoInicial) {
-								diferenca = minutoperiodoFinal - minutoSolicitacaoInicial;
+						minutoInicioPeriodo = (horaInicioPeriodo * 60) + minutoInicioPeriodo;
+						minutoFimPeriodo = (horaFimPeriodo * 60) + minutoFimPeriodo;
+						
+						//Obter sobra entre o fim do periodo e o fim da solicitação.
+						sobra = minutoSolicitacaoFinal - minutoFimPeriodo;
+						
+						if (sobra > 0) {//se o periodo não atender a todos os minutos da solicitação.
+							if (minutoSolicitacaoInicial >= minutoInicioPeriodo) {//se o inicio da solicitação estiver entre o inicio do periodo.  
+								//obter os minutos que representam o periodo atual.
+								diferenca = minutoFimPeriodo - minutoSolicitacaoInicial;
 							} else {
-								diferenca = minutoperiodoFinal - minutoperiodoInicial;
+								//obter os minutos que representam o periodo atual.
+								diferenca = minutoFimPeriodo - minutoInicioPeriodo;
 							}
+							//obter minutos que ainda não foram utilizados no calculo.
 							minutoTotal = minutoTotal - diferenca;
+							//Cálcular os minutos que correspondem ao periodo de acordo com a porcentagem do mesmo.
 							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
-						} else {
-							diferenca = minutoSolicitacaoFinal - minutoperiodoInicial;
+						} else {//caso o periodo atenda a todos os minutos da solicitação.
+							//obter minutos que representam o periodo atual.
+							diferenca = minutoSolicitacaoFinal - minutoInicioPeriodo;
+							//obter minutos que ainda não foram utilizados no calculo.
 							minutoTotal = minutoTotal - diferenca;
+							//Cálcular os minutos que correspondem ao periodo de acordo com a porcentagem do mesmo.
 							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
 						}
 					}
 				}
 				// caso exista algum registro sem porcentagem será adicionado os
-				// minutos.
+				// minutos sem cálculo da porcentagem.
 				if (minutoTotal > 0) {
 					minutos = minutos + minutoTotal;
 				}
 			} else {
 				// se for feriado calcular de acordo com a porcentagem definida
-				// para o feriado na regra
+				// para o feriado na regra.
 				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
 						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 				minutos = (int) (minutoTotal + (minutoTotal * ((float) porcentagemFeriado / 100)));
 			}
+			//Adicionar novo saldo ao banco de horas.
 			getJdbcTemplate()
 					.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
 							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
 		}
 	}
-
 
 	@Override
 	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro) {
@@ -507,16 +512,16 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						Usuario lider = new Usuario();
 						lider.setId(rs.getLong("id_aprovador_lider"));
 						lider.setNome(rs.getString("nomeLider"));
-						
+
 						Usuario gerente = new Usuario();
 						gerente.setId(rs.getLong("id_aprovador_gerente"));
 						gerente.setNome(rs.getString("nomeGerente"));
-						
+
 						Status statusLider = new Status();
 						statusLider.setId(rs.getLong("id_status_lider"));
 						Status statusGerente = new Status();
 						statusGerente.setId(rs.getLong("id_status_gerente"));
-						
+
 						Solicitacao solicitacao = new Solicitacao();
 						solicitacao.setStatusLider(statusLider);
 						solicitacao.setStatusGerente(statusGerente);

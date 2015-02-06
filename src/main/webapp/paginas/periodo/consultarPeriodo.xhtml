@@ -20,14 +20,11 @@
 						<div style="width: 410px; position: relative;">
 							<p:outputLabel value="Dia Semana:" style="width:100px;" />
 							<h:selectOneMenu value="#{periodoMnt.periodoFiltro.diaSemana}" converter="omnifaces.SelectItemsConverter">
-								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItem itemLabel="Todos" noSelectionOption="true" />
 								<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia.nomeDia()}" itemValue="#{dia}" />
+								<f:ajax event="change" render="mainForm:periodoDt" />
 							</h:selectOneMenu>
-						</div>
-						<!-- Div btn pesquisar -->
-						<div style="width: 410px; position: relative; left: 230px; top: -37px;">
-							<h:commandButton styleClass="botao3d" style="position:relative;" actionListener="#{periodoMnt.pesquisar()}" value="Pesquisar" />
-						</div>
+						</div>						
 					</div>
 					
 					<!-- Tabela -->
