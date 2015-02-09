@@ -50,9 +50,10 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
-		pesquisarPorUsuarioLogado();
+		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); 
+		else pesquisarPorUsuarioLogado();
 	}
+
 
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
