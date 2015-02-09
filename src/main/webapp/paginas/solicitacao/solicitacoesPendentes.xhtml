@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
-
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
+
 	<ui:define name="content">
 		<h:form id="mainForm">
 			<ui:insert>
@@ -79,6 +79,12 @@
 					<p:confirmDialog id="msgAprovar" global="true" showEffect="fade" hideEffect="explode" header="Aprovar" message="Deseja aprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmAprovacao">
 						<!-- Div msg aprovar -->
 						<div class="divDialog">
+							<h:outputText value="Observação para a(s) solicitação(ões):" />
+							<br />
+							<h:inputTextarea id="obs01" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;">
+								<f:ajax event="change" render="mainForm:obs02" />
+							</h:inputTextarea>
+							<br />
 							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.aprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
 							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
@@ -90,6 +96,10 @@
 					<p:confirmDialog id="msgReprovar" global="true" showEffect="fade" hideEffect="explode" header="Reprovar" message="Deseja reprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmReprovacao">
 						<!-- Div msg reprovar -->
 						<div class="divDialog">
+							<h:outputText value="Observação para a(s) solicitação(ões):" />
+							<br />
+							<h:inputTextarea id="obs02" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;"/>
+							<br />							
 							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.reprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
 							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
@@ -106,7 +116,6 @@
 						<!-- Fim div Seleção -->
 					</p:confirmDialog>
 					<!-- Fim mensagem seleção -->
-					
 				</div>
 				<!-- Fim div corpo -->
 			</ui:insert>

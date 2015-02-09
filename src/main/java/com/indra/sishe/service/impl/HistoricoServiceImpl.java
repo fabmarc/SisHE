@@ -60,8 +60,8 @@ public class HistoricoServiceImpl extends StatelessServiceAb implements Historic
 	}
 
 	@Override
-	public void gerarHistorico(List<Long> ids) {
-		historicoDao.gerarHistorico(ids);
+	public void gerarHistorico(List<Long> ids, String descricao) {
+		historicoDao.gerarHistorico(ids, descricao);
 	}
 	
 	

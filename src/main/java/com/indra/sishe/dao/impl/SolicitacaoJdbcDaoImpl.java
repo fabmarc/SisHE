@@ -277,31 +277,9 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						"UPDATE solicitacao SET id_status_gerente = ?,  id_aprovador_gerente = ?, data_aprovacao_gerente = ? WHERE id = ?",
 						params);
 
-		/*if (status == 1) {// se for para aprovar a solicitação, deve-se gerar o
-							// histórico e contabilizar os minutos.
-
-			gerarHistorico(ids);
-		}*/
-
 		for (int rows : affectedRows)
 			if (rows == 0) throw new RegistroInexistenteException();
 	}
-
-	/*private void gerarHistorico(List<Long> ids) {
-
-		SimpleJdbcInsert insertHistorico;
-		insertHistorico = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("historico")
-				.usingGeneratedKeyColumns("id");
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		for (Long id : ids) {
-			params.addValue("id_gerente", (Long) UsuarioLogado.getId());
-			params.addValue("id_solicitacao", id);
-			params.addValue("id_banco_hora", obterIdBanco(id));
-			params.addValue("data", new Date());
-			insertHistorico.executeAndReturnKey(params);
-		}
-	}*/
-
 	
 	@Override
 	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro) {

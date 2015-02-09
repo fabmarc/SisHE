@@ -81,14 +81,17 @@ public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implement
 	}
 
 	@Override
-	public void gerarHistorico(List<Long> ids) {
+	public void gerarHistorico(List<Long> ids, String descricao) {
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		for (Long id : ids) {
-			params.addValue("id_gerente", (Long) UsuarioLogado.getId());
+			if(UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")){
+				params.addValue("id_gerente", (Long) UsuarioLogado.getId());
+			}
 			params.addValue("id_solicitacao", id);
 			params.addValue("id_banco_hora", obterIdBanco(id));
 			params.addValue("data", new Date());
+			params.addValue("descricao", descricao);
 			insertHistorico.executeAndReturnKey(params);
 		}
 	}

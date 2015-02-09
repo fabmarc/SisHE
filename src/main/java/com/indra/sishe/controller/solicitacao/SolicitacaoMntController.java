@@ -28,9 +28,11 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	private List<Solicitacao> solicitacoesSelecionadas;
 
+	private String observacao;
+
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
-	
+
 	@Inject
 	protected transient HistoricoService historicoService;
 
@@ -134,11 +136,12 @@ public class SolicitacaoMntController extends SolicitacaoController {
 				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
 				if (status == 1) {
 					bancoHorasService.contabilizarHorasBanco(ids);
-					historicoService.gerarHistorico(ids);
 				}
 			} else {
 				solicitacaoService.liderAcaoSolicitacao(ids, status);
 			}
+			historicoService.gerarHistorico(ids, observacao);
+			observacao = "";
 			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
@@ -164,6 +167,14 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setSolicitacoesSelecionadas(List<Solicitacao> solicitacoesSelecionadas) {
 		this.solicitacoesSelecionadas = solicitacoesSelecionadas;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 }

@@ -10,6 +10,6 @@ import com.indra.sishe.entity.Historico;
 @Local
 public interface HistoricoService extends BaseService<Historico>{
 	
-	public void gerarHistorico(List<Long> ids);
+	public void gerarHistorico(List<Long> ids, String descricao);
 
 }

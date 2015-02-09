@@ -1,6 +1,7 @@
 package com.indra.sishe.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Historico implements Serializable {
 
@@ -13,6 +14,10 @@ public class Historico implements Serializable {
 	private Solicitacao solicitacao;
 
 	private BancoHoras bancoHoras;
+	
+	private Date data;
+	
+	private String descricao;
 
 	public Historico() {
 	}
@@ -47,6 +52,22 @@ public class Historico implements Serializable {
 
 	public void setBancoHoras(BancoHoras bancoHoras) {
 		this.bancoHoras = bancoHoras;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	@Override
