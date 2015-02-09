@@ -280,7 +280,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		for (int rows : affectedRows)
 			if (rows == 0) throw new RegistroInexistenteException();
 	}
-	
+
 	@Override
 	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro) {
 
