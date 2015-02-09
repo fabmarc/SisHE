@@ -9,10 +9,12 @@ import javax.inject.Inject;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.BancoHoras;
 import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.enums.EstadoEnum;
+import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.CidadeService;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.SindicatoService;
@@ -35,6 +37,9 @@ public class UsuarioCadController extends UsuarioController {
 
 	@Inject
 	protected transient CidadeService cidadeService;
+
+	@Inject
+	protected transient BancoHorasService bancoHorasService;
 
 	public UsuarioCadController() {
 	}
@@ -59,7 +64,10 @@ public class UsuarioCadController extends UsuarioController {
 
 	public String cadastrarUsuario() {
 		try {
-			usuarioService.save(usuarioSelecionado);
+			Usuario userTemp = usuarioService.save(usuarioSelecionado);
+			if (userTemp != null) {
+				bancoHorasService.save(new BancoHoras(userTemp, new Long(0)));
+			}
 			putFlashAttr("usuarioFiltro", usuarioFiltro);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Usuario"));
 			putFlashAttr("searched", searched);
@@ -83,7 +91,6 @@ public class UsuarioCadController extends UsuarioController {
 			return irParaAlterar(usuarioSelecionado);
 		}
 	}
-	
 
 	public String cancelar() {
 
@@ -121,8 +128,9 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public List<EstadoEnum> obterEstados() {
-//		List<EstadoEnum> listaEstados = new ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
-//		return listaEstados;
+		// List<EstadoEnum> listaEstados = new
+		// ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
+		// return listaEstados;
 		return EstadoEnum.listaEstados();
 	}
 

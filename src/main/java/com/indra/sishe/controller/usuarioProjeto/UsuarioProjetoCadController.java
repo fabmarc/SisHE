@@ -1,5 +1,6 @@
 package com.indra.sishe.controller.usuarioProjeto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,38 +15,36 @@ import com.indra.sishe.entity.UsuarioProjeto;
 
 @ViewScoped
 @ManagedBean(name = "usuarioProjetoCad")
-public class UsuarioProjetoCadController extends usuarioProjetoController {
+public class UsuarioProjetoCadController extends UsuarioProjetoController {
 
 	private static final long serialVersionUID = 5412878556555830463L;
+	private List<UsuarioProjeto> usuariosProjetos = new ArrayList<UsuarioProjeto>();
 
 	@PostConstruct
 	private void init() {
 		MessageProvider.setInstance(messageProvider);
 		searched = (Boolean) getFlashAttr("searched");
-		usuarioProjetoSelecionado = (UsuarioProjeto) getFlashAttr("usuarioProjetoSelecionado");
+		usuarioProjetoSelecionado = (UsuarioProjeto) getSessionAttr("usuarioProjetoSelecionado");
 
 		if (usuarioProjetoSelecionado == null) {
 			usuarioProjetoSelecionado = new UsuarioProjeto();
 		}
 
-		usuarioProjetoFiltro = (UsuarioProjeto) getFlashAttr("usuarioProjetoFiltro");
-		listarUsuarios();
-		listarProjetos();
+		usuarioProjetoFiltro = (UsuarioProjeto) getFlashAttr("usuarioProjetoFiltro");		
+		listarUsuarios(usuarioProjetoSelecionado);
+		
 	}
 
 	public void UsuarioProjetoMntController(){
 		
 	}
 	
-	private List<Usuario> listarUsuarios() {
-		listaUsuarios = usuarioService.findAll();
-		return listaUsuarios;
+	public List<UsuarioProjeto> listarUsuarios(UsuarioProjeto usuarioProjeto) {
+		listaUsuarioProjeto = usuarioProjetoService.findUserNotInProjeto(usuarioProjeto);
+		return listaUsuarioProjeto;
 	}
 
-	public List<Projeto> listarProjetos() {
-		listaProjetos = projetoService.findAll();
-		return listaProjetos;
-	}
+	
 
 	private boolean modoCadastrar() {
 		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {
@@ -120,5 +119,18 @@ public class UsuarioProjetoCadController extends usuarioProjetoController {
 	public void setUsuarioProjetoSelecionado(UsuarioProjeto usuarioProjetoSelecionado) {
 		this.usuarioProjetoSelecionado = usuarioProjetoSelecionado;
 	}
+	
+	public List<UsuarioProjeto> getListaUsuarioProjeto() {
+		return  listaUsuarioProjeto;
+	}
 
+	public List<UsuarioProjeto> getUsuariosProjetos() {
+		return usuariosProjetos;
+	}
+
+	public void setUsuariosProjetos(List<UsuarioProjeto> usuariosProjetos) {
+		this.usuariosProjetos = usuariosProjetos;
+	}
+	
+	
 }
