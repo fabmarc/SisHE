@@ -38,11 +38,13 @@
 
 						<p:column headerText="Hora Inicial" style="text-align: center;" >
 							<h:outputText value="#{solicitacao.horaInicio}">
+								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 
 						<p:column headerText="Hora Final" style="text-align: center;" >
 							<h:outputText value="#{solicitacao.horaFinal}">
+								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 

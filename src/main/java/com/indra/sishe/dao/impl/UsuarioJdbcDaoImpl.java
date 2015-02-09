@@ -47,18 +47,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				"id");
 	}
 
-	private void criarBancoHoras(Long idUsuario) {
-
-		SimpleJdbcInsert bancoHoras;
-		bancoHoras = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("banco_horas")
-				.usingGeneratedKeyColumns("id");
-
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("id_usuario", idUsuario);
-		params.addValue("saldo", 0);
-		bancoHoras.executeAndReturnKey(params);
-	}
-
 	@Override
 	public Usuario save(Usuario entity) throws RegistroDuplicadoException {
 
@@ -80,7 +68,6 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			}
 			Number key = insertUsuario.executeAndReturnKey(params);
 			entity.setId(key.longValue());
-			criarBancoHoras(key.longValue());
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}

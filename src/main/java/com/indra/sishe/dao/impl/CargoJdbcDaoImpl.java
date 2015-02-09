@@ -58,13 +58,6 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
 		}
-
-		try {
-			Number key = insertCargo.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
-			entity.setId(key.longValue());
-		} catch (DuplicateKeyException e) {
-			throw new RegistroDuplicadoException(e.toString());
-		}
 		return entity;
 	}
 

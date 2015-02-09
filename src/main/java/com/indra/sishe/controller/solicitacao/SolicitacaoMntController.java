@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 
 import org.primefaces.context.RequestContext;
 
@@ -14,6 +16,8 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.service.BancoHorasService;
+import com.indra.sishe.service.HistoricoService;
 
 @ViewScoped
 @ManagedBean(name = "solicitacaoMnt")
@@ -24,6 +28,16 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	private List<Solicitacao> listaSolicitacoes;
 
 	private List<Solicitacao> solicitacoesSelecionadas;
+
+	private Solicitacao solicitacaoDetalhe;
+
+	private String observacao;
+
+	@Inject
+	protected transient BancoHorasService bancoHorasService;
+
+	@Inject
+	protected transient HistoricoService historicoService;
 
 	@PostConstruct
 	public void init() {
@@ -36,8 +50,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-
-//		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else 
+		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
 		pesquisarPorUsuarioLogado();
 	}
 
@@ -57,8 +70,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		}
 		searched = true;
 	}
-	
-
 
 	public void beforeRemoverSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
@@ -69,17 +80,18 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public String remove() {
-		
-//		for (Solicitacao solicitacao : solicitacoesSelecionadas){
-//			if (solicitacao.getLider().getNome() != null) {
-////				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada");
-//				 messager.error(messageProvider.getMessage("msg.error.excluir.solicitacao.avaliada"));
-//			}
-//		}
-		
+
+		// for (Solicitacao solicitacao : solicitacoesSelecionadas){
+		// if (solicitacao.getLider().getNome() != null) {
+		// // throw new
+		// ApplicationException("msg.error.excluir.solicitacao.avaliada");
+		// messager.error(messageProvider.getMessage("msg.error.excluir.solicitacao.avaliada"));
+		// }
+		// }
+
 		int size = solicitacoesSelecionadas.size();
 		ArrayList<Solicitacao> solicitacoesParaRemover = new ArrayList<Solicitacao>(size);
-		for (Solicitacao solicitacao : solicitacoesSelecionadas){
+		for (Solicitacao solicitacao : solicitacoesSelecionadas) {
 			solicitacoesParaRemover.add(solicitacao);
 		}
 		try {
@@ -91,7 +103,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		pesquisarPorUsuarioLogado();
 		return irParaConsultarPorUsuario();
 	}
-	
+
 	public void beforeAprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
@@ -125,9 +137,14 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		try {
 			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
 				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
+				if (status == 1) {
+					bancoHorasService.contabilizarHorasBanco(ids);
+				}
 			} else {
 				solicitacaoService.liderAcaoSolicitacao(ids, status);
 			}
+			historicoService.gerarHistorico(ids, observacao);
+			observacao = "";
 			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
@@ -153,6 +170,23 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setSolicitacoesSelecionadas(List<Solicitacao> solicitacoesSelecionadas) {
 		this.solicitacoesSelecionadas = solicitacoesSelecionadas;
+	}
+
+
+	public Solicitacao getSolicitacaoDetalhe() {
+		return solicitacaoDetalhe;
+	}
+
+	public void setSolicitacaoDetalhe(Solicitacao solicitacaoDetalhe) {
+		this.solicitacaoDetalhe = solicitacaoDetalhe;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 }
