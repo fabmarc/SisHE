@@ -8,28 +8,26 @@
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				<br />
 				<p:fieldset id="fsEquipe" legend="Dados do Projeto" styleClass="classFieldSet">
-					
-					<div id="divInfoProjeto" class="divInfoProjeto">
-						<div id="divNomeProjeto"  class="divNomeProjeto">
-							<p:outputLabel id="lblNomeProjeto"  value="Nome:"></p:outputLabel>
-							<p:outputLabel id="objNomeProjeto" styleClass="objNomeProjeto" value="#{usuarioProjetoMnt.usuarioProjetoSelecionado.projeto.nome}"></p:outputLabel>
-						</div>
 
-						<div id="divNomeGerente" class="divNomeGerente">
-							<p:outputLabel id="lblNomeGerente"  value="Gerente:"></p:outputLabel>
-							<p:outputLabel id="objNomeGerente" styleClass="objNomeGerente" value="#{usuarioProjetoMnt.usuarioProjetoSelecionado.usuario.nome}"></p:outputLabel>
+					<div id="divNomeProjeto" class="divNomeProjeto">
+						<p:outputLabel id="lblNomeProjeto" value="Nome:"></p:outputLabel>
+						<p:outputLabel id="objNomeProjeto" styleClass="objNomeProjeto" value="#{usuarioProjetoMnt.projetoSelecionado.nome}"></p:outputLabel>
+					</div>
 
-						</div>
+					<div id="divNomeGerente" class="divNomeGerente">
+						<p:outputLabel id="lblNomeGerente" value="Gerente:"></p:outputLabel>
+						<p:outputLabel id="objNomeGerente" styleClass="objNomeGerente" value="#{usuarioProjetoMnt.projetoSelecionado.gerente.nome}"></p:outputLabel>
+
 					</div>
 				</p:fieldset>
 				<br />
 
 				<div id="divDT" style="top: 2px; position: relative;">
 					<p:dataTable id="usuariosDT" style="top:10%;" rowKey="#{usuarios.id}" var="usuarios" 
-									value="#{usuarioProjetoMnt.listaUsuarioProjeto}" selection="#{usuarioProjetoMnt.usuariosProjetos}" 
-									scrollable="true" scrollHeight="270" emptyMessage="Nenhum registro encontrado." >
+									value="#{usuarioProjetoCad.listaUsuarioProjeto}" selection="#{usuarioProjetoCad.usuariosProjetos}" 
+									scrollable="true" scrollHeight="145" emptyMessage="Nenhum registro encontrado." >
 						<f:facet name="header">
-          					 Equipe
+          					 Cadastrar Equipe
        					 </f:facet>
        					 
 						<p:column selectionMode="multiple" style="width:16px;text-align:center" />

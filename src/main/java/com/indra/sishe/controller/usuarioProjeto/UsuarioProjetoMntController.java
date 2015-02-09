@@ -17,10 +17,9 @@ import com.indra.sishe.entity.UsuarioProjeto;
 
 @ViewScoped
 @ManagedBean(name = "usuarioProjetoMnt")
-public class UsuarioProjetoMntController extends usuarioProjetoController {
+public class UsuarioProjetoMntController extends UsuarioProjetoController {
 
-	private static final long serialVersionUID = -6925459169473948818L;
-	private List<UsuarioProjeto> listaUsuarioProjeto = new ArrayList<UsuarioProjeto>();
+	private static final long serialVersionUID = -6925459169473948818L;	
 	private List<UsuarioProjeto> usuariosProjetos = new ArrayList<UsuarioProjeto>();
 		
 	@PostConstruct
@@ -43,6 +42,7 @@ public class UsuarioProjetoMntController extends usuarioProjetoController {
 			UsuarioProjeto up = new UsuarioProjeto();
 			up.setProjeto(projetoSelecionado);
 			listarUsuariosDoProjeto(up);
+			putSessionAttr("usuarioProjetoSelecionado", up );
 		}		
 	}
 
