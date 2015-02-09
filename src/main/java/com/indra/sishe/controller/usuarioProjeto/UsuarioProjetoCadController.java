@@ -47,8 +47,7 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 	
 
 	public boolean modoCadastrar() {
-		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {
-			
+		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {			
 			cadastrarUsuarioProjeto();
 			return true;
 		} else {
