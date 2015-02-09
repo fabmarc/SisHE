@@ -12,12 +12,12 @@
 					<div id="divInfoProjeto" class="divInfoProjeto">
 						<div id="divNomeProjeto"  class="divNomeProjeto">
 							<p:outputLabel id="lblNomeProjeto"  value="Nome:"></p:outputLabel>
-							<p:outputLabel id="objNomeProjeto" styleClass="objNomeProjeto" value="#{usuarioProjetoMnt.usuarioProjetoSelecionado.projeto.nome}"></p:outputLabel>
+							<p:outputLabel id="objNomeProjeto" styleClass="objNomeProjeto" value="#{usuarioProjetoMnt.projetoSelecionado.nome}"></p:outputLabel>
 						</div>
 
 						<div id="divNomeGerente" class="divNomeGerente">
 							<p:outputLabel id="lblNomeGerente"  value="Gerente:"></p:outputLabel>
-							<p:outputLabel id="objNomeGerente" styleClass="objNomeGerente" value="#{usuarioProjetoMnt.usuarioProjetoSelecionado.usuario.nome}"></p:outputLabel>
+							<p:outputLabel id="objNomeGerente" styleClass="objNomeGerente" value="#{usuarioProjetoMnt.projetoSelecionado.gerente.nome}"></p:outputLabel>
 
 						</div>
 					</div>
@@ -56,7 +56,7 @@
 
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 					<div class="divDialog">
-						<h:commandButton value="Sim" actionListener="#{usuarioProjetoMnt.removerSistema()}" onclick="confirmExclusao.hide()" update="mainForm:usuariosDT messages" styleClass="botao3d" style="width: 109px;" />
+						<h:commandButton value="Sim" actionListener="#{usuarioProjetoMnt.removerUsuarioDaEquipe()}" onclick="confirmExclusao.hide()" update="mainForm:usuariosDT messages" styleClass="botao3d" style="width: 109px;" />
 						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 					</div>
 				</p:confirmDialog>

@@ -76,14 +76,14 @@ public class UsuarioProjetoMntController extends UsuarioProjetoController {
 		}
 	}
 
-	public String removerSistema() {
+	public String removerUsuarioDaEquipe() {
 		int size = usuariosProjetos.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		for (UsuarioProjeto usuarioProjeto : usuariosProjetos)
 			ids.add(usuarioProjeto.getId());
 		try {
 			usuarioProjetoService.remove(ids);
-			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Equipe"));
+			messager.info(messageProvider.getMessage("msg.success.registro.excluido", "Usuário"));
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
 		}
