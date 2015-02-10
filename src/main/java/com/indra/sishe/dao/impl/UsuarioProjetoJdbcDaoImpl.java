@@ -54,22 +54,18 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		}
 		return entity;
 	}
-	
 
 	@Override
-	public void salvar(List<UsuarioProjeto> usuarioProjeto) {
-
-		ArrayList<Object[]> params = new ArrayList<Object[]>(usuarioProjeto.size());
-		for (UsuarioProjeto up : usuarioProjeto) {
-			Object[] param = new Object[] { up.getUsuario().getId(), up.getProjeto().getId() };
+	public void salvar(List<Usuario> usuarios, Projeto projeto) {
+		ArrayList<Object[]> params = new ArrayList<Object[]>(usuarios.size());
+		for (Usuario user : usuarios) {
+			Object[] param = new Object[] { user.getId(), projeto.getId() };
 			params.add(param);
 		}
 
 		int[] affectedRows = getJdbcTemplate().batchUpdate(
 				"INSERT INTO usuario_projeto(id_usuario, id_projeto) values (?,?)", params);
-
-	}		
-	
+	}
 
 	@Override
 	public UsuarioProjeto update(UsuarioProjeto entity) throws RegistroInexistenteException,
@@ -88,7 +84,6 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 
 	@Override
 	public List<UsuarioProjeto> findAll() {
-
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -174,7 +169,6 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
-
 	}
 
 	@Override
@@ -295,48 +289,39 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 				});
 		return lista;
 	}
-	
+
 	@Override
-	public List<UsuarioProjeto> findUserNotInProjeto(UsuarioProjeto usuarioProjeto) {
+	public List<Usuario> findUserNotInProjeto(UsuarioProjeto usuarioProjeto) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT u.nome AS nomeUsuario, u.id as usuarioId, c.nome AS nomeCargo ,"
-				+ " up.id_projeto AS idProjeto, up.id_usuario as usuarioDoProjeto, up.id as idUP ,  p.nome as nomeProjeto, p.id as idProjeto");
-		sql.append(" FROM usuario_projeto up");
-		sql.append(" INNER JOIN usuario u ON up.id_usuario = u.id");
+		sql.append("SELECT u.nome AS nomeUsuario, u.id as usuarioId, c.nome AS nomeCargo, c.id as idCargo ");
+		sql.append(" FROM usuario u");
 		sql.append(" INNER JOIN cargo c ON c.id = u.id_cargo ");
-		sql.append(" INNER JOIN projeto p ON p.id = up.id_projeto ");
+		sql.append(" LEFT JOIN usuario_projeto up ON (up.id_usuario = u.id) ");
 		sql.append(" WHERE 1 = 1");
 
 		if (usuarioProjeto.getProjeto() != null && usuarioProjeto.getProjeto().getId() != null) {
-			sql.append(" AND up.id_projeto <> :idProjeto");
+			sql.append(" AND up.id_projeto IS NULL");
 			params.addValue("idProjeto", usuarioProjeto.getProjeto().getId());
 		}
 
-		List<UsuarioProjeto> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
-				new RowMapper<UsuarioProjeto>() {
+		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<Usuario>() {
 					@Override
-					public UsuarioProjeto mapRow(ResultSet rs, int idx) throws SQLException {
+					public Usuario mapRow(ResultSet rs, int idx) throws SQLException {
 
 						Usuario usuario = new Usuario();
-						Projeto projeto = new Projeto();
 						Cargo cargo = new Cargo();
-						UsuarioProjeto up = new UsuarioProjeto();
 
 						usuario.setNome(rs.getString("nomeUsuario"));
 						usuario.setId(rs.getLong("usuarioId"));
 
+						cargo.setId(rs.getLong("idCargo"));
 						cargo.setNome(rs.getString("nomeCargo"));
 						usuario.setCargo(cargo);
 
-						projeto.setId(rs.getLong("idProjeto"));
-
-						up.setUsuario(usuario);
-						up.setProjeto(projeto);
-						up.setId(rs.getLong("idUP"));
-
-						return up;
+						return usuario;
 					}
 				});
 		return lista;

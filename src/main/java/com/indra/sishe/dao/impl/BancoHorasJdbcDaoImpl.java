@@ -2,6 +2,7 @@ package com.indra.sishe.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -22,6 +23,8 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.BancoHorasDAO;
 import com.indra.sishe.entity.BancoHoras;
+import com.indra.sishe.entity.Historico;
+import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
@@ -95,7 +98,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 	}
 
 	@Override
-	public void contabilizarHorasBanco(List<Long> idsSolicitacoes) {
+	public List<HistoricoDetalhes> contabilizarHorasBanco(List<Long> idsSolicitacoes) {
 		
 		StringBuilder sql;
 		MapSqlParameterSource params;
@@ -108,7 +111,8 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 		int horaInicioSolicitacao, horaFimSolicitacao;
 		int minutoInicioSolicitacao, minutoFimSolicitacao;
 		int horaInicioPeriodo, horaFimPeriodo;
-		int minutoInicioPeriodo, minutoFimPeriodo;	
+		int minutoInicioPeriodo, minutoFimPeriodo;
+		List<HistoricoDetalhes> historicoDetalhes = new ArrayList<HistoricoDetalhes>();
 		
 		Calendar calSolicitacao = Calendar.getInstance();
 		Calendar calPeriodo = Calendar.getInstance();
@@ -201,6 +205,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				// verificar se existe periodos que correspondem a solicitação.
 				if (periodos.size() < 1) {
 					//caso não exista nenhum periodo, será adicionado todos os minutos sem cálculo.
+					historicoDetalhes.add(new HistoricoDetalhes(minutoTotal, minutoTotal, new Historico(new Solicitacao(id))));
 					minutos = minutoTotal;
 				} else {// Caso existam periodos.
 					//percorrer todos os periodos.
@@ -228,12 +233,14 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 							//obter minutos que ainda não foram utilizados no calculo.
 							minutoTotal = minutoTotal - diferenca;
 							//Cálcular os minutos que correspondem ao periodo de acordo com a porcentagem do mesmo.
+							historicoDetalhes.add(new HistoricoDetalhes(diferenca, p.getPorcentagem(), (int) (diferenca + (diferenca * (float) p.getPorcentagem() / 100)), new Historico(new Solicitacao(id))));
 							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
 						} else {//caso o periodo atenda a todos os minutos da solicitação.
 							//obter minutos que representam o periodo atual.
 							diferenca = minutoSolicitacaoFinal - minutoInicioPeriodo;
 							//obter minutos que ainda não foram utilizados no calculo.
 							minutoTotal = minutoTotal - diferenca;
+							historicoDetalhes.add(new HistoricoDetalhes(diferenca, p.getPorcentagem(), (int) (diferenca + (diferenca * (float) p.getPorcentagem() / 100)), new Historico(new Solicitacao(id))));
 							//Cálcular os minutos que correspondem ao periodo de acordo com a porcentagem do mesmo.
 							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
 						}
@@ -249,13 +256,17 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				// para o feriado na regra.
 				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
 						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
+				historicoDetalhes.add(new HistoricoDetalhes(diferenca, porcentagemFeriado, (int) (minutoTotal * (float) porcentagemFeriado / 100), new Historico(new Solicitacao(id))));
+				
 				minutos = (int) (minutoTotal + (minutoTotal * ((float) porcentagemFeriado / 100)));
 			}
 			//Adicionar novo saldo ao banco de horas.
 			getJdbcTemplate()
 					.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
 							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
-		}		
+			System.out.println(historicoDetalhes.size());
+		}	
+		return historicoDetalhes;
 	}
 
 }

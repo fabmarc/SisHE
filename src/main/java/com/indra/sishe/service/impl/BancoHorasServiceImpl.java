@@ -10,6 +10,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.BancoHorasDAO;
 import com.indra.sishe.entity.BancoHoras;
+import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -64,8 +65,8 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 	}
 
 	@Override
-	public void contabilizarHorasBanco(List<Long> idsSolicitacoes) {
-		bancoHorasDao.contabilizarHorasBanco(idsSolicitacoes);
+	public List<HistoricoDetalhes> contabilizarHorasBanco(List<Long> idsSolicitacoes) {
+		return bancoHorasDao.contabilizarHorasBanco(idsSolicitacoes);
 	}
 
 }

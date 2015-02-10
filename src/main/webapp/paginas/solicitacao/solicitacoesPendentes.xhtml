@@ -13,8 +13,10 @@
 				<!-- Div Corpo -->
 				<div class="divCorpo" style="padding-bottom: 5%;">
 					<!-- Div Pesquisar -->
+
 					<div style="width: 410px; height:40px;">
 						<h:commandButton styleClass="botao3d" style="float:left;" actionListener="#{solicitacaoPend.pesquisarPendentes()}" value="Pesquisar" />
+
 					</div>
 
 					<!-- Tabela -->
@@ -112,6 +114,7 @@
 						<div class="divDialog">
 							<h:outputText value="Observação para a(s) solicitação(ões):" />
 							<br />
+
 							<h:inputTextarea id="obs01" value="#{solicitacaoPend.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;">
 								<f:ajax event="change" render="mainForm:obs02" />
 							</h:inputTextarea>
