@@ -13,7 +13,7 @@
 				<!-- Div Corpo -->
 				<div class="divCorpo" style="padding-bottom: 5%;">
 					<!-- Div Pesquisar -->
-					<div style="width: 410px; height:40px;">
+					<div style="width: 410px; height:40px;">						
 						<h:commandButton styleClass="botao3d" style="float:left;" actionListener="#{solicitacaoMnt.pesquisarPendentes()}" value="Pesquisar" />
 					</div>
 
@@ -88,7 +88,7 @@
 
 					</p:dataTable>
 					<!-- Fim tabela -->
-
+					
 
 					<!-- Mensagem aprovar -->
 					<p:confirmDialog id="msgAprovar" global="true" showEffect="fade" hideEffect="explode" header="Aprovar" message="Deseja aprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmAprovacao">
@@ -97,7 +97,7 @@
 							<h:outputText value="Observação para a(s) solicitação(ões):" />
 							<br />
 							<h:inputTextarea id="obs01" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;">
-								<f:ajax event="change" render="mainForm:obs02" />
+								<f:ajax event="blur" render="mainForm:obs02" />
 							</h:inputTextarea>
 							<br />
 							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.aprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />

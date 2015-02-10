@@ -6,10 +6,11 @@ import javax.ejb.Local;
 
 import com.indra.infra.service.BaseService;
 import com.indra.sishe.entity.Historico;
+import com.indra.sishe.entity.HistoricoDetalhes;
 
 @Local
 public interface HistoricoService extends BaseService<Historico>{
 	
-	public void gerarHistorico(List<Long> ids, String descricao);
+	public void gerarHistorico(List<Long> ids, String descricao, List<HistoricoDetalhes> detalhes);
 
 }

@@ -35,6 +35,10 @@ public class Solicitacao implements Serializable{
 
 	public Solicitacao() {
 	}
+	
+	public Solicitacao(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
