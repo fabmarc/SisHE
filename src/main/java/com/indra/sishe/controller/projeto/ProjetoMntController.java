@@ -88,8 +88,8 @@ public class ProjetoMntController extends ProjetoController {
 		if (projetosSelecionados.size() != 1) {
 			RequestContext.getCurrentInstance().execute("selectOne.show()");
 		} else {
-			putFlashAttr("searched", true);
-			putFlashAttr("projetoFiltro", projetoFiltro);
+			putSessionAttr("searched", true);
+			putSessionAttr("projetoFiltro", projetoFiltro);
 			putSessionAttr("projetoSelecionadoFiltro", projetosSelecionados.get(0));
 			return "/paginas/equipe/consultarEquipe.xhtml?faces-redirect=true";
 		}

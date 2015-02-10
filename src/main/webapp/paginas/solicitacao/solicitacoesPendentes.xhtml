@@ -28,7 +28,7 @@
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<!-- Código -->
+						<!-- Código NÂO SERÁ EXIBIDO -->
 						<p:column headerText="Código" style="width:10%; text-align:center;">
 							<h:outputText value="#{solicitacao.id}" />
 						</p:column>
@@ -41,10 +41,20 @@
 						</p:column>
 						
 						<!-- Sistema -->
-						<p:column headerText="Sistema" >
-							<div>
+						<p:column headerText="Sistema" style="max-width:112px;text-overflow:ellipsis;">
 								<h:outputText value="#{solicitacao.sistema.nome}" />
-							</div>
+						</p:column>
+						
+						<p:column headerText="Hora Inicial" style="width:70px ;text-align: center;" >
+							<h:outputText value="#{solicitacao.horaInicio}">
+								<f:convertDateTime pattern="HH:mm"/>
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Hora Final" style="width:70px ;text-align: center;" >
+							<h:outputText value="#{solicitacao.horaFinal}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputText>
 						</p:column>
 						
 						<!-- Data -->
@@ -58,7 +68,11 @@
 						
 						<!-- Ação -->
 						<p:column headerText="Ação" style="width:5%">
-							<p:commandLink title="Visualizar Solicitação" id="alterarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" action="#{solicitacaoMnt.visualizar()}" />
+							<p:commandLink title="Visualizar Solicitação" id="descricaoLink" onclick="modalDetalhes.show()" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" >
+							<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoMnt.solicitacaoDetalhe}" />
+							<f:ajax event="click" execute="@all" render="@all" />
+							</p:commandLink>
+						 <!-- <p:tooltip  id="toolTipVisualizar" for="descricaoLink" value="Descrição: #{solicitacao.descricao}" style="max-width:682px" /> --> 							
 						</p:column>
 						
 						<!-- Rodapé tabela -->
@@ -74,7 +88,8 @@
 
 					</p:dataTable>
 					<!-- Fim tabela -->
-					
+
+
 					<!-- Mensagem aprovar -->
 					<p:confirmDialog id="msgAprovar" global="true" showEffect="fade" hideEffect="explode" header="Aprovar" message="Deseja aprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmAprovacao">
 						<!-- Div msg aprovar -->
@@ -120,6 +135,14 @@
 				<!-- Fim div corpo -->
 			</ui:insert>
 		</h:form>
+					<p:dialog header="Detalhes" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="150">
+						<div >
+							<div>
+								<h:outputText value="Solicitante:" />
+								<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome}" />
+							</div>
+						</div>
+					</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

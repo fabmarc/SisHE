@@ -46,8 +46,9 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 
 	
 
-	private boolean modoCadastrar() {
-		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {
+	public boolean modoCadastrar() {
+		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {			
+			cadastrarUsuarioProjeto();
 			return true;
 		} else {
 			return false;
@@ -63,16 +64,12 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 	}
 
 	public String cadastrarUsuarioProjeto() {
-		try {
-			this.usuarioProjetoSelecionado = usuarioProjetoService.save(usuarioProjetoSelecionado);
-			putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
-			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Equipe"));
-			putFlashAttr("searched", searched);
-			return irParaConsultar();
-		} catch (ApplicationException e) {
-			returnErrorMessage(e.getMessage());
-		}
-		return null;
+		usuarioProjetoService.salvar(usuariosProjetos);
+		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
+		returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Equipe"));
+		putFlashAttr("searched", searched);
+		return irParaConsultar();
+		
 	}
 
 	public String alterarUsuarioProjeto() {

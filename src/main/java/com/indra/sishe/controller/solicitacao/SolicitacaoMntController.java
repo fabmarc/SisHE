@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
@@ -27,6 +28,8 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	private List<Solicitacao> listaSolicitacoes;
 
 	private List<Solicitacao> solicitacoesSelecionadas;
+
+	private Solicitacao solicitacaoDetalhe;
 
 	private String observacao;
 
@@ -167,6 +170,15 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setSolicitacoesSelecionadas(List<Solicitacao> solicitacoesSelecionadas) {
 		this.solicitacoesSelecionadas = solicitacoesSelecionadas;
+	}
+
+
+	public Solicitacao getSolicitacaoDetalhe() {
+		return solicitacaoDetalhe;
+	}
+
+	public void setSolicitacaoDetalhe(Solicitacao solicitacaoDetalhe) {
+		this.solicitacaoDetalhe = solicitacaoDetalhe;
 	}
 
 	public String getObservacao() {
