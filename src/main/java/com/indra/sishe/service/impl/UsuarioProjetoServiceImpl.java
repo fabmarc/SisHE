@@ -12,6 +12,8 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.UsuarioProjetoDAO;
+import com.indra.sishe.entity.Projeto;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioProjetoService;
@@ -115,13 +117,13 @@ public class UsuarioProjetoServiceImpl extends StatelessServiceAb implements Usu
 	}
 
 	@Override
-	public List<UsuarioProjeto> findUserNotInProjeto(UsuarioProjeto usuarioProjeto) {
+	public List<Usuario> findUserNotInProjeto(UsuarioProjeto usuarioProjeto) {
 		return usuarioProjetoDAO.findUserNotInProjeto(usuarioProjeto);
 	}
 
 	@Override
-	public void salvar(List<UsuarioProjeto> usuarioProjeto) {
-		usuarioProjetoDAO.salvar(usuarioProjeto);	
+	public void salvar(List<Usuario> usuarios, Projeto projeto) {
+		usuarioProjetoDAO.salvar(usuarios,projeto);	
 	}
 
 	

@@ -8,7 +8,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.indra.infra.resource.MessageProvider;
-import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.entity.UsuarioProjeto;
@@ -18,7 +17,7 @@ import com.indra.sishe.entity.UsuarioProjeto;
 public class UsuarioProjetoCadController extends UsuarioProjetoController {
 
 	private static final long serialVersionUID = 5412878556555830463L;
-	private List<UsuarioProjeto> usuariosProjetos = new ArrayList<UsuarioProjeto>();
+	private List<Usuario> usuariosSelecionados = new ArrayList<Usuario>();
 
 	@PostConstruct
 	private void init() {
@@ -30,24 +29,21 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 			usuarioProjetoSelecionado = new UsuarioProjeto();
 		}
 
-		usuarioProjetoFiltro = (UsuarioProjeto) getFlashAttr("usuarioProjetoFiltro");		
+		usuarioProjetoFiltro = (UsuarioProjeto) getFlashAttr("usuarioProjetoFiltro");
 		listarUsuarios(usuarioProjetoSelecionado);
-		
 	}
 
-	public void UsuarioProjetoMntController(){
-		
-	}
-	
-	public List<UsuarioProjeto> listarUsuarios(UsuarioProjeto usuarioProjeto) {
-		listaUsuarioProjeto = usuarioProjetoService.findUserNotInProjeto(usuarioProjeto);
-		return listaUsuarioProjeto;
+	public void UsuarioProjetoMntController() {
+
 	}
 
-	
+	public List<Usuario> listarUsuarios(UsuarioProjeto usuarioProjeto) {
+		listaUsuarios = usuarioProjetoService.findUserNotInProjeto(usuarioProjeto);
+		return listaUsuarios;
+	}
 
 	public boolean modoCadastrar() {
-		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {			
+		if (usuarioProjetoSelecionado == null || usuarioProjetoSelecionado.getId() == null) {
 			cadastrarUsuarioProjeto();
 			return true;
 		} else {
@@ -55,34 +51,12 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 		}
 	}
 
-	public String confirmar() {
-		if (modoCadastrar()) {
-			return cadastrarUsuarioProjeto();
-		} else {
-			return alterarUsuarioProjeto();
-		}
-	}
-
 	public String cadastrarUsuarioProjeto() {
-		usuarioProjetoService.salvar(usuariosProjetos);
+		usuarioProjetoService.salvar(usuariosSelecionados, (Projeto) getSessionAttr("projetoSelecionadoFiltro"));
 		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
-		returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Equipe"));
+		returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Usuário(s)"));
 		putFlashAttr("searched", searched);
 		return irParaConsultar();
-		
-	}
-
-	public String alterarUsuarioProjeto() {
-		try {
-			usuarioProjetoService.update(usuarioProjetoSelecionado);
-			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Equipe"));
-			putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
-			putFlashAttr("searched", searched);
-			return irParaConsultar();
-		} catch (ApplicationException e) {
-			returnErrorMessage(e.getMessage());
-			return irParaAlterar(usuarioProjetoSelecionado);
-		}
 	}
 
 	public List<Usuario> getListaUsuarios() {
@@ -116,18 +90,21 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 	public void setUsuarioProjetoSelecionado(UsuarioProjeto usuarioProjetoSelecionado) {
 		this.usuarioProjetoSelecionado = usuarioProjetoSelecionado;
 	}
-	
+
 	public List<UsuarioProjeto> getListaUsuarioProjeto() {
-		return  listaUsuarioProjeto;
+		return listaUsuarioProjeto;
 	}
 
-	public List<UsuarioProjeto> getUsuariosProjetos() {
-		return usuariosProjetos;
+	public List<Usuario> getUsuariosProjetos() {
+		return usuariosSelecionados;
 	}
 
-	public void setUsuariosProjetos(List<UsuarioProjeto> usuariosProjetos) {
-		this.usuariosProjetos = usuariosProjetos;
+	public List<Usuario> getUsuariosSelecionados() {
+		return usuariosSelecionados;
 	}
-	
-	
+
+	public void setUsuariosSelecionados(List<Usuario> usuariosSelecionados) {
+		this.usuariosSelecionados = usuariosSelecionados;
+	}
+
 }
