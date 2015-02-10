@@ -65,13 +65,6 @@ public class UsuarioProjetoController extends BaseController implements Serializ
 		return "/paginas/equipe/cadastrarEquipe.xhtml?faces-redirect=true";
 	}
 
-	public String irParaAlterar(UsuarioProjeto usuarioProjeto) {
-		putFlashAttr("searched", searched);
-		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
-		putFlashAttr("usuarioProjetoSelecionado", usuarioProjetoSelecionado);
-		return "/paginas/equipe/cadastrarEquipe.xhtml";
-	}
-
 	public List<UsuarioProjeto> getUsuarioProjeto() {
 		return usuarioProjeto;
 	}

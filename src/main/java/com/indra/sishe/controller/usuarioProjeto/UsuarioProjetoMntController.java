@@ -46,8 +46,7 @@ public class UsuarioProjetoMntController extends UsuarioProjetoController {
 		}		
 	}
 
-	public void beforeRemoveUsuarioProjeto() {
-		
+	public void beforeRemoveUsuarioProjeto() {		
 		if (usuariosProjetos.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
 		} else {
@@ -60,20 +59,6 @@ public class UsuarioProjetoMntController extends UsuarioProjetoController {
 		listaUsuarioProjeto = usuarioProjetoService.findByProjeto(usuarioProjetoFiltro);
 		Collections.sort(listaUsuarioProjeto);
 		searched = true;
-	}
-
-	
-	public String irParaAlterar(UsuarioProjeto usuarioProjetoSelecionado) {
-		putFlashAttr("searched", searched);
-		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
-		try {
-			usuarioProjetoSelecionado = usuarioProjetoService.findById(usuarioProjetoSelecionado.getId());
-			putFlashAttr("usuarioProjetoSelecionado", usuarioProjetoSelecionado);
-			return "/paginas/equipe/cadastrarEquipe.xhtml?faces-redirect=true";
-		} catch (ApplicationException e) {
-			returnErrorMessage(e.getMessage());
-			return irParaConsultar();
-		}
 	}
 
 	public String removerUsuarioDaEquipe() {

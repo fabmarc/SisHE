@@ -24,7 +24,7 @@
 
 				<div id="divDT" style="top: 2px; position: relative;">
 					<p:dataTable id="usuariosDT" style="top:10%;" rowKey="#{usuarios.id}" var="usuarios" 
-									value="#{usuarioProjetoCad.listaUsuarioProjeto}" selection="#{usuarioProjetoCad.usuariosProjetos}" 
+									value="#{usuarioProjetoCad.listaUsuarios}" selection="#{usuarioProjetoCad.usuariosSelecionados}" 
 									scrollable="true" scrollHeight="145" emptyMessage="Nenhum registro encontrado." >
 						<f:facet name="header">
           					 Cadastrar Equipe
@@ -34,12 +34,13 @@
 						
 						<p:column headerText="Código" style="width:10%; text-align:center">
 							<h:outputText value="#{usuarios.id}" />
-						</p:column>
+						</p:column>						
+				
 						<p:column headerText="Nome" style="width:60%;">
-							<h:outputText value="#{usuarios.usuario.nome}" />
+							<h:outputText value="#{usuarios.nome}" />
 						</p:column>
 						<p:column headerText="Cargo" style="width:30%;">
-							<h:outputText value="#{usuarios.usuario.cargo.nome}" />
+							<h:outputText value="#{usuarios.cargo.nome}" />
 						</p:column>
 
 						<f:facet name="footer">
