@@ -6,17 +6,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
 
 import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
-import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
-import com.indra.sishe.service.BancoHorasService;
-import com.indra.sishe.service.HistoricoService;
 
 @ViewScoped
 @ManagedBean(name = "solicitacaoMnt")
@@ -30,14 +26,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	private Solicitacao solicitacaoDetalhe;
 
-	private String observacao;
-
-	@Inject
-	protected transient BancoHorasService bancoHorasService;
-
-	@Inject
-	protected transient HistoricoService historicoService;
-
 	@PostConstruct
 	public void init() {
 
@@ -49,8 +37,8 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); 
-		else pesquisarPorUsuarioLogado();
+//		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else 
+			pesquisarPorUsuarioLogado();
 	}
 
 
@@ -59,15 +47,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		usuario.setId(UsuarioLogado.getId());
 		solicitacaoFiltro.setUsuario(usuario);
 		listaSolicitacoes = solicitacaoService.findByFilterByUsuario(solicitacaoFiltro);
-		searched = true;
-	}
-
-	public void pesquisarPendentes() {
-		if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
-			listaSolicitacoes = solicitacaoService.findByGerente(new Usuario(UsuarioLogado.getId()));
-		} else {
-			listaSolicitacoes = solicitacaoService.findByLider(new Usuario(UsuarioLogado.getId()));
-		}
 		searched = true;
 	}
 
@@ -103,55 +82,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		pesquisarPorUsuarioLogado();
 		return irParaConsultarPorUsuario();
 	}
-
-	public void beforeAprovarSolicitacao() {
-		if (solicitacoesSelecionadas.size() == 0) {
-			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
-		} else {
-			RequestContext.getCurrentInstance().execute("confirmAprovacao.show()");
-		}
-	}
-
-	public void beforeReprovarSolicitacao() {
-		if (solicitacoesSelecionadas.size() == 0) {
-			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
-		} else {
-			RequestContext.getCurrentInstance().execute("confirmReprovacao.show()");
-		}
-	}
-
-	public void aprovar() {
-		acaoAprovarReprovar(1);
-	}
-
-	public void reprovar() {
-		acaoAprovarReprovar(2);
-	}
-
-	private void acaoAprovarReprovar(int status) {
-
-		int size = solicitacoesSelecionadas.size();
-		ArrayList<Long> ids = new ArrayList<Long>(size);
-		for (Solicitacao solicitacao : solicitacoesSelecionadas)
-			ids.add(solicitacao.getId());
-		try {
-			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
-				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
-				if (status == 1) {
-					bancoHorasService.contabilizarHorasBanco(ids);
-				}
-			} else {
-				solicitacaoService.liderAcaoSolicitacao(ids, status);
-			}
-			historicoService.gerarHistorico(ids, observacao);
-			observacao = "";
-			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
-		} catch (ApplicationException e) {
-			messager.error(e.getMessage());
-		}
-		pesquisarPendentes();
-	}
-
+	
 	public void visualizar() {
 		System.out.println("Visualizar");
 	}
@@ -181,12 +112,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		this.solicitacaoDetalhe = solicitacaoDetalhe;
 	}
 
-	public String getObservacao() {
-		return observacao;
-	}
-
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
+	
 
 }

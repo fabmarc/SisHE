@@ -23,9 +23,6 @@ public class FeriadoMntController extends FeriadoController {
 	private List<Feriado> listaFeriados;
 	private List<Feriado> feriadosSelecionados;
 
-	public FeriadoMntController() {
-	}
-
 	@PostConstruct
 	private void init() {
 		
