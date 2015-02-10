@@ -100,39 +100,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		}
 	}
 
-	public void aprovar() {
-		acaoAprovarReprovar(1);
-	}
-
-	public void reprovar() {
-		acaoAprovarReprovar(2);
-	}
-
-	private void acaoAprovarReprovar(int status) {
-
-		int size = solicitacoesSelecionadas.size();
-		ArrayList<Long> ids = new ArrayList<Long>(size);
-		List<HistoricoDetalhes> detalhes = new ArrayList<HistoricoDetalhes>();
-		for (Solicitacao solicitacao : solicitacoesSelecionadas)
-			ids.add(solicitacao.getId());
-		try {
-			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
-				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
-				if (status == 1) {
-					detalhes = bancoHorasService.contabilizarHorasBanco(ids);
-				}
-			} else {
-				solicitacaoService.liderAcaoSolicitacao(ids, status);
-			}
-			historicoService.gerarHistorico(ids, observacao, detalhes);
-			observacao = "";
-			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
-		} catch (ApplicationException e) {
-			messager.error(e.getMessage());
-		}
-		pesquisarPendentes();
-	}
-
 	public void visualizar() {
 		System.out.println("Visualizar");
 	}
@@ -152,7 +119,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	public void setSolicitacoesSelecionadas(List<Solicitacao> solicitacoesSelecionadas) {
 		this.solicitacoesSelecionadas = solicitacoesSelecionadas;
 	}
-
 
 	public Solicitacao getSolicitacaoDetalhe() {
 		return solicitacaoDetalhe;
