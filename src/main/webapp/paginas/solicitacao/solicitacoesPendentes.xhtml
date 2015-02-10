@@ -28,7 +28,7 @@
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<!-- Código NÂO SERÁ EXIBIDO -->
+						<!-- Código  NÂO SERÁ EXIBIDO -->
 						<p:column headerText="Código" style="width:10%; text-align:center;">
 							<h:outputText value="#{solicitacao.id}" />
 						</p:column>
@@ -69,7 +69,7 @@
 						<!-- Ação -->
 						<p:column headerText="Ação" style="width:5%">
 							<p:commandLink title="Visualizar Solicitação" id="descricaoLink" onclick="modalDetalhes.show()" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" >
-							<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoMnt.solicitacaoDetalhe}" />
+							<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoMnt.solicitacaoDetalhe}"  />
 							<f:ajax event="click" execute="@all" render="@all" />
 							</p:commandLink>
 						 <!-- <p:tooltip  id="toolTipVisualizar" for="descricaoLink" value="Descrição: #{solicitacao.descricao}" style="max-width:682px" /> --> 							
@@ -89,6 +89,14 @@
 					</p:dataTable>
 					<!-- Fim tabela -->
 
+					<p:dialog header="Detalhes" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="150">
+						<div >
+							<div>
+								<h:outputText value="Solicitante:" />
+								<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome}" />
+							</div>
+						</div>
+					</p:dialog>
 
 					<!-- Mensagem aprovar -->
 					<p:confirmDialog id="msgAprovar" global="true" showEffect="fade" hideEffect="explode" header="Aprovar" message="Deseja aprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmAprovacao">
@@ -135,14 +143,6 @@
 				<!-- Fim div corpo -->
 			</ui:insert>
 		</h:form>
-					<p:dialog header="Detalhes" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="150">
-						<div >
-							<div>
-								<h:outputText value="Solicitante:" />
-								<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome}" />
-							</div>
-						</div>
-					</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>
