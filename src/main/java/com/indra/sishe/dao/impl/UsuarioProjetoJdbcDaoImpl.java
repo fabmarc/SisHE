@@ -54,6 +54,22 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		}
 		return entity;
 	}
+	
+
+	@Override
+	public void salvar(List<UsuarioProjeto> usuarioProjeto) {
+
+		ArrayList<Object[]> params = new ArrayList<Object[]>(usuarioProjeto.size());
+		for (UsuarioProjeto up : usuarioProjeto) {
+			Object[] param = new Object[] { up.getUsuario().getId(), up.getProjeto().getId() };
+			params.add(param);
+		}
+
+		int[] affectedRows = getJdbcTemplate().batchUpdate(
+				"INSERT INTO usuario_projeto(id_usuario, id_projeto) values (?,?)", params);
+
+	}		
+	
 
 	@Override
 	public UsuarioProjeto update(UsuarioProjeto entity) throws RegistroInexistenteException,
@@ -241,8 +257,7 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT u.nome AS nomeUsuario, u.id as usuarioId, c.nome AS nomeCargo ,"
-				+ " up.id_projeto AS idProjeto, up.id_usuario as usuarioDoProjeto, up.id as idUP ,  p.nome as nomeProjeto, p.id as idProjeto");
+		sql.append("SELECT u.nome AS nomeUsuario, up.id as idUP ,u.id as usuarioId, c.nome AS nomeCargo, up.id_projeto AS idProjeto,p.nome as nomeProjeto");
 		sql.append(" FROM usuario_projeto up");
 		sql.append(" INNER JOIN usuario u ON up.id_usuario = u.id");
 		sql.append(" INNER JOIN cargo c ON c.id = u.id_cargo ");
@@ -266,7 +281,6 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 
 						usuario.setNome(rs.getString("nomeUsuario"));
 						usuario.setId(rs.getLong("usuarioId"));
-
 						cargo.setNome(rs.getString("nomeCargo"));
 						usuario.setCargo(cargo);
 

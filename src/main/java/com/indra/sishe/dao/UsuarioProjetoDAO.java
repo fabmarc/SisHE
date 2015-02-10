@@ -12,4 +12,6 @@ public interface UsuarioProjetoDAO extends BaseDAO<UsuarioProjeto> {
 	public List<UsuarioProjeto> findByProjeto(UsuarioProjeto usuarioProjeto);
 	
 	public List<UsuarioProjeto> findUserNotInProjeto(UsuarioProjeto usuarioProjeto);
+	
+	public void salvar(final List<UsuarioProjeto> usuarioProjeto);
 }
