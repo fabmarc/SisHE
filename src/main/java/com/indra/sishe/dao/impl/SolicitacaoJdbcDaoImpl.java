@@ -219,7 +219,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("WHERE (solicitacao.id_status_lider = 1 AND solicitacao.id_status_gerente is null) ");
 		sql.append("AND projeto.id_gerente = :idGerente");
 		params.addValue("idGerente", gerente.getId());
-		
+
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
 					@Override

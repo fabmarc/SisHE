@@ -37,10 +37,9 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-//		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else 
-			pesquisarPorUsuarioLogado();
+		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
+		pesquisarPorUsuarioLogado();
 	}
-
 
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
@@ -82,7 +81,23 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		pesquisarPorUsuarioLogado();
 		return irParaConsultarPorUsuario();
 	}
-	
+
+	public void beforeAprovarSolicitacao() {
+		if (solicitacoesSelecionadas.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmAprovacao.show()");
+		}
+	}
+
+	public void beforeReprovarSolicitacao() {
+		if (solicitacoesSelecionadas.size() == 0) {
+			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+		} else {
+			RequestContext.getCurrentInstance().execute("confirmReprovacao.show()");
+		}
+	}
+
 	public void visualizar() {
 		System.out.println("Visualizar");
 	}
@@ -103,7 +118,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		this.solicitacoesSelecionadas = solicitacoesSelecionadas;
 	}
 
-
 	public Solicitacao getSolicitacaoDetalhe() {
 		return solicitacaoDetalhe;
 	}
@@ -111,7 +125,5 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	public void setSolicitacaoDetalhe(Solicitacao solicitacaoDetalhe) {
 		this.solicitacaoDetalhe = solicitacaoDetalhe;
 	}
-
-	
 
 }

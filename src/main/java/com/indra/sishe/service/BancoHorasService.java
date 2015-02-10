@@ -6,10 +6,11 @@ import javax.ejb.Local;
 
 import com.indra.infra.service.BaseService;
 import com.indra.sishe.entity.BancoHoras;
+import com.indra.sishe.entity.HistoricoDetalhes;
 
 @Local
 public interface BancoHorasService extends BaseService<BancoHoras>{
 
-	public void contabilizarHorasBanco(List<Long> idsSolicitacoes);
+	public List<HistoricoDetalhes> contabilizarHorasBanco(List<Long> idsSolicitacoes);
 	
 }

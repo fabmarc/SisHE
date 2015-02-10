@@ -22,6 +22,7 @@ import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.HistoricoDAO;
 import com.indra.sishe.entity.Historico;
+import com.indra.sishe.entity.HistoricoDetalhes;
 
 @Repository
 public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements HistoricoDAO{
@@ -81,9 +82,9 @@ public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implement
 	}
 
 	@Override
-	public void gerarHistorico(List<Long> ids, String descricao) {
-		
-		MapSqlParameterSource params = new MapSqlParameterSource();
+	public void gerarHistorico(List<Long> ids, String descricao, List<HistoricoDetalhes> detalhes) {
+		Number key;
+		MapSqlParameterSource params = new MapSqlParameterSource();		
 		for (Long id : ids) {
 			if(UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")){
 				params.addValue("id_gerente", (Long) UsuarioLogado.getId());
@@ -92,8 +93,24 @@ public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implement
 			params.addValue("id_banco_hora", obterIdBanco(id));
 			params.addValue("data", new Date());
 			params.addValue("descricao", descricao);
-			insertHistorico.executeAndReturnKey(params);
+			key = insertHistorico.executeAndReturnKey(params);
+			for(HistoricoDetalhes d : detalhes){
+				if(d.getHistorico().getSolicitacao().getId() == id){
+					gerarDetalhes(key.longValue(), d.getMinutos(), d.getPorcentagem(), d.getValor());
+				}
+			}
 		}
+	}
+	
+	private void gerarDetalhes(Long idHistorico, Integer minutos, Integer porcentagem, Integer valor){
+		SimpleJdbcInsert insertHistoricoDetalhes = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("historico_detalhes")
+				.usingGeneratedKeyColumns("id");
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id_historico", idHistorico);
+		params.addValue("minutos", minutos);		
+		params.addValue("porcentagem", porcentagem);
+		params.addValue("valor", valor);
+		insertHistoricoDetalhes.executeAndReturnKey(params);
 	}
 	
 	private Long obterIdBanco(Long idSolicitacao) {

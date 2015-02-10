@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.HistoricoDAO;
 import com.indra.sishe.entity.Historico;
+import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.service.HistoricoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -60,8 +61,8 @@ public class HistoricoServiceImpl extends StatelessServiceAb implements Historic
 	}
 
 	@Override
-	public void gerarHistorico(List<Long> ids, String descricao) {
-		historicoDao.gerarHistorico(ids, descricao);
+	public void gerarHistorico(List<Long> ids, String descricao, List<HistoricoDetalhes> detalhes) {
+		historicoDao.gerarHistorico(ids, descricao, detalhes);
 	}
 	
 	

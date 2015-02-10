@@ -13,12 +13,14 @@
 				<!-- Div Corpo -->
 				<div class="divCorpo" style="padding-bottom: 5%;">
 					<!-- Div Pesquisar -->
+
 					<div style="width: 410px; height:40px;">
-						<h:commandButton styleClass="botao3d" style="float:left;" actionListener="#{solicitacaoMnt.pesquisarPendentes()}" value="Pesquisar" />
+						<h:commandButton styleClass="botao3d" style="float:left;" actionListener="#{solicitacaoPend.pesquisarPendentes()}" value="Pesquisar" />
+
 					</div>
 
 					<!-- Tabela -->
-					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoPend.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoPend.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
 						<!-- Cabeçalho -->
 						<f:facet name="header">
 							Pendentes
@@ -28,7 +30,7 @@
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<!-- Código  NÂO SERÁ EXIBIDO -->
+						<!-- Código - NÂO SERÁ EXIBIDO -->
 						<p:column headerText="Código" style="width:10%; text-align:center;">
 							<h:outputText value="#{solicitacao.id}" />
 						</p:column>
@@ -69,8 +71,8 @@
 						<!-- Ação -->
 						<p:column headerText="Ação" style="width:5%">
 							<p:commandLink title="Visualizar Solicitação" id="descricaoLink" onclick="modalDetalhes.show()" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" >
-							<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoMnt.solicitacaoDetalhe}"  />
-							<f:ajax event="click" execute="@all" render="@all" />
+							<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoPend.solicitacaoDetalhe}"  />
+							<!-- <f:ajax event="click" execute="@all" render="@all" /> -->
 							</p:commandLink>
 						 <!-- <p:tooltip  id="toolTipVisualizar" for="descricaoLink" value="Descrição: #{solicitacao.descricao}" style="max-width:682px" /> --> 							
 						</p:column>
@@ -79,9 +81,9 @@
 						<f:facet name="footer">
 							<!-- Div Ação -->
 							<div style="text-align: right; width: 100%">
-								<p:commandLink id="aprovar" value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}"/>
+								<p:commandLink id="aprovar" value="Aprovar" actionListener="#{solicitacaoPend.beforeAprovarSolicitacao()}"/>
 								/
-								<p:commandLink id="reprovar" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}"/>
+								<p:commandLink id="reprovar" value="Reprovar" actionListener="#{solicitacaoPend.beforeReprovarSolicitacao()}"/>
 							</div>
 						</f:facet>
 						<!-- Fim rodapé -->
@@ -89,12 +91,20 @@
 					</p:dataTable>
 					<!-- Fim tabela -->
 
-					<p:dialog header="Detalhes" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="150">
-						<div >
-							<div>
-								<h:outputText value="Solicitante:" />
-								<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome}" />
-							</div>
+					<p:dialog header="Detalhes" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="400px" width="500px">
+						<div>
+							Solicitante: <b>#{solicitacaoPend.solicitacaoDetalhe.usuario.nome} </b> <br/>
+							<h:outputText value="Sistema " />
+							<h:outputText style="font-weight: bold" value="#{solicitacaoPend.solicitacaoDetalhe.sistema.nome}" /><br/>
+							<h:outputText value="Data: " />
+							<h:outputText style="font-weight: bold" value="#{solicitacaoPend.solicitacaoDetalhe.data}" /><br/>
+							<h:outputText value="Período: " />
+							<h:outputText style="font-weight: bold" value="#{solicitacaoPend.solicitacaoDetalhe.horaInicio} a #{solicitacaoPend.solicitacaoDetalhe.horaFinal}" /><br/>
+							<h:outputText value="Duração: " />
+							<h:outputText style="font-weight: bold" value="Implementar..." /> <br/>
+							<h:outputText rendered="{#{solicitacaoPend.solicitacaoDetalhe.lider.nome} != null}" value="Líder Aprovador: #{solicitacaoPend.solicitacaoDetalhe.lider.nome} em #{solicitacaoPend.solicitacaoDetalhe.dataAprovacaoLider}" />
+							<h:outputText rendered="{#{solicitacaoPend.solicitacaoDetalhe.gerente.nome} != null}" value="Gerente Aprovador: #{solicitacaoPend.solicitacaoDetalhe.gerente.nome} em #{solicitacaoPend.solicitacaoDetalhe.dataAprovacaoGerente}" />							
+							
 						</div>
 					</p:dialog>
 
@@ -104,11 +114,12 @@
 						<div class="divDialog">
 							<h:outputText value="Observação para a(s) solicitação(ões):" />
 							<br />
-							<h:inputTextarea id="obs01" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;">
+
+							<h:inputTextarea id="obs01" value="#{solicitacaoPend.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;">
 								<f:ajax event="change" render="mainForm:obs02" />
 							</h:inputTextarea>
 							<br />
-							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.aprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Sim" actionListener="#{solicitacaoPend.aprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
 							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
 						<!-- Fim div aprovar -->
@@ -121,9 +132,9 @@
 						<div class="divDialog">
 							<h:outputText value="Observação para a(s) solicitação(ões):" />
 							<br />
-							<h:inputTextarea id="obs02" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;"/>
+							<h:inputTextarea id="obs02" value="#{solicitacaoPend.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;"/>
 							<br />							
-							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.reprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Sim" actionListener="#{solicitacaoPend.reprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
 							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
 						<!-- Fim div reprovar -->

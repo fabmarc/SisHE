@@ -13,6 +13,7 @@ import org.primefaces.context.RequestContext;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
+import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.BancoHorasService;
@@ -20,16 +21,16 @@ import com.indra.sishe.service.HistoricoService;
 
 @ViewScoped
 @ManagedBean(name = "solicitacaoPend")
-public class SolicitacaoPendController extends SolicitacaoController{
+public class SolicitacaoPendController extends SolicitacaoController {
 
 	private static final long serialVersionUID = 6411818531460354566L;
-	
+
 	private List<Solicitacao> listaSolicitacoes;
-	
+
 	private List<Solicitacao> solicitacoesSelecionadas;
-	
+
 	private Solicitacao solicitacaoDetalhe;
-	
+
 	private String observacao;
 
 	@Inject
@@ -37,7 +38,7 @@ public class SolicitacaoPendController extends SolicitacaoController{
 
 	@Inject
 	protected transient HistoricoService historicoService;
-	
+
 	@PostConstruct
 	public void init() {
 
@@ -51,7 +52,7 @@ public class SolicitacaoPendController extends SolicitacaoController{
 
 		pesquisarPendentes();
 	}
-	
+
 	public void pesquisarPendentes() {
 		if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
 			setListaSolicitacoes(solicitacaoService.findByGerente(new Usuario(UsuarioLogado.getId())));
@@ -60,7 +61,7 @@ public class SolicitacaoPendController extends SolicitacaoController{
 		}
 		searched = true;
 	}
-	
+
 	public void beforeAprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
@@ -89,18 +90,19 @@ public class SolicitacaoPendController extends SolicitacaoController{
 
 		int size = solicitacoesSelecionadas.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
+		List<HistoricoDetalhes> detalhes = new ArrayList<HistoricoDetalhes>();
 		for (Solicitacao solicitacao : solicitacoesSelecionadas)
 			ids.add(solicitacao.getId());
 		try {
 			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
 				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
 				if (status == 1) {
-					bancoHorasService.contabilizarHorasBanco(ids);
+					detalhes = bancoHorasService.contabilizarHorasBanco(ids);
 				}
 			} else {
 				solicitacaoService.liderAcaoSolicitacao(ids, status);
 			}
-			historicoService.gerarHistorico(ids, observacao);
+			historicoService.gerarHistorico(ids, observacao, detalhes);
 			observacao = "";
 			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
 		} catch (ApplicationException e) {
