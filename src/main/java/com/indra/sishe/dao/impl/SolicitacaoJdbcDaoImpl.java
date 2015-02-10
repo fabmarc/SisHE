@@ -3,7 +3,6 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.SolicitacaoDAO;
-import com.indra.sishe.entity.Periodo;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
@@ -212,7 +210,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("WHERE (solicitacao.id_status_lider = 1 AND solicitacao.id_status_gerente is null) ");
 		sql.append("AND projeto.id_gerente = :idGerente");
 		params.addValue("idGerente", gerente.getId());
-		
+
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
 					@Override

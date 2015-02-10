@@ -11,7 +11,6 @@ import org.primefaces.context.RequestContext;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
-import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
 
@@ -38,10 +37,9 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-//		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else 
-			pesquisarPorUsuarioLogado();
+		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
+		pesquisarPorUsuarioLogado();
 	}
-
 
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();

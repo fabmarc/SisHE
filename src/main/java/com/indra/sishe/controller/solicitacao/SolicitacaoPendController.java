@@ -21,16 +21,16 @@ import com.indra.sishe.service.HistoricoService;
 
 @ViewScoped
 @ManagedBean(name = "solicitacaoPend")
-public class SolicitacaoPendController extends SolicitacaoController{
+public class SolicitacaoPendController extends SolicitacaoController {
 
 	private static final long serialVersionUID = 6411818531460354566L;
-	
+
 	private List<Solicitacao> listaSolicitacoes;
-	
+
 	private List<Solicitacao> solicitacoesSelecionadas;
-	
+
 	private Solicitacao solicitacaoDetalhe;
-	
+
 	private String observacao;
 
 	@Inject
@@ -38,7 +38,7 @@ public class SolicitacaoPendController extends SolicitacaoController{
 
 	@Inject
 	protected transient HistoricoService historicoService;
-	
+
 	@PostConstruct
 	public void init() {
 
@@ -52,7 +52,7 @@ public class SolicitacaoPendController extends SolicitacaoController{
 
 		pesquisarPendentes();
 	}
-	
+
 	public void pesquisarPendentes() {
 		if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
 			setListaSolicitacoes(solicitacaoService.findByGerente(new Usuario(UsuarioLogado.getId())));
@@ -61,7 +61,7 @@ public class SolicitacaoPendController extends SolicitacaoController{
 		}
 		searched = true;
 	}
-	
+
 	public void beforeAprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
