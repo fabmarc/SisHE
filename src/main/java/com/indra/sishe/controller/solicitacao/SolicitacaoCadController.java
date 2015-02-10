@@ -1,0 +1,116 @@
+package com.indra.sishe.controller.solicitacao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+
+import com.indra.infra.resource.MessageProvider;
+import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.entity.Sistema;
+import com.indra.sishe.entity.Solicitacao;
+import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.service.SistemaService;
+import com.indra.sishe.service.UsuarioService;
+
+@ViewScoped
+@ManagedBean(name = "solicitacaoCad")
+public class SolicitacaoCadController extends SolicitacaoController {
+
+	private static final long serialVersionUID = -631053948832685230L;
+	/* listas utilizadas para preencher o componente select da view de cadastro */
+	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+	private List<Sistema> listaSistemas = new ArrayList<Sistema>();
+	
+	private Sistema sistemaselecionado = new Sistema();
+	private Usuario usuarioSelecionado =  new Usuario();
+	private Solicitacao solicitacaoCadastrar = new Solicitacao();
+	
+	
+	@Inject
+	private SistemaService sistemaService;
+	@Inject
+	private UsuarioService usuarioService;
+
+	public SolicitacaoCadController() {
+
+	}
+
+	@PostConstruct
+	public void init() {
+		MessageProvider.setInstance(messageProvider);
+		searched = (Boolean) getFlashAttr("searched");
+
+		if (searched == null) searched = false;
+
+		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
+
+		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
+
+		if (listaUsuarios.size() == 0) {
+			obterUsuarios();
+		}
+
+		if (listaSistemas.size() == 0) {
+			obterSistemas();
+		}
+	}
+
+	public Solicitacao cadastrarSolicitacao(Solicitacao entity) throws ApplicationException {
+		return solicitacaoService.save(entity);
+	}
+
+	public List<Usuario> obterUsuarios() {
+		listaUsuarios = usuarioService.findAll();
+		return listaUsuarios;
+	}
+
+	public List<Sistema> obterSistemas() {
+		listaSistemas = sistemaService.findAll();
+		return listaSistemas;
+	}
+
+	public List<Usuario> getListaUsuarios() {
+		return listaUsuarios;
+	}
+
+	public void setListaUsuarios(List<Usuario> listaUsuarios) {
+		this.listaUsuarios = listaUsuarios;
+	}
+
+	public List<Sistema> getListaSistemas() {
+		return listaSistemas;
+	}
+
+	public void setListaSistemas(List<Sistema> listaSistemas) {
+		this.listaSistemas = listaSistemas;
+	}
+
+	public Sistema getSistemaselecionado() {
+		return sistemaselecionado;
+	}
+
+	public void setSistemaselecionado(Sistema sistemaselecionado) {
+		this.sistemaselecionado = sistemaselecionado;
+	}
+
+	public Usuario getUsuarioSelecionado() {
+		return usuarioSelecionado;
+	}
+
+	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
+		this.usuarioSelecionado = usuarioSelecionado;
+	}
+
+	public Solicitacao getSolicitacaoCadastrar() {
+		return solicitacaoCadastrar;
+	}
+
+	public void setSolicitacaoCadastrar(Solicitacao solicitacaoCad) {
+		this.solicitacaoCadastrar = solicitacaoCad;
+	}
+
+}

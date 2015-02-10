@@ -15,7 +15,7 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	@Inject
 	protected transient SolicitacaoService solicitacaoService;
 	
-	protected Solicitacao solicitacaoFiltro;
+	protected Solicitacao solicitacaoFiltro = new Solicitacao();
 	
 	protected Boolean searched;
 	
@@ -31,7 +31,7 @@ public abstract class SolicitacaoController extends BaseController implements Se
 		putFlashAttr("solicitacaoSelecionada", null);
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("solicitacaoFiltro", this.solicitacaoFiltro);
-		return "";
+		return "/paginas/solicitacao/cadastrarSolicitacao.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar() {

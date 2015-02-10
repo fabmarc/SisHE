@@ -9,79 +9,48 @@
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
 
-				<div class="divCorpo" style="padding-bottom: 5%;">
-				
-				<div style="width: 410px; position: relative; height: 60px;">
-					<div style="position: relative;width: 263px; height: 41px;">
-						<p:outputLabel value="Data:" for="calendarioBusca" />
-						<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+				<div class="divCorpo" style="top: 15px; left: 170px; position: relative; width: 250px">
+
+					<div id="divsistema">
+						<p:outputLabel for="sistemasSelect" value="Sistema:" id="lblSistema"></p:outputLabel>
+						<p:selectOneMenu id="sistemasSelect" converter="omnifaces.SelectItemsConverter" value="#{solicitacaoCad.sistemaselecionado.id}" required="true" requiredMessage="O campo Sistema é obrigatório."
+							style="position:relative; top: -7px;width:216px;">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{solicitacaoCad.listaSistemas}" var="sistemas" itemLabel="#{sistemas.nome}" itemValue="#{sistemas}" />
+						</p:selectOneMenu>
+
+					</div>
+					<p:outputLabel for="usuariosSelect" value="Usuários:" id="lblUsuario" ></p:outputLabel>
+					<p:selectOneMenu id="usuariosSelect" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo Usuário é obrigatório." value="#{solicitacaoCad.usuarioSelecionado.id}"
+						style="position:relative; top: -7px;width:216px;">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{solicitacaoCad.listaUsuarios}" var="usuarios" itemLabel="#{usuarios.nome}" itemValue="#{usuarios}" />
+					</p:selectOneMenu>
+					<div id="divUsuario">
+
+						<div id="divData">
+							<p:outputLabel value="Data:" style="width:25px;" />
+							<p:calendar type="text"  value="#{solicitacaoCad.solicitacaoCadastrar.data}" required="true" requiredMessage="O campo Data é obrigatório." />
+						</div>
+
+						<div id="divHoras">
+							<p:outputLabel for="hrInicio" value="Hora Início:" />
+							<p:inputText type="time" id="hrInicio" value="#{solicitacaoCad.solicitacaoCadastrar.horaInicio}" required="true" requiredMessage="Campo Hora Inicio é obrigatório.">
+							<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
+						</p:inputText>
+							
+							<p:outputLabel for="hrFinal" value="Hora Final:" />
+							<p:inputText type="time" id="hrFinal" value="#{solicitacaoCad.solicitacaoCadastrar.horaFinal}" required="true" requiredMessage="Campo Hora Final é obrigatório.">
+							<f:convertDateTime pattern="HH:mm" type="time" dateStyle="short" timeZone="GMT-3" />
+						</p:inputText>
+
+						</div>
+
 					</div>
 
-					<div style="width: 100px;top: -20px;left: 118px;height: 40px;position: relative;">	
-						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" value="Pesquisar" />
-					</div>
 				</div>
-					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
-						<f:facet name="header">
-							<p:outputLabel value="Solicitações de #{usuarioLogado.nome}" style="height: 15px;top: 1px;position: relative;font-weight: bold;color: #4f4f4f;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);" />
-						</f:facet>
 
-						<p:column style="width:5px; text-align:center" selectionMode="multiple">
-						</p:column>
-
-						<p:column headerText="Data" style="text-align: center;width:10%">
-							<h:outputText value="#{solicitacao.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
-						</p:column>
-
-
-						<p:column headerText="Hora Inicial" style="text-align: center;" >
-							<h:outputText value="#{solicitacao.horaInicio}">
-								<f:convertDateTime pattern="HH:mm" />
-							</h:outputText>
-						</p:column>
-
-						<p:column headerText="Hora Final" style="text-align: center;" >
-							<h:outputText value="#{solicitacao.horaFinal}">
-								<f:convertDateTime pattern="HH:mm" />
-							</h:outputText>
-						</p:column>
-
-						<p:column headerText="Sistema" style="max-width:112px;text-overflow:ellipsis;">
-							<h:outputText value="#{solicitacao.sistema.nome}" />
-						</p:column>
-
-						<p:column headerText="Status" style="min-width: 175px;">
-							<h:outputText value="#{solicitacao.status}" id="statusText" />
-						<!-- <p:tooltip id="toolTipVisualizar" for="statusText" value="Aprovado por: #{solicitacao.gerente.nome}" /> -->
-						</p:column>
-
-						<p:column headerText="Ação" style="width:5%">
-							<p:commandLink  id="visualizarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" action="#{solicitacaoMnt.visualizar()}" />
-						</p:column>
-
-						<f:facet name="footer">
-							<div style="text-align: right; width: 100%">
-								<p:commandLink id="Excluir" value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
-							</div>
-						</f:facet>
-					</p:dataTable>
-
-					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
-						<div class="divDialog">
-							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.remove}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
-							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
-						</div>
-					</p:confirmDialog>
-
-					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Selecione" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
-						<div class="divDialog">
-							<h:commandButton value="OK" styleClass="botao3d" onclick="selectAtleastOne.hide()" ajax="false" style="width:109px;" />
-						</div>
-					</p:confirmDialog>
-
-				</div>
+				<div style="width: 410px; position: relative; height: 60px;"></div>
 			</ui:insert>
 		</h:form>
 	</ui:define>
