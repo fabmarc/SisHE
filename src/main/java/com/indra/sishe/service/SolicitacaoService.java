@@ -25,4 +25,6 @@ public interface SolicitacaoService extends BaseService<Solicitacao> {
 	public void gerenteAcaoSolicitacao(List<Long> ids, int status) throws ApplicationException;
 	
 	void removeSolicitacoes(List<Solicitacao> solicitacoesParaRemover) throws ApplicationException;
+	
+	public boolean validarSolicitacao(Solicitacao solicitacao)throws ApplicationException;
 }

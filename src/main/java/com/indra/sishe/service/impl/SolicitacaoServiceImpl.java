@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.ejb.Stateless;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
@@ -26,11 +28,14 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	private SolicitacaoDAO solicitacaoDao;
 
 	@Override
-	public Solicitacao save(Solicitacao entity) throws ApplicationException {
-		// TODO Auto-generated method stub
-		return null;
+	public Solicitacao save(Solicitacao entity) throws ApplicationException {		
+		try {
+			return solicitacaoDao.save(entity);
+		} catch (RegistroDuplicadoException e) {			
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Solicitação");
+		}
 	}
-
+	
 	@Override
 	public Solicitacao update(Solicitacao entity) throws ApplicationException {
 		// TODO Auto-generated method stub
@@ -139,5 +144,32 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 	}
-
+	
+	@Override
+	public boolean validarSolicitacao(Solicitacao solicitacao) throws ApplicationException {
+		Date d =  new Date(System.currentTimeMillis());
+		if (solicitacao.getHoraInicio() == null ) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicial");
+		}		
+		else if(solicitacao.getHoraFinal() == null){
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Final");
+		}		
+		else if ((solicitacao.getHoraInicio() == null || solicitacao.getHoraFinal() == null) && solicitacao.getHoraFinal().before(solicitacao.getHoraInicio())) {
+			throw new ApplicationException("msg.error.intervalo.incorreto","Data Inicial", "Data Final");
+		}		
+		else if (solicitacao.getDescricao().length() > 500) {
+			throw new ApplicationException("msg.error.campo.maior.esperado","Descricao","500");			
+		}	
+		else if(solicitacao.getDescricao() == null){
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
+		}else if(solicitacao.getSistema() ==  null || solicitacao.getSistema().getId() == 0){
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
+		}
+		else if (solicitacao.getData().before(d)){
+			throw new ApplicationException("msg.error.data");
+		}
+		else{
+			return true;
+		}		
+	}
 }

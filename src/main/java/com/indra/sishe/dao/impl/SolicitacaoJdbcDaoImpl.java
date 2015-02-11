@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -46,21 +47,29 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	@Override
 	public Solicitacao save(Solicitacao entity) throws RegistroDuplicadoException {
-		/*
-		 * try { MapSqlParameterSource params = new MapSqlParameterSource();
-		 * 
-		 * params.addValue("data", entity.getData());
-		 * params.addValue("hora_inicio", entity.getHoraInicio());
-		 * params.addValue("hora_final", entity.getHoraFinal());
-		 * params.addValue("descricao", entity.getDescricao()); if
-		 * (entity.getSistema() != null) { params.addValue("id_sistema",
-		 * entity.getSistema().getId()); } if (entity.getUsuario() != null) {
-		 * params.addValue("id_usuario", entity.getUsuario().getId()); } Number
-		 * key = insertSolicitacao.executeAndReturnKey(params);
-		 * entity.setId(key.longValue()); } catch (DuplicateKeyException e) {
-		 * throw new RegistroDuplicadoException(e.toString()); }
-		 */
-		return null;// entity;
+		
+		try {
+			MapSqlParameterSource params = new MapSqlParameterSource();
+
+			params.addValue("data", entity.getData());
+			params.addValue("hora_inicio", entity.getHoraInicio());
+			params.addValue("hora_final", entity.getHoraFinal());
+			params.addValue("descricao", entity.getDescricao());
+		
+			if (entity.getSistema() != null) {
+				params.addValue("id_sistema", entity.getSistema().getId());
+			}
+			
+			if (entity.getUsuario() != null) {
+				params.addValue("id_usuario", entity.getUsuario().getId());
+			}
+			Number key = insertSolicitacao.executeAndReturnKey(params);
+			entity.setId(key.longValue());
+		} catch (DuplicateKeyException e) {
+			throw new RegistroDuplicadoException(e.toString());
+		}
+
+		return entity;
 	}
 
 	@Override
