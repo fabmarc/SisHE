@@ -19,14 +19,7 @@
 							<f:selectItems value="#{solicitacaoCad.listaSistemas}" var="sistemas" itemLabel="#{sistemas.nome}" itemValue="#{sistemas}" />
 						</p:selectOneMenu>
 
-					</div>
-					<p:outputLabel for="usuariosSelect" value="Usuários:" id="lblUsuario" ></p:outputLabel>
-					<p:selectOneMenu id="usuariosSelect" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo Usuário é obrigatório." value="#{solicitacaoCad.usuarioSelecionado.id}"
-						style="position:relative; top: -7px;width:216px;">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{solicitacaoCad.listaUsuarios}" var="usuarios" itemLabel="#{usuarios.nome}" itemValue="#{usuarios}" />
-					</p:selectOneMenu>
-					<div id="divUsuario">
+					</div>				
 
 						<div id="divData">
 							<p:outputLabel value="Data:" style="width:25px;" />
@@ -45,12 +38,19 @@
 						</p:inputText>
 
 						</div>
-
-					</div>
-
+						
+						<div id="divDescricao">
+							<p:outputLabel for="descricao" value="Descricao:" />
+							<p:inputTextarea id="descricao" cols="3" rows="3" maxlength="500"></p:inputTextarea>
+						</div>
+						<div id="divButtons" style="position: relative; top: 11px; left: 8%;">
+							<h:commandButton styleClass="botao3d"  action="#{solicitacaoCad.cadastrarSolicitacao(solicitacaoCad.solicitacaoCadastrar)}" value="Confirmar" />
+							<h:commandButton styleClass="botao3d"  action="#{solicitacaoCad.cancelar()}" value="Cancelar" style="position: relative;left: 5px;" />							
+						</div>
 				</div>
 
 				<div style="width: 410px; position: relative; height: 60px;"></div>
+			
 			</ui:insert>
 		</h:form>
 	</ui:define>

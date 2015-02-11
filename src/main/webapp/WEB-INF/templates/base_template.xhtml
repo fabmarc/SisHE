@@ -55,7 +55,7 @@
 							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
 								<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
-								<p:menuitem value="Pendentes" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
+								<p:menuitem value="Pendentes" action="#{solicitacaoMnt.irParaConsultarPendentes()}" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
 							</p:submenu>
 							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
 								<p:submenu label="Sistema">

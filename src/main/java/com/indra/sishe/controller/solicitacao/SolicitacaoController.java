@@ -19,8 +19,12 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	
 	protected Boolean searched;
 	
-	public String irParaConsultar() {
+	public String irParaConsultarPendentes() {
 		return "/paginas/solicitacao/solicitacoesPendentes.xhtml?faces-redirect=true";
+	}
+	
+	public String irParaConsultar() {
+		return "/paginas/solicitacao/consultarSolicitacao.xhtml?faces-redirect=true";
 	}
 	
 	public String irParaConsultarPorUsuario() {

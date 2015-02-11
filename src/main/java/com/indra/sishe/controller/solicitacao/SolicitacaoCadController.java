@@ -12,28 +12,20 @@ import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
-import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.SistemaService;
-import com.indra.sishe.service.UsuarioService;
 
 @ViewScoped
 @ManagedBean(name = "solicitacaoCad")
 public class SolicitacaoCadController extends SolicitacaoController {
 
 	private static final long serialVersionUID = -631053948832685230L;
-	/* listas utilizadas para preencher o componente select da view de cadastro */
-	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+	/* lista utilizada para preencher o componente select da view de cadastro */
 	private List<Sistema> listaSistemas = new ArrayList<Sistema>();
-	
+
 	private Sistema sistemaselecionado = new Sistema();
-	private Usuario usuarioSelecionado =  new Usuario();
 	private Solicitacao solicitacaoCadastrar = new Solicitacao();
-	
-	
 	@Inject
 	private SistemaService sistemaService;
-	@Inject
-	private UsuarioService usuarioService;
 
 	public SolicitacaoCadController() {
 
@@ -50,35 +42,36 @@ public class SolicitacaoCadController extends SolicitacaoController {
 
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		if (listaUsuarios.size() == 0) {
-			obterUsuarios();
-		}
-
 		if (listaSistemas.size() == 0) {
 			obterSistemas();
 		}
 	}
 
-	public Solicitacao cadastrarSolicitacao(Solicitacao entity) throws ApplicationException {
-		return solicitacaoService.save(entity);
+	public String cadastrarSolicitacao(Solicitacao entity) throws ApplicationException {
+		try {
+			if (solicitacaoService.validarSolicitacao(entity)) {
+				this.solicitacaoFiltro = solicitacaoService.save(entity);
+				putFlashAttr("solicitacaoFiltro", solicitacaoFiltro);
+				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação"));
+				putFlashAttr("searched", searched);
+			}
+
+			return irParaConsultarPendentes();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+		}
+		return null;
 	}
 
-	public List<Usuario> obterUsuarios() {
-		listaUsuarios = usuarioService.findAll();
-		return listaUsuarios;
+	public String cancelar() {
+		putFlashAttr("searched", searched);
+		putFlashAttr("solicitacaoFiltro", solicitacaoFiltro);
+		return "/paginas/solicitacao/consultarSolicitacao.xhtml?faces-redirect=true";
 	}
-
+	
 	public List<Sistema> obterSistemas() {
 		listaSistemas = sistemaService.findAll();
 		return listaSistemas;
-	}
-
-	public List<Usuario> getListaUsuarios() {
-		return listaUsuarios;
-	}
-
-	public void setListaUsuarios(List<Usuario> listaUsuarios) {
-		this.listaUsuarios = listaUsuarios;
 	}
 
 	public List<Sistema> getListaSistemas() {
@@ -97,20 +90,12 @@ public class SolicitacaoCadController extends SolicitacaoController {
 		this.sistemaselecionado = sistemaselecionado;
 	}
 
-	public Usuario getUsuarioSelecionado() {
-		return usuarioSelecionado;
-	}
-
-	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
-		this.usuarioSelecionado = usuarioSelecionado;
-	}
-
 	public Solicitacao getSolicitacaoCadastrar() {
 		return solicitacaoCadastrar;
 	}
 
-	public void setSolicitacaoCadastrar(Solicitacao solicitacaoCad) {
-		this.solicitacaoCadastrar = solicitacaoCad;
+	public void setSolicitacaoCadastrar(Solicitacao solicitacaoCadastrar) {
+		this.solicitacaoCadastrar = solicitacaoCadastrar;
 	}
 
 }
