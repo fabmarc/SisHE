@@ -21,6 +21,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.HistoricoDAO;
+import com.indra.sishe.entity.DadosRelatorio;
 import com.indra.sishe.entity.Historico;
 import com.indra.sishe.entity.HistoricoDetalhes;
 
@@ -127,6 +128,42 @@ public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implement
 				return rs.getLong("idBanco");
 			}
 		});
+	}
+	
+	public List<DadosRelatorio> gerarRelatorio(String mes, String ano){
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("select historico_detalhes.id, solicitacao.id as idSolicitacao, TO_CHAR(solicitacao.data, 'DD/MM/YYYY') as dataSolicitacao, historico.data, id_historico as idHistorico, TO_CHAR(solicitacao.data, 'MM') , solicitacao.hora_inicio, solicitacao.hora_final, minutos, porcentagem, valor, (SELECT SUM(VALOR) FROM historico_detalhes WHERE HISTORICO.ID = historico_detalhes.ID_HISTORICO AND historico.id_solicitacao = solicitacao.id LIMIT 1) as total from  historico_detalhes inner join historico on (historico.id = historico_detalhes.id_historico) inner join solicitacao on (historico.id_solicitacao = solicitacao.id) inner join usuario on (usuario.id = solicitacao.id_usuario) where usuario.id = :idUsuario ");
+		params.addValue("idUsuario", UsuarioLogado.getId());
+		if(mes != null && !mes.isEmpty()){
+			sql.append(" and TO_CHAR(solicitacao.data, 'MM') = :mes ");
+			params.addValue("mes", mes);
+		}
+		if(ano != null && !ano.isEmpty()){
+			sql.append(" and TO_CHAR(solicitacao.data, 'YYYY') = :ano ");
+			params.addValue("ano", ano);
+		}
+		sql.append(" order by solicitacao.id, historico_detalhes.id "); 
+		
+		List<DadosRelatorio> dados = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<DadosRelatorio>() {
+			@Override
+			public DadosRelatorio mapRow(ResultSet rs, int idx) throws SQLException {
+				DadosRelatorio dado = new DadosRelatorio();
+				
+				dado.setIdSolicitacao(rs.getInt("idSolicitacao"));
+				dado.setDataSolicitacao(rs.getString("dataSolicitacao"));
+				dado.setHoraInicioSolicitacao(rs.getString("hora_inicio"));
+				dado.setHoraFimSolicitacao(rs.getString("hora_final"));
+				dado.setMinutos(rs.getString("minutos"));
+				dado.setPorcentagem(rs.getString("porcentagem"));
+				dado.setValor(rs.getString("valor"));
+				dado.setTotal(rs.getString("total"));
+				
+				return dado;
+			}
+		});
+		return dados;
 	}
 
 }
