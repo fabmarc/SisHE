@@ -25,27 +25,27 @@
 						</div>
 					</div>
 					<div style="top: 7px; position: relative;">
-						<p:treeTable value="#{relatorioController.table}" var="document" rendered="#{relatorioController.mostrarTable()}">
+						<p:treeTable value="#{relatorioController.table}" var="detalhe" rendered="#{relatorioController.mostrarTable()}">
 							<f:facet name="header">
            						Relatório
        						</f:facet>
 							<p:column headerText="Solicitações">
-								<h:outputText value="#{document.dataSolicitacao}" />
+								<h:outputText value="#{detalhe.dataSolicitacao}" />
 							</p:column>
 							<p:column headerText="Hora inicial" style="text-align:center">
-								<h:outputText value="#{document.horaInicioSolicitacao}" />
+								<h:outputText value="#{detalhe.horaInicioSolicitacao}" />
 							</p:column>
 							<p:column headerText="Hora final" style="text-align:center">
-								<h:outputText value="#{document.horaFimSolicitacao}" />
+								<h:outputText value="#{detalhe.horaFimSolicitacao}" />
 							</p:column>
 							<p:column headerText="Minutos" style="text-align:center">
-								<h:outputText value="#{document.minutos}" />
+								<h:outputText value="#{detalhe.minutos}" />
 							</p:column>
 							<p:column headerText="%" style="text-align:center">
-								<h:outputText value="#{document.porcentagem}" />
+								<h:outputText value="#{detalhe.porcentagem}" />
 							</p:column>
 							<p:column headerText="Minutos contabilizados" style="text-align:center">
-								<h:outputText value="#{document.valor}" />
+								<h:outputText value="#{detalhe.valor}" />
 							</p:column>
 						</p:treeTable>
 					</div>
