@@ -2,6 +2,7 @@ package com.indra.sishe.service.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -147,7 +148,10 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	
 	@Override
 	public boolean validarSolicitacao(Solicitacao solicitacao) throws ApplicationException {
-		Date d =  new Date(System.currentTimeMillis());
+		Calendar today =  Calendar.getInstance();
+		Calendar data = Calendar.getInstance();
+		data.setTime(solicitacao.getData());
+		
 		if (solicitacao.getHoraInicio() == null ) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicial");
 		}		
@@ -157,7 +161,7 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 		else if ((solicitacao.getHoraInicio() == null || solicitacao.getHoraFinal() == null) && solicitacao.getHoraFinal().before(solicitacao.getHoraInicio())) {
 			throw new ApplicationException("msg.error.intervalo.incorreto","Data Inicial", "Data Final");
 		}		
-		else if (solicitacao.getDescricao().length() > 500) {
+		else if (solicitacao.getDescricao() != null && solicitacao.getDescricao().length() > 500) {
 			throw new ApplicationException("msg.error.campo.maior.esperado","Descricao","500");			
 		}	
 		else if(solicitacao.getDescricao() == null){
@@ -165,9 +169,10 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 		}else if(solicitacao.getSistema() ==  null || solicitacao.getSistema().getId() == 0){
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
 		}
-		else if (solicitacao.getData().before(d)){
+		/*else if (data.getTime().before(today.getTime()) && !data.getTime().toString().equals(today.getTime().toString())){
+			
 			throw new ApplicationException("msg.error.data");
-		}
+		}*/
 		else{
 			return true;
 		}		

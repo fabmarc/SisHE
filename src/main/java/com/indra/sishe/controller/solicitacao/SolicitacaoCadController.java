@@ -47,10 +47,10 @@ public class SolicitacaoCadController extends SolicitacaoController {
 		}
 	}
 
-	public String cadastrarSolicitacao(Solicitacao entity) throws ApplicationException {
+	public String cadastrarSolicitacao() throws ApplicationException {
 		try {
-			if (solicitacaoService.validarSolicitacao(entity)) {
-				this.solicitacaoFiltro = solicitacaoService.save(entity);
+			if (solicitacaoService.validarSolicitacao(solicitacaoCadastrar)) {
+				this.solicitacaoFiltro = solicitacaoService.save(this.solicitacaoCadastrar);
 				putFlashAttr("solicitacaoFiltro", solicitacaoFiltro);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação"));
 				putFlashAttr("searched", searched);
@@ -82,11 +82,11 @@ public class SolicitacaoCadController extends SolicitacaoController {
 		this.listaSistemas = listaSistemas;
 	}
 
-	public Sistema getSistemaselecionado() {
+	public Sistema getSistemaSelecionado() {
 		return sistemaselecionado;
 	}
 
-	public void setSistemaselecionado(Sistema sistemaselecionado) {
+	public void setSistemaSelecionado(Sistema sistemaselecionado) {
 		this.sistemaselecionado = sistemaselecionado;
 	}
 

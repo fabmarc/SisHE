@@ -10,20 +10,20 @@
 				</div>
 
 				<div class="divCorpo" style="top: 15px; left: 170px; position: relative; width: 250px">
-
+					<div style="left: 40%; position: relative; width: 100%">
 					<div id="divsistema">
 						<p:outputLabel for="sistemasSelect" value="Sistema:" id="lblSistema"></p:outputLabel>
-						<p:selectOneMenu id="sistemasSelect" converter="omnifaces.SelectItemsConverter" value="#{solicitacaoCad.sistemaselecionado.id}" required="true" requiredMessage="O campo Sistema é obrigatório."
+						<p:selectOneMenu id="sistemasSelect" converter="omnifaces.SelectItemsConverter" value="#{solicitacaoCad.solicitacaoCadastrar.sistema.id}" required="true" requiredMessage="O campo Sistema é obrigatório."
 							style="position:relative; top: -7px;width:216px;">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{solicitacaoCad.listaSistemas}" var="sistemas" itemLabel="#{sistemas.nome}" itemValue="#{sistemas}" />
+							<f:selectItems value="#{solicitacaoCad.listaSistemas}" var="sistemas" itemLabel="#{sistemas.nome}" itemValue="#{sistemas.id}" />
 						</p:selectOneMenu>
 
 					</div>				
 
 						<div id="divData">
 							<p:outputLabel value="Data:" style="width:25px;" />
-							<p:calendar type="text"  value="#{solicitacaoCad.solicitacaoCadastrar.data}" required="true" requiredMessage="O campo Data é obrigatório." />
+							<p:calendar type="text"  value="#{solicitacaoCad.solicitacaoCadastrar.data}" required="true" requiredMessage="O campo Data é obrigatório."/>
 						</div>
 
 						<div id="divHoras">
@@ -41,14 +41,15 @@
 						
 						<div id="divDescricao">
 							<p:outputLabel for="descricao" value="Descricao:" />
-							<p:inputTextarea id="descricao" cols="3" rows="3" maxlength="500"></p:inputTextarea>
-						</div>
-						<div id="divButtons" style="position: relative; top: 11px; left: 8%;">
-							<h:commandButton styleClass="botao3d"  action="#{solicitacaoCad.cadastrarSolicitacao(solicitacaoCad.solicitacaoCadastrar)}" value="Confirmar" />
+							<p:inputTextarea id="descricao" cols="3" rows="3" maxlength="500" value="#{solicitacaoCad.solicitacaoCadastrar.descricao}"></p:inputTextarea>
+						</div>							
+				</div>				
+				</div>				
+				<div id="divButtons" style="position: relative; top: 23px; left: 40%;">
+							<h:commandButton styleClass="botao3d"  action="#{solicitacaoCad.cadastrarSolicitacao()}" value="Confirmar" />
 							<h:commandButton styleClass="botao3d"  action="#{solicitacaoCad.cancelar()}" value="Cancelar" style="position: relative;left: 5px;" />							
 						</div>
-				</div>
-
+				
 				<div style="width: 410px; position: relative; height: 60px;"></div>
 			
 			</ui:insert>
