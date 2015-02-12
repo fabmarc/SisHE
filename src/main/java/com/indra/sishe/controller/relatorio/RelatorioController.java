@@ -81,10 +81,10 @@ public class RelatorioController extends BaseController implements Serializable 
 		TreeNode work = null;
 		for (DadosRelatorio dadoTemp : dados) {
 			if (dadoTemp.getIdSolicitacao() != idMarcador) {
-				work = new DefaultTreeNode(new DadosRelatorio(dadoTemp.getDataSolicitacao(), "-", dadoTemp.getHoraInicioSolicitacao(), dadoTemp.getHoraFimSolicitacao(), dadoTemp.obterMinutosSoliciacao(), dadoTemp.porcentagemGeral(), dadoTemp.obterMinutosGerado()), table);
+				work = new DefaultTreeNode(new DadosRelatorio(dadoTemp.getDataSolicitacao(), "-", dadoTemp.getHoraInicioSolicitacao().substring(0, 5), dadoTemp.getHoraFimSolicitacao().substring(0, 5), dadoTemp.obterMinutosSoliciacao(), dadoTemp.porcentagemGeral(), dadoTemp.obterMinutosGerado()), table);
 				idMarcador = dadoTemp.getIdSolicitacao();
 			}
-			new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", dadoTemp.getMinutos() + " min", dadoTemp.getPorcentagem() + " %", dadoTemp.getValor() + " min"), work);
+			new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", dadoTemp.getMinutos() + "min", dadoTemp.getPorcentagem() + "%", dadoTemp.getValor() + "min"), work);
 			total = total + Integer.parseInt(dadoTemp.getValor());
 		}
 		return table;

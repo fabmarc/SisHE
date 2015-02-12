@@ -107,11 +107,9 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 		this.total = total;
 	}
 	
-	
-	
 	public String obterMinutosSoliciacao(){
-		Integer minInicial = minutosSolicitacao();		
-		return minInicial.toString() + " min (" + (minInicial/60) + ":" + (minInicial%60) + " horas)";
+		Integer minInicial = minutosSolicitacao();
+		return minInicial.toString() + "min (" + formatarHora(minInicial) + " horas)";
 	}
 	
 	private Integer minutosSolicitacao(){
@@ -139,11 +137,25 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 	}
 	
 	public String porcentagemGeral(){
-		return Integer.toString(((Integer.parseInt(total) - minutosSolicitacao())*100)/minutosSolicitacao()) + " %";		
+		return Integer.toString(((Integer.parseInt(total) - minutosSolicitacao())*100)/minutosSolicitacao()) + "%";		
 	}
 	
 	public String obterMinutosGerado(){
-		return total + " min" + " (" + (Integer.parseInt(total)/60) + ":" + (Integer.parseInt(total)%60) + " horas)";
+		return total + "min" + " (" + formatarHora(Integer.parseInt(total)) + " horas)";
+	}
+	
+	private String formatarHora(Integer minutos){
+		Integer hora = minutos/60;
+		Integer minuto = minutos%60;
+		String h = Integer.toString(hora);
+		String m = Integer.toString(minuto);
+		if(hora<10){
+			h = "0" + Integer.toString(hora);
+		}
+		if(minuto<10){
+			m = "0" + Integer.toString(minuto);
+		}
+		return h + ":" + m;
 	}
 
 	@Override
