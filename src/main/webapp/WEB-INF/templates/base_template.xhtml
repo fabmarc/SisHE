@@ -55,7 +55,7 @@
 							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
 								<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
-								<p:menuitem value="Pendentes" action="#{solicitacaoMnt.irParaConsultarPendentes()}" icon="ui-icon-search" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
+								<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard"/>
 							</p:submenu>
 							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
 								<p:submenu label="Sistema">
@@ -65,10 +65,6 @@
 								<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
 									<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 									<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
-								</p:submenu>
-								<p:submenu label="Equipe">
-									<p:menuitem value="Cadastrar" url="#" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{usuarioProjetoMnt.irParaConsultar()}" icon="ui-icon-search" />
 								</p:submenu>
 							</p:submenu>
 
@@ -86,10 +82,6 @@
 							<p:submenu label="Sindicato" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
 								<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
-								<p:submenu label="Regra">
-									<p:menuitem value="Cadastrar" action="#{regraMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{regraMnt.irParaConsultar()}" icon="ui-icon-search" />
-								</p:submenu>
 							</p:submenu>
 
 							<p:submenu label="Feriados" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">

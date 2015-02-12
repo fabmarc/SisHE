@@ -102,5 +102,9 @@ public class RelatorioController extends BaseController implements Serializable 
 		List<Mes> listaDias = new ArrayList<Mes>(Arrays.asList(Mes.values()));
 		return listaDias;
 	}
+	
+	public String irParaRelatorio(){
+		return "/paginas/solicitacao/relatorio.xhtml?faces-redirect=true";
+	}
 
 }
