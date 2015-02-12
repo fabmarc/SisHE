@@ -9,7 +9,7 @@ public class Solicitacao implements Serializable{
 
 	private Long id;
 	
-	private Sistema sistema;
+	private Sistema sistema = new Sistema();
 	
 	private Usuario usuario;
 	

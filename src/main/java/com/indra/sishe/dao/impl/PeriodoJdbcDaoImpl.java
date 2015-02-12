@@ -47,7 +47,7 @@ public class PeriodoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	private boolean validarPeriodos(Periodo entity, String modo) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params2 = new MapSqlParameterSource();
-		sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where ((((:horainicio between hora_inicio and hora_fim) or (:horafim between hora_inicio and hora_fim)) or ((hora_inicio between :horainicio and :horafim) or (hora_fim between :horainicio and :horafim))) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date)) ");
+		sql.append("select periodo.id as id_periodo, id_regra, dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) where ((((:horainicio > hora_inicio and :horainicio< hora_fim) or (:horafim > hora_inicio and :horafim < hora_fim)) or ((hora_inicio > :horainicio and hora_inicio < :horafim) or (hora_fim > :horainicio and hora_fim < :horafim))) and (dia_semana = :diasemana) and (periodo.id_regra = :idregra and regra.data_fim > current_date)) ");
 		params2.addValue("horainicio", entity.getHoraInicio());
 		params2.addValue("horafim", entity.getHoraFim());
 		params2.addValue("diasemana", entity.getDiaSemana().numeroDia());

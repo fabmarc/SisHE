@@ -177,7 +177,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				sql = new StringBuilder();
 				params = new MapSqlParameterSource();
 				//comando SQL para obter dados do periodo.
-				sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and (hora_inicio >= :horaInicio and hora_fim <=:horaFim) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
+				sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and ((hora_inicio >= :horaInicio and hora_fim <=:horaFim) or (:horaInicio between hora_inicio and hora_fim and hora_fim <=:horaFim)) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
 				params.addValue("idUsuario", solicitacao.getUsuario().getId());
 				params.addValue("diaSemana", diaSolicitado);
 				params.addValue("horaInicio", solicitacao.getHoraInicio());
@@ -199,9 +199,8 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 						});
 				
 				//Obter minutos da solicitação a serem adicionados.
-				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
-						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
-
+				minutoTotal = ((horaFimSolicitacao * 60) + minutoFimSolicitacao) - ((horaInicioSolicitacao * 60) + minutoInicioSolicitacao);
+				
 				// verificar se existe periodos que correspondem a solicitação.
 				if (periodos.size() < 1) {
 					//caso não exista nenhum periodo, será adicionado todos os minutos sem cálculo.
@@ -250,6 +249,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				// minutos sem cálculo da porcentagem.
 				if (minutoTotal > 0) {
 					minutos = minutos + minutoTotal;
+					historicoDetalhes.add(new HistoricoDetalhes(minutoTotal, 0, minutoTotal, new Historico(new Solicitacao(id))));
 				}
 			} else {
 				// se for feriado calcular de acordo com a porcentagem definida
@@ -264,7 +264,6 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 			getJdbcTemplate()
 					.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
 							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
-			System.out.println(historicoDetalhes.size());
 		}	
 		return historicoDetalhes;
 	}

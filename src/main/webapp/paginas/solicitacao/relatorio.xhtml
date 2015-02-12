@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<ui:insert>
+				<p:growl id="message" showDetail="true" showSummary="false" />
+
+				<div class="divCorpo" style="padding-bottom: 10%;">
+					<div style="width: 440px; position: relative; height: 60px; left: 126px;">
+						<div style="position: relative; width: 263px; height: 41px;">
+							<h:outputLabel value="Mês" style="width:50px;" />
+							<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" id="cargoIpt" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Todos" noSelectionOption="true" />
+								<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes.numero}" />
+							</h:selectOneMenu>
+						</div>
+						<div style="position: relative; width: 263px; height: 41px; top: -39px; left: 171px;">
+							<h:outputLabel value="Ano" style="width:50px;" />
+							<p:inputMask maxlength="4" mask="9999" value="#{relatorioController.ano}" style="height:15px; width:100px;" />
+						</div>
+						<div style="width: 100px; top: -20px; left: 118px; height: 40px; position: relative; top: -57px; left: 297px;">
+							<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
+						</div>
+					</div>
+					<div style="top: 7px; position: relative;">
+						<p:treeTable value="#{relatorioController.table}" var="detalhe" rendered="#{relatorioController.mostrarTable()}">
+							<f:facet name="header">
+           						Relatório
+       						</f:facet>
+							<p:column headerText="Solicitações">
+								<h:outputText value="#{detalhe.dataSolicitacao}" />
+							</p:column>
+							<p:column headerText="Hora inicial" style="text-align:center">
+								<h:outputText value="#{detalhe.horaInicioSolicitacao}" />
+							</p:column>
+							<p:column headerText="Hora final" style="text-align:center">
+								<h:outputText value="#{detalhe.horaFimSolicitacao}" />
+							</p:column>
+							<p:column headerText="Minutos" style="text-align:center">
+								<h:outputText value="#{detalhe.minutos}" />
+							</p:column>
+							<p:column headerText="%" style="text-align:center">
+								<h:outputText value="#{detalhe.porcentagem}" />
+							</p:column>
+							<p:column headerText="Minutos contabilizados" style="text-align:center">
+								<h:outputText value="#{detalhe.valor}" />
+							</p:column>
+						</p:treeTable>
+					</div>
+				</div>
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

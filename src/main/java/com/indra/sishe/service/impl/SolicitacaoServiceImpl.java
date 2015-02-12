@@ -1,6 +1,9 @@
 package com.indra.sishe.service.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -8,6 +11,7 @@ import javax.ejb.Stateless;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
@@ -25,10 +29,14 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	private SolicitacaoDAO solicitacaoDao;
 
 	@Override
-	public Solicitacao save(Solicitacao entity) throws ApplicationException {
-		return null;
+	public Solicitacao save(Solicitacao entity) throws ApplicationException {		
+		try {
+			return solicitacaoDao.save(entity);
+		} catch (RegistroDuplicadoException e) {			
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Solicitação");
+		}
 	}
-
+	
 	@Override
 	public Solicitacao update(Solicitacao entity) throws ApplicationException {
 		return null;
@@ -134,5 +142,41 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 	}
-
+	
+	@Override
+	public boolean validarSolicitacao(Solicitacao solicitacao) throws ApplicationException, ParseException {
+		
+		DateFormat dateFormatter;
+		dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
+		
+		String hoje = dateFormatter.format(new Date());
+		String dtEscolhida= dateFormatter.format(solicitacao.getData());
+		
+		if (solicitacao.getHoraInicio() == null ) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicial");
+		}		
+		else if(solicitacao.getHoraFinal() == null){
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Final");
+		}		
+		else if ((solicitacao.getHoraInicio() != null || solicitacao.getHoraFinal() != null) && solicitacao.getHoraInicio().after(solicitacao.getHoraFinal())) {
+			throw new ApplicationException("msg.error.intervalo.incorreto","Hora Inicial", "Hora Final");
+		}		
+		else if (solicitacao.getDescricao() != null && solicitacao.getDescricao().length() > 500) {
+			throw new ApplicationException("msg.error.campo.maior.esperado","Descricao","500");			
+		}	
+		else if(solicitacao.getDescricao() == null){
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
+		}else if(solicitacao.getDescricao() != null && (solicitacao.getDescricao().length() > 500)){
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
+		}else if(solicitacao.getSistema() ==  null || solicitacao.getSistema().getId() == 0){
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
+		}
+		else if (!hoje.equalsIgnoreCase(dtEscolhida) && dateFormatter.parse(dtEscolhida).before(dateFormatter.parse(hoje))){
+			
+			throw new ApplicationException("msg.error.data");
+		}
+		else{
+			return true;
+		}		
+	}
 }
