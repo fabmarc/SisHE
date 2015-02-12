@@ -1,8 +1,9 @@
 package com.indra.sishe.service.impl;
 
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -147,10 +148,13 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 	
 	@Override
-	public boolean validarSolicitacao(Solicitacao solicitacao) throws ApplicationException {
-		Calendar today =  Calendar.getInstance();
-		Calendar data = Calendar.getInstance();
-		data.setTime(solicitacao.getData());
+	public boolean validarSolicitacao(Solicitacao solicitacao) throws ApplicationException, ParseException {
+		
+		DateFormat dateFormatter;
+		dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
+		
+		String hoje = dateFormatter.format(new Date());
+		String dtEscolhida= dateFormatter.format(solicitacao.getData());
 		
 		if (solicitacao.getHoraInicio() == null ) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicial");
@@ -158,21 +162,23 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 		else if(solicitacao.getHoraFinal() == null){
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Final");
 		}		
-		else if ((solicitacao.getHoraInicio() == null || solicitacao.getHoraFinal() == null) && solicitacao.getHoraFinal().before(solicitacao.getHoraInicio())) {
-			throw new ApplicationException("msg.error.intervalo.incorreto","Data Inicial", "Data Final");
+		else if ((solicitacao.getHoraInicio() != null || solicitacao.getHoraFinal() != null) && solicitacao.getHoraInicio().after(solicitacao.getHoraFinal())) {
+			throw new ApplicationException("msg.error.intervalo.incorreto","Hora Inicial", "Hora Final");
 		}		
 		else if (solicitacao.getDescricao() != null && solicitacao.getDescricao().length() > 500) {
 			throw new ApplicationException("msg.error.campo.maior.esperado","Descricao","500");			
 		}	
 		else if(solicitacao.getDescricao() == null){
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
+		}else if(solicitacao.getDescricao() != null && (solicitacao.getDescricao().length() > 500)){
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
 		}else if(solicitacao.getSistema() ==  null || solicitacao.getSistema().getId() == 0){
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
 		}
-		/*else if (data.getTime().before(today.getTime()) && !data.getTime().toString().equals(today.getTime().toString())){
+		else if (!hoje.equalsIgnoreCase(dtEscolhida) && dateFormatter.parse(dtEscolhida).before(dateFormatter.parse(hoje))){
 			
 			throw new ApplicationException("msg.error.data");
-		}*/
+		}
 		else{
 			return true;
 		}		

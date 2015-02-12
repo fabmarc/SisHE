@@ -1,5 +1,6 @@
 package com.indra.sishe.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -26,5 +27,5 @@ public interface SolicitacaoService extends BaseService<Solicitacao> {
 	
 	void removeSolicitacoes(List<Solicitacao> solicitacoesParaRemover) throws ApplicationException;
 	
-	public boolean validarSolicitacao(Solicitacao solicitacao)throws ApplicationException;
+	public boolean validarSolicitacao(Solicitacao solicitacao)throws ApplicationException, ParseException;
 }

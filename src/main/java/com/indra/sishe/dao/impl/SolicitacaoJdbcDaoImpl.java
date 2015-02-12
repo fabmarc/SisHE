@@ -47,7 +47,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	@Override
 	public Solicitacao save(Solicitacao entity) throws RegistroDuplicadoException {
-		
+
 		try {
 			MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -55,11 +55,26 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.addValue("hora_inicio", entity.getHoraInicio());
 			params.addValue("hora_final", entity.getHoraFinal());
 			params.addValue("descricao", entity.getDescricao());
-		
+
+			Usuario user = new Usuario();
+			user.setId(UsuarioLogado.getId());
+			entity.setUsuario(user);
+
 			if (entity.getSistema() != null) {
 				params.addValue("id_sistema", entity.getSistema().getId());
 			}
-			
+
+			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
+				params.addValue("id_status_lider", 1);
+				params.addValue("id_status_gerente", 1);
+				params.addValue("id_aprovador_gerente", UsuarioLogado.getId());
+			}
+
+			if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
+				params.addValue("id_status_lider", 1);
+				params.addValue("id_aprovador_lider", UsuarioLogado.getId());
+			}
+
 			if (entity.getUsuario() != null) {
 				params.addValue("id_usuario", entity.getUsuario().getId());
 			}
