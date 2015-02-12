@@ -12,9 +12,9 @@ import com.indra.sishe.entity.Usuario;
 @Local
 public interface SolicitacaoService extends BaseService<Solicitacao> {
 
-	public List<Solicitacao> findByLider(Usuario lider);
+	public List<Solicitacao> findByLider(Solicitacao solicitacaoFiltro);
 
-	public List<Solicitacao> findByGerente(Usuario gerente);
+	public List<Solicitacao> findByGerente(Solicitacao solicitacaoFiltro);
 
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro);
 	

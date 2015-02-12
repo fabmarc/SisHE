@@ -13,7 +13,6 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.SolicitacaoDAO;
 import com.indra.sishe.entity.Solicitacao;
-import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.SolicitacaoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -27,25 +26,21 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 
 	@Override
 	public Solicitacao save(Solicitacao entity) throws ApplicationException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Solicitacao update(Solicitacao entity) throws ApplicationException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Solicitacao> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Solicitacao findById(Long id) throws ApplicationException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -99,13 +94,13 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 
 	@Override
-	public List<Solicitacao> findByLider(Usuario lider) {
-		return solicitacaoDao.findByLider(lider);
+	public List<Solicitacao> findByLider(Solicitacao solicitacaoFiltro) {
+		return solicitacaoDao.findByLider(solicitacaoFiltro);
 	}
 
 	@Override
-	public List<Solicitacao> findByGerente(Usuario gerente) {
-		return solicitacaoDao.findByGerente(gerente);
+	public List<Solicitacao> findByGerente(Solicitacao solicitacaoFiltro) {
+		return solicitacaoDao.findByGerente(solicitacaoFiltro);
 	}
 
 	@Override
