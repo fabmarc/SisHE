@@ -1,5 +1,6 @@
 package com.indra.sishe.controller.solicitacao;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class SolicitacaoCadController extends SolicitacaoController {
 	private SistemaService sistemaService;
 
 	public SolicitacaoCadController() {
-
+		
 	}
 
 	@PostConstruct
@@ -47,7 +48,7 @@ public class SolicitacaoCadController extends SolicitacaoController {
 		}
 	}
 
-	public String cadastrarSolicitacao() throws ApplicationException {
+	public String cadastrarSolicitacao() throws ApplicationException, ParseException {
 		try {
 			if (solicitacaoService.validarSolicitacao(solicitacaoCadastrar)) {
 				this.solicitacaoFiltro = solicitacaoService.save(this.solicitacaoCadastrar);
@@ -55,7 +56,6 @@ public class SolicitacaoCadController extends SolicitacaoController {
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação"));
 				putFlashAttr("searched", searched);
 			}
-
 			return irParaConsultarPendentes();
 		} catch (ApplicationException e) {
 			returnErrorMessage(e.getMessage());
@@ -68,7 +68,7 @@ public class SolicitacaoCadController extends SolicitacaoController {
 		putFlashAttr("solicitacaoFiltro", solicitacaoFiltro);
 		return "/paginas/solicitacao/consultarSolicitacao.xhtml?faces-redirect=true";
 	}
-	
+
 	public List<Sistema> obterSistemas() {
 		listaSistemas = sistemaService.findAll();
 		return listaSistemas;

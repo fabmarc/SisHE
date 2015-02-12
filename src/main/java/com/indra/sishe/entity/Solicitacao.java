@@ -74,7 +74,7 @@ public class Solicitacao implements Serializable{
 			}
 		}else if(statusGerente.getId() != null){
 			if (statusGerente.getId() == 1) {
-				return "Concluido";	
+				return "Concluída";	
 			}else if (statusGerente.getId() == 2) {
 				return "Reprovado pelo Gerente";
 			}

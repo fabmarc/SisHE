@@ -10,21 +10,32 @@
 				</div>
 
 				<div class="divCorpo" style="padding-bottom: 5%;">
-				
-				<div style="width: 410px; position: relative; height: 60px;">
-					<div style="position: relative;width: 263px; height: 41px;">
-						<p:outputLabel value="Data:" for="calendarioBusca" />
-						<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
-					</div>
 
-					<div style="width: 100px;top: -20px;left: 118px;height: 40px;position: relative;">	
-						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" value="Pesquisar" />
+					<div style="width: 410px; position: relative; height: 60px;">
+						<div style="position: relative; width: 263px; height: 41px;">
+							<p:outputLabel value="Data:" for="calendarioBusca" />
+							<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+						</div>
+						
+						<div style="position: relative;left: 541px;top: -41px;">
+						<p:outputLabel value="Pendentes" style="position: relative;top: 24px;left: 22px;" />
+						<p:selectBooleanCheckbox value="#{solicitacaoMnt.pendente}" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
+							<!-- <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" /> -->
+						</p:selectBooleanCheckbox>
+						</div>
+						<div id="divSistemas" style="position: relative;top: -85px;left: 123px;" >
+						<p:outputLabel value="Sistema:" />
+						<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;" >
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{solicitacaoMnt.listaSistemas}" var="sistema" itemLabel="#{sistema.nome}" itemValue="#{sistema}" />
+						</p:selectOneMenu>
+						</div>
+						<div style="width: 100px;position: relative;top: -119px;left: 638px;">
+							<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
+						</div>
 					</div>
-				</div>
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
-						<f:facet name="header">
-							<p:outputLabel value="Solicitações de #{usuarioLogado.nome}" style="height: 15px;top: 1px;position: relative;font-weight: bold;color: #4f4f4f;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);" />
-						</f:facet>
+						<f:facet name="header">Solicitações</f:facet>
 
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
@@ -36,13 +47,13 @@
 						</p:column>
 
 
-						<p:column headerText="Hora Inicial" style="text-align: center;" >
+						<p:column headerText="Hora Inicial" style="text-align: center;">
 							<h:outputText value="#{solicitacao.horaInicio}">
 								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Hora Final" style="text-align: center;" >
+						<p:column headerText="Hora Final" style="text-align: center;">
 							<h:outputText value="#{solicitacao.horaFinal}">
 								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
@@ -54,19 +65,53 @@
 
 						<p:column headerText="Status" style="min-width: 175px;">
 							<h:outputText value="#{solicitacao.status}" id="statusText" />
-						<!-- <p:tooltip id="toolTipVisualizar" for="statusText" value="Aprovado por: #{solicitacao.gerente.nome}" /> -->
+							<!-- <p:tooltip id="toolTipVisualizar" for="statusText" value="Aprovado por: #{solicitacao.gerente.nome}" /> -->
 						</p:column>
 
 						<p:column headerText="Ação" style="width:5%">
-							<p:commandLink  id="visualizarLink" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search" action="#{solicitacaoMnt.visualizar()}" />
+							<p:commandLink title="Visualizar Solicitação" id="descricaoLink" oncomplete="modalDetalhes.show()" style="width:20px; left:13px; position: relative; float:center;" styleClass="ui-icon ui-icon-search">
+								<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoMnt.solicitacaoDetalhe}" />
+							</p:commandLink>
 						</p:column>
 
 						<f:facet name="footer">
-							<div style="text-align: right; width: 100%">
-								<p:commandLink id="Excluir" value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
-							</div>
+							<!--	<div style="width: 100%; height: 23px; position: relative;">-->
+							<!-- 	<div style="text-align: left; width: 50%; position: relative;"> -->
+							<p:commandLink id="aprovar" style="position: absolute;left: 12px;" value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
+							<h:outputLabel value=" / " rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" style="width: 10px;position: absolute;left: 74px;color: #333;font-weight: bold;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);font-family: Arial,sans-serif;font-size: 1.1em;" />
+							<p:commandLink id="reprovar" style="position: absolute;left: 88px;" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}" />
+							<!-- <div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;"> -->
+							<p:commandLink id="Excluir" style="position: relative;right: -325px;" value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
 						</f:facet>
 					</p:dataTable>
+
+					<p:dialog header="Detalhes" dynamic="true" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="auto" width="490px">
+						<div>
+							Solicitante: <b>#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome} </b> <br /> Sistema: <b>#{solicitacaoMnt.solicitacaoDetalhe.sistema.nome}</b> <br /> Data:
+							<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.data}" style="font-weight: bold;">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> a <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br />
+							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.lider.nome}">
+								Líder Aprovador: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<br />
+							</ui:fragment>
+							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.gerente.nome}">
+								Gerente Aprovador: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<br />
+							</ui:fragment>
+							<div style="height: 4px;"></div>
+							<br />Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
+						</div>
+						<div style="height: 8px;"></div>
+						<div class="divDialog">
+							<h:commandButton value="OK" styleClass="botao3d" onclick="modalDetalhes.hide()" style="width:109px;" />
+						</div>
+					</p:dialog>
 
 					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 						<div class="divDialog">
@@ -78,6 +123,31 @@
 					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Selecione" message="#{msg['msg.warning.selecione.pelo.menos.um']}" widgetVar="selectAtleastOne">
 						<div class="divDialog">
 							<h:commandButton value="OK" styleClass="botao3d" onclick="selectAtleastOne.hide()" ajax="false" style="width:109px;" />
+						</div>
+					</p:confirmDialog>
+
+					<p:confirmDialog id="msgAprovar" global="true" showEffect="fade" hideEffect="explode" header="Aprovar" message="Deseja aprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmAprovacao">
+						<!-- Div msg aprovar -->
+						<div class="divDialog">
+							<h:outputText value="Observação para a(s) solicitação(ões):" />
+							<br />
+							<h:inputTextarea id="obs01" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;">
+								<f:ajax event="change" render="mainForm:obs02" />
+							</h:inputTextarea>
+							<br />
+							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.aprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
+						</div>
+					</p:confirmDialog>
+
+					<p:confirmDialog id="msgReprovar" global="true" showEffect="fade" hideEffect="explode" header="Reprovar" message="Deseja reprovar o(s) registro(s) selecionado(s)?" widgetVar="confirmReprovacao">
+						<div class="divDialog">
+							<h:outputText value="Observação para a(s) solicitação(ões):" />
+							<br />
+							<h:inputTextarea id="obs02" value="#{solicitacaoMnt.observacao}" maxlength="200" style="width: 330px; height: 50px; left: 4px; position: relative;" />
+							<br />
+							<h:commandButton value="Sim" actionListener="#{solicitacaoMnt.reprovar()}" onclick="confirmExclusao.hide()" update="mainForm:solicitacaoDt messages" styleClass="botao3d" style="width: 109px;" />
+							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
 					</p:confirmDialog>
 

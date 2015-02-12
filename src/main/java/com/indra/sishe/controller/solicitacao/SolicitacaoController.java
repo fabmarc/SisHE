@@ -63,6 +63,7 @@ public abstract class SolicitacaoController extends BaseController implements Se
 
 	public void setSearched(Boolean searched) {
 		this.searched = searched;
-	}	
+	}
+	
 
 }
