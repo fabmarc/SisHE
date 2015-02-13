@@ -1,8 +1,6 @@
 package com.indra.sishe.controller.relatorio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -14,7 +12,7 @@ import org.primefaces.model.TreeNode;
 
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.DadosRelatorio;
-import com.indra.sishe.enums.Mes;
+import com.indra.sishe.enums.MesEnum;
 import com.indra.sishe.service.HistoricoService;
 
 @ManagedBean(name = "relatorioController")
@@ -29,7 +27,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	
 	private String ano;
 	
-	private String mes;
+	private MesEnum mes;
 
 	@Inject
 	protected transient HistoricoService historicoService;
@@ -65,17 +63,17 @@ public class RelatorioController extends BaseController implements Serializable 
 		this.ano = ano;
 	}
 
-	public String getMes() {
+	public MesEnum getMes() {
 		return mes;
 	}
 
-	public void setMes(String mes) {
+	public void setMes(MesEnum mes) {
 		this.mes = mes;
 	}
 
 	public TreeNode gerarHistorico() {
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
-		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes, this.ano);
+		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()));
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;
@@ -98,8 +96,9 @@ public class RelatorioController extends BaseController implements Serializable 
 		}
 	}
 	
-	public List<Mes> obterListaMes() {
-		List<Mes> listaDias = new ArrayList<Mes>(Arrays.asList(Mes.values()));
+	public List<MesEnum> obterListaMes() {
+		//List<MesEnum> listaDias = new ArrayList<MesEnum>(Arrays.asList(MesEnum.values()));
+		List<MesEnum> listaDias = MesEnum.seisMeses();
 		return listaDias;
 	}
 	
