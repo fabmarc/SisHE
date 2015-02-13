@@ -177,7 +177,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				sql = new StringBuilder();
 				params = new MapSqlParameterSource();
 				//comando SQL para obter dados do periodo.
-				sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and ((hora_inicio between :horaInicio  and :horaFim)  or (:horaInicio between hora_inicio and hora_fim and hora_fim <=:horaFim)) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
+				sql.append("SELECT dia_semana, hora_inicio, hora_fim, porcentagem from periodo inner join regra on (regra.id = periodo.id_regra) inner join sindicato on (regra.id_sindicato = sindicato.id) inner join usuario on (usuario.id_sindicato = sindicato.id) where usuario.id = :idUsuario and dia_semana = :diaSemana and ((hora_inicio >= :horaInicio and hora_inicio < :horaFim)  or (:horaInicio between hora_inicio and hora_fim)) and :dataSolicitada between regra.data_inicio and regra.data_fim order by hora_inicio asc");
 				params.addValue("idUsuario", solicitacao.getUsuario().getId());
 				params.addValue("diaSemana", diaSolicitado);
 				params.addValue("horaInicio", solicitacao.getHoraInicio());
