@@ -198,10 +198,10 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
 		
-		if (solicitacaoFiltro.getUsuario().getNome() != null) {
-			sql.append("AND usuario.nome = :nomeUsuario ");
+		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%'");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
-		}
+		}		
 
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
@@ -271,7 +271,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome = :nomeUsuario ");
+			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%'");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
 		}		
 		
@@ -381,10 +381,10 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
 		
-		if (solicitacaoFiltro.getUsuario().getNome() != null) {
-			sql.append("AND usuario.nome = :nomeUsuario ");
+		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%'");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
-		}
+		}		
 
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
