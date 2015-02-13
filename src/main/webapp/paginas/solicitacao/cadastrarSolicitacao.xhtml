@@ -51,10 +51,10 @@
 				</div>
 				<div id="divButtons" style="position: relative; top: 23px; left: 40%;">
 					<h:commandButton styleClass="botao3d" action="#{solicitacaoCad.cadastrarSolicitacao()}" value="Confirmar" />
-					<h:commandButton styleClass="botao3d" action="#{solicitacaoCad.cancelar()}" value="Cancelar" 
+					<h:commandButton styleClass="botao3d"  immediate="true" action="#{solicitacaoCad.cancelar()}" value="Cancelar" 
 						style="position: relative;left: 5px;" />
 				</div>
-				<div style="width: 410px; position: relative; height: 60px;"></div>
+				<div id="divDown" style="width: 0px; position: relative; height: 60px;"></div>
 
 			</ui:insert>
 		</h:form>

@@ -64,7 +64,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 				params.addValue("id_sistema", entity.getSistema().getId());
 			}
 
-			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
+		/*	if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
 				params.addValue("id_status_lider", 1);
 				params.addValue("id_status_gerente", 1);
 				params.addValue("id_aprovador_gerente", UsuarioLogado.getId());
@@ -74,7 +74,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
 				params.addValue("id_status_lider", 1);
 				params.addValue("id_aprovador_lider", UsuarioLogado.getId());
-			}
+			}*/
 
 			if (entity.getUsuario() != null) {
 				params.addValue("id_usuario", entity.getUsuario().getId());
