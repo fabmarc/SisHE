@@ -11,8 +11,13 @@ import javax.inject.Inject;
 
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.controller.usuario.UsuarioLogado;
+import com.indra.sishe.entity.DadosRelatorio;
+import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
+import com.indra.sishe.service.BancoHorasService;
+import com.indra.sishe.service.HistoricoService;
 import com.indra.sishe.service.SistemaService;
 
 @ViewScoped
@@ -28,6 +33,10 @@ public class SolicitacaoCadController extends SolicitacaoController {
 	@Inject
 	private SistemaService sistemaService;
 
+	@Inject
+	private BancoHorasService bancoHorasService;
+	@Inject
+	private HistoricoService historicoService;
 	public SolicitacaoCadController() {
 		
 	}
@@ -49,9 +58,18 @@ public class SolicitacaoCadController extends SolicitacaoController {
 	}
 
 	public String cadastrarSolicitacao() throws ApplicationException, ParseException {
+		
 		try {
 			if (solicitacaoService.validarSolicitacao(solicitacaoCadastrar)) {
 				this.solicitacaoFiltro = solicitacaoService.save(this.solicitacaoCadastrar);
+				if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+					List<Long> id = new ArrayList<Long>();
+					id.add(solicitacaoFiltro.getId());
+					solicitacaoService.gerenteAcaoSolicitacao(id, 1);
+					List<HistoricoDetalhes> relatorio = new ArrayList<HistoricoDetalhes>();
+					relatorio =  bancoHorasService.contabilizarHorasBanco(id);
+					historicoService.gerarHistorico(id, "", relatorio);					
+				} 
 				putFlashAttr("solicitacaoFiltro", solicitacaoFiltro);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação"));
 				putFlashAttr("searched", searched);
