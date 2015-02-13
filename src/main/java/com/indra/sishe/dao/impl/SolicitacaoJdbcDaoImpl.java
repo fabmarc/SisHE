@@ -68,7 +68,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 				params.addValue("id_status_lider", 1);
 				params.addValue("id_status_gerente", 1);
 				params.addValue("id_aprovador_gerente", UsuarioLogado.getId());
-			}
+			}			
+			
 
 			if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
 				params.addValue("id_status_lider", 1);
