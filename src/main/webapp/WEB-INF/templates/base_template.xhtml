@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:sec="http://www.springframework.org/security/tags">
 <f:view contentType="text/html" encoding="UTF-8">
 	<h:head>
 		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/bar_chart_22x22.png" />
@@ -50,45 +51,42 @@
 								</h:commandLink>
 							</div>
 						</div>
-
 						<p:menubar style="top:20px;">
-							<p:submenu label="Solicitação" rendered="#{usuarioLogado.verificarPermissao('ROLE_FUNCIONARIO')}">
-								<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+							<sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_GERENTE">
+								<p:submenu label="Administração">
+									<p:submenu label="Cargo">
+										<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+									<p:submenu label="Usuário">
+										<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+									<p:submenu label="Projeto">
+										<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+									<p:submenu label="Sistema">
+										<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+									<p:submenu label="Sindicato">
+										<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+									<p:submenu label="Feriado">
+										<p:menuitem value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+								</p:submenu>
+							</sec:authorize>
+							<p:submenu label="Solicitação">
+								<sec:authorize ifAnyGranted="ROLE_FUNCIONARIO">
+									<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+								</sec:authorize>
 								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
 								<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard"/>
 							</p:submenu>
-							<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
-								<p:submenu label="Sistema">
-									<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" icon="ui-icon-search" />
-								</p:submenu>
-								<p:submenu label="Projetos" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
-									<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
-								</p:submenu>
-							</p:submenu>
-
-							<p:submenu label="Funcionário" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
-								<p:submenu label="Usuário">
-									<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" icon="ui-icon-search" />
-								</p:submenu>
-								<p:submenu label="Cargo">
-									<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" icon="ui-icon-search" />
-								</p:submenu>
-							</p:submenu>
-
-							<p:submenu label="Sindicato" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
-								<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
-							</p:submenu>
-
-							<p:submenu label="Feriados" rendered="#{usuarioLogado.verificarPermissao('ROLE_GERENTE')}">
-								<p:menuitem value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" icon="ui-icon-search" />
-							</p:submenu>
-
 						</p:menubar>
 
 					</h:form>

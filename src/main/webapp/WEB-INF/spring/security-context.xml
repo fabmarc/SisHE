@@ -7,26 +7,40 @@
 	<!-- Enable method level Spring Security by annotations -->
 	<sec:global-method-security pre-post-annotations="enabled" />
 	
+	<sec:http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
 	
-	
-	<sec:http auto-config="true" authentication-manager-ref="authenticationManager">
+		<!-- Page level Spring Security : Permit access to resources in /paginas/unsecure/** -->
+		<sec:intercept-url pattern="/paginas/unsecure/**"
+			access="permitAll" />
 
-		<sec:form-login login-page="/unsecure/login.jsf" default-target-url="/unsecure/login.jsf" authentication-failure-url="/unsecure/login.jsf" />
-            <sec:logout logout-success-url="/paginas/unsecure/login.jsf" />
-            <sec:intercept-url pattern="/index.jsf" access="ROLE_ADMIN, ROLE_FUNCIONARIO, ROLE_GERENTE, ROLE_LIDER" />
-            <sec:intercept-url pattern="/paginas/cargo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/feriado/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/projeto/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/regra/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/periodo/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/sindicato/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/sistema/**" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />  
-            <sec:intercept-url pattern="/paginas/usuario/**" access="ROLE_ADMIN, ROLE_GERENTE" />
-            <sec:intercept-url pattern="/paginas/solicitacao/solicitacoesPendentes.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER" />
-            <sec:intercept-url pattern="/paginas/solicitacao/consultarSolicitacoes.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO" />
-             <sec:intercept-url pattern="/paginas/solicitacao/relatorio.jsf" access="ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO" />
-            <!-- <sec:intercept-url pattern="/paginas/equipe/**" access="ROLE_ADMIN, ROLE_GERENTE" /> -->
-                
+		<sec:intercept-url pattern="/paginas/solicitacao/cadastrarSolicitacao.jsf"
+			access="hasAnyRole('ROLE_FUNCIONARIO')" />
+
+		<sec:intercept-url pattern="/paginas/usuario/alterarSenha.jsf"
+			access="hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_LIDER', 'ROLE_FUNCIONARIO')" />
+
+		<sec:intercept-url pattern="/paginas/solicitacao/**"
+			access="hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_LIDER', 'ROLE_FUNCIONARIO')" />
+
+		<!-- Page level Spring Security : Intercept access to resources in /paginas/** -->
+		<sec:intercept-url pattern="/paginas/**"
+			access="hasAnyRole('ROLE_ADMIN','ROLE_GERENTE')" />
+
+		<!-- Page level Spring Security : Enable Primefaces -->
+		<sec:intercept-url pattern="/javax.faces.resource/**"
+			access="permitAll" />
+
+		<!-- Page level Spring Security : Intercept access to resources in /** -->
+		<sec:intercept-url pattern="/**"
+			access="hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_LIDER', 'ROLE_FUNCIONARIO')" />
+
+		<!-- Define login page for Spring Security -->
+		<sec:form-login login-page="/paginas/unsecure/login.jsf" />
+
+		<!-- Define logout properties for Spring Security -->
+		<sec:logout invalidate-session="true" delete-cookies="true"
+			logout-success-url="/"></sec:logout>
+
 	</sec:http>
 
 	<!-- Set UserDetailsServiceImpl class as the authentication Manager for Spring Security -->
