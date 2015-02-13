@@ -2,8 +2,8 @@ package com.indra.sishe.enums;
 
 public enum PermissaoEnum {
 	
-	ADMINISTRADOR("Administrador", "ROLE_ADMIN, ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO"),
-	GERENTE("Gerente", "ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO"),
+	ADMINISTRADOR("Administrador", "ROLE_ADMIN"),
+	GERENTE("Gerente", "ROLE_GERENTE, ROLE_FUNCIONARIO"),
 	LIDER("Líder", "ROLE_LIDER, ROLE_FUNCIONARIO"),
 	FUNCIONARIO("Funcionário", "ROLE_FUNCIONARIO");
 	

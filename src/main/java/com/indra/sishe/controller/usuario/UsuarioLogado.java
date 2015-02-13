@@ -54,7 +54,7 @@ public class UsuarioLogado extends BaseController implements Serializable {
 				.getAttribute("usuario_permissoes");
 	}
 
-	public boolean verificarPermissao(String nivel) {
+	public static boolean verificarPermissao(String nivel) {
 		if (getPermissoes().contains(nivel)) {
 			return true;
 		} else {
