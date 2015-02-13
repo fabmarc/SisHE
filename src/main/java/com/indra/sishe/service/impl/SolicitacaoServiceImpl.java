@@ -172,7 +172,6 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
 		}
 		else if (!hoje.equalsIgnoreCase(dtEscolhida) && dateFormatter.parse(dtEscolhida).before(dateFormatter.parse(hoje))){
-			
 			throw new ApplicationException("msg.error.data");
 		}
 		else{
