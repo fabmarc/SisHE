@@ -20,7 +20,7 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	protected Boolean searched;
 	
 	public String irParaConsultarPendentes() {
-		return "/paginas/solicitacao/solicitacoesPendentes.xhtml?faces-redirect=true";
+		return "/paginas/solicitacao/solicitacaoPendente.xhtml?faces-redirect=true";
 	}
 	
 	public String irParaConsultar() {
@@ -28,7 +28,7 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	}
 	
 	public String irParaConsultarPorUsuario() {
-		return "/paginas/solicitacao/consultarSolicitacoes.xhtml?faces-redirect=true";
+		return "/paginas/solicitacao/consultarSolicitacao.xhtml?faces-redirect=true";
 	}
 
 	public String irParaCadastrar() {
