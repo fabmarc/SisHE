@@ -30,24 +30,24 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	private List<Solicitacao> listaSolicitacoes;
 
 	private List<Solicitacao> solicitacoesSelecionadas;
-	
+
 	private List<Sistema> listaSistemas;
 
 	private Solicitacao solicitacaoDetalhe;
 
 	private String observacao;
-	
+
 	private boolean pendente;
-	
+
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
 
 	@Inject
 	protected transient HistoricoService historicoService;
-	
+
 	@Inject
 	protected transient SistemaService sistemaService;
-	
+
 	@PostConstruct
 	public void init() {
 
@@ -60,20 +60,18 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); 
-		else pesquisarPorUsuarioLogado();
-		
-//		pesquisarPendentes();
+		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>();
+		else pesquisar();
 	}
 
-	public void pesquisar(){
+	public void pesquisar() {
 		if (pendente == true) {
 			pesquisarPendentes();
 		} else {
 			pesquisarPorUsuarioLogado();
 		}
 	}
-	
+
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
 		usuario.setId(UsuarioLogado.getId());
@@ -130,7 +128,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		return irParaConsultarPorUsuario();
 	}
 
-	
 	public void beforeAprovarSolicitacao() {
 		if (solicitacoesSelecionadas.size() == 0) {
 			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
@@ -180,10 +177,18 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		pesquisarPendentes();
 	}
 
-	private List<Sistema> obterListaSistemas(){
+	public boolean verificarCargo() {
+		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE") || UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private List<Sistema> obterListaSistemas() {
 		return sistemaService.findAll();
 	}
-	
+
 	public List<Solicitacao> getListaSolicitacoes() {
 		return listaSolicitacoes;
 	}
@@ -208,21 +213,17 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		this.solicitacaoDetalhe = solicitacaoDetalhe;
 	}
 
-
 	public String getObservacao() {
 		return observacao;
 	}
-
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
 
-
 	public boolean isPendente() {
 		return pendente;
 	}
-
 
 	public void setPendente(boolean pendente) {
 		this.pendente = pendente;

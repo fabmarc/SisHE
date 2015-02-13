@@ -34,6 +34,7 @@ public class Solicitacao implements Serializable{
 	private String descricao;
 
 	public Solicitacao() {
+		this.usuario = new Usuario();
 	}
 	
 	public Solicitacao(Long id) {

@@ -46,14 +46,12 @@
 
 							<p:column headerText="Data" style="width:10%" sortBy="#{feriado.data}">
 								<h:outputText value="#{feriado.data}">
-									<f:convertDateTime pattern="HH:mm" />
+									<f:convertDateTime pattern="dd/MM/YYYY" />
 								</h:outputText>
 							</p:column>
 
 							<p:column headerText="Nome" sortBy="#{feriado.nome}">
-								<h:outputText value="#{feriado.nome}">
-									<f:convertDateTime pattern="HH:mm" />
-								</h:outputText>
+								<h:outputText value="#{feriado.nome}"/>
 							</p:column>
 
 							<p:column headerText="Abrangência" sortBy="#{feriado.abrangencia}">

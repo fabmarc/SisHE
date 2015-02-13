@@ -198,6 +198,10 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
 		
+		if (solicitacaoFiltro.getUsuario().getNome() != null) {
+			sql.append("AND usuario.nome = :nomeUsuario ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+		}
 
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
@@ -265,6 +269,11 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
+
+		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+			sql.append("AND usuario.nome = :nomeUsuario ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+		}		
 		
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
@@ -370,6 +379,11 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		if (solicitacaoFiltro.getSistema() != null) {
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
+		}
+		
+		if (solicitacaoFiltro.getUsuario().getNome() != null) {
+			sql.append("AND usuario.nome = :nomeUsuario ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
 		}
 
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,

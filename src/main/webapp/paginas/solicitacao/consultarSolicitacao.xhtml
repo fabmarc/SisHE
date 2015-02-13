@@ -17,20 +17,24 @@
 							<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
 						</div>
 						
-						<div style="position: relative;left: 541px;top: -41px;">
+						<div id="divPendente" style="position: relative;left: 541px;top: -41px;width: 95px">
 						<p:outputLabel value="Pendentes" style="position: relative;top: 24px;left: 22px;" />
-						<p:selectBooleanCheckbox value="#{solicitacaoMnt.pendente}" rendered="#{usuarioLogado.verificarPermissao('ROLE_LIDER')}">
+						<p:selectBooleanCheckbox id="PendenteCheckbox" value="#{solicitacaoMnt.pendente}" rendered="#{solicitacaoMnt.verificarCargo()}">
 							<!-- <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" /> -->
 						</p:selectBooleanCheckbox>
 						</div>
-						<div id="divSistemas" style="position: relative;top: -85px;left: 123px;" >
+						<div id="divSistemas" style="position: relative;top: -84px;left: 123px;" >
 						<p:outputLabel value="Sistema:" />
 						<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;" >
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{solicitacaoMnt.listaSistemas}" var="sistema" itemLabel="#{sistema.nome}" itemValue="#{sistema}" />
 						</p:selectOneMenu>
 						</div>
-						<div style="width: 100px;position: relative;top: -119px;left: 638px;">
+						<div id="divSolicitante" style="position: relative;top: -139px;left: 291px;width: 150px;" >
+						<p:outputLabel value="Solicitante:" />
+						<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 130px;" />
+						</div>
+						<div style="width: 100px;position: relative;top: -184px;left: 638px;">
 							<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
 						</div>
 					</div>
