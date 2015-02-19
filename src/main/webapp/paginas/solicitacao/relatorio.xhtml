@@ -7,20 +7,27 @@
 			<ui:insert>
 				<p:growl id="message" showDetail="true" showSummary="false" />
 
-				<div class="divCorpo" style="padding-bottom: 10%;">
-					<div style="width: 440px; position: relative; height: 60px; left: 196px;">
-						<div style="position: relative; width: 263px; height: 41px;">
-							<h:outputLabel value="Mês" style="width:50px;" />
-							<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" id="cargoIpt" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
-								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-								<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes} / #{mes.ano}" itemValue="#{mes}" />
-							</h:selectOneMenu>
-						</div>
-						<div style="width: 130px; height: 40px; position: relative; top: -15px; left: 177px;">
-							<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
+				<p:breadCrumb styleClass="breadCrumb">
+    				<p:menuitem value="Home" url="/index.jsf" />
+    				<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+				<div class="divCorpo" style="padding-bottom: 12%;">
+					<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 340px; left: 200px; top: -10px;">
+						<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
+							<div style="position: relative; width: 263px; height: 41px;">
+								<h:outputLabel value="Mês" style="width:50px;" />
+								<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" id="cargoIpt" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes} / #{mes.ano}" itemValue="#{mes}" />
+								</h:selectOneMenu>
+							</div>
+							<div style="width: 130px; height: 40px; position: relative; top: -15px; left: 177px;">
+								<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
+							</div>
 						</div>
 					</div>
-					<div style="top: 7px; position: relative;">
+					<div style="top: 15px; position: relative;">
 						<p:treeTable value="#{relatorioController.table}" var="detalhe" rendered="#{relatorioController.mostrarTable()}">
 							<f:facet name="header">
            						Relatório

@@ -13,6 +13,7 @@ import org.primefaces.model.TreeNode;
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.DadosRelatorio;
 import com.indra.sishe.enums.MesEnum;
+import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.HistoricoService;
 
 @ManagedBean(name = "relatorioController")
@@ -31,6 +32,9 @@ public class RelatorioController extends BaseController implements Serializable 
 
 	@Inject
 	protected transient HistoricoService historicoService;
+	
+	@Inject
+	protected transient BancoHorasService bancoHorasService;
 
 	public TreeNode getTable() {
 		return table;
@@ -49,6 +53,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public void pesquisar() {
+		table = null;
 		this.table = gerarHistorico();
 		if(!mostrarTable()){
 			returnInfoMessage(messageProvider.getMessage("msg.info.relatorio.vazio"));
@@ -72,18 +77,29 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public TreeNode gerarHistorico() {
+		
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
 		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()));
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;
+		Integer saldo = 0;
+		Integer saldoMinu = 0;
 		for (DadosRelatorio dadoTemp : dados) {
 			if (dadoTemp.getIdSolicitacao() != idMarcador) {
 				work = new DefaultTreeNode(new DadosRelatorio(dadoTemp.getDataSolicitacao(), "-", dadoTemp.getHoraInicioSolicitacao().substring(0, 5), dadoTemp.getHoraFimSolicitacao().substring(0, 5), dadoTemp.obterMinutosSoliciacao(), dadoTemp.porcentagemGeral(), dadoTemp.obterMinutosGerado()), table);
 				idMarcador = dadoTemp.getIdSolicitacao();
+				saldo = saldo + Integer.parseInt(dadoTemp.getTotal());
+				saldoMinu = saldoMinu + dadoTemp.minutosSolicitacao();
 			}
 			new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", dadoTemp.getMinutos() + "min", dadoTemp.getPorcentagem() + "%", dadoTemp.getValor() + "min"), work);
 			total = total + Integer.parseInt(dadoTemp.getValor());
+		}
+		
+		//exibir o saldo
+		if(!(table == null || table.getChildren().size() < 1)){
+			//bancoHorasService.findByUsuario(new Usuario(UsuarioLogado.getId())).getSaldo();//Total no banco de horas do usuario
+			new DefaultTreeNode(new DadosRelatorio("Total", "-", "-", "-", saldoMinu.toString() + "min (" + DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min (" + DadosRelatorio.formatarHora(saldo) + " horas)"), table);
 		}
 		return table;
 	}

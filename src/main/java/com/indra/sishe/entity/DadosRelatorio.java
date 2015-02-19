@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
+public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio> {
 
 	private static final long serialVersionUID = -2945377505162563295L;
 
@@ -20,7 +20,7 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 	private String porcentagem;
 	private String valor;
 	private String total;
-	
+
 	public DadosRelatorio(String dataSolicitacao, String dataHistorico, String horaInicioSolicitacao,
 			String horaFimSolicitacao, String minutos, String porcentagem, String valor) {
 		this.dataSolicitacao = dataSolicitacao;
@@ -31,10 +31,10 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 		this.porcentagem = porcentagem;
 		this.valor = valor;
 	}
-	
-	public DadosRelatorio() {	
+
+	public DadosRelatorio() {
 	}
-	
+
 	public String getDataSolicitacao() {
 		return dataSolicitacao;
 	}
@@ -90,7 +90,7 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 	public void setValor(String valor) {
 		this.valor = valor;
 	}
-	
+
 	public int getIdSolicitacao() {
 		return idSolicitacao;
 	}
@@ -98,7 +98,7 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 	public void setIdSolicitacao(int idSolicitacao) {
 		this.idSolicitacao = idSolicitacao;
 	}
-	
+
 	public String getTotal() {
 		return total;
 	}
@@ -106,21 +106,21 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 	public void setTotal(String total) {
 		this.total = total;
 	}
-	
-	public String obterMinutosSoliciacao(){
+
+	public String obterMinutosSoliciacao() {
 		Integer minInicial = minutosSolicitacao();
 		return minInicial.toString() + "min (" + formatarHora(minInicial) + " horas)";
 	}
-	
-	private Integer minutosSolicitacao(){
-		
+
+	public Integer minutosSolicitacao() {
+
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 		Date d = null;
 		try {
 			d = df.parse(this.horaInicioSolicitacao);
 		} catch (ParseException e) {
 			e.printStackTrace();
-		} 
+		}
 		Calendar inicio = new GregorianCalendar();
 		inicio.setTime(d);
 		Date d2 = null;
@@ -131,28 +131,29 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio>{
 		}
 		Calendar fim = new GregorianCalendar();
 		fim.setTime(d2);
-		Integer minInicial = (inicio.get(Calendar.HOUR_OF_DAY)*60) + (inicio.get(Calendar.MINUTE));
-		Integer minFinal = (fim.get(Calendar.HOUR_OF_DAY)*60) + (fim.get(Calendar.MINUTE));
+		Integer minInicial = (inicio.get(Calendar.HOUR_OF_DAY) * 60) + (inicio.get(Calendar.MINUTE));
+		Integer minFinal = (fim.get(Calendar.HOUR_OF_DAY) * 60) + (fim.get(Calendar.MINUTE));
 		return minFinal - minInicial;
 	}
-	
-	public String porcentagemGeral(){
-		return Integer.toString(((Integer.parseInt(total) - minutosSolicitacao())*100)/minutosSolicitacao()) + "%";		
+
+	public String porcentagemGeral() {
+		return Integer.toString(((Integer.parseInt(total) - minutosSolicitacao()) * 100) / minutosSolicitacao())
+				+ "%";
 	}
-	
-	public String obterMinutosGerado(){
+
+	public String obterMinutosGerado() {
 		return total + "min" + " (" + formatarHora(Integer.parseInt(total)) + " horas)";
 	}
-	
-	private String formatarHora(Integer minutos){
-		Integer hora = minutos/60;
-		Integer minuto = minutos%60;
+
+	public static String formatarHora(Integer minutos) {
+		Integer hora = minutos / 60;
+		Integer minuto = minutos % 60;
 		String h = Integer.toString(hora);
 		String m = Integer.toString(minuto);
-		if(hora<10){
+		if (hora < 10) {
 			h = "0" + Integer.toString(hora);
 		}
-		if(minuto<10){
+		if (minuto < 10) {
 			m = "0" + Integer.toString(minuto);
 		}
 		return h + ":" + m;

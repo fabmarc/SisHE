@@ -6,6 +6,16 @@
 		<h:form id="mainForm">
 			<br />
 			<ui:insert>
+			
+				<p:breadCrumb styleClass="breadCrumb">
+    				<p:menuitem value="Home" url="/index.jsf" />
+    				<p:menuitem value="Consultar Sindicato" action="#{sindicatoMnt.irParaConsultar()}" immediate="true"/>
+    				<p:menuitem value="Consultar Regra" action="#{regraMnt.irParaConsultar()}" immediate="true"/>
+    				<p:menuitem value="Consultar Período" action="#{periodoMnt.irParaConsultar()}" immediate="true"/>
+    				<p:menuitem value="Cadastrar Período" action="#{periodoMnt.irParaCadastrar()}" immediate="true"/>
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+			
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				
 				<!-- Div Corpo -->

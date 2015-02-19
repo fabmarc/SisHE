@@ -268,4 +268,27 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 		return historicoDetalhes;
 	}
 
+	@Override
+	public BancoHoras findByUsuario(Usuario entity) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT id, id_usuario, saldo ");
+		sql.append("FROM banco_horas WHERE 1=1 ");
+		sql.append("AND id_usuario = :idUsuario");
+		params.addValue("idUsuario", entity.getId());
+		BancoHoras banco = getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new RowMapper<BancoHoras>() {
+			@Override
+			public BancoHoras mapRow(ResultSet rs, int idx) throws SQLException {
+
+				BancoHoras bancoHoras = new BancoHoras();
+				bancoHoras.setId(rs.getLong("id"));
+				bancoHoras.setSaldo(rs.getLong("saldo"));		
+
+				return bancoHoras;
+			}
+		});
+		banco.setUsuario(entity);
+		return banco;
+	}
+
 }
