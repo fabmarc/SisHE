@@ -20,13 +20,13 @@
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{sindicatoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
 					</p:selectOneMenu>
-
+					
 				</div>
 				<br />
 				<br />
 				<div id="divConfirmButtons" style="position: relative; width: 205px; left: 170px;">
 					<h:commandButton styleClass="botao3d" style=" width:100px; float:left;" action="#{sindicatoCad.modoCadastrar()}" value="Confirmar" />
-					<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{sindicatoCad.cancelar()}" value="Cancelar" immediate="true" />
+					<h:commandButton styleClass="botao3d" style="float:right; width:100px;position:relative;left:15px" action="#{sindicatoCad.cancelar()}" value="Cancelar" immediate="true" />
 				</div>
 
 			</ui:insert>
