@@ -51,7 +51,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		try {
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("nome", entity.getNome());
-			params.addValue("role", entity.getRole().getPermissao());
+			params.addValue("role", entity.getRole().getRole());
 			Number key = insertCargo.executeAndReturnKey(params);
 			entity.setId(key.longValue());
 		} catch (DuplicateKeyException e) {

@@ -7,6 +7,15 @@
 		<h:form id="mainForm">
 
 			<ui:insert>
+			
+				<p:breadCrumb styleClass="breadCrumb">
+    				<p:menuitem value="Home" url="/index.jsf" />
+    				<p:menuitem value="Consultar Sindicato" action="#{sindicatoMnt.irParaConsultar()}" />
+    				<p:menuitem value="Consultar Regra" action="#{regraMnt.irParaConsultar()}" />
+    				<p:menuitem value="Consultar Período" action="#{periodoMnt.irParaConsultar()}" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+			
 				<!-- Div Mensagem -->
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />

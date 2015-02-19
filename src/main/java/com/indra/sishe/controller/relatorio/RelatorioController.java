@@ -1,8 +1,6 @@
 package com.indra.sishe.controller.relatorio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -14,7 +12,8 @@ import org.primefaces.model.TreeNode;
 
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.DadosRelatorio;
-import com.indra.sishe.enums.Mes;
+import com.indra.sishe.enums.MesEnum;
+import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.HistoricoService;
 
 @ManagedBean(name = "relatorioController")
@@ -29,10 +28,13 @@ public class RelatorioController extends BaseController implements Serializable 
 	
 	private String ano;
 	
-	private String mes;
+	private MesEnum mes;
 
 	@Inject
 	protected transient HistoricoService historicoService;
+	
+	@Inject
+	protected transient BancoHorasService bancoHorasService;
 
 	public TreeNode getTable() {
 		return table;
@@ -51,6 +53,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public void pesquisar() {
+		table = null;
 		this.table = gerarHistorico();
 		if(!mostrarTable()){
 			returnInfoMessage(messageProvider.getMessage("msg.info.relatorio.vazio"));
@@ -65,27 +68,38 @@ public class RelatorioController extends BaseController implements Serializable 
 		this.ano = ano;
 	}
 
-	public String getMes() {
+	public MesEnum getMes() {
 		return mes;
 	}
 
-	public void setMes(String mes) {
+	public void setMes(MesEnum mes) {
 		this.mes = mes;
 	}
 
 	public TreeNode gerarHistorico() {
+		
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
-		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes, this.ano);
+		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()));
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;
+		Integer saldo = 0;
+		Integer saldoMinu = 0;
 		for (DadosRelatorio dadoTemp : dados) {
 			if (dadoTemp.getIdSolicitacao() != idMarcador) {
 				work = new DefaultTreeNode(new DadosRelatorio(dadoTemp.getDataSolicitacao(), "-", dadoTemp.getHoraInicioSolicitacao().substring(0, 5), dadoTemp.getHoraFimSolicitacao().substring(0, 5), dadoTemp.obterMinutosSoliciacao(), dadoTemp.porcentagemGeral(), dadoTemp.obterMinutosGerado()), table);
 				idMarcador = dadoTemp.getIdSolicitacao();
+				saldo = saldo + Integer.parseInt(dadoTemp.getTotal());
+				saldoMinu = saldoMinu + dadoTemp.minutosSolicitacao();
 			}
 			new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", dadoTemp.getMinutos() + "min", dadoTemp.getPorcentagem() + "%", dadoTemp.getValor() + "min"), work);
 			total = total + Integer.parseInt(dadoTemp.getValor());
+		}
+		
+		//exibir o saldo
+		if(!(table == null || table.getChildren().size() < 1)){
+			//bancoHorasService.findByUsuario(new Usuario(UsuarioLogado.getId())).getSaldo();//Total no banco de horas do usuario
+			new DefaultTreeNode(new DadosRelatorio("Total", "-", "-", "-", saldoMinu.toString() + "min (" + DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min (" + DadosRelatorio.formatarHora(saldo) + " horas)"), table);
 		}
 		return table;
 	}
@@ -98,8 +112,9 @@ public class RelatorioController extends BaseController implements Serializable 
 		}
 	}
 	
-	public List<Mes> obterListaMes() {
-		List<Mes> listaDias = new ArrayList<Mes>(Arrays.asList(Mes.values()));
+	public List<MesEnum> obterListaMes() {
+		//List<MesEnum> listaDias = new ArrayList<MesEnum>(Arrays.asList(MesEnum.values()));
+		List<MesEnum> listaDias = MesEnum.seisMeses();
 		return listaDias;
 	}
 	

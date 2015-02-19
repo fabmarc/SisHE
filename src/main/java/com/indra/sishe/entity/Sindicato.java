@@ -11,6 +11,14 @@ public class Sindicato implements Serializable, Comparable<Sindicato> {
 	private Estado estado;
 
 	private String descricao;
+	
+	private Integer limPositivo;
+	
+	private Integer limNegativo;
+	
+	private Integer periodoAcerto;
+	
+	private Integer diasAntecedencia;
 
 	public Sindicato() {
 
@@ -38,6 +46,38 @@ public class Sindicato implements Serializable, Comparable<Sindicato> {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Integer getLimPositivo() {
+		return limPositivo;
+	}
+
+	public void setLimPositivo(Integer limPositivo) {
+		this.limPositivo = limPositivo;
+	}
+
+	public Integer getLimNegativo() {
+		return limNegativo;
+	}
+
+	public void setLimNegativo(Integer limNegativo) {
+		this.limNegativo = limNegativo;
+	}
+
+	public Integer getPeriodoAcerto() {
+		return periodoAcerto;
+	}
+
+	public void setPeriodoAcerto(Integer periodoAcerto) {
+		this.periodoAcerto = periodoAcerto;
+	}
+
+	public Integer getDiasAntecedencia() {
+		return diasAntecedencia;
+	}
+
+	public void setDiasAntecedencia(Integer diasAntecedencia) {
+		this.diasAntecedencia = diasAntecedencia;
 	}
 
 	@Override

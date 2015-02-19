@@ -11,6 +11,7 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.BancoHorasDAO;
 import com.indra.sishe.entity.BancoHoras;
 import com.indra.sishe.entity.HistoricoDetalhes;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -67,6 +68,11 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 	@Override
 	public List<HistoricoDetalhes> contabilizarHorasBanco(List<Long> idsSolicitacoes) {
 		return bancoHorasDao.contabilizarHorasBanco(idsSolicitacoes);
+	}
+
+	@Override
+	public BancoHoras findByUsuario(Usuario entity) {
+		return bancoHorasDao.findByUsuario(entity);
 	}
 
 }

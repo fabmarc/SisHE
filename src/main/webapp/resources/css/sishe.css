@@ -127,11 +127,18 @@ html {
 .divCorpo{
 	position: relative;
 	width: 100%;
-	top: 20px;
+	top: 10px;
 }
 
 .calendario input{
 	width:90px !important;
+}
+
+.breadCrumb{
+	top:10px;
+	position:relative;
+	background: #FFFFFF -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+	border: 1px solid #FFFFFF;
 }
 
 /*Incluído por Diego*/
