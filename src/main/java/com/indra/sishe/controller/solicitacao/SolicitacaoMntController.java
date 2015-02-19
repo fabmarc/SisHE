@@ -17,6 +17,7 @@ import com.indra.sishe.entity.HistoricoDetalhes;
 import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.enums.StatusEnum;
 import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.HistoricoService;
 import com.indra.sishe.service.SistemaService;
@@ -65,7 +66,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public void pesquisar() {
-		if (pendente == true) {
+		if (solicitacaoFiltro.getStatusGeral().getId() == 3) {
 			pesquisarPendentes();
 		} else {
 			pesquisarPorUsuarioLogado();
@@ -188,6 +189,10 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	private List<Sistema> obterListaSistemas() {
 		return sistemaService.findAll();
 	}
+	
+	public List<StatusEnum> listaStatus() {
+		return StatusEnum.status();
+	} 
 
 	public List<Solicitacao> getListaSolicitacoes() {
 		return listaSolicitacoes;

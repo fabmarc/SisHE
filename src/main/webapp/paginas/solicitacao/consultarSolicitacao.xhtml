@@ -11,33 +11,64 @@
 
 				<div class="divCorpo" style="padding-bottom: 5%;">
 
-					<div style="width: 410px; position: relative; height: 60px;">
-						<div style="position: relative; width: 263px; height: 41px;">
-							<p:outputLabel value="Data:" for="calendarioBusca" />
-							<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+					<ui:fragment rendered="#{solicitacaoMnt.verificarCargo()}">
+
+						<div style="width: 410px; position: relative; height: 60px;">
+							<div style="position: relative; width: 263px; height: 41px;">
+								<p:outputLabel value="Data:" for="calendarioBusca" />
+								<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+							</div>
+
+							<div id="divSolicitante" style="position: relative; top: -41px; left: 123px;">
+								<p:outputLabel value="Solicitante:" />
+								<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 130px;" />
+							</div>
+							<div id="divSistema" style="position: relative; top: -106px;left: 285px; width: 150px;">
+								<p:outputLabel value="Sistema:" />
+								<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{solicitacaoMnt.listaSistemas}" var="sistema" itemLabel="#{sistema.nome}" itemValue="#{sistema}" />
+								</p:selectOneMenu>
+							</div>
+							<div id="divStatus" style="position: relative; top: -161px; left: 453px;">
+								<p:outputLabel value="Status:" />
+								<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.statusGeral}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
+								</p:selectOneMenu>
+							</div>
+							<div style="width: 100px; position: relative; top: -196px; left: 638px;">
+								<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
+							</div>
 						</div>
-						
-						<div id="divPendente" style="position: relative;left: 541px;top: -41px;width: 95px">
-						<p:outputLabel value="Pendentes" style="position: relative;top: 24px;left: 22px;" />
-						<p:selectBooleanCheckbox id="PendenteCheckbox" value="#{solicitacaoMnt.pendente}" rendered="#{solicitacaoMnt.verificarCargo()}">
-							<!-- <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" /> -->
-						</p:selectBooleanCheckbox>
+					</ui:fragment>
+
+					<ui:fragment rendered="#{!solicitacaoMnt.verificarCargo()}">
+						<div style="width: 410px; position: relative; height: 60px;">
+							<div style="position: relative; width: 263px; height: 41px;">
+								<p:outputLabel value="Data:" for="calendarioBusca" />
+								<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBuscaFunc" style="position:relative; top: -6px;width:100px;!" />
+							</div>
+
+							<div id="divSistemasFunc" style="position: relative; top: -41px; left: 123px;">
+								<p:outputLabel value="Sistema:" />
+								<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{solicitacaoMnt.listaSistemas}" var="sistema" itemLabel="#{sistema.nome}" itemValue="#{sistema}" />
+								</p:selectOneMenu>
+							</div>
+							<div id="divStatus" style="position: relative; top: -96px; width: 155px; left: 292px;">
+								<p:outputLabel value="Status:" />
+								<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.statusGeral}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
+								</p:selectOneMenu>
+							</div>
+							<div style="width: 100px; position: relative; top: -131px; left: 638px;">
+								<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" value="Pesquisar" />
+							</div>
 						</div>
-						<div id="divSistemas" style="position: relative;top: -84px;left: 123px;" >
-						<p:outputLabel value="Sistema:" />
-						<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 150px;" >
-							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{solicitacaoMnt.listaSistemas}" var="sistema" itemLabel="#{sistema.nome}" itemValue="#{sistema}" />
-						</p:selectOneMenu>
-						</div>
-						<div id="divSolicitante" style="position: relative;top: -139px;left: 291px;width: 150px;" >
-						<p:outputLabel value="Solicitante:" />
-						<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 130px;" />
-						</div>
-						<div style="width: 100px;position: relative;top: -184px;left: 638px;">
-							<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
-						</div>
-					</div>
+					</ui:fragment>
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">Solicitações</f:facet>
 
@@ -50,26 +81,32 @@
 							</h:outputText>
 						</p:column>
 
+						<p:column headerText="Solicitante" rendered="#{solicitacaoMnt.verificarCargo()}">
+							<h:outputText value="#{solicitacao.usuario.nome}" />
+						</p:column>
 
-						<p:column headerText="Hora Inicial" style="text-align: center;">
+						<p:column headerText="Hora Inicial" style="text-align: center;width: 75px;" rendered="#{!solicitacaoMnt.verificarCargo()}">
 							<h:outputText value="#{solicitacao.horaInicio}">
 								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Hora Final" style="text-align: center;">
+						<p:column headerText="Hora Final" style="text-align: center;width: 75px" rendered="#{!solicitacaoMnt.verificarCargo()}">
 							<h:outputText value="#{solicitacao.horaFinal}">
 								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 
+						<p:column headerText="Duração" style="text-align: center;" rendered="#{solicitacaoMnt.verificarCargo()}">
+							<h:outputText value="#{solicitacao.duracao()}">
+							</h:outputText>
+						</p:column>
 						<p:column headerText="Sistema" style="max-width:112px;text-overflow:ellipsis;">
 							<h:outputText value="#{solicitacao.sistema.nome}" />
 						</p:column>
 
-						<p:column headerText="Status" style="min-width: 175px;">
+						<p:column headerText="Status" style="width: 80px;">
 							<h:outputText value="#{solicitacao.status}" id="statusText" />
-							<!-- <p:tooltip id="toolTipVisualizar" for="statusText" value="Aprovado por: #{solicitacao.gerente.nome}" /> -->
 						</p:column>
 
 						<p:column headerText="Ação" style="width:5%">
@@ -95,23 +132,21 @@
 							<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.data}" style="font-weight: bold;">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
-							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> a <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br />
+							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> às <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br /> Duração: <b>#{solicitacaoMnt.solicitacaoDetalhe.duracao()}</b><br />
 							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.lider.nome}">
-								Líder Aprovador: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
+								Líder avaliador: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 								<br />
 							</ui:fragment>
 							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.gerente.nome}">
-								Gerente Aprovador: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
+								Gerente avaliador: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
-								<br />
 							</ui:fragment>
 							<div style="height: 4px;"></div>
-							<br />Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
+							Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
 						</div>
-						<div style="height: 8px;"></div>
 						<div class="divDialog">
 							<h:commandButton value="OK" styleClass="botao3d" onclick="modalDetalhes.hide()" style="width:109px;" />
 						</div>

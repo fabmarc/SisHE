@@ -2,6 +2,7 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import com.indra.sishe.enums.StatusEnum;
 
 public class Solicitacao implements Serializable{
 
@@ -15,11 +16,13 @@ public class Solicitacao implements Serializable{
 	
 	private Usuario lider;
 	
-	private Status statusLider;
+	private StatusEnum statusLider;
+	
+	private StatusEnum statusGeral;
 	
 	private Usuario gerente;
 	
-	private Status statusGerente;
+	private StatusEnum statusGerente;
 	
 	private Date data;
 
@@ -66,21 +69,20 @@ public class Solicitacao implements Serializable{
 	}
 
 	public String getStatus() {
-
-		if (statusLider.getId() != 0 && statusGerente.getId() == 0) {
-			if (statusLider.getId() == 1) {
-				return "Aguardando Gerente";	
-			}else if (statusLider.getId() == 2) {
-				return "Reprovado pelo Líder";
-			}
-		}else if(statusGerente.getId() != null){
-			if (statusGerente.getId() == 1) {
-				return "Concluída";	
-			}else if (statusGerente.getId() == 2) {
-				return "Reprovado pelo Gerente";
-			}
+		if(statusLider.getId() == 2){
+			return statusLider.getNome();
+		}else{
+			return statusGerente.getNome();	
 		}
-		return "Aguardando Líder";
+	}
+	
+	public String duracao(){
+		long secs = (this.horaFinal.getTime() - this.horaInicio.getTime()) / 1000;
+		long horas = secs / 3600;    
+		secs = secs % 3600;
+		long mins = secs / 60;
+		secs = secs % 60;;
+		return horas+"h "+mins+"min";
 	}
 
 	public Usuario getLider() {
@@ -91,28 +93,12 @@ public class Solicitacao implements Serializable{
 		this.lider = lider;
 	}
 
-	public Status getStatusLider() {
-		return statusLider;
-	}
-
-	public void setStatusLider(Status statusLider) {
-		this.statusLider = statusLider;
-	}
-
 	public Usuario getGerente() {
 		return gerente;
 	}
 
 	public void setGerente(Usuario gerente) {
 		this.gerente = gerente;
-	}
-
-	public Status getStatusGerente() {
-		return statusGerente;
-	}
-
-	public void setStatusGerente(Status statusGerente) {
-		this.statusGerente = statusGerente;
 	}
 
 	public Date getData() {
@@ -161,6 +147,30 @@ public class Solicitacao implements Serializable{
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public StatusEnum getStatusLider() {
+		return statusLider;
+	}
+
+	public void setStatusLider(StatusEnum statusLider) {
+		this.statusLider = statusLider;
+	}
+
+	public StatusEnum getStatusGerente() {
+		return statusGerente;
+	}
+
+	public void setStatusGerente(StatusEnum statusGerente) {
+		this.statusGerente = statusGerente;
+	}
+
+	public StatusEnum getStatusGeral() {
+		return statusGeral;
+	}
+
+	public void setStatusGeral(StatusEnum statusGeral) {
+		this.statusGeral = statusGeral;
 	}
 
 	@Override

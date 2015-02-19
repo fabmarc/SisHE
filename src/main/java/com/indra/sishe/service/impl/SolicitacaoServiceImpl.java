@@ -57,21 +57,21 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 
 	public boolean validarRemove(Solicitacao solicitacao) throws ApplicationException {
 		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
-			if (solicitacao.getStatusGerente().getId() > 0) { 
+			if (solicitacao.getStatusGerente().getId() != 3) { 
 				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente"); 
 			}else{
 				return true;
 			}
 		}else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
-			if (solicitacao.getStatusGerente().getId() > 0) { 
+			if (solicitacao.getStatusGerente().getId() != 3) { 
 				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente"); 
 			}else{
 				return true;
 			}
 		}else if (UsuarioLogado.getPermissoes().contains("ROLE_FUNCIONARIO")) {
-			if (solicitacao.getStatusGerente().getId() > 0) {
+			if (solicitacao.getStatusGerente().getId() != 3) {
 				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente");
-			}else if (solicitacao.getStatusLider().getId() > 0) { 
+			}else if (solicitacao.getStatusLider().getId() != 3) { 
 				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Líder"); 
 			}else{
 				return true;
