@@ -19,7 +19,7 @@
 				</div>
 				
 				<!-- Div Corpo -->
-				<div class="divCorpo" style="padding-bottom: 40%;">
+				<div class="divCorpo" style="padding-bottom: 15%;">
 					<!-- Div conteudo -->
 					<div style="left: 207px; position: relative; width: 100%">
 						<!-- Nome -->
@@ -29,7 +29,7 @@
 						</div>
 						<div style="position:relative;top:4px;">
 							<h:outputText value="Permissão:" />
-       						<p:selectOneRadio value="#{cargoCad.cargoSelecionado.role}" layout="pageDirection" columns="2" converter="omnifaces.SelectItemsConverter">
+       						<p:selectOneRadio value="#{cargoCad.cargoSelecionado.role}" layout="pageDirection" columns="2" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{cargoCad.msgValidacao('msg.error.campo.obrigatorio', 'Permissão')}">
             					<f:selectItems value="#{cargoCad.obterListaPermissoes()}" var="role" itemLabel="#{role.permissao}" itemValue="#{role}" />
         					</p:selectOneRadio >
         				</div>
