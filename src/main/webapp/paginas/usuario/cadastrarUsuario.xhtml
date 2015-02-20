@@ -6,7 +6,6 @@
 		<h:form id="mainForm" style="height:100%;">
 			<br />
 			<ui:insert>
-				
 				<p:breadCrumb styleClass="breadCrumb" style="top:-10px;">
     				<p:menuitem value="Home" url="/index.jsf" immediate="true"/>
     				<p:menuitem value="Consultar Usuário" action="#{usuarioMnt.irParaConsultar()}" immediate="true"/>
@@ -21,7 +20,7 @@
 				<div style="left: 112px; position: relative; width: 100%; padding-bottom: 54%;">
 					<div>
 						<div style="position: absolute; float: left;">
-							<p:outputLabel value="Nome:" for="nomeIpt" style="width:50px;" />
+							<p:outputLabel value="Nome:" style="width:50px;" />
 							<p:inputText id="nomeIpt" type="text" value="#{usuarioCad.usuarioSelecionado.nome}" maxlength="60" required="true" requiredMessage="Preencha o campo Nome" />
 						</div>
 						<div style="position: absolute; float: right; left: 235px;">
@@ -102,7 +101,6 @@
 						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" immediate="true"/>
 					</div>
 				</div>
-
 			</ui:insert>
 		</h:form>
 	</ui:define>
