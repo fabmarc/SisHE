@@ -32,7 +32,7 @@
 
 					<div style="top: 63px; position: absolute;">
 						<div style="position: absolute; float: left;">
-							<h:outputLabel value="Cargo:" for="cargoIpt" />
+							<h:outputLabel value="Cargo:" />
 							<h:selectOneMenu id="cargoIpt" value="#{usuarioCad.usuarioSelecionado.cargo}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um Cargo">
 								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 								<f:selectItems value="#{usuarioCad.obterCargos()}" var="cargo" itemLabel="#{cargo.nome}" itemValue="#{cargo}" />
@@ -40,7 +40,7 @@
 						</div>
 
 						<div style="position: absolute; float: right; left: 235px;">
-							<h:outputLabel value="Sindicato" for="sindicatoIpt" />
+							<h:outputLabel value="Sindicato" />
 							<h:selectOneMenu id="sindicatoIpt" value="#{usuarioCad.usuarioSelecionado.sindicato}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um Sindicato">
 								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 								<f:selectItems value="#{usuarioCad.obterSindicatos()}" var="sindicato" itemLabel="#{sindicato.descricao}" itemValue="#{sindicato}" />
@@ -50,7 +50,7 @@
 
 					<div style="top: 126px; position: absolute;">
 						<div style="position: absolute; float: left;">
-							<h:outputLabel value="Estado" for="estadoIpt" />
+							<h:outputLabel value="Estado" />
 							<h:selectOneMenu id="estadoIpt" value="#{usuarioCad.estadoSelecionado}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um Estado">
 								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 								<f:selectItems value="#{usuarioCad.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
@@ -59,7 +59,7 @@
 						</div>
 
 						<div style="position: absolute; float: right; left: 235px;">
-							<h:outputLabel value="Cidade" for="cidadeIpt" />
+							<h:outputLabel value="Cidade" />
 							<h:selectOneMenu id="cidadeIpt" value="#{usuarioCad.usuarioSelecionado.cidade}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione uma Cidade">
 								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 								<f:selectItems value="#{usuarioCad.obterCidadePorEstado()}" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
@@ -75,7 +75,7 @@
 						</div>
 
 						<div style="position: absolute; float: right; left: 235px;">
-							<p:outputLabel value="E-mail:" for="emailIpt" style="width:60px;" />
+							<p:outputLabel value="E-mail:" style="width:60px;" />
 							<p:inputText id="emailIpt" type="text" value="#{usuarioCad.usuarioSelecionado.email}" maxlength="30" validatorMessage="Formato de email invalido.">
 								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 							</p:inputText>
