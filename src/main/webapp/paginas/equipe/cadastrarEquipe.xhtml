@@ -48,15 +48,12 @@
 							</div>
 						</f:facet>
 					</p:dataTable>
-					
-					<div id="Botoes" style="position: relative;top: 22px;left: 35%;">					
-						<h:commandButton value="Cadastrar" styleClass="botao3d"  action="#{usuarioProjetoCad.modoCadastrar()}" />
 
-						<h:commandButton  value="Cancelar" styleClass="botao3d" style="position: relative;left: 1%;"
-						 actionListener="#{usuarioProjetoMnt.beforeRemoveUsuarioProjeto()}" />
-	
-									</div>
-					
+					<div id="Botoes" style="position: relative; top: 22px; left: 35%;">
+						<h:commandButton value="Cadastrar" styleClass="botao3d" action="#{usuarioProjetoCad.modoCadastrar()}" />
+						<h:commandButton value="Cancelar" styleClass="botao3d" style="position: relative;left: 1%;" action="#{usuarioProjetoCad.cancelar()}" />
+					</div>
+
 				</div>
 
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
