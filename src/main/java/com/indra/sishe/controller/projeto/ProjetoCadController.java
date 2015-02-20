@@ -74,7 +74,7 @@ public class ProjetoCadController extends ProjetoController {
 	}
 
 	private List<Usuario> obterGerentes() {
-		return usuarioService.findByCargo("ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO");
+		return usuarioService.findByCargo("ROLE_GERENTE");
 	}
 
 	public String cancelar() {

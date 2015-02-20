@@ -74,7 +74,7 @@ public class SolicitacaoCadController extends SolicitacaoController {
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação"));
 				putFlashAttr("searched", searched);
 			}
-			return irParaConsultarPendentes();
+			return irParaConsultar();
 		} catch (ApplicationException e) {
 			returnErrorMessage(e.getMessage());
 		}

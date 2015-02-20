@@ -55,6 +55,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.addValue("hora_inicio", entity.getHoraInicio());
 			params.addValue("hora_final", entity.getHoraFinal());
 			params.addValue("descricao", entity.getDescricao());
+			params.addValue("status_lider", 3);
+			params.addValue("status_gerente", 3);
 
 			Usuario user = new Usuario();
 			user.setId(UsuarioLogado.getId());
