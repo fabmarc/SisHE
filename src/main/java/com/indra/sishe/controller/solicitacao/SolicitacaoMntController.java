@@ -66,7 +66,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public void pesquisar() {
-		if (solicitacaoFiltro.getStatusGeral().getId() == 3) {
+		if (solicitacaoFiltro.getStatusGeral() != null && solicitacaoFiltro.getStatusGeral().getId() == 3) {
 			pesquisarPendentes();
 		} else {
 			pesquisarPorUsuarioLogado();
@@ -105,14 +105,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public String remove() {
-
-		// for (Solicitacao solicitacao : solicitacoesSelecionadas){
-		// if (solicitacao.getLider().getNome() != null) {
-		// // throw new
-		// ApplicationException("msg.error.excluir.solicitacao.avaliada");
-		// messager.error(messageProvider.getMessage("msg.error.excluir.solicitacao.avaliada"));
-		// }
-		// }
 
 		int size = solicitacoesSelecionadas.size();
 		ArrayList<Solicitacao> solicitacoesParaRemover = new ArrayList<Solicitacao>(size);

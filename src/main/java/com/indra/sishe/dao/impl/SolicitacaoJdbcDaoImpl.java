@@ -195,8 +195,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 		
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}		
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
@@ -264,8 +264,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%'");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}		
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
@@ -335,8 +335,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 		
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}
 		
 		if (solicitacaoFiltro.getStatusGeral() != null && solicitacaoFiltro.getStatusGeral().getId() > 0) {
@@ -451,8 +451,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 		
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}		
 		
 		if (solicitacaoFiltro.getStatusGeral() != null) {
