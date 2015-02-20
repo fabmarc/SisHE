@@ -70,6 +70,15 @@ public class SolicitacaoCadController extends SolicitacaoController {
 					relatorio =  bancoHorasService.contabilizarHorasBanco(id);
 					historicoService.gerarHistorico(id, "", relatorio);					
 				} 
+				
+				if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+					List<Long> id = new ArrayList<Long>();
+					id.add(solicitacaoFiltro.getId());
+					solicitacaoService.liderAcaoSolicitacao(id, 1);
+					List<HistoricoDetalhes> relatorio = new ArrayList<HistoricoDetalhes>();					
+					historicoService.gerarHistorico(id, "", relatorio);
+				}
+				
 				putFlashAttr("solicitacaoFiltro", solicitacaoFiltro);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação"));
 				putFlashAttr("searched", searched);
@@ -89,6 +98,7 @@ public class SolicitacaoCadController extends SolicitacaoController {
 
 	public List<Sistema> obterSistemas() {
 		listaSistemas = sistemaService.findAll();
+		sistemaService.findByFilter(sistemaselecionado);
 		return listaSistemas;
 	}
 

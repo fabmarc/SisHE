@@ -66,18 +66,6 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 				params.addValue("id_sistema", entity.getSistema().getId());
 			}
 
-		/*	if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
-				params.addValue("status_lider", 1);
-				params.addValue("status_gerente", 1);
-				params.addValue("id_aprovador_gerente", UsuarioLogado.getId());
-			}			
-			
-
-			if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
-				params.addValue("status_lider", 1);
-				params.addValue("id_aprovador_lider", UsuarioLogado.getId());
-			}*/
-
 			if (entity.getUsuario() != null) {
 				params.addValue("id_usuario", entity.getUsuario().getId());
 			}
@@ -195,8 +183,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 		
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}		
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
@@ -264,8 +252,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%'");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}		
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
@@ -335,8 +323,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 		
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}
 		
 		if (solicitacaoFiltro.getStatusGeral() != null && solicitacaoFiltro.getStatusGeral().getId() > 0) {
@@ -451,8 +439,8 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		}
 		
 		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND usuario.nome LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome());
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}		
 		
 		if (solicitacaoFiltro.getStatusGeral() != null) {
