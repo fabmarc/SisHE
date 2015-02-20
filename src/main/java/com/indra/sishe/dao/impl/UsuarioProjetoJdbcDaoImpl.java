@@ -301,9 +301,13 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		sql.append(" LEFT JOIN usuario_projeto up ON (up.id_usuario = u.id) ");
 		sql.append(" WHERE 1 = 1");
 
-		if (usuarioProjeto.getProjeto() != null && usuarioProjeto.getProjeto().getId() != null) {
+		if (usuarioProjeto.getProjeto() != null && usuarioProjeto.getProjeto().getId() != 0) {
 			sql.append(" AND up.id_projeto IS NULL");
 			params.addValue("idProjeto", usuarioProjeto.getProjeto().getId());
+		}
+		
+		if (usuarioProjeto.getProjeto() != null && usuarioProjeto.getProjeto().getGerente().getId() != 0) {
+			sql.append(" AND c.id <> 2");
 		}
 
 		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,

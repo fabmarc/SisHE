@@ -36,6 +36,12 @@ public class UsuarioProjetoCadController extends UsuarioProjetoController {
 	public void UsuarioProjetoMntController() {
 
 	}
+	
+	public String cancelar() {
+		putFlashAttr("searched", searched);
+		putFlashAttr("usuarioProjetoFiltro", usuarioProjetoFiltro);
+		return irParaConsultar();
+	}
 
 	public List<Usuario> listarUsuarios(UsuarioProjeto usuarioProjeto) {
 		listaUsuarios = usuarioProjetoService.findUserNotInProjeto(usuarioProjeto);

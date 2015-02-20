@@ -27,7 +27,7 @@ public abstract class CargoController extends BaseController implements Serializ
 		putFlashAttr("cargoSelecionado", null);
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("cargoFiltro", this.cargoFiltro);
-		return "/paginas/cargo/cadastrarCargo.xhtml";
+		return "/paginas/cargo/cadastrarCargo.xhtml?faces-redirect=true";
 	}
 
 	public String irParaAlterar(Cargo cargoSelecionado) {
@@ -38,7 +38,7 @@ public abstract class CargoController extends BaseController implements Serializ
 	}
 
 	public String irParaAlterar() {
-		return "/paginas/cargo/cadastrarCargo.xhtml";
+		return "/paginas/cargo/cadastrarCargo.xhtml?faces-redirect=true";
 	}
 
 	public Cargo getCargoFiltro() {

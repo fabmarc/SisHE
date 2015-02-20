@@ -24,14 +24,14 @@
 						<!-- Div Nome Pesquisar -->
 						<div style="position: relative; width: 220px;">
 							<h:outputLabel value="Nome:" style="margin:left; align:left; width:50px;" />
-							<h:inputText id="iptNome" value="#{usuarioMnt.usuarioFiltro.nome}" maxlength="40" style="height:15px; width:200px;" />
+							<h:inputText id="iptNome" value="#{usuarioMnt.usuarioFiltro.nome}" maxlength="40" style="height:17px; width:200px;" />
 							<!-- <p:watermark for="iptNome" value="Nome do usuário" />  -->
 						</div>
 						<!-- Div Cargo Pesquisar -->
-						<div style="position: relative; width: 180px; left: 224px; top: -61px;">
+						<div style="position: relative; width: 180px; left: 224px; top: -62px;">
 							<h:outputLabel value="Cargo:" style="margin:left; align:left; width:50px;" />
 							<h:selectOneMenu style="width: 150px;" id="cargoIpt" value="#{usuarioMnt.usuarioFiltro.cargo}" converter="omnifaces.SelectItemsConverter">
-								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItem itemLabel="Todos" noSelectionOption="true" />
 								<f:selectItems value="#{usuarioMnt.obterCargos()}" var="cargo" itemLabel="#{cargo.nome}" itemValue="#{cargo}" />
 							</h:selectOneMenu>
 						</div>
