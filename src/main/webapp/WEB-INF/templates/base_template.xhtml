@@ -8,7 +8,7 @@
 		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
 		<h:outputStylesheet library="css" name="sishe.css" />
 		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
-
+		
 		<ui:insert name="title">
 			<title>Banco de Horas</title>
 		</ui:insert>
@@ -81,7 +81,7 @@
 								</p:submenu>
 							</sec:authorize>
 							<p:submenu label="Solicitação">
-								<sec:authorize ifAnyGranted="ROLE_FUNCIONARIO">
+								<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO">
 									<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								</sec:authorize>
 								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
