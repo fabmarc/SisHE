@@ -6,6 +6,7 @@
 		<h:form id="mainForm" style="height:100%;">
 			<br />
 			<ui:insert>
+				
 				<p:breadCrumb styleClass="breadCrumb" style="top:-10px;">
     				<p:menuitem value="Home" url="/index.jsf" immediate="true"/>
     				<p:menuitem value="Consultar Usuário" action="#{usuarioMnt.irParaConsultar()}" immediate="true"/>
@@ -75,7 +76,9 @@
 
 						<div style="position: absolute; float: right; left: 235px;">
 							<p:outputLabel value="E-mail:" for="emailIpt" style="width:60px;" />
-							<p:inputText id="emailIpt" type="text" value="#{usuarioCad.usuarioSelecionado.email}" maxlength="30" />
+							<p:inputText id="emailIpt" type="text" value="#{usuarioCad.usuarioSelecionado.email}" maxlength="30" validatorMessage="Formato de email invalido.">
+								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</p:inputText>
 						</div>
 					</div>
 
@@ -101,6 +104,7 @@
 						<h:commandButton styleClass="botao3d" style="float:right; width:100px;" action="#{usuarioCad.cancelar()}" value="Cancelar" immediate="true"/>
 					</div>
 				</div>
+
 			</ui:insert>
 		</h:form>
 	</ui:define>
