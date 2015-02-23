@@ -35,6 +35,8 @@ public class Solicitacao implements Serializable{
 	private Date horaFinal;	
 	
 	private String descricao;
+	
+	private String duracao;
 
 	public Solicitacao() {
 		this.usuario = new Usuario();
@@ -76,15 +78,6 @@ public class Solicitacao implements Serializable{
 		}
 	}
 	
-	public String duracao(){
-		long secs = (this.horaFinal.getTime() - this.horaInicio.getTime()) / 1000;
-		long horas = secs / 3600;    
-		secs = secs % 3600;
-		long mins = secs / 60;
-		secs = secs % 60;;
-		return horas+"h "+mins+"min";
-	}
-
 	public Usuario getLider() {
 		return lider;
 	}
@@ -171,6 +164,20 @@ public class Solicitacao implements Serializable{
 
 	public void setStatusGeral(StatusEnum statusGeral) {
 		this.statusGeral = statusGeral;
+	}
+
+	public String getDuracao() {
+		long secs = (this.horaFinal.getTime() - this.horaInicio.getTime()) / 1000;
+		long horas = secs / 3600;    
+		secs = secs % 3600;
+		long mins = secs / 60;
+		secs = secs % 60;;
+		duracao = horas+"h "+mins+"min";
+		return duracao;
+	}
+
+	public void setDuracao(String duracao) {
+		this.duracao = duracao;
 	}
 
 	@Override

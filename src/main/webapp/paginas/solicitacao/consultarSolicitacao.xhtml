@@ -3,15 +3,21 @@
 
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
 	<ui:define name="content">
-		<h:form id="mainForm">
+		<h:form id="mainForm" style="height:100%;">
 			<ui:insert>
+
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" immediate="true" />
+					<p:menuitem value="Solicitação" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Consultar Solicitação" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
 
 				<div class="divCorpo" style="padding-bottom: 5%;">
-
-
 					<div style="width: 730px; position: relative; height: 60px;">
 						<div id="divData" style="position: relative; width: 110px; height: 41px;">
 							<p:outputLabel value="Data:" for="calendarioBusca" />
@@ -36,59 +42,52 @@
 							<p:outputLabel value="Solicitante:" />
 							<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 110px;" />
 						</div>
-						<div style="position: relative;top: -10px;" >
-						<div id="divPendentes" style="width: 110px; position: relative; top: -217px; left: 514px;">
-							<p:outputLabel value="Não avaliados" style="position: relative;top: 26px;left: 22px;" />
-							<p:selectBooleanCheckbox value="#{solicitacaoMnt.pendente}" />
-						</div>
-						<div id="divConsultarTodos" style="width: 110px;height: 6px; position: relative; top: -240px; left: 514px;">
-							<p:outputLabel value="Todos usuários" style="position: relative;top: 26px;left: 22px;" />
-							<p:selectBooleanCheckbox value="#{solicitacaoMnt.todosUsuarios}" />
-						</div>
+						<div id="divConsultarTodos" style="width: 110px; position: relative; top: -232px;left: 523px;">
+							<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" />
+							<p:selectBooleanCheckbox value="#{solicitacaoMnt.todasSolicitacoes}" style="top: 4px;position: relative;" />
 						</div>
 					</div>
 					<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
 						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
 					</div>
 
-
-					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">Solicitações</f:facet>
 
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<p:column headerText="Data" style="text-align: center;width:10%">
+						<p:column headerText="Data" sortBy="#{solicitacao.data}" style="text-align: center;width:10%">
 							<h:outputText value="#{solicitacao.data}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Solicitante" rendered="#{solicitacaoMnt.verificarCargo()}">
+						<p:column headerText="Solicitante" sortBy="#{solicitacao.usuario.nome}" rendered="#{solicitacaoMnt.verificarCargo()}">
 							<h:outputText value="#{solicitacao.usuario.nome}" />
 						</p:column>
 
-						<p:column headerText="Hora Inicial" style="text-align: center;width: 75px;" rendered="#{!solicitacaoMnt.verificarCargo()}">
+						<p:column headerText="Hora Inicial" sortBy="#{solicitacao.horaInicio}" style="text-align: center;width: 75px;" rendered="#{!solicitacaoMnt.verificarCargo()}">
 							<h:outputText value="#{solicitacao.horaInicio}">
 								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Hora Final" style="text-align: center;width: 75px" rendered="#{!solicitacaoMnt.verificarCargo()}">
+						<p:column headerText="Hora Final" sortBy="#{solicitacao.horaFinal}" style="text-align: center;width: 75px" rendered="#{!solicitacaoMnt.verificarCargo()}">
 							<h:outputText value="#{solicitacao.horaFinal}">
 								<f:convertDateTime pattern="HH:mm" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Duração" style="text-align: center;" rendered="#{solicitacaoMnt.verificarCargo()}">
-							<h:outputText value="#{solicitacao.duracao()}">
+						<p:column headerText="Duração" sortBy="#{solicitacao.duracao}" style="text-align: center;" rendered="#{solicitacaoMnt.verificarCargo()}">
+							<h:outputText value="#{solicitacao.duracao}">
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Sistema" style="max-width:112px;text-overflow:ellipsis;">
+						<p:column headerText="Sistema" sortBy="#{solicitacao.sistema.nome}" style="max-width:112px;text-overflow:ellipsis;">
 							<h:outputText value="#{solicitacao.sistema.nome}" />
 						</p:column>
 
-						<p:column headerText="Status" style="width: 80px;">
+						<p:column headerText="Status" sortBy="#{solicitacao.status}" style="width: 80px;">
 							<h:outputText value="#{solicitacao.status}" id="statusText" />
 						</p:column>
 
@@ -172,7 +171,6 @@
 							<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />
 						</div>
 					</p:confirmDialog>
-
 				</div>
 			</ui:insert>
 		</h:form>

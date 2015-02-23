@@ -16,6 +16,8 @@ public interface SolicitacaoDAO extends BaseDAO<Solicitacao> {
 	public List<Solicitacao> findByFilter(Solicitacao solicitacaoFiltro);
 	
 	public List<Solicitacao> findByFilterByUsuario(Solicitacao solicitacaoFiltro);
+	
+	public List<Solicitacao> findByProjeto(Solicitacao solicitacaoFiltro);
 
 	public void liderAcaoSolicitacao(List<Long> ids, int status) throws RegistroInexistenteException;
 

@@ -2,41 +2,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
 	<ui:define name="content">
-
 		<h:form id="mainForm">
-			<div class="divMsg">
-				<p:messages id="messages" showDetail="true" showSummary="false" />
-			</div>
-			<div style="position: relative; width: 100%; padding-bottom: 10%;">
-				<div style="top: 17px; position: relative; width: 226px; height: 50px;">
+			<ui:insert>
 
-					<div style="position: relative;">
-						<p:outputLabel value="Nome:" />
-						<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; top: -6px;" />
-					</div>
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" immediate="true" />
+					<p:menuitem value="Feriado" action="#{feriadoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
 
-					<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
-						<p:outputLabel value="Data:" for="calendarioBusca" />
-						<p:calendar styleClass="calendario" value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
-					</div>
-
-					<div id="DivEstado" style="position: relative; top: -105px; left: 300px;">
-						<p:outputLabel for="selecionarEstado" value="Abrangência:" />
-						<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
-							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{feriadoMnt.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-						</p:selectOneMenu>
-					</div>
-
-
-
-					<div style="top: -139.5px; position: relative; left: 622px;">
-						<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
-					</div>
-
+				<div class="divMsg">
+					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
+				<div style="position: relative; width: 100%; padding-bottom: 10%;">
+					<div style="top: 17px; position: relative; width: 226px; height: 50px;">
 
-				<ui:insert>
+						<div style="position: relative;">
+							<p:outputLabel value="Nome:" />
+							<p:inputText value="#{feriadoMnt.feriadoFiltro.nome}" maxlength="30" style="width:150px; position: relative; top: -6px;" />
+						</div>
+
+						<div style="position: relative; left: 179px; top: -64px; width: 263px; height: 41px;">
+							<p:outputLabel value="Data:" for="calendarioBusca" />
+							<p:calendar styleClass="calendario" value="#{feriadoMnt.feriadoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:100px;!" />
+						</div>
+
+						<div id="DivEstado" style="position: relative; top: -105px; left: 300px;">
+							<p:outputLabel for="selecionarEstado" value="Abrangência:" />
+							<p:selectOneMenu style="position: relative; top: -6px;width:184px" id="selecionarEstado" value="#{feriadoMnt.feriadoFiltro.estado}" converter="omnifaces.SelectItemsConverter">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+								<f:selectItems value="#{feriadoMnt.obterEstados()}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
+							</p:selectOneMenu>
+						</div>
+
+						<div style="top: -139.5px; position: relative; left: 622px;">
+							<h:commandButton actionListener="#{feriadoMnt.pesquisar()}" value="Pesquisar" ajax="false" style="" styleClass="botao3d" />
+						</div>
+					</div>
+
 					<div style="position: relative; top: 38px;">
 						<p:dataTable style="top:10%;" rowKey="#{feriado.id}" selection="#{feriadoMnt.feriadosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="feriadoDt" var="feriado" value="#{feriadoMnt.listaFeriados}" emptyMessage="Nenhum registro encontrado." sortMode="multiple">
 							<f:facet name="header">Feriados</f:facet>
@@ -51,7 +55,7 @@
 							</p:column>
 
 							<p:column headerText="Nome" sortBy="#{feriado.nome}">
-								<h:outputText value="#{feriado.nome}"/>
+								<h:outputText value="#{feriado.nome}" />
 							</p:column>
 
 							<p:column headerText="Abrangência" sortBy="#{feriado.abrangencia}">
@@ -88,8 +92,8 @@
 							<h:commandButton value="OK" onclick="selectAtleastOne.hide()" ajax="false" styleClass="botao3d" style="width:109px;" />
 						</div>
 					</p:confirmDialog>
-				</ui:insert>
-			</div>
+				</div>
+			</ui:insert>
 		</h:form>
 	</ui:define>
 </ui:composition>

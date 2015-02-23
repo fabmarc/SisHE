@@ -140,6 +140,11 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 
 	@Override
+	public List<Solicitacao> findByProjeto(Solicitacao solicitacaoFiltro) {
+		return solicitacaoDao.findByProjeto(solicitacaoFiltro);
+	}
+
+	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 	}
 	
@@ -178,4 +183,5 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 			return true;
 		}		
 	}
+
 }

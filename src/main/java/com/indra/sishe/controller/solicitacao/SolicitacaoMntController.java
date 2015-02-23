@@ -38,9 +38,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	private String observacao;
 
-	private boolean pendente;
-
-	private boolean todosUsuarios;
+	private boolean todasSolicitacoes;
 
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
@@ -58,25 +56,23 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		setListaSistemas(obterListaSistemas());
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
-		if (solicitacaoFiltro == null)
-			solicitacaoFiltro = new Solicitacao();
+		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		if (!searched)
-			listaSolicitacoes = new ArrayList<Solicitacao>();
-		else
-			pesquisar();
+		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
+		pesquisar();
 	}
 
 	public void pesquisar() {
-		if (pendente == true) {
+		if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE") || (UsuarioLogado.getPermissoes()).contains("ROLE_LIDER")) {
+		if (todasSolicitacoes == false) {
 			pesquisarPendentes();
-		} else if (todosUsuarios == true) {
-			
 		} else {
+				pesquisarPorProjeto();
+			} 
+		}else {
 			pesquisarPorUsuarioLogado();
 		}
 	}
@@ -85,11 +81,20 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		listaSolicitacoes = solicitacaoService.findByFilter(solicitacaoFiltro);
 		searched = true;
 	}
+
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
 		usuario.setId(UsuarioLogado.getId());
 		solicitacaoFiltro.setUsuario(usuario);
 		listaSolicitacoes = solicitacaoService.findByFilterByUsuario(solicitacaoFiltro);
+		searched = true;
+	}
+
+	public void pesquisarPorProjeto() {
+		Usuario usuario = new Usuario();
+		usuario.setId(UsuarioLogado.getId());
+		solicitacaoFiltro.setGerente(usuario);
+		listaSolicitacoes = solicitacaoService.findByProjeto(solicitacaoFiltro);
 		searched = true;
 	}
 
@@ -230,20 +235,12 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		this.observacao = observacao;
 	}
 
-	public boolean isPendente() {
-		return pendente;
+	public boolean isTodasSolicitacoes() {
+		return todasSolicitacoes;
 	}
 
-	public void setPendente(boolean pendente) {
-		this.pendente = pendente;
-	}
-
-	public boolean isTodosUsuarios() {
-		return todosUsuarios;
-	}
-
-	public void setTodosUsuarios(boolean todosUsuarios) {
-		this.todosUsuarios = todosUsuarios;
+	public void setTodasSolicitacoes(boolean todosUsuarios) {
+		this.todasSolicitacoes = todosUsuarios;
 	}
 
 	public List<Sistema> getListaSistemas() {
