@@ -17,38 +17,33 @@ import com.indra.sishe.service.SindicatoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class SindicatoServiceImpl extends StatelessServiceAb implements
-		SindicatoService {
+public class SindicatoServiceImpl extends StatelessServiceAb implements SindicatoService {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8670069751964068611L;
 
 	@Autowired
 	private SindicatoDAO sindicatoDao;
 
 	@Override
-	public Sindicato save(Sindicato entity) {
-		// TODO Auto-generated method stub
+	public Sindicato save(Sindicato entity) throws ApplicationException {
 		try {
-			return sindicatoDao.save(entity);
+			if (validarSindicato(entity)) {
+				return sindicatoDao.save(entity);
+			} else {
+				return null;
+			}
 		} catch (RegistroDuplicadoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Sindicato");
 		}
-		return null;
+
 	}
 
 	@Override
 	public Sindicato update(Sindicato entity) throws ApplicationException {
-		// TODO Auto-generated method stub
 		try {
 			return sindicatoDao.update(entity);
 		} catch (RegistroInexistenteException e) {
-			// TODO: handle exception
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Sindicato");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sindicato");
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.campo.existente", "sindicato", "nome");
 		}
@@ -57,7 +52,6 @@ public class SindicatoServiceImpl extends StatelessServiceAb implements
 
 	@Override
 	public List<Sindicato> findAll() {
-		// TODO Auto-generated method stub
 		return sindicatoDao.findAll();
 	}
 
@@ -66,47 +60,64 @@ public class SindicatoServiceImpl extends StatelessServiceAb implements
 		try {
 			return sindicatoDao.findById(id);
 		} catch (RegistroInexistenteException e) {
-			// TODO: handle exception
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Sindicato");
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sindicato");
 		}
-
 	}
 
 	@Override
 	public List<Sindicato> findByFilter(Sindicato sindicato) {
-		// TODO Auto-generated method stub
 		return sindicatoDao.findByFilter(sindicato);
 	}
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
-		// TODO Auto-generated method stub
 		try {
 			sindicatoDao.remove(id);
 		} catch (RegistroInexistenteException e) {
-			// TODO: handle exception
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Sindicato");
-		} catch (DeletarRegistroViolacaoFK e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sindicato");
+		} catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Sindicato");
 		}
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-		// TODO Auto-generated method stub
 		try {
 			List<Object> pks = new ArrayList<Object>(ids);
 			sindicatoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente",
-					"Sindicato");
-		} catch (DeletarRegistroViolacaoFK e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Sindicato");
+		} catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Sindicato");
 		}
 	}
 
+	// VALIDA O SINDICATO
+	public boolean validarSindicato(Sindicato sindicatoSelecionado) throws ApplicationException {
+
+		// VALIDA A DESCRIÇÃO
+		if (sindicatoSelecionado.getDescricao() == null || sindicatoSelecionado.getDescricao().isEmpty()
+				|| sindicatoSelecionado.getDescricao().equals("")) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Nome do Sindicato");
+		}
+		// VALIDA O TAMANHO DA DESCRIÇÃO
+		else if (sindicatoSelecionado.getDescricao() != null && sindicatoSelecionado.getDescricao().length() > 40) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome do Sindicato", "40");
+		}
+		// VALIDA O ESTADO
+		else if (sindicatoSelecionado.getEstado() == null || sindicatoSelecionado.getEstado().getId() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Estado");
+		}
+		// VALIDA O LIMITE POSITIVO
+		else if (sindicatoSelecionado.getLimPositivo() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Limite Positivo");
+		}
+		// VALIDA O LIMITE NEGATIVO
+		else if (sindicatoSelecionado.getLimNegativo() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Limite Negativo");
+		} else {
+			return true;
+		}
+
+	}
 }

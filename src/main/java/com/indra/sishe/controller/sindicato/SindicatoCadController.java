@@ -13,18 +13,11 @@ import com.indra.sishe.entity.Sindicato;
 @ManagedBean(name = "sindicatoCad")
 public class SindicatoCadController extends SindicatoController {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -7110793257142962826L;
-
-	/**
-	 * 
-	 */
-
+	
 	public SindicatoCadController() {
-		// TODO Auto-generated constructor stub
-
+		
 	}
 
 	@PostConstruct
@@ -46,26 +39,19 @@ public class SindicatoCadController extends SindicatoController {
 	}
 
 	public String cadastrarSindicato() {
-
-		if (validarSindicato(sindicatoSelecionado)) {
-			try {
-				sindicatoService.save(sindicatoSelecionado);
-			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			this.sindicatoSelecionado = sindicatoService.save(sindicatoSelecionado);
 			putFlashAttr("sindicatoFiltro", sindicatoFiltro);
-			returnInfoMessage(messageProvider.getMessage(
-					"msg.success.registro.cadastrado", "Sindicato"));
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Sindicato"));
 			putFlashAttr("searched", searched);
 			return irParaConsultar();
-		} else {
-			returnInfoMessage(messageProvider.getMessage(
-					"msg.error.registro.nao.cadastrado", "Sindicato"));
-			return null;
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
 		}
-
+		return null;
 	}
+	
+	
 
 	public String alterarSindicato() {
 
@@ -73,8 +59,8 @@ public class SindicatoCadController extends SindicatoController {
 			try {
 				sindicatoService.update(sindicatoSelecionado);
 				returnInfoMessage(messageProvider.getMessage(
-						"msg.success.registro.alterado", "Cliente"));
-				putFlashAttr("clienteFiltro", sindicatoFiltro);
+						"msg.success.registro.alterado", "Sindicato"));
+				putFlashAttr("sindicatoFiltro", sindicatoFiltro);
 				putFlashAttr("searched", searched);
 				return irParaConsultar();
 			} catch (ApplicationException e) {
@@ -95,16 +81,16 @@ public class SindicatoCadController extends SindicatoController {
 		return sindicatoFiltro;
 	}
 
-	public void setSindicatoFiltro(Sindicato clienteFiltro) {
-		this.sindicatoFiltro = clienteFiltro;
+	public void setSindicatoFiltro(Sindicato sindicatoFiltro) {
+		this.sindicatoFiltro = sindicatoFiltro;
 	}
 
 	public Sindicato getSindicatoSelecionado() {
 		return sindicatoSelecionado;
 	}
 
-	public void setSindicatoSelecionado(Sindicato clienteSelecionado) {
-		this.sindicatoSelecionado = clienteSelecionado;
+	public void setSindicatoSelecionado(Sindicato sindicatoSelecionado) {
+		this.sindicatoSelecionado = sindicatoSelecionado;
 	}
 
 	public boolean wasSearched() {
@@ -113,22 +99,21 @@ public class SindicatoCadController extends SindicatoController {
 
 	public void setPesquisar(boolean pesquisar) {
 		this.searched = pesquisar;
+	}	
+	
+	public String confirmar() {
+		if (modoCadastrar()) {
+			return cadastrarSindicato();
+		} else {
+			return alterarSindicato();
+		}
 	}
 
-	/*public List<Estado> obterEstados() {
-		setListaEstado(estadoService.findAll());
-		return estadoService.findAll();
-		
-	}*/
-
-	public String modoCadastrar() {
-
-		if (sindicatoSelecionado.getId() == null) {
-			cadastrarSindicato();
-			return irParaConsultar();
-		} else {			
-			alterarSindicato();
-			return irParaConsultar();
+	private boolean modoCadastrar() {
+		if (sindicatoSelecionado == null || sindicatoSelecionado.getId() == null) {			
+			return true;
+		} else {						
+			return false;
 		}
 	}
 

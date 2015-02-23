@@ -23,7 +23,7 @@ public class SindicatoMntController extends SindicatoController {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<Sindicato> listaSindicato;
+	private List<Sindicato> listaSindicatos;
 
 	private List<Sindicato> sindicatosSelecionados;
 
@@ -41,7 +41,7 @@ public class SindicatoMntController extends SindicatoController {
 
 		sindicatoFiltro = (Sindicato) getFlashAttr("sindicatoFiltro");
 		if (sindicatoFiltro == null) sindicatoFiltro = new Sindicato();
-		if (!searched) listaSindicato = new ArrayList<Sindicato>();
+		if (!searched) listaSindicatos = new ArrayList<Sindicato>();
 		else pesquisar();
 
 		setListaEstado(estadoService.findAll());
@@ -86,8 +86,8 @@ public class SindicatoMntController extends SindicatoController {
 	}
 
 	public void pesquisar() {
-		listaSindicato = sindicatoService.findByFilter(sindicatoFiltro);
-		Collections.sort(listaSindicato);
+		listaSindicatos = sindicatoService.findByFilter(sindicatoFiltro);
+		Collections.sort(listaSindicatos);
 		searched = true;
 	}
 
@@ -104,11 +104,11 @@ public class SindicatoMntController extends SindicatoController {
 	}
 
 	public List<Sindicato> getListaSindicato() {
-		return listaSindicato;
+		return listaSindicatos;
 	}
 
 	public void setListaSindicato(List<Sindicato> listaSindicato) {
-		this.listaSindicato = listaSindicato;
+		this.listaSindicatos = listaSindicato;
 	}
 
 	public Sindicato getSindicatoFiltro() {

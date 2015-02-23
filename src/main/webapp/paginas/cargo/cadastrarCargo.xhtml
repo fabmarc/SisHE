@@ -5,10 +5,12 @@
 	<ui:define name="content">
 		<h:form id="mainForm">
 			<ui:insert>
+
+				<!-- BreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
-    				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Consultar Cargo" action="#{cargoMnt.irParaConsultar()}" immediate="true"/>
-    				<p:menuitem value="Cadastrar Cargo" action="#{cargoMnt.irParaCadastrar()}" immediate="true"/>
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Cargo" action="#{cargoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 
@@ -16,22 +18,23 @@
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
-				
+
 				<!-- Div Corpo -->
 				<div class="divCorpo" style="padding-bottom: 15%;">
 					<!-- Div conteudo -->
 					<div style="left: 207px; position: relative; width: 100%">
-						<!-- Nome -->
+						<!-- Div Nome -->
 						<div style="position: relative;">
 							<p:outputLabel value="Nome:" style="width:50px;" />
 							<p:inputText type="text" value="#{cargoCad.cargoSelecionado.nome}" maxlength="20" required="true" requiredMessage="#{cargoCad.msgValidacao('msg.error.campo.obrigatorio', 'Nome')}" />
 						</div>
-						<div style="position:relative;top:4px;">
+						<!-- Div Permissão -->
+						<div style="position: relative; top: 4px;">
 							<h:outputText value="Permissão:" />
-       						<p:selectOneRadio value="#{cargoCad.cargoSelecionado.role}" layout="pageDirection" columns="2" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{cargoCad.msgValidacao('msg.error.campo.obrigatorio', 'Permissão')}">
-            					<f:selectItems value="#{cargoCad.obterListaPermissoes()}" var="role" itemLabel="#{role.permissao}" itemValue="#{role}" />
-        					</p:selectOneRadio >
-        				</div>
+							<p:selectOneRadio value="#{cargoCad.cargoSelecionado.role}" layout="pageDirection" columns="2" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{cargoCad.msgValidacao('msg.error.campo.obrigatorio', 'Permissão')}">
+								<f:selectItems value="#{cargoCad.obterListaPermissoes()}" var="role" itemLabel="#{role.permissao}" itemValue="#{role}" />
+							</p:selectOneRadio>
+						</div>
 						<!-- Div Ações-->
 						<div style="position: relative; width: 220px; top: 10px;">
 							<h:commandButton styleClass="botao3d" style="width:100px; float:left;" action="#{cargoCad.confirmar()}" value="Confirmar" />
