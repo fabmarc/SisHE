@@ -11,7 +11,7 @@
 
 				<div style="top: 15px; left: 170px; position: relative; width: 250px">
 
-					<h:outputLabel value="Sindicato:" style="width:50px;" />
+					<h:outputLabel value="Nome:" style="width:50px;" />
 					<h:inputText type="text" value="#{sindicatoCad.sindicatoSelecionado.descricao}" maxlength="40" required="true" requiredMessage="Informe o nome do Sindicato." />
 					<br />
 
@@ -19,13 +19,37 @@
 					<p:selectOneMenu converter="omnifaces.SelectItemsConverter" value="#{sindicatoCad.sindicatoSelecionado.estado}" style="width:216px">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{sindicatoCad.listaEstado}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado}" />
-					</p:selectOneMenu>
+					</p:selectOneMenu>					
+				</div>
+				
+				<div id="divLimites" style="position:relative; top: 22px;left: 170px;">
+					
+					<h:outputLabel for="limPositivo" value="Limite Positivo (h): " />
+        			<p:inputText id="limPositivo" type="number" value="#{sindicatoCad.sindicatoSelecionado.limPositivo}" title="Informe o limite positivo em horas">
+ 					 	<f:validateLongRange minimum="0"  />
+					</p:inputText>
+					
+					<h:outputLabel for="limNegativo" value="Limite Negativo (h): " />
+        			<p:inputText id="limNegativo" type="number" value="#{sindicatoCad.sindicatoSelecionado.limNegativo}" title="Informe o limite negativo em horas">
+ 					 	<f:validateLongRange minimum="0"  />
+					</p:inputText>
+					
+					<h:outputLabel for="antecedencia" value="antecedência do alerta (dias):" />
+        			<p:inputText id="antecedencia" type="number" value="#{sindicatoCad.sindicatoSelecionado.diasAntecedencia}" >
+ 					 	<f:validateLongRange minimum="0"  />
+					</p:inputText>
+					
+					<h:outputLabel for="acerto" value="Período acerto:" />
+        			<p:inputText id="acert" type="number" value="#{sindicatoCad.sindicatoSelecionado.periodoAcerto}" >
+ 					 	<f:validateLongRange minimum="0"  />
+					</p:inputText>
 					
 				</div>
+				
 				<br />
 				<br />
 				<div id="divConfirmButtons" style="position: relative; width: 205px; left: 170px;">
-					<h:commandButton styleClass="botao3d" style=" width:100px; float:left;" action="#{sindicatoCad.modoCadastrar()}" value="Confirmar" />
+					<h:commandButton styleClass="botao3d" style=" width:100px; float:left;" action="#{sindicatoCad.confirmar()}" value="Confirmar" />
 					<h:commandButton styleClass="botao3d" style="float:right; width:100px;position:relative;left:15px" action="#{sindicatoCad.cancelar()}" value="Cancelar" immediate="true" />
 				</div>
 

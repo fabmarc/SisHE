@@ -97,7 +97,12 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 			parms.addValue("id_estado", entity.getEstado().getId());
 			parms.addValue("descricao", entity.getDescricao());
-
+			
+			parms.addValue("limite_positivo", (entity.getLimPositivo() * 60));
+			parms.addValue("limite_negativo", (entity.getLimNegativo() * 60));
+			parms.addValue("periodo_acerto", (entity.getPeriodoAcerto() * 60));
+			parms.addValue("dias_antecedencia", entity.getDiasAntecedencia());
+			
 			Number key = insertSindicato.executeAndReturnKey(parms);
 			entity.setId(key.longValue());
 		} catch (DuplicateKeyException e) {

@@ -21,7 +21,7 @@ public class SindicatoController extends BaseController implements Serializable 
 
 	@Inject
 	protected transient EstadoService estadoService;
-	protected List<Estado> listaEstado;
+	protected List<Estado> listaEstados;
 
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
 	public Sindicato sindicatoFiltro;
@@ -31,26 +31,19 @@ public class SindicatoController extends BaseController implements Serializable 
 
 	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
 	protected Boolean searched;
-
-	/**
-	 * @return the listaEstado
-	 */
+	
 	public List<Estado> getListaEstado() {
-		return listaEstado;
+		return listaEstados;
 	}
-
-	/**
-	 * @param listaEstado
-	 *            the listaEstado to set
-	 */
+	
 	public void setListaEstado(List<Estado> listaEstado) {
-		this.listaEstado = listaEstado;
+		this.listaEstados = listaEstado;
 	}
 
 	// VALIDA O SINDICATO PELO TAMANHO DO NOME E SE ESTÁ VAZIO
-	public boolean validarSindicato(Sindicato sindicatoFiltro) {
-		if (!verificarDescricao(sindicatoFiltro)
-				|| !tamanhoDescricao(sindicatoFiltro)) {
+	public boolean validarSindicato(Sindicato sindicatoSelecionado) {
+		if (!verificarDescricao(sindicatoSelecionado)
+				|| !tamanhoDescricao(sindicatoSelecionado)) {
 			return false;
 		} else {
 			return true;
@@ -59,9 +52,9 @@ public class SindicatoController extends BaseController implements Serializable 
 
 	// VALIDA O NOME DO SINDICATO PARA A PESQUISA; CASO SEJA VAZIO OU NULL
 	// RETORNARÁ FALSE
-	public boolean verificarDescricao(Sindicato sindicatoFiltro) {
-		if (sindicatoFiltro.getDescricao().isEmpty()
-				|| sindicatoFiltro.getDescricao() == "") {
+	public boolean verificarDescricao(Sindicato sindicatoSelecionado) {
+		if (sindicatoSelecionado.getDescricao() == null || sindicatoSelecionado.getDescricao().isEmpty()
+				|| sindicatoSelecionado.getDescricao().equals("")) {
 			messager.error(messageProvider.getMessage(
 					"msg.error.campo.obrigatorio", "Nome do Sindicato"));
 			return false;
