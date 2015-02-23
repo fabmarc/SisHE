@@ -7,19 +7,19 @@
 			<br />
 			<ui:insert>
 			
-				<p:breadCrumb styleClass="breadCrumb">
+				<p:breadCrumb styleClass="breadCrumb" style="top:-10px;">
     				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Consultar Sindicato" action="#{sindicatoMnt.irParaConsultar()}" immediate="true"/>
-    				<p:menuitem value="Consultar Regra" action="#{regraMnt.irParaConsultar()}" immediate="true"/>
-    				<p:menuitem value="Consultar Período" action="#{periodoMnt.irParaConsultar()}" immediate="true"/>
-    				<p:menuitem value="Cadastrar Período" action="#{periodoMnt.irParaCadastrar()}" immediate="true"/>
+    				<p:menuitem value="Sindicato" action="#{sindicatoMnt.irParaConsultar()}" immediate="true"/>
+    				<p:menuitem value="Regra" action="#{regraMnt.irParaConsultar()}" immediate="true"/>
+    				<p:menuitem value="Período" action="#{periodoMnt.irParaConsultar()}" immediate="true"/>
+    				<p:menuitem value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" immediate="true"/>
 				</p:breadCrumb>
-				<hr style="margin: 10px 0;" />
+				<hr style="margin: 10px 0;  top: -17px; position: relative;" />
 			
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				
 				<!-- Div Corpo -->
-				<div style="position: relative; width: 100%; padding-bottom: 10%;">
+				<div style="position: relative; width: 100%; padding-bottom: 7%; top: -23px;">
 					<!-- Div conteudo -->
 					<div style="top: 15px; left: 207px; position: relative; width: 230px">
 						<!-- Nome da Regra -->
