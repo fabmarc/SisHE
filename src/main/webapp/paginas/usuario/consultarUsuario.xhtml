@@ -6,16 +6,19 @@
 
 		<h:form id="mainForm">
 			<ui:insert>
+								
+				<!-- DreadCrumb -->
+				<p:breadCrumb styleClass="breadCrumb">
+    				<p:menuitem value="Home" url="/index.jsf" />
+    				<p:menuitem value="Usuário" action="#{usuarioMnt.irParaConsultar()}" />    				
+    				<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+
 				<!-- Div Mensagem -->
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
-				
-				<p:breadCrumb styleClass="breadCrumb">
-    				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Consultar Usuário" action="#{usuarioMnt.irParaConsultar()}" />
-				</p:breadCrumb>
-				<hr style="margin: 10px 0;" />
 
 				<!-- Div Corpo -->
 				<div class="divCorpo" style="padding-bottom: 0%;">

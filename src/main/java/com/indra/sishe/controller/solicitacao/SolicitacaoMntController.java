@@ -40,6 +40,8 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	private boolean pendente;
 
+	private boolean todosUsuarios;
+
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
 
@@ -56,23 +58,33 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		setListaSistemas(obterListaSistemas());
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null) searched = false;
+		if (searched == null)
+			searched = false;
 
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
-		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
+		if (solicitacaoFiltro == null)
+			solicitacaoFiltro = new Solicitacao();
 
-		if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>();
-		else pesquisar();
+		if (!searched)
+			listaSolicitacoes = new ArrayList<Solicitacao>();
+		else
+			pesquisar();
 	}
 
 	public void pesquisar() {
-		if (solicitacaoFiltro.getStatusGeral() != null && solicitacaoFiltro.getStatusGeral().getId() == 3) {
+		if (pendente == true) {
 			pesquisarPendentes();
+		} else if (todosUsuarios == true) {
+			
 		} else {
 			pesquisarPorUsuarioLogado();
 		}
 	}
 
+	public void pesquisarTodos() {
+		listaSolicitacoes = solicitacaoService.findByFilter(solicitacaoFiltro);
+		searched = true;
+	}
 	public void pesquisarPorUsuarioLogado() {
 		Usuario usuario = new Usuario();
 		usuario.setId(UsuarioLogado.getId());
@@ -181,10 +193,10 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	private List<Sistema> obterListaSistemas() {
 		return sistemaService.findAll();
 	}
-	
+
 	public List<StatusEnum> listaStatus() {
 		return StatusEnum.status();
-	} 
+	}
 
 	public List<Solicitacao> getListaSolicitacoes() {
 		return listaSolicitacoes;
@@ -224,6 +236,14 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setPendente(boolean pendente) {
 		this.pendente = pendente;
+	}
+
+	public boolean isTodosUsuarios() {
+		return todosUsuarios;
+	}
+
+	public void setTodosUsuarios(boolean todosUsuarios) {
+		this.todosUsuarios = todosUsuarios;
 	}
 
 	public List<Sistema> getListaSistemas() {

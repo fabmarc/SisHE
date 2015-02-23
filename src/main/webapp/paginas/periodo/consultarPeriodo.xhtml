@@ -3,19 +3,19 @@
 
 <ui:composition template="/WEB-INF/templates/base_template.xhtml">
 	<ui:define name="content">
-
 		<h:form id="mainForm">
-
 			<ui:insert>
-			
+
+				<!-- DreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
-    				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Consultar Sindicato" action="#{sindicatoMnt.irParaConsultar()}" />
-    				<p:menuitem value="Consultar Regra" action="#{regraMnt.irParaConsultar()}" />
-    				<p:menuitem value="Consultar Período" action="#{periodoMnt.irParaConsultar()}" />
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Sindicato" action="#{sindicatoMnt.irParaConsultar()}" />
+					<p:menuitem value="Regra" action="#{regraMnt.irParaConsultar()}" />
+					<p:menuitem value="Período" action="#{periodoMnt.irParaConsultar()}" />
+					<p:menuitem value="Consultar" action="#{periodoMnt.irParaConsultar()}" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
-			
+
 				<!-- Div Mensagem -->
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
@@ -25,7 +25,7 @@
 				<div class="divCorpo" style="padding-bottom: 8%;">
 					<!-- Div Pesquisar -->
 					<div style="width: 410px; position: relative; height: 60px;">
-					<!-- Div dia da semana -->
+						<!-- Div dia da semana -->
 						<div style="width: 410px; position: relative;">
 							<p:outputLabel value="Dia Semana:" style="width:100px;" />
 							<h:selectOneMenu value="#{periodoMnt.periodoFiltro.diaSemana}" converter="omnifaces.SelectItemsConverter">
@@ -33,9 +33,9 @@
 								<f:selectItems value="#{periodoCad.obterListaDias()}" var="dia" itemLabel="#{dia.nomeDia()}" itemValue="#{dia}" />
 								<f:ajax event="change" render="mainForm:periodoDt" />
 							</h:selectOneMenu>
-						</div>						
+						</div>
 					</div>
-					
+
 					<!-- Tabela -->
 					<p:dataTable style="top:15px; position:relative;" rowKey="#{periodo.id}" selection="#{periodoMnt.periodosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="periodoDt" var="periodo" value="#{periodoMnt.listaPeriodos}" emptyMessage="Nenhum registro encontrado.">
 						<!-- Cabeçalho -->
@@ -94,6 +94,7 @@
 									<p:commandLink value="Voltar" action="#{periodoMnt.voltarRegra()}" />
 								</div>
 								<!-- Fim div Voltar -->
+								
 								<!-- Div Açao -->
 								<div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;">
 									<p:commandLink value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" />
