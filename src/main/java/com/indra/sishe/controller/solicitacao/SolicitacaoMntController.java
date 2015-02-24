@@ -56,24 +56,26 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		setListaSistemas(obterListaSistemas());
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null) searched = false;
+		if (searched == null)
+			searched = false;
 
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
-		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
+		if (solicitacaoFiltro == null)
+			solicitacaoFiltro = new Solicitacao();
 
 		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
 		pesquisar();
 	}
 
 	public void pesquisar() {
-		if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE") || (UsuarioLogado.getPermissoes()).contains("ROLE_LIDER")) {
 		if (todasSolicitacoes == false) {
 			pesquisarPendentes();
 		} else {
+			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
 				pesquisarPorProjeto();
-			} 
-		}else {
-			pesquisarPorUsuarioLogado();
+			}else {
+				pesquisarPorUsuarioLogado();
+			}
 		}
 	}
 
