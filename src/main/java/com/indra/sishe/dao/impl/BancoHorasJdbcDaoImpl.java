@@ -248,7 +248,9 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				// caso exista algum registro sem porcentagem será adicionado os
 				// minutos sem cálculo da porcentagem.
 				if (minutoTotal > 0) {
-					minutos = minutos + minutoTotal;
+					if(periodos.size()>0){
+						minutos = minutos + minutoTotal;
+					}
 					historicoDetalhes.add(new HistoricoDetalhes(minutoTotal, 0, minutoTotal, new Historico(new Solicitacao(id))));
 				}
 			} else {
