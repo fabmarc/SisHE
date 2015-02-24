@@ -40,6 +40,7 @@ public class CargoCadController extends CargoController {
 	}
 
 	public String cadastrarCargo() {
+		
 			try {
 				this.cargoSelecionado = cargoService.save(cargoSelecionado);
 				putFlashAttr("cargoFiltro", cargoFiltro);
@@ -48,11 +49,15 @@ public class CargoCadController extends CargoController {
 				return irParaConsultar();
 			} catch (ApplicationException e) {
 				returnErrorMessage(e.getMessage());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		return null;
 	}
 
 	public String alterarCargo() {
+		
 			try {
 				cargoService.update(cargoSelecionado);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Cargo"));

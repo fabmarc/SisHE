@@ -141,6 +141,30 @@ html {
 	border: 1px solid #FFFFFF;
 }
 
+.divContSaldo{
+	float: right;
+	position: relative;
+	width: 260px;
+	top: -6px;
+	height: 20px;
+	text-align: right;
+	right: 8px;							
+}
+
+.divSaldo{
+	left: 17px;
+	position: relative;
+	overflow: hidden;
+	width: 16px;
+	float: right;
+	right: 8px;		
+	-webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
+    transition: width 2s;					
+}
+.divSaldo:hover{
+	width: 210px;					
+}
+
 /*Incluído por Diego*/
 
 .divNomeProjeto{
