@@ -48,7 +48,8 @@
 						</div>
 					</div>
 					<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
-						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
+						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" rendered="#{solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
+						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" rendered="#{!solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
 					</div>
 
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
@@ -114,7 +115,7 @@
 							<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.data}" style="font-weight: bold;">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
-							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> às <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br /> Duração: <b>#{solicitacaoMnt.solicitacaoDetalhe.duracao()}</b><br />
+							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> às <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br /> Duração: <b>#{solicitacaoMnt.solicitacaoDetalhe.duracao}</b><br />
 							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.lider.nome}">
 								Líder avaliador: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
