@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.indra.infra.util.FacesMessager;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.UsuarioService;
 
 @ManagedBean
@@ -30,6 +31,9 @@ public class LoginController extends BaseController{
 	
 	@Inject
 	private transient UsuarioService usuarioService;
+	
+	@Inject
+	private transient BancoHorasService bancoService;
 
 	public LoginController() {
 	}
@@ -46,6 +50,7 @@ public class LoginController extends BaseController{
 			putSessionAttr("usuario_id", user.getId());
 			putSessionAttr("usuario_nome", user.getNome());
 			putSessionAttr("usuario_permissoes", result.getAuthorities().toString());
+			putSessionAttr("saldo", bancoService.findByUsuario(user).getSaldo());
 		} catch (AuthenticationException e) {
 			messager.error(e.getMessage());
 			e.printStackTrace();
