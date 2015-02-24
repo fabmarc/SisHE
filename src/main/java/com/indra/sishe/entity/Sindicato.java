@@ -2,13 +2,15 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
+import com.indra.sishe.enums.EstadoEnum;
+
 public class Sindicato implements Serializable, Comparable<Sindicato> {
 
 	private static final long serialVersionUID = 5891090718221141954L;
 
 	private Long id;
 
-	private Estado estado;
+	private EstadoEnum estado;
 
 	private String descricao;
 	
@@ -31,12 +33,12 @@ public class Sindicato implements Serializable, Comparable<Sindicato> {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Estado getEstado() {
+	
+	public EstadoEnum getEstado() {
 		return estado;
 	}
 
-	public void setEstado(Estado estado) {
+	public void setEstado(EstadoEnum estado) {
 		this.estado = estado;
 	}
 
