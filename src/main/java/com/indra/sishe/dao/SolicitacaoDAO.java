@@ -5,7 +5,6 @@ import java.util.List;
 import com.indra.infra.dao.BaseDAO;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.entity.Solicitacao;
-import com.indra.sishe.entity.Usuario;
 
 public interface SolicitacaoDAO extends BaseDAO<Solicitacao> {
 

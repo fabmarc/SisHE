@@ -8,6 +8,7 @@ import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
+import com.indra.sishe.enums.EstadoEnum;
 
 @ViewScoped
 @ManagedBean(name = "sindicatoCad")
@@ -29,13 +30,10 @@ public class SindicatoCadController extends SindicatoController {
 
 		sindicatoSelecionado = (Sindicato) getFlashAttr("sindicatoSelecionado");
 		if (sindicatoSelecionado == null) {
-			sindicatoSelecionado = new Sindicato();
-			sindicatoSelecionado.setEstado(new Estado());
-			 
-			
+			sindicatoSelecionado = new Sindicato();				
 		}
 		sindicatoFiltro = (Sindicato) getFlashAttr("sindicatoFiltro");
-		setListaEstado(estadoService.findAll());
+		setListaEstado(EstadoEnum.listaEstados());
 	}
 
 	public String cadastrarSindicato() {
@@ -74,6 +72,7 @@ public class SindicatoCadController extends SindicatoController {
 	public String cancelar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sindicatoFiltro", sindicatoFiltro);
+		putFlashAttr("sindicatoSelecionado", null);
 		return "/paginas/sindicato/consultarSindicato.xhtml?faces-redirect=true";
 	}
 

@@ -36,6 +36,7 @@
 			<div id="corpo" style="top: 100px; position: relative; height: 100%;">
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
+
 						<div style="float: right; position: relative; width: 75px;" id="divAcoes">
 							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
 								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
@@ -49,6 +50,14 @@
 								<h:commandLink action="#{loginController.logout}">
 									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
 								</h:commandLink>
+							</div>
+						</div>
+						<div class="divContSaldo">
+							<div style="float:right;" >
+								<p:graphicImage url="/resources/images/saldo.png" style="height: 20px; position: relative;"/>
+							</div>
+							<div class="divSaldo" title="Saldo">
+								<label style="right: 10px; height: 20px; position: relative; width: 183px; float:left; z-index:-1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</label>
 							</div>
 						</div>
 						<p:menubar style="top:20px;">
@@ -80,15 +89,14 @@
 									</p:submenu>
 								</p:submenu>
 							</sec:authorize>
-							<p:submenu label="Solicitação">
-								<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO">
+							<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO">
+								<p:submenu label="Solicitação">
 									<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-								</sec:authorize>
-								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
-								<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard"/>
-							</p:submenu>
+									<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard"/>
+								</p:submenu>
+							</sec:authorize>
 						</p:menubar>
-
 					</h:form>
 				</ui:insert>
 
@@ -96,7 +104,7 @@
 					<h:outputLabel value="[Conteúdo Default, esta região deve ser sobrescrita]" />
 				</ui:insert>
 			</div>
-							
+
 			<div class="rodape">
 				<div style="top: 10px; position: relative;">
 					<font color="#989898" size="2px" style="font-family: 'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;">&copy; Indra 2015</font>

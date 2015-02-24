@@ -1,7 +1,7 @@
 package com.indra.sishe.enums;
 
 public enum TipoFeriadoEnum {
-	Fixo('F'), Móvel('M');
+	Fixo('F'), Movel('M');
 	private final Character idTipo;
 
 	private TipoFeriadoEnum(Character idTipo) {

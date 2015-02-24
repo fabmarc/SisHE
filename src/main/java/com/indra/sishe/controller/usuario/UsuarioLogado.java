@@ -48,6 +48,18 @@ public class UsuarioLogado extends BaseController implements Serializable {
 	public String getNome() {
 		return (String) getSessionAttr("usuario_nome");
 	}
+	
+	public Long getSaldoHoras() {
+		return (Long) getSessionAttr("saldo");
+	}
+	
+	public String getSaldoFormatado(){
+		Long saldo = (Long) getSessionAttr("saldo");
+		Long min, horas;
+		horas = saldo / 60;
+		min = saldo % 60;
+		return horas + " h e " + min +" min";
+	}
 
 	public static String getPermissoes() {
 		return (String) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true))
