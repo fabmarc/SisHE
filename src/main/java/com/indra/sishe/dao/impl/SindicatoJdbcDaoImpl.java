@@ -26,6 +26,7 @@ import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.SindicatoDAO;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
+import com.indra.sishe.enums.EstadoEnum;
 
 @Repository
 public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
@@ -50,7 +51,8 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT s.id AS idSindicato , s.descricao, e.sigla, e.id AS idEstado, e.nome as nome ");
+		sql.append("SELECT s.id AS idSindicato , s.descricao, e.sigla, e.id AS idEstado, e.nome as nome, s.periodo_acerto, s.dias_antecedencia ,"
+							+" limite_positivo, limite_negativo ");
 		sql.append("FROM estado e INNER JOIN sindicato s ON e.id = s.id_estado ");
 
 		if (sindicato != null && sindicato.getDescricao() != null
@@ -78,11 +80,14 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 						estado.setSigla(rs.getString("sigla"));
 						estado.setNome(rs.getString("nome"));
 						estado.setId(rs.getLong("idEstado"));
-						sind.setEstado(estado);
+						sind.setEstado(EstadoEnum.obterEstado(rs.getLong("idEstado")));
 
 						sind.setId(rs.getLong("idSindicato"));
 						sind.setDescricao(rs.getString("descricao"));
-
+						sind.setPeriodoAcerto(rs.getInt("periodo_acerto"));
+						sind.setLimPositivo((rs.getInt("limite_positivo") / 60));
+						sind.setLimNegativo((rs.getInt("limite_negativo") / 60));
+						sind.setDiasAntecedencia(rs.getInt("dias_antecedencia"));
 						return sind;
 					}
 				});
@@ -98,9 +103,10 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 			parms.addValue("id_estado", entity.getEstado().getId());
 			parms.addValue("descricao", entity.getDescricao());
 			
-			parms.addValue("limite_positivo", (entity.getLimPositivo() * 60));
-			parms.addValue("limite_negativo", (entity.getLimNegativo() * 60));
-			parms.addValue("periodo_acerto", (entity.getPeriodoAcerto() * 60));
+		
+			parms.addValue("limite_positivo", (entity.getLimPositivo() * 60)); // transforma de hora para minuto 	
+			parms.addValue("limite_negativo", (entity.getLimNegativo() * 60)); // transforma de hora para minuto 	
+			parms.addValue("periodo_acerto", (entity.getPeriodoAcerto() ));	
 			parms.addValue("dias_antecedencia", entity.getDiasAntecedencia());
 			
 			Number key = insertSindicato.executeAndReturnKey(parms);
@@ -116,9 +122,10 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 	public Sindicato update(Sindicato entity)
 			throws RegistroInexistenteException {
 		int rows = getJdbcTemplate().update(
-				"UPDATE sindicato SET descricao = ?, id_estado = ? "
+				"UPDATE sindicato SET descricao = ?, id_estado = ? , limite_positivo = (? * 60), limite_negativo = (? * 60), periodo_acerto = ?"
 						+ "WHERE id = ?", entity.getDescricao(),
-				entity.getEstado().getId(), entity.getId());
+				entity.getEstado().getId(),entity.getLimPositivo(),entity.getLimNegativo(),
+				entity.getPeriodoAcerto(), entity.getId() );
 		if (rows == 0)
 			throw new RegistroInexistenteException();
 		return entity;
@@ -127,7 +134,9 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 	@Override
 	public List<Sindicato> findAll() {
 		return getJdbcTemplate().query(
-				"SELECT id, id_estado, descricao " + "FROM sindicato",
+				"SELECT id,id_estado,descricao, periodo_acerto , " 
+				 + "dias_antecedencia,(limite_positivo / 60) as limite_positivo,"
+				 + "(limite_negativo / 60)limite_negativo" + "FROM sindicato",
 				new BeanPropertyRowMapper<Sindicato>(Sindicato.class));
 	}
 
@@ -136,23 +145,25 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 		try {
 			return getJdbcTemplate()
 					.queryForObject(
-							"SELECT s.id AS idSindicato , s.descricao as descricao,"
-									+ "e.id AS idEstado, e.nome as nome FROM estado e INNER JOIN sindicato s ON e.id = s.id_estado "
-									+ "WHERE s.id = ?  ", new Object[] { id },
+							"SELECT s.id AS idSindicato, s.descricao as descricao,"
+							+"s.periodo_acerto, s.dias_antecedencia ,"
+							+" limite_positivo, limite_negativo,"
+							+ "e.id AS idEstado, e.nome as nome FROM estado e INNER JOIN sindicato s ON e.id = s.id_estado "
+							+ "WHERE s.id = ?  ", new Object[] { id },
 							new RowMapper<Sindicato>() {
 
 								@Override
 								public Sindicato mapRow(ResultSet rs, int idx)
-										throws SQLException {
-									// TODO Auto-generated method stub
-									Sindicato sind = new Sindicato();
-									Estado estado = new Estado();
-									estado.setId(rs.getLong("idEstado"));
-									estado.setNome(rs.getString("nome"));
+										throws SQLException {									
+									Sindicato sind = new Sindicato();				
+									
 									sind.setId(rs.getLong("idSindicato"));
 									sind.setDescricao(rs.getString("descricao"));
-									sind.setEstado(estado);
-
+									sind.setEstado(EstadoEnum.obterEstado(rs.getLong("idEstado")));	
+									sind.setPeriodoAcerto(rs.getInt("periodo_acerto"));
+									sind.setLimPositivo((rs.getInt("limite_positivo") / 60));
+									sind.setLimNegativo((rs.getInt("limite_negativo") / 60));
+									sind.setDiasAntecedencia(rs.getInt("dias_antecedencia"));
 									return sind;
 								}
 

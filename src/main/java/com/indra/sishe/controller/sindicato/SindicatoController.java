@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
+import com.indra.sishe.enums.EstadoEnum;
 import com.indra.sishe.service.EstadoService;
 import com.indra.sishe.service.SindicatoService;
 
@@ -21,7 +22,7 @@ public class SindicatoController extends BaseController implements Serializable 
 
 	@Inject
 	protected transient EstadoService estadoService;
-	protected List<Estado> listaEstados;
+	protected List<EstadoEnum> listaEstados;
 
 	// VARIÁVEL UTILIZADA PARA O FILTRO DA PESQUISA
 	public Sindicato sindicatoFiltro;
@@ -32,11 +33,11 @@ public class SindicatoController extends BaseController implements Serializable 
 	// TRUE QUANDO O BOTÃO PESQUISAR FOR PRESSIONADO
 	protected Boolean searched;
 	
-	public List<Estado> getListaEstado() {
+	public List<EstadoEnum> getListaEstado() {
 		return listaEstados;
 	}
 	
-	public void setListaEstado(List<Estado> listaEstado) {
+	public void setListaEstado(List<EstadoEnum> listaEstado) {
 		this.listaEstados = listaEstado;
 	}
 
@@ -84,6 +85,7 @@ public class SindicatoController extends BaseController implements Serializable 
 	public String irParaCadastrar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("sindicatoFiltro", sindicatoFiltro);
+		putFlashAttr("sindicatoSelecionado", null);
 		return "/paginas/sindicato/cadastrarSindicato.xhtml?faces-redirect=true";
 	}
 

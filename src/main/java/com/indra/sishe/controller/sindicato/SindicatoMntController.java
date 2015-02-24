@@ -13,6 +13,7 @@ import org.primefaces.context.RequestContext;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Sindicato;
+import com.indra.sishe.enums.EstadoEnum;
 
 @ViewScoped
 @ManagedBean(name = "sindicatoMnt")
@@ -44,7 +45,7 @@ public class SindicatoMntController extends SindicatoController {
 		if (!searched) listaSindicatos = new ArrayList<Sindicato>();
 		else pesquisar();
 
-		setListaEstado(estadoService.findAll());
+		setListaEstado(EstadoEnum.listaEstados());
 
 	}
 
