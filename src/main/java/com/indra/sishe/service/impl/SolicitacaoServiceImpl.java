@@ -29,14 +29,14 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	private SolicitacaoDAO solicitacaoDao;
 
 	@Override
-	public Solicitacao save(Solicitacao entity) throws ApplicationException {		
+	public Solicitacao save(Solicitacao entity) throws ApplicationException {
 		try {
 			return solicitacaoDao.save(entity);
-		} catch (RegistroDuplicadoException e) {			
+		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Solicitação");
 		}
 	}
-	
+
 	@Override
 	public Solicitacao update(Solicitacao entity) throws ApplicationException {
 		return null;
@@ -53,31 +53,37 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	}
 
 	@Override
-	public void remove(Long id) throws ApplicationException { }
+	public void remove(Long id) throws ApplicationException {
+	}
 
 	public boolean validarRemove(Solicitacao solicitacao) throws ApplicationException {
-		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
-			if (solicitacao.getStatusGerente().getId() != 3) { 
-				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente"); 
-			}else{
-				return true;
+		Long idUsuarioLogado = UsuarioLogado.getId();
+		if (solicitacao.getUsuario().getId() != idUsuarioLogado) {
+			throw new ApplicationException("msg.error.excluir.solicitacao.alheia");
+		} else {
+			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
+				if (solicitacao.getStatusGerente().getId() != 3) {
+					throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente");
+				} else {
+					return true;
+				}
+			} else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
+				if (solicitacao.getStatusGerente().getId() != 3) {
+					throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente");
+				} else {
+					return true;
+				}
+			} else if (UsuarioLogado.getPermissoes().contains("ROLE_FUNCIONARIO")) {
+				if (solicitacao.getStatusGerente().getId() != 3) {
+					throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente");
+				} else if (solicitacao.getStatusLider().getId() != 3) {
+					throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Líder");
+				} else {
+					return true;
+				}
+			} else {
+				return false;
 			}
-		}else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
-			if (solicitacao.getStatusGerente().getId() != 3) { 
-				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente"); 
-			}else{
-				return true;
-			}
-		}else if (UsuarioLogado.getPermissoes().contains("ROLE_FUNCIONARIO")) {
-			if (solicitacao.getStatusGerente().getId() != 3) {
-				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Gerente");
-			}else if (solicitacao.getStatusLider().getId() != 3) { 
-				throw new ApplicationException("msg.error.excluir.solicitacao.avaliada", "Líder"); 
-			}else{
-				return true;
-			}
-		}else{
-			return false;
 		}
 	}
 
@@ -147,41 +153,37 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 	}
-	
+
 	@Override
 	public boolean validarSolicitacao(Solicitacao solicitacao) throws ApplicationException, ParseException {
-		
+
 		DateFormat dateFormatter;
 		dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
-		
+
 		String hoje = dateFormatter.format(new Date());
-		String dtEscolhida= dateFormatter.format(solicitacao.getData());
-		
-		if (solicitacao.getHoraInicio() == null ) {
+		String dtEscolhida = dateFormatter.format(solicitacao.getData());
+
+		if (solicitacao.getHoraInicio() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Inicial");
-		}		
-		else if(solicitacao.getHoraFinal() == null){
+		} else if (solicitacao.getHoraFinal() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Hora Final");
-		}		
-		else if ((solicitacao.getHoraInicio() != null || solicitacao.getHoraFinal() != null) && solicitacao.getHoraInicio().after(solicitacao.getHoraFinal())) {
-			throw new ApplicationException("msg.error.intervalo.incorreto","Hora Inicial", "Hora Final");
-		}		
-		else if (solicitacao.getDescricao() != null && solicitacao.getDescricao().length() > 500) {
-			throw new ApplicationException("msg.error.campo.maior.esperado","Descricao","500");			
-		}	
-		else if(solicitacao.getDescricao() == null){
-			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
-		}else if(solicitacao.getDescricao() != null && (solicitacao.getDescricao().length() > 500)){
+		} else if ((solicitacao.getHoraInicio() != null || solicitacao.getHoraFinal() != null)
+				&& solicitacao.getHoraInicio().after(solicitacao.getHoraFinal())) {
+			throw new ApplicationException("msg.error.intervalo.incorreto", "Hora Inicial", "Hora Final");
+		} else if (solicitacao.getDescricao() != null && solicitacao.getDescricao().length() > 500) {
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
-		}else if(solicitacao.getSistema() ==  null || solicitacao.getSistema().getId() == 0){
+		} else if (solicitacao.getDescricao() == null) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
+		} else if (solicitacao.getDescricao() != null && (solicitacao.getDescricao().length() > 500)) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
+		} else if (solicitacao.getSistema() == null || solicitacao.getSistema().getId() == 0) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
-		}
-		else if (!hoje.equalsIgnoreCase(dtEscolhida) && dateFormatter.parse(dtEscolhida).before(dateFormatter.parse(hoje))){
+		} else if (!hoje.equalsIgnoreCase(dtEscolhida)
+				&& dateFormatter.parse(dtEscolhida).before(dateFormatter.parse(hoje))) {
 			throw new ApplicationException("msg.error.data");
-		}
-		else{
+		} else {
 			return true;
-		}		
+		}
 	}
 
 }

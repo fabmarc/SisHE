@@ -250,5 +250,41 @@ public class SistemaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		return null;
 	}
 
+	@Override
+	public List<Sistema> findByProjetoByUsuarioLogado(Long idUsuarioLogado) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT distinct s.id AS idSistema , s.id_projeto AS idProjeto ,s.descricao AS sistemaDescricao ," +
+				"s.nome AS nomeSistema ,p.nome AS nomeProjeto " +
+				"FROM sistema s INNER JOIN projeto p ON s.id_projeto = p.id " +
+				"INNER JOIN usuario_projeto on (usuario_projeto.id_projeto = p.id and (usuario_projeto.id_usuario = :idUsuarioLogado or p.id_gerente = :idUsuarioLogado))" +
+				"INNER JOIN usuario u ON s.id_lider = u.id");
+		params.addValue("idUsuarioLogado", idUsuarioLogado);
+
+		List<Sistema> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+
+		new RowMapper<Sistema>() {
+			@Override
+			public Sistema mapRow(ResultSet rs, int idx) throws SQLException {
+
+				Sistema sistema = new Sistema();
+				Projeto projeto = new Projeto();
+
+				projeto.setId(rs.getLong("idProjeto"));
+				projeto.setNome(rs.getString("nomeProjeto"));
+
+				sistema.setProjeto(projeto);
+				sistema.setId(rs.getLong("idSistema"));
+				sistema.setNome(rs.getString("nomeSistema"));
+				sistema.setDescricao(rs.getString("sistemaDescricao"));
+
+				return sistema;
+			}
+		});
+
+		return lista;
+	}
+
 	
 }

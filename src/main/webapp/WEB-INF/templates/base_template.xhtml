@@ -84,7 +84,7 @@
 								<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO">
 									<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 								</sec:authorize>
-								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
+								<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
 								<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard"/>
 							</p:submenu>
 						</p:menubar>

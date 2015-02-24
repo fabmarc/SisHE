@@ -154,6 +154,9 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 			params.add(param);
 		}
 		try {
+			if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+				getJdbcTemplate().batchUpdate("DELETE FROM historico WHERE id_solicitacao = ?", params);
+			}
 			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM solicitacao WHERE id = ?", params);
 			for (int rows : affectedRows)
 				if (rows == 0) throw new RegistroInexistenteException();
@@ -175,16 +178,17 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("FROM solicitacao INNER JOIN usuario ON (usuario.id = solicitacao.id_usuario) INNER JOIN sistema ON (sistema.id = solicitacao.id_sistema) INNER JOIN projeto ON (projeto.id = sistema.id_projeto) LEFT JOIN usuario lider ON (lider.id = solicitacao.id_aprovador_lider) LEFT JOIN usuario gerente ON (gerente.id = solicitacao.id_aprovador_gerente) ");
 		sql.append("WHERE solicitacao.status_lider = 3 AND solicitacao.status_gerente = 3 AND sistema.id_lider = :idLider ");
 		params.addValue("idLider", solicitacaoFiltro.getLider().getId());
-		
-		if (solicitacaoFiltro.getSistema() != null) {
+
+		if (solicitacaoFiltro.getSistema() != null && solicitacaoFiltro.getSistema().getId() != null) {
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
-		
-		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+
+		if (solicitacaoFiltro.getUsuario().getNome() != null
+				&& !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
 			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
-		}		
+		}
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
@@ -212,7 +216,6 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 						gerente.setId(rs.getLong("id_aprovador_gerente"));
 						gerente.setNome(rs.getString("nomeGerente"));
 
-
 						Solicitacao solicitacao = new Solicitacao();
 						solicitacao.setStatusLider(StatusEnum.obterStatus(rs.getLong("status_lider")));
 						solicitacao.setStatusGerente(StatusEnum.obterStatus(rs.getLong("status_gerente")));
@@ -236,7 +239,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 
 	@Override
 	public List<Solicitacao> findByGerente(Solicitacao solicitacaoFiltro) {
-		
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT solicitacao.id AS idSolicitacao, hora_inicio, hora_final, solicitacao.descricao AS descricao, data_aprovacao_lider, data, status_lider, id_usuario, usuario.nome AS nomeUsuario, id_sistema, sistema.nome AS nomeSistema, id_aprovador_lider, lider.nome AS nomeLider, projeto.nome AS nomeProjeto, projeto.id AS idprojeto, data_aprovacao_gerente, id_aprovador_gerente, gerente.nome AS nomeGerente, status_gerente ");
@@ -244,16 +247,17 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("WHERE (solicitacao.status_lider = 1 AND solicitacao.status_gerente = 3) ");
 		sql.append("AND projeto.id_gerente = :idGerente ");
 		params.addValue("idGerente", solicitacaoFiltro.getGerente().getId());
-		
+
 		if (solicitacaoFiltro.getSistema() != null) {
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
 
-		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+		if (solicitacaoFiltro.getUsuario().getNome() != null
+				&& !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
 			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
-		}		
+		}
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
@@ -314,18 +318,19 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		if (solicitacaoFiltro.getData() != null) {
 			sql.append("AND solicitacao.data = :data ");
 			params.addValue("data", solicitacaoFiltro.getData());
-		}		
-		
+		}
+
 		if (solicitacaoFiltro.getSistema() != null) {
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
-		
-		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+
+		if (solicitacaoFiltro.getUsuario().getNome() != null
+				&& !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
 			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
 		}
-		
+
 		if (solicitacaoFiltro.getStatusGeral() != null && solicitacaoFiltro.getStatusGeral().getId() > 0) {
 			if (solicitacaoFiltro.getStatusGeral().getId() == 1) {
 				sql.append("AND solicitacao.status_gerente = :idStatus ");
@@ -426,28 +431,29 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("FROM solicitacao INNER JOIN usuario ON (usuario.id = solicitacao.id_usuario) INNER JOIN sistema ON (sistema.id = solicitacao.id_sistema) LEFT JOIN usuario lider ON (lider.id = solicitacao.id_aprovador_lider) LEFT JOIN usuario gerente ON (gerente.id = solicitacao.id_aprovador_gerente) INNER JOIN projeto ON (projeto.id = sistema.id_projeto) ");
 		sql.append("WHERE solicitacao.id_usuario = :idUsuario ");
 		params.addValue("idUsuario", solicitacaoFiltro.getUsuario().getId());
-		
+
 		if (solicitacaoFiltro.getData() != null) {
 			sql.append("AND solicitacao.data = :data ");
 			params.addValue("data", solicitacaoFiltro.getData());
 		}
-		
+
 		if (solicitacaoFiltro.getSistema() != null) {
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
-		
-		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+
+		if (solicitacaoFiltro.getUsuario().getNome() != null
+				&& !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
 			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
-		}		
-		
+		}
+
 		if (solicitacaoFiltro.getStatusGeral() != null) {
 			if (solicitacaoFiltro.getStatusGeral().getId() == 1) {
 				sql.append("AND solicitacao.status_gerente = :idStatus ");
-			} else if(solicitacaoFiltro.getStatusGeral().getId() == 2){
+			} else if (solicitacaoFiltro.getStatusGeral().getId() == 2) {
 				sql.append("AND ( solicitacao.status_lider = :idStatus OR solicitacao.status_gerente = :idStatus ) ");
-			}else{
+			} else {
 				sql.append("AND ( solicitacao.status_lider = :idStatus OR (solicitacao.status_gerente = :idStatus AND solicitacao.status_lider <> 2 ) ) ");
 			}
 			params.addValue("idStatus", solicitacaoFiltro.getStatusGeral().getId());
@@ -509,28 +515,29 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("FROM solicitacao INNER JOIN usuario ON (usuario.id = solicitacao.id_usuario) INNER JOIN sistema ON (sistema.id = solicitacao.id_sistema) LEFT JOIN usuario lider ON (lider.id = solicitacao.id_aprovador_lider) LEFT JOIN usuario gerente ON (gerente.id = solicitacao.id_aprovador_gerente) INNER JOIN projeto ON (projeto.id = sistema.id_projeto) ");
 		sql.append("WHERE projeto.id = (SELECT id FROM projeto WHERE id_gerente = :idGerente) ");
 		params.addValue("idGerente", solicitacaoFiltro.getGerente().getId());
-		
+
 		if (solicitacaoFiltro.getData() != null) {
 			sql.append("AND solicitacao.data = :data ");
 			params.addValue("data", solicitacaoFiltro.getData());
 		}
-		
+
 		if (solicitacaoFiltro.getSistema() != null) {
 			sql.append("AND solicitacao.id_sistema = :idSistema ");
 			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
 		}
-		
-		if (solicitacaoFiltro.getUsuario().getNome() != null && !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
+
+		if (solicitacaoFiltro.getUsuario().getNome() != null
+				&& !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
 			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
 			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
-		}		
-		
+		}
+
 		if (solicitacaoFiltro.getStatusGeral() != null) {
 			if (solicitacaoFiltro.getStatusGeral().getId() == 1) {
 				sql.append("AND solicitacao.status_gerente = :idStatus ");
-			} else if(solicitacaoFiltro.getStatusGeral().getId() == 2){
+			} else if (solicitacaoFiltro.getStatusGeral().getId() == 2) {
 				sql.append("AND ( solicitacao.status_lider = :idStatus OR solicitacao.status_gerente = :idStatus ) ");
-			}else{
+			} else {
 				sql.append("AND ( solicitacao.status_lider = :idStatus OR (solicitacao.status_gerente = :idStatus AND solicitacao.status_lider <> 2 ) ) ");
 			}
 			params.addValue("idStatus", solicitacaoFiltro.getStatusGeral().getId());
