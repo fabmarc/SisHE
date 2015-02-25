@@ -33,41 +33,40 @@ public class CargoCadController extends CargoController {
 		searched = (Boolean) getFlashAttr("searched");
 
 		cargoSelecionado = (Cargo) getFlashAttr("cargoSelecionado");
-		if (cargoSelecionado == null)
-			cargoSelecionado = new Cargo();
+		if (cargoSelecionado == null) cargoSelecionado = new Cargo();
 
 		cargoFiltro = (Cargo) getFlashAttr("cargoFiltro");
 	}
 
 	public String cadastrarCargo() {
-		
-			try {
-				this.cargoSelecionado = cargoService.save(cargoSelecionado);
-				putFlashAttr("cargoFiltro", cargoFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cargo"));
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		try {
+			this.cargoSelecionado = cargoService.save(cargoSelecionado);
+			putFlashAttr("cargoFiltro", cargoFiltro);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Cargo"));
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	public String alterarCargo() {
-		
-			try {
-				cargoService.update(cargoSelecionado);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Cargo"));
-				putFlashAttr("cargoFiltro", cargoFiltro);
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			} catch (ApplicationException e) {
-				returnErrorMessage(e.getMessage());
-				return irParaAlterar(cargoSelecionado);
-			}
+
+		try {
+			cargoService.update(cargoSelecionado);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Cargo"));
+			putFlashAttr("cargoFiltro", cargoFiltro);
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
+		} catch (ApplicationException e) {
+			returnErrorMessage(e.getMessage());
+			return irParaAlterar(cargoSelecionado);
+		}
 	}
 
 	public String cancelar() {
@@ -100,11 +99,11 @@ public class CargoCadController extends CargoController {
 	public void setCargoSelecionado(Cargo cargoSelecionado) {
 		this.cargoSelecionado = cargoSelecionado;
 	}
-	
-	public String msgValidacao(String key, String params){
+
+	public String msgValidacao(String key, String params) {
 		return messageProvider.getMessage(key, params);
 	}
-	
+
 	public List<PermissaoEnum> obterListaPermissoes() {
 		List<PermissaoEnum> listapermissoes = new ArrayList<PermissaoEnum>(Arrays.asList(PermissaoEnum.values()));
 		return listapermissoes;

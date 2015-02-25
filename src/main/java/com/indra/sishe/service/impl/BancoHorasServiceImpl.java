@@ -19,12 +19,12 @@ import com.indra.sishe.service.StatelessServiceAb;
 public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHorasService {
 
 	private static final long serialVersionUID = 1877572808403223993L;
-	
+
 	@Autowired
 	private BancoHorasDAO bancoHorasDao;
-	
-	public BancoHorasServiceImpl(){
-		
+
+	public BancoHorasServiceImpl() {
+
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

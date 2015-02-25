@@ -33,17 +33,13 @@ public class CargoMntController extends CargoController {
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		cargoFiltro = (Cargo) getFlashAttr("cargoFiltro");
-		if (cargoFiltro == null)
-			cargoFiltro = new Cargo();
+		if (cargoFiltro == null) cargoFiltro = new Cargo();
 
-		if (!searched)
-			listaCargos = new ArrayList<Cargo>();
-		else
-			pesquisar();
+		if (!searched) listaCargos = new ArrayList<Cargo>();
+		else pesquisar();
 	}
 
 	public void beforeRemoveCargos() {

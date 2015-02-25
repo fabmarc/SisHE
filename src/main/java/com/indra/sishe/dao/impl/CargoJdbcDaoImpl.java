@@ -78,7 +78,7 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT id, nome, role " + "FROM cargo WHERE 1=1 ");
-		
+
 		return consultar(sql, params);
 	}
 

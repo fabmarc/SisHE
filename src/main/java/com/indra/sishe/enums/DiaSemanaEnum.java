@@ -2,14 +2,9 @@ package com.indra.sishe.enums;
 
 public enum DiaSemanaEnum {
 
-	Domingo(1, "Domingo"),
-	Segunda(2, "Segunda-feira"),
-	Terca(3, "Terça-feira"),
-	Quarta(4, "Quarta-feira"),
-	Quinta(5, "Quinta-feira"),
-	Sexta(6, "Sexta-feira"),
-	Sabado(7, "Sábado");
-	
+	Domingo(1, "Domingo"), Segunda(2, "Segunda-feira"), Terca(3, "Terça-feira"), Quarta(4, "Quarta-feira"), Quinta(
+			5, "Quinta-feira"), Sexta(6, "Sexta-feira"), Sabado(7, "Sábado");
+
 	private final int numeroDia;
 	private final String nomeDia;
 
@@ -21,8 +16,8 @@ public enum DiaSemanaEnum {
 	public int numeroDia() {
 		return this.numeroDia;
 	}
-	
-	public String nomeDia(){
+
+	public String nomeDia() {
 		return this.nomeDia;
 	}
 

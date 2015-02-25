@@ -33,7 +33,7 @@ public class PeriodoCadController extends PeriodoController {
 		if (periodoSelecionado == null) periodoSelecionado = new Periodo();
 
 		periodoFiltro = (Periodo) getFlashAttr("periodoFiltro");
-		
+
 		regraSelecionada = (Regra) getFlashAttr("regraSelecionadaFiltro");
 	}
 
@@ -41,7 +41,7 @@ public class PeriodoCadController extends PeriodoController {
 		try {
 			periodoSelecionado.setRegra(regraSelecionada);
 			this.periodoSelecionado = periodoService.save(periodoSelecionado);
-			putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
+			putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 			putFlashAttr("periodoFiltro", periodoFiltro);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Periodo"));
 			putFlashAttr("searched", searched);
@@ -56,7 +56,7 @@ public class PeriodoCadController extends PeriodoController {
 		try {
 			periodoService.update(periodoSelecionado);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.alterado", "Periodo"));
-			putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
+			putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 			putFlashAttr("periodoFiltro", periodoFiltro);
 			putFlashAttr("searched", searched);
 			return irParaConsultar();
@@ -69,7 +69,7 @@ public class PeriodoCadController extends PeriodoController {
 	public String cancelar() {
 		putFlashAttr("searched", searched);
 		putFlashAttr("periodoFiltro", periodoFiltro);
-		putFlashAttr("regraSelecionadaFiltro",regraSelecionada);
+		putFlashAttr("regraSelecionadaFiltro", regraSelecionada);
 		putFlashAttr("periodoSelecionado", null);
 		return irParaConsultar();
 	}

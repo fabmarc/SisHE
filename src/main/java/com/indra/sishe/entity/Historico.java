@@ -14,15 +14,15 @@ public class Historico implements Serializable {
 	private Solicitacao solicitacao;
 
 	private BancoHoras bancoHoras;
-	
+
 	private Date data;
-	
+
 	private String descricao;
 
 	public Historico() {
 	}
-	
-	public Historico(Solicitacao solicitacao){
+
+	public Historico(Solicitacao solicitacao) {
 		this.solicitacao = solicitacao;
 	}
 

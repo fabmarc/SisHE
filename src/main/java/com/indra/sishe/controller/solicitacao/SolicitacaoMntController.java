@@ -53,14 +53,11 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		setListaSistemas(obterSistemas());
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
-		if (solicitacaoFiltro == null)
-			solicitacaoFiltro = new Solicitacao();
+		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		
 		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
 		pesquisar();
 	}
@@ -71,7 +68,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		} else {
 			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
 				pesquisarPorProjeto();
-			}else {
+			} else {
 				pesquisarPorUsuarioLogado();
 			}
 		}
@@ -194,7 +191,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 			return false;
 		}
 	}
-	
+
 	public boolean verificarLider() {
 		if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
 			return true;

@@ -21,7 +21,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	private String senha;
 
 	private String senhaConfirm;
-	
+
 	private String senhaAtual;
 
 	private Integer matricula;
@@ -30,7 +30,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
 	public Usuario() {
 	}
-	
+
 	public Usuario(Long id) {
 		this.id = id;
 	}
