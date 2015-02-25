@@ -76,7 +76,10 @@ public class UsuarioProjetoMntController extends UsuarioProjetoController {
 		return irParaConsultar();
 	}
 	
-	
+		
+	public String voltarParaProjeto() {		
+		return "/paginas/projeto/consultarProjeto.xhtml?faces-redirect=true";
+	}
 	
 	public List<UsuarioProjeto> listarUsuariosDoProjeto(UsuarioProjeto usuarioProjeto){		
 		listaUsuarioProjeto = usuarioProjetoService.findByProjeto(usuarioProjeto);
