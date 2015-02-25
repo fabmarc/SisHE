@@ -15,4 +15,6 @@ public interface UsuarioDAO extends BaseDAO<Usuario> {
 	public Usuario updatePassword(Usuario entity) throws RegistroInexistenteException;
 
 	public Usuario findByLogin(String login);
+	
+	public List<Usuario> findGerentesDisponiveis();
 }
