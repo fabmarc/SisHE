@@ -207,7 +207,10 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			params.add(param);
 		}
 		try {
-			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM usuario WHERE id = ?", params);
+			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM BANCO_HORAS WHERE ID_USUARIO = ?", params);
+			for (int rows : affectedRows)
+				if (rows == 0) throw new RegistroInexistenteException();
+			affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM usuario WHERE id = ?", params);
 			for (int rows : affectedRows)
 				if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DataIntegrityViolationException d) {
