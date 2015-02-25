@@ -13,6 +13,7 @@ import com.indra.infra.controller.BaseController;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.UsuarioService;
 
 @ViewScoped
@@ -25,6 +26,9 @@ public class UsuarioLogado extends BaseController implements Serializable {
 
 	@Inject
 	private UsuarioService usuarioService;
+	
+	@Inject
+	private BancoHorasService bancoService;
 
 	@PostConstruct
 	private void init() {
@@ -91,6 +95,10 @@ public class UsuarioLogado extends BaseController implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	public void atualizarSaldo(){
+		putSessionAttr("saldo", bancoService.findByUsuario(new Usuario(getId())).getSaldo());
 	}
 
 }
