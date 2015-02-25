@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -97,18 +96,10 @@ public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException,
 			DeletarRegistroViolacaoFK {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public EstadoEnum findByCidade(Cidade cidade) {
-		StringBuilder sql = new StringBuilder();
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT estado.id as id, estado.nome as nome, estado.sigla as sigla ");
-		sql.append("FROM ESTADO INNER JOIN CIDADE ON (cidade.id_estado = estado.id) WHERE 1=1 ");
-		sql.append("AND cidade.id  = :idCidade");
-		params.addValue("idCidade", cidade.getId());
-		return EstadoEnum.obterEstado(getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new BeanPropertyRowMapper<Estado>(Estado.class)).getId());	
+		return EstadoEnum.obterEstado(cidade.getEstado().getId());	
 	}
 }
