@@ -41,8 +41,7 @@ public class UsuarioLogado extends BaseController implements Serializable {
 
 	public static Long getId() {
 		return (Long) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true))
-				.getAttribute("usuario_id");// (Long)
-											// getSessionAttr("usuario_id");
+				.getAttribute("usuario_id");
 	}
 
 	public String getNome() {
