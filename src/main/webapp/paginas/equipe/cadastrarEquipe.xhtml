@@ -5,6 +5,15 @@
 	<ui:define name="content">
 		<h:form id="mainForm">
 			<ui:insert>
+			
+			<!-- BreadCrumb -->
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Equipe" action="#{usuarioProjetoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Cadastrar" action="#{usuarioProjetoMnt.irParaConsultar()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+			
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				<br />
 				<p:fieldset id="fsEquipe" legend="Dados do Projeto" styleClass="classFieldSet">
@@ -44,7 +53,8 @@
 						</p:column>
 
 						<f:facet name="footer">
-							<div style="text-align: center; width: 100%">
+							<div style="width: 100%; height: 23px; position: relative;">
+								
 							</div>
 						</f:facet>
 					</p:dataTable>

@@ -5,10 +5,19 @@
 	<ui:define name="content">
 		<h:form id="mainForm">
 			<ui:insert>
+			
+			<!-- BreadCrumb -->
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Equipe" action="#{usuarioProjetoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Consultar" action="#{usuarioProjetoMnt.irParaConsultar()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+			
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				<br />
 				<!-- Div Corpo -->
-				<div class="divCorpo" style="padding-bottom: 10%;">
+				<div class="divCorpo" style="padding-bottom: 5%;">
 					<!-- Div conteudo -->
 					<div style="left: 0px; position: relative; width: 100%">
 				<p:fieldset id="fsEquipe" legend="Dados do Projeto" styleClass="classFieldSet">

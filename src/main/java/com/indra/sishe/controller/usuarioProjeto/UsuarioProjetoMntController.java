@@ -52,8 +52,8 @@ public class UsuarioProjetoMntController extends UsuarioProjetoController {
 		} else {
 			RequestContext.getCurrentInstance().execute("confirmExclusao.show()");
 		}
-	}
-
+	}	
+	
 	public void pesquisar() {
 		usuarioProjetoFiltro.setProjeto(projetoSelecionado);
 		listaUsuarioProjeto = usuarioProjetoService.findByProjeto(usuarioProjetoFiltro);
@@ -75,6 +75,8 @@ public class UsuarioProjetoMntController extends UsuarioProjetoController {
 		pesquisar();
 		return irParaConsultar();
 	}
+	
+	
 	
 	public List<UsuarioProjeto> listarUsuariosDoProjeto(UsuarioProjeto usuarioProjeto){		
 		listaUsuarioProjeto = usuarioProjetoService.findByProjeto(usuarioProjeto);

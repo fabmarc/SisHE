@@ -103,9 +103,7 @@ public class SistemaMntController extends SistemaController {
 	}
 
 	public List<Usuario> listarLideres() {
-
-		listaLideres = usuarioService.findByCargo("ROLE_LIDER, ROLE_FUNCIONARIO");
-
+		listaLideres = usuarioService.findByCargo("ROLE_LIDER");
 		return listaLideres;
 	}
 

@@ -5,6 +5,15 @@
 	<ui:define name="content">
 		<h:form id="mainForm">
 			<ui:insert>
+			
+			<!-- BreadCrumb -->
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Sistema" action="#{sistemaMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+				
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 
 				<div id="camposPesquisar" style="top: 17px; position: relative; width: 226px;">
@@ -35,7 +44,7 @@
 					</div>
 				</div>
 
-				<div style="top: -43px; position: relative;">
+				<div style="top: -79px; position: relative;">
 					<p:dataTable style="top:10%;" rowKey="#{sistema.id}" selection="#{sistemaMnt.sistemasSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sistemaDt" var="sistema"
 						value="#{sistemaMnt.listaSistema}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">
@@ -48,11 +57,11 @@
 						<p:column headerText="Nome" style="max-width:290px; text-overflow:ellipsis;">
 							<h:outputText value="#{sistema.nome}" />
 						</p:column>
-						<p:column headerText="Líder" style="width:15%; text-align:center">
+						<p:column headerText="Líder" style="width:15%;">
 							<h:outputText value="#{sistema.lider.nome}" />
 						</p:column>
 
-						<p:column headerText="Projeto" style="width:15%; text-align:center">
+						<p:column headerText="Projeto" style="width:15%; ">
 							<h:outputText value="#{sistema.projeto.nome}" />
 						</p:column>
 

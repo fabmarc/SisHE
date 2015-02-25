@@ -136,7 +136,7 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 		return getJdbcTemplate().query(
 				"SELECT id,id_estado,descricao, periodo_acerto , " 
 				 + "dias_antecedencia,(limite_positivo / 60) as limite_positivo,"
-				 + "(limite_negativo / 60)limite_negativo" + "FROM sindicato",
+				 + "(limite_negativo / 60)limite_negativo " + " FROM sindicato",
 				new BeanPropertyRowMapper<Sindicato>(Sindicato.class));
 	}
 
