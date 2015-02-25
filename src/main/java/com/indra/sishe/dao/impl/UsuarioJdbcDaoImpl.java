@@ -305,4 +305,16 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		return entity;
 	}
 
+	@Override
+	public List<Usuario> findGerentesDisponiveis() {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT usuario.id, usuario.id_cargo as id_cargo, cargo.nome as nome_cargo, usuario.nome as nome, usuario.matricula, usuario.email as email, usuario.login as login, usuario.senha as senha, usuario.id_sindicato as id_sindicato, sindicato.descricao as sindicato_descricao, cidade.id as id_cidade, cidade.id_estado as id_cidade_estado, cidade.nome as cidade_nome ");
+		sql.append("FROM usuario LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) WHERE 1=1 ");
+
+		
+		return consultar(sql, params);
+	}
+
 }
