@@ -16,7 +16,7 @@
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
-				<div style="top: 17px; position: relative; width: 226px; height: 50px;">
+				<div style="top: -2px; position: relative; width: 226px; height: 50px;">
 					<div style="position: relative;">
 						<p:outputLabel value="Nome:" />
 						<p:inputText value="#{projetoMnt.projetoFiltro.nome}" maxlength="50" style="width:150px; position: relative; top: -6px;" />
@@ -27,24 +27,24 @@
 				</div>
 
 				<div style="position: relative; top: 38px;">
-					<p:dataTable style="top:10%;" rowKey="#{projeto.id}" selection="#{projetoMnt.projetosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="projetoDt" var="projeto" value="#{projetoMnt.listaProjetos}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="position: relative;top: -22px;" sortMode="multiple" rowKey="#{projeto.id}" selection="#{projetoMnt.projetosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="projetoDt" var="projeto" value="#{projetoMnt.listaProjetos}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">Projetos</f:facet>
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<p:column headerText="Código" style="width:10%; text-align:center;">
+						<p:column headerText="Código" style="width:10%; text-align:center;" sortBy="#{projeto.id}">
 							<h:outputText value="#{projeto.id}" />
 						</p:column>
 
-						<p:column headerText="Nome">
+						<p:column headerText="Nome" sortBy="#{projeto.nome}">
 							<h:outputText value="#{projeto.nome}" />
 						</p:column>
 
-						<p:column headerText="Gerente" style="width: 25%;">
+						<p:column headerText="Gerente" style="width: 25%;" sortBy="#{projeto.gerente.nome}">
 							<h:outputText value="#{projeto.gerente.nome}" />
 						</p:column>
 
-						<p:column headerText="Descrição" style="max-width:200px;text-overflow:ellipsis;">
+						<p:column headerText="Descrição" style="max-width:200px;text-overflow:ellipsis;" sortBy="#{projeto.descricao}">
 							<h:outputText value="#{projeto.descricao}" />
 						</p:column>
 

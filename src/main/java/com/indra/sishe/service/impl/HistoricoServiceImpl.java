@@ -15,14 +15,14 @@ import com.indra.sishe.service.HistoricoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
-public class HistoricoServiceImpl extends StatelessServiceAb implements HistoricoService{
+public class HistoricoServiceImpl extends StatelessServiceAb implements HistoricoService {
 
 	private static final long serialVersionUID = 4285770176009473735L;
-	
+
 	@Autowired
 	private HistoricoDAO historicoDao;
-	
-	public HistoricoServiceImpl(){
+
+	public HistoricoServiceImpl() {
 	}
 
 	@Override
@@ -52,13 +52,13 @@ public class HistoricoServiceImpl extends StatelessServiceAb implements Historic
 	@Override
 	public void remove(Long id) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -70,7 +70,5 @@ public class HistoricoServiceImpl extends StatelessServiceAb implements Historic
 	public List<DadosRelatorio> gerarRelatorio(String mes, String ano) {
 		return historicoDao.gerarRelatorio(mes, ano);
 	}
-	
-	
 
 }

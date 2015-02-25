@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" 
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:sec="http://www.springframework.org/security/tags">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:sec="http://www.springframework.org/security/tags">
 <f:view contentType="text/html" encoding="UTF-8">
 	<h:head>
 		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/bar_chart_22x22.png" />
@@ -8,7 +7,7 @@
 		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
 		<h:outputStylesheet library="css" name="sishe.css" />
 		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
-		
+
 		<ui:insert name="title">
 			<title>Banco de Horas</title>
 		</ui:insert>
@@ -26,9 +25,9 @@
 						<font color="#F8F8FF" style="font-size: 25px;">Banco de Horas</font>
 					</h2>
 				</div>
-				<div style="background-color: #818181; width: 100%; position: relative; height: 1px;"/>
+				<div style="background-color: #818181; width: 100%; position: relative; height: 1px;" />
 				<div id="userLogado" style="width: 98.5%; position: absolute; height: 25px; z-index: 100; text-align: right;">
-					<h:outputLabel value="Olá, #{usuarioLogado.nome}" style="color: rgb(248, 248, 255); font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px; top: 2px; position: relative;" rendered="#{usuarioLogado.nome != null}" />
+					<h:outputLabel value="Olá, #{usuarioLogado.nome}" style="color: rgb(248, 248, 255); font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px; top: 2px; position: relative; width: auto; float: right" rendered="#{usuarioLogado.nome != null}" />
 				</div>
 				<div class="logoCabeRodape" />
 			</div>
@@ -37,27 +36,27 @@
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
 
-						<div style="float: right; position: relative; width: 75px;" id="divAcoes">
-							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
-								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
-							</div>
-							<div style="float: left; position: relative; width: 20px; top: -6px; left: 5px;" id="divSenha">
-								<h:commandLink action="#{loginController.irParaAlterarSenha()}">
-									<p:graphicImage url="/resources/images/senha.png" title="Alterar Senha" />
-								</h:commandLink>
-							</div>
-							<div style="float: left; position: relative; width: 20px; top: -6px; left: 10px;" id="divLogout">
+						<div style="float: right; position: relative; width: 350px; height: 5px;" id="divAcoes">
+							<div style="float: right; position: relative; width: 20px; top: -6px; left: 0px;" id="divLogout">
 								<h:commandLink action="#{loginController.logout}">
 									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
 								</h:commandLink>
 							</div>
-						</div>
-						<div class="divContSaldo">
-							<div style="float:right;" >
-								<p:graphicImage url="/resources/images/saldo.png" style="height: 20px; position: relative;"/>
+							<div style="float: right; position: relative; width: 20px; top: -6px; left: -5px;" id="divSenha">
+								<h:commandLink action="#{loginController.irParaAlterarSenha()}">
+									<p:graphicImage url="/resources/images/senha.png" title="Alterar Senha" />
+								</h:commandLink>
 							</div>
-							<div class="divSaldo" title="Saldo">
-								<label style="right: 10px; height: 20px; position: relative; width: 183px; float:left; z-index:-1;">Saldo = #{usuarioLogado.saldoFormatado}</label>
+							<div style="float: right; position: relative; width: 25px; top: -10px; left: -10px;" id="divHome">
+								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
+							</div>
+							<div class="divContSaldo" style="left: -18px;">
+								<div style="float: right;">
+									<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;" />
+								</div>
+								<div class="divSaldo" title="Saldo">
+									<label style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</label>
+								</div>
 							</div>
 						</div>
 						<p:menubar style="top:20px;">
@@ -92,8 +91,8 @@
 							<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO">
 								<p:submenu label="Solicitação">
 									<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultarPorUsuario()}" icon="ui-icon-search" />
-									<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard"/>
+									<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard" />
 								</p:submenu>
 							</sec:authorize>
 						</p:menubar>

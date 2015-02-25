@@ -17,7 +17,7 @@
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
 
-				<div class="divCorpo" style="padding-bottom: 5%;">
+				<div class="divCorpo" style="padding-bottom: 5%;position: relative;top: 10%;">
 					<div style="width: 730px; position: relative; height: 60px;">
 						<div id="divData" style="position: relative; width: 110px; height: 41px;">
 							<p:outputLabel value="Data:" for="calendarioBusca" />
@@ -38,21 +38,25 @@
 								<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
 							</p:selectOneMenu>
 						</div>
-						<div id="divSolicitante" style="position: relative; top: -151px; left: 384px; width: 129px;">
-							<p:outputLabel value="Solicitante:" />
-							<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 110px;" />
-						</div>
-						<div id="divConsultarTodos" style="width: 110px; position: relative; top: -232px;left: 523px;">
-							<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" />
-							<p:selectBooleanCheckbox value="#{solicitacaoMnt.todasSolicitacoes}" style="top: 4px;position: relative;" />
-						</div>
+						<ui:fragment rendered="#{solicitacaoMnt.verificarCargo()}">
+							<div id="divSolicitante" style="position: relative; top: -151px; left: 384px; width: 129px;">
+								<p:outputLabel value="Solicitante:" />
+								<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 110px;" />
+							</div>
+							<div id="divConsultarTodos" style="width: 110px; position: relative; top: -232px; left: 523px;">
+								<p:outputLabel value="Minhas Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{solicitacaoMnt.verificarLider()}" />
+								<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{!solicitacaoMnt.verificarLider()}" />
+								<p:selectBooleanCheckbox value="#{solicitacaoMnt.todasSolicitacoes}" style="top: 4px;position: relative;" />
+							</div>
+						</ui:fragment>
 					</div>
 					<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
 						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" rendered="#{solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
 						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" rendered="#{!solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
 					</div>
 
-					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}"
+						emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">Solicitações</f:facet>
 
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">

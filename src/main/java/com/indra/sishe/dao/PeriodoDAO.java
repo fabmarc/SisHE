@@ -9,6 +9,6 @@ import com.indra.sishe.entity.Regra;
 public interface PeriodoDAO extends BaseDAO<Periodo> {
 
 	public List<Periodo> findByFilter(Periodo entity);
-	
+
 	public List<Periodo> findByRegra(Regra entity);
 }

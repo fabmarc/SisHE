@@ -1,8 +1,8 @@
+/* Incluído por Rodrigo */
 html {
 	height: 100%;
 	overflow: auto;
 }
-
 
 .nomeSistema {
 	text-align: right;
@@ -22,11 +22,10 @@ html {
 	height: 400px;
 	background-size: 80%;
 	opacity: 0.1;
-	filter: alpha(opacity =   10); /* IE8 e anteriores */
+	filter: alpha(opacity =     10); /* IE8 e anteriores */
 }
 
 .botao3d {
-	/*display: block;*/
 	background: -webkit-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
 	background: -moz-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
 	background: -o-linear-gradient(bottom, #C4C4C4, #F3F3F3 70%);
@@ -84,7 +83,7 @@ html {
 .rodape {
 	text-align: center;
 	width: 100%;
-	color: Black;	
+	color: Black;
 	background-color: rgb(243, 243, 243);
 	height: 38px;
 	position: fixed;
@@ -98,119 +97,125 @@ html {
 	text-align: center;
 }
 
-.divLogin{
+.divLogin {
 	top: 70px;
 	left: 200px;
 	position: relative;
 	width: 327px;
 	height: 230px;
-	border: 1px solid rgba(134, 134, 134, 0.48); 
-	-moz-box-shadow: 5px 5px 5px #ADADAD; 
-	-webkit-box-shadow: 5px 5px 5px #ADADAD; 
+	border: 1px solid rgba(134, 134, 134, 0.48);
+	-moz-box-shadow: 5px 5px 5px #ADADAD;
+	-webkit-box-shadow: 5px 5px 5px #ADADAD;
 	border-radius: 21px;
 }
 
-.divLoginCenter{
+.divLoginCenter {
 	position: relative;
 	width: 250px;
 	position: absolute;
-	top: 33%;left: 30%;
+	top: 33%;
+	left: 30%;
 	margin-top: -50px;
 	margin-left: -50px;
 }
 
-.divMsg{
+.divMsg {
 	position: relative;
 	top: 12px;
 }
 
-.divCorpo{
+.divCorpo {
 	position: relative;
 	width: 100%;
 	top: 10px;
 }
 
-.calendario input{
-	width:90px !important;
+.calendario input {
+	width: 90px !important;
 }
 
-.breadCrumb{
-	top:10px;
-	position:relative;
-	background: #FFFFFF -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+.breadCrumb {
+	top: 10px;
+	position: relative;
+	background: #FFFFFF
+		-webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255,
+		0.8)), to(rgba(255, 255, 255, 0)));
 	border: 1px solid #FFFFFF;
 }
 
-.divContSaldo{
+.divContSaldo {
 	float: right;
 	position: relative;
 	width: 260px;
 	top: -6px;
 	height: 20px;
 	text-align: right;
-	right: 8px;							
+	right: 8px;
 }
 
-.divSaldo{
-	left: 17px;
+.divSaldo {
+	left: 23px;
 	position: relative;
 	overflow: hidden;
 	width: 16px;
 	float: right;
-	right: 8px;		
+	right: 8px;
 	-webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
-    transition: width 2s;					
+	transition: width 2s;
 }
-.divSaldo:hover{
-	width: 210px;					
+
+.divSaldo:hover {
+	width: 210px;
 }
+
+/* Fim Bloco Rodrigo */
+
 
 /*Incluído por Diego*/
-
-.divNomeProjeto{
-position: relative;
-right: initial;
-top: -24px;
-width: 263px;
-height: 1px;
-}
-.objNomeProjeto{
+.divNomeProjeto {
 	position: relative;
-top: -25px;
-right: -45px;
-text-align: justify;
-text-overflow: initial;
-text-rendering: optimizeLegibility;
-font-weight: bolder;
+	right: initial;
+	top: -24px;
+	width: 263px;
+	height: 1px;
 }
 
-.objNomeGerente{
+.objNomeProjeto {
 	position: relative;
-top: -25px;
-right: -59px;
-text-align: justify;
-text-overflow: initial;
-text-rendering: optimizeLegibility;
-font-weight: bolder;
+	top: -25px;
+	right: -45px;
+	text-align: justify;
+	text-overflow: initial;
+	text-rendering: optimizeLegibility;
+	font-weight: bolder;
 }
 
-.divNomeGerente{
+.objNomeGerente {
 	position: relative;
-top: -24px;
-right: -250px;
-height: 1px;
-}
-.classFieldSet .ui-fieldset, .ui-fieldset .ui-fieldset-legend {
-top: -1px;
-width: inherit;
-height: 0px;
-text-align: start;
-position: relative;
-text-align: 1px;
-line-height: 1px;
-font-size: small;
+	top: -25px;
+	right: -59px;
+	text-align: justify;
+	text-overflow: initial;
+	text-rendering: optimizeLegibility;
+	font-weight: bolder;
 }
 
+.divNomeGerente {
+	position: relative;
+	top: -24px;
+	right: -250px;
+	height: 1px;
+}
 
+.classFieldSet .ui-fieldset,.ui-fieldset .ui-fieldset-legend {
+	top: -1px;
+	width: inherit;
+	height: 0px;
+	text-align: start;
+	position: relative;
+	text-align: 1px;
+	line-height: 1px;
+	font-size: small;
+}
 
 /*Fim Bloco Diego*/

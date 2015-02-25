@@ -25,14 +25,14 @@ public class RelatorioController extends BaseController implements Serializable 
 	private DadosRelatorio selectedDocument;
 
 	private TreeNode table;
-	
+
 	private String ano;
-	
+
 	private MesEnum mes;
 
 	@Inject
 	protected transient HistoricoService historicoService;
-	
+
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
 
@@ -55,7 +55,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	public void pesquisar() {
 		table = null;
 		this.table = gerarHistorico();
-		if(!mostrarTable()){
+		if (!mostrarTable()) {
 			returnInfoMessage(messageProvider.getMessage("msg.info.relatorio.vazio"));
 		}
 	}
@@ -77,7 +77,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public TreeNode gerarHistorico() {
-		
+
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
 		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()));
 		Integer idMarcador = -1;
@@ -87,38 +87,42 @@ public class RelatorioController extends BaseController implements Serializable 
 		Integer saldoMinu = 0;
 		for (DadosRelatorio dadoTemp : dados) {
 			if (dadoTemp.getIdSolicitacao() != idMarcador) {
-				work = new DefaultTreeNode(new DadosRelatorio(dadoTemp.getDataSolicitacao(), "-", dadoTemp.getHoraInicioSolicitacao().substring(0, 5), dadoTemp.getHoraFimSolicitacao().substring(0, 5), dadoTemp.obterMinutosSoliciacao(), dadoTemp.porcentagemGeral(), dadoTemp.obterMinutosGerado()), table);
+				work = new DefaultTreeNode(new DadosRelatorio(dadoTemp.getDataSolicitacao(), "-", dadoTemp
+						.getHoraInicioSolicitacao().substring(0, 5), dadoTemp.getHoraFimSolicitacao().substring(0,
+						5), dadoTemp.obterMinutosSoliciacao(), dadoTemp.porcentagemGeral(),
+						dadoTemp.obterMinutosGerado()), table);
 				idMarcador = dadoTemp.getIdSolicitacao();
 				saldo = saldo + Integer.parseInt(dadoTemp.getTotal());
 				saldoMinu = saldoMinu + dadoTemp.minutosSolicitacao();
 			}
-			new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", dadoTemp.getMinutos() + "min", dadoTemp.getPorcentagem() + "%", dadoTemp.getValor() + "min"), work);
+			new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", dadoTemp.getMinutos() + "min",
+					dadoTemp.getPorcentagem() + "%", dadoTemp.getValor() + "min"), work);
 			total = total + Integer.parseInt(dadoTemp.getValor());
 		}
 		
-		//exibir o saldo
-		if(!(table == null || table.getChildren().size() < 1)){
-			//bancoHorasService.findByUsuario(new Usuario(UsuarioLogado.getId())).getSaldo();//Total no banco de horas do usuario
-			new DefaultTreeNode(new DadosRelatorio("Total", "-", "-", "-", saldoMinu.toString() + "min (" + DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min (" + DadosRelatorio.formatarHora(saldo) + " horas)"), table);
+		// exibir o saldo
+		if (!(table == null || table.getChildren().size() < 1)) {
+			new DefaultTreeNode(new DadosRelatorio("Total", "-", "-", "-", saldoMinu.toString() + "min ("
+					+ DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min ("
+					+ DadosRelatorio.formatarHora(saldo) + " horas)"), table);
 		}
 		return table;
 	}
 
 	public boolean mostrarTable() {
-		if (table == null || table.getChildren().size()<1) {
+		if (table == null || table.getChildren().size() < 1) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-	
+
 	public List<MesEnum> obterListaMes() {
-		//List<MesEnum> listaDias = new ArrayList<MesEnum>(Arrays.asList(MesEnum.values()));
 		List<MesEnum> listaDias = MesEnum.seisMeses();
 		return listaDias;
 	}
-	
-	public String irParaRelatorio(){
+
+	public String irParaRelatorio() {
 		return "/paginas/solicitacao/relatorio.xhtml?faces-redirect=true";
 	}
 

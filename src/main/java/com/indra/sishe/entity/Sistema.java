@@ -2,7 +2,7 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
-public class Sistema implements Serializable, Comparable<Sistema> {
+public class Sistema implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Long id;
@@ -48,17 +48,6 @@ public class Sistema implements Serializable, Comparable<Sistema> {
 		this.lider = usuario;
 		this.nome = nome;
 		this.descricao = descricao;
-	}
-
-	@Override
-	public int compareTo(Sistema o) {		
-		
-		int valor = nome.toLowerCase().compareTo(o.getNome().toLowerCase());
-		if (valor != 0) {
-			return valor;
-		} else {
-			return 0;
-		}
 	}
 
 	public Long getId() {

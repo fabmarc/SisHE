@@ -25,26 +25,26 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 	private String nome;
 
 	private PermissaoEnum role;
-	
-	public Cargo() {		
+
+	public Cargo() {
 	}
 
-	public Long getId() {		
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long idCargo) {		
+	public void setId(Long idCargo) {
 		this.id = idCargo;
 	}
 
-	public String getNome() {		
+	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nomeCargo) {
 		this.nome = nomeCargo;
 	}
-	
+
 	public PermissaoEnum getRole() {
 		return role;
 	}
@@ -64,24 +64,17 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 
 	@Override
 	public boolean equals(Object obj) {
-		
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 		Cargo other = (Cargo) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
+			if (other.id != null) return false;
+		} else if (!id.equals(other.id)) return false;
 		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
+			if (other.nome != null) return false;
+		} else if (!nome.equals(other.nome)) return false;
 		return true;
 	}
 

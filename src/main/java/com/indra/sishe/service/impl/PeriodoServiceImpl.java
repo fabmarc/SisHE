@@ -49,9 +49,9 @@ public class PeriodoServiceImpl extends StatelessServiceAb implements PeriodoSer
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Periodo");
 		} catch (RegistroDuplicadoException d) {
-			if(d.getMessageCode().equalsIgnoreCase("msg.error.faixa.tempo.existente")){
+			if (d.getMessageCode().equalsIgnoreCase("msg.error.faixa.tempo.existente")) {
 				throw new ApplicationException(d, "msg.error.faixa.tempo.existente");
-			}else{
+			} else {
 				throw new ApplicationException(d, "msg.error.campo.existente", "periodo", "horário");
 			}
 		}

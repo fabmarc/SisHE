@@ -40,10 +40,10 @@ public class PeriodoMntController extends PeriodoController {
 		periodoFiltro = (Periodo) getFlashAttr("periodoFiltro");
 		if (periodoFiltro == null) periodoFiltro = new Periodo();
 
-		regraSelecionada = (Regra) getSessionAttr("regraSelecionadaFiltro");			
-		
+		regraSelecionada = (Regra) getSessionAttr("regraSelecionadaFiltro");
+
 		listaPeriodos = new ArrayList<Periodo>();
-		
+
 	}
 
 	public void pesquisar() {
@@ -89,8 +89,6 @@ public class PeriodoMntController extends PeriodoController {
 		}
 	}
 
-	
-	
 	public List<Periodo> getListaPeriodos() {
 		pesquisar();
 		return listaPeriodos;

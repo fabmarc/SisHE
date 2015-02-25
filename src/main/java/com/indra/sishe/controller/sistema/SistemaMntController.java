@@ -1,7 +1,6 @@
 package com.indra.sishe.controller.sistema;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -62,7 +61,6 @@ public class SistemaMntController extends SistemaController {
 
 	public void pesquisar() {		
 		listaSistema = sistemaService.findByFilter(sistemaFiltro);
-		Collections.sort(listaSistema);
 		searched = true;
 	}
 

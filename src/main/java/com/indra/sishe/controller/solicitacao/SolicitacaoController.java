@@ -1,11 +1,16 @@
 package com.indra.sishe.controller.solicitacao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import com.indra.infra.controller.BaseController;
+import com.indra.sishe.controller.usuario.UsuarioLogado;
+import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
+import com.indra.sishe.service.SistemaService;
 import com.indra.sishe.service.SolicitacaoService;
 
 public abstract class SolicitacaoController extends BaseController implements Serializable{
@@ -15,19 +20,25 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	@Inject
 	protected transient SolicitacaoService solicitacaoService;
 	
+	@Inject
+	private SistemaService sistemaService;
+	
 	protected Solicitacao solicitacaoFiltro = new Solicitacao();
 	
 	protected Boolean searched;
+	
+	private List<Sistema> listaSistemas = new ArrayList<Sistema>();
+	
+	public List<Sistema> obterSistemas() {
+		listaSistemas = sistemaService.findByProjetoByUsuarioLogado(UsuarioLogado.getId());
+		return listaSistemas;
+	}
 	
 	public String irParaConsultarPendentes() {
 		return "/paginas/solicitacao/solicitacaoPendente.xhtml?faces-redirect=true";
 	}
 	
 	public String irParaConsultar() {
-		return "/paginas/solicitacao/consultarSolicitacao.xhtml?faces-redirect=true";
-	}
-	
-	public String irParaConsultarPorUsuario() {
 		return "/paginas/solicitacao/consultarSolicitacao.xhtml?faces-redirect=true";
 	}
 
@@ -64,6 +75,14 @@ public abstract class SolicitacaoController extends BaseController implements Se
 	public void setSearched(Boolean searched) {
 		this.searched = searched;
 	}
-	
+
+	public List<Sistema> getListaSistemas() {
+		return listaSistemas;
+	}
+
+	public void setListaSistemas(List<Sistema> listaSistemas) {
+		this.listaSistemas = listaSistemas;
+	}
+
 
 }

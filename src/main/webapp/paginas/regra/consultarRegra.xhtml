@@ -17,7 +17,7 @@
 			<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 			</div>
-			<div style="top: 17px; position: relative; width: 226px; height: 50px;">
+			<div style="top: -2px; position: relative; width: 226px; height: 50px;">
 				<div style="position: relative;">
 					<p:outputLabel value="Nome:" />
 					<p:inputText value="#{regraMnt.regraFiltro.descricao}" maxlength="100" style="width:150px; position: relative; top: -6px;" />
@@ -29,33 +29,32 @@
 			</div>
 
 				<div style="position: relative; top: 38px;">
-					<p:dataTable style="top:10%;" rowKey="#{regra.id}" selection="#{regraMnt.regrasSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="regraDt" var="regra" value="#{regraMnt.listaRegras}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable style="top:17px;" sortMode="multiple" rowKey="#{regra.id}" selection="#{regraMnt.regrasSelecionadas}" paginatorPosition="bottom" paginator="true" rows="10" id="regraDt" var="regra" value="#{regraMnt.listaRegras}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">Regras</f:facet>
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
 						</p:column>
 
-						<p:column headerText="Nome" style="max-width:200px;text-overflow:ellipsis;">
+						<p:column headerText="Nome" style="max-width:200px;text-overflow:ellipsis;" sortBy="#{regra.descricao}">
 							<h:outputText value="#{regra.descricao}" />
 						</p:column>
 
-						<p:column headerText="Sindicato" style="width:10%; max-width: 107px; text-overflow: ellipsis;">
-							<h:outputText value="#{regra.sindicato.descricao}">
-							</h:outputText>
+						<p:column headerText="Sindicato" style="width:10%; max-width: 107px; text-overflow: ellipsis;" sortBy="#{regra.sindicato.descricao}">
+							<h:outputText value="#{regra.sindicato.descricao}"/>
 						</p:column>
 
-						<p:column headerText="Data Inicial" style="text-align:center;width:90px">
+						<p:column headerText="Data Inicial" style="text-align:center;width:90px" sortBy="#{regra.dataInicio}">
 							<h:outputText value="#{regra.dataInicio}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Data Final" style="text-align:center;width:90px">
+						<p:column headerText="Data Final" style="text-align:center;width:90px" sortBy="#{regra.dataFim}">
 							<h:outputText value="#{regra.dataFim}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Feriado" style="text-align:center;width:10%">
+						<p:column headerText="Feriado" style="text-align:center;width:10%" sortBy="#{regra.porcentagem}">
 							<h:outputText value="#{regra.porcentagem}%" />
 						</p:column>
 

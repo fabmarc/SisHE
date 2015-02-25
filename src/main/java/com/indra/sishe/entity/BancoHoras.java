@@ -2,19 +2,19 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
-public class BancoHoras implements Serializable{
-	
+public class BancoHoras implements Serializable {
+
 	private static final long serialVersionUID = -6168029499594993488L;
 
 	private Long id;
-	
+
 	private Usuario usuario;
-	
+
 	private Long saldo;
 
 	public BancoHoras() {
 	}
-	
+
 	public BancoHoras(Usuario usuario, Long saldo) {
 		this.usuario = usuario;
 		this.saldo = saldo;
@@ -63,5 +63,5 @@ public class BancoHoras implements Serializable{
 		} else if (!id.equals(other.id)) return false;
 		return true;
 	}
-	
+
 }

@@ -2,18 +2,18 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 
-public class HistoricoDetalhes implements Serializable{
+public class HistoricoDetalhes implements Serializable {
 
 	private static final long serialVersionUID = 3339476117649747379L;
 
 	private Long id;
-	
+
 	private Historico historico;
-	
+
 	private Integer minutos;
-	
+
 	private Integer porcentagem;
-	
+
 	private Integer valor;
 
 	public HistoricoDetalhes() {
@@ -25,7 +25,7 @@ public class HistoricoDetalhes implements Serializable{
 		this.valor = valor;
 		this.historico = historico;
 	}
-	
+
 	public HistoricoDetalhes(Integer minutos, Integer valor, Historico historico) {
 		this.minutos = minutos;
 		this.valor = valor;
@@ -91,5 +91,5 @@ public class HistoricoDetalhes implements Serializable{
 		} else if (!id.equals(other.id)) return false;
 		return true;
 	}
-	
+
 }

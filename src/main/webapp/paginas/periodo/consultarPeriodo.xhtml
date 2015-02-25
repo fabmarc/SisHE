@@ -60,17 +60,17 @@
 						</p:column>
 
 						<!-- Hora Inicio -->
-						<p:column headerText="Hora Inicio" style="width:15%;">
-							<div style="text-align: center;">
-								<h:outputText value="#{periodo.horaInicio}" />
-							</div>
+						<p:column headerText="Hora Inicio" style="text-align: center;width:15%;" sortBy="#{periodo.horaInicio}">
+							<h:outputText value="#{periodo.horaInicio}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputText>
 						</p:column>
 
 						<!-- Hora Fim -->
-						<p:column headerText="Hora Fim" style="width:15%;">
-							<div style="text-align: center;">
-								<h:outputText value="#{periodo.horaFim}" />
-							</div>
+						<p:column headerText="Hora Fim" style="text-align: center;width:15%;" sortBy="#{periodo.horaFim}">
+							<h:outputText value="#{periodo.horaFim}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputText>
 						</p:column>
 
 						<!-- Porcentagem -->
@@ -94,7 +94,7 @@
 									<p:commandLink value="Voltar" action="#{periodoMnt.voltarRegra()}" />
 								</div>
 								<!-- Fim div Voltar -->
-								
+
 								<!-- Div Açao -->
 								<div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;">
 									<p:commandLink value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" />

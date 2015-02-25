@@ -116,8 +116,8 @@ public class SistemaServiceImpl extends StatelessServiceAb implements SistemaSer
 	}
 
 	@Override
-	public List<Sistema> findByProjeto(Sistema sistema) {
-		return null;
+	public List<Sistema> findByProjetoByUsuarioLogado(Long idUsuarioLogado) {
+		return sistemaDao.findByProjetoByUsuarioLogado(idUsuarioLogado);
 	}
 
 }

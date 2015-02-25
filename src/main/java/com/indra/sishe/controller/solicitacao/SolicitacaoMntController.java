@@ -14,7 +14,6 @@ import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.entity.HistoricoDetalhes;
-import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Solicitacao;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.enums.StatusEnum;
@@ -31,8 +30,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	private List<Solicitacao> listaSolicitacoes;
 
 	private List<Solicitacao> solicitacoesSelecionadas;
-
-	private List<Sistema> listaSistemas;
 
 	private Solicitacao solicitacaoDetalhe;
 
@@ -53,15 +50,13 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	public void init() {
 
 		MessageProvider.setInstance(messageProvider);
-		setListaSistemas(obterListaSistemas());
+		setListaSistemas(obterSistemas());
 
 		searched = (Boolean) getFlashAttr("searched");
-		if (searched == null)
-			searched = false;
+		if (searched == null) searched = false;
 
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
-		if (solicitacaoFiltro == null)
-			solicitacaoFiltro = new Solicitacao();
+		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
 		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
 		pesquisar();
@@ -73,7 +68,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		} else {
 			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
 				pesquisarPorProjeto();
-			}else {
+			} else {
 				pesquisarPorUsuarioLogado();
 			}
 		}
@@ -136,8 +131,8 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		} catch (Exception e) {
 			messager.error(e.getMessage());
 		}
-		pesquisarPorUsuarioLogado();
-		return irParaConsultarPorUsuario();
+		pesquisar();
+		return irParaConsultar();
 	}
 
 	public void beforeAprovarSolicitacao() {
@@ -197,8 +192,12 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		}
 	}
 
-	private List<Sistema> obterListaSistemas() {
-		return sistemaService.findAll();
+	public boolean verificarLider() {
+		if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public List<StatusEnum> listaStatus() {
@@ -243,14 +242,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setTodasSolicitacoes(boolean todosUsuarios) {
 		this.todasSolicitacoes = todosUsuarios;
-	}
-
-	public List<Sistema> getListaSistemas() {
-		return listaSistemas;
-	}
-
-	public void setListaSistemas(List<Sistema> listaSistemas) {
-		this.listaSistemas = listaSistemas;
 	}
 
 }

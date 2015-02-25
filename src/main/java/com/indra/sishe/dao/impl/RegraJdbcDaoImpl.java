@@ -22,7 +22,6 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.RegraDAO;
-import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Regra;
 import com.indra.sishe.entity.Sindicato;
 
@@ -90,9 +89,8 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT id, id_sindicato, data_inicio, data_fim FROM regra ");
-		sql.append("WHERE ((:dataInicio BETWEEN data_inicio AND data_fim) OR (:dataFinal BETWEEN data_inicio AND data_fim)) ");
+		sql.append("WHERE id_sindicato = :idSidicato AND ((:dataInicio BETWEEN data_inicio AND data_fim) OR (:dataFinal BETWEEN data_inicio AND data_fim)) ");
 		sql.append("OR ((data_inicio BETWEEN :dataInicio AND :dataFinal) OR (data_fim BETWEEN :dataInicio AND :dataFinal)) ");
-		sql.append("AND id_sindicato = :idSidicato ");
 		params.addValue("idSidicato", regra.getSindicato().getId());
 		params.addValue("dataInicio", regra.getDataInicio());
 		params.addValue("dataFinal", regra.getDataFim());
@@ -127,26 +125,24 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 	@Override
 	public Regra save(Regra regra) throws RegistroDuplicadoException {
 
-			try {
-				if (validarRegra(regra, "cadastrar")) {
-					MapSqlParameterSource params = new MapSqlParameterSource();
-					params.addValue("id_sindicato", regra.getSindicato().getId());
-					params.addValue("descricao", regra.getDescricao());
-					params.addValue("data_inicio", regra.getDataInicio());
-					params.addValue("data_fim", regra.getDataFim());
-					params.addValue("porcentagem_feriado", regra.getPorcentagem());
-					Number key = insertRegra.executeAndReturnKey(params);
-					regra.setId(key.longValue());
-					return regra;
-				}else {
-					throw new RegistroDuplicadoException("Intervalo existente");
-				}
-			} catch (DuplicateKeyException e) {
-				throw new RegistroDuplicadoException(e.toString());
+		try {
+			if (validarRegra(regra, "cadastrar")) {
+				MapSqlParameterSource params = new MapSqlParameterSource();
+				params.addValue("id_sindicato", regra.getSindicato().getId());
+				params.addValue("descricao", regra.getDescricao());
+				params.addValue("data_inicio", regra.getDataInicio());
+				params.addValue("data_fim", regra.getDataFim());
+				params.addValue("porcentagem_feriado", regra.getPorcentagem());
+				Number key = insertRegra.executeAndReturnKey(params);
+				regra.setId(key.longValue());
+				return regra;
+			} else {
+				throw new RegistroDuplicadoException("Intervalo existente");
 			}
+		} catch (DuplicateKeyException e) {
+			throw new RegistroDuplicadoException(e.toString());
 		}
-
-	
+	}
 
 	@Override
 	public Regra update(Regra regra) throws RegistroInexistenteException, RegistroDuplicadoException {
@@ -212,15 +208,9 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 				public Regra mapRow(ResultSet rs, int idx) throws SQLException {
 					Sindicato sindicato = new Sindicato();
 					Regra regra = new Regra();
-					Estado estado = new Estado();
-
-					estado.setId(rs.getLong("idEstado"));
-					estado.setNome(rs.getString("nomeEstado"));
-					estado.setSigla(rs.getString("siglaEstado"));
 
 					sindicato.setId(rs.getLong("idSindicato"));
 					sindicato.setDescricao(rs.getString("nomeSindicato"));
-					sindicato.setEstado(estado);
 
 					regra.setId(rs.getLong("id"));
 					regra.setSindicato(sindicato);
