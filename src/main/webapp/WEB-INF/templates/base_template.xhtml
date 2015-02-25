@@ -28,7 +28,7 @@
 				</div>
 				<div style="background-color: #818181; width: 100%; position: relative; height: 1px;"/>
 				<div id="userLogado" style="width: 98.5%; position: absolute; height: 25px; z-index: 100; text-align: right;">
-					<h:outputLabel value="Olá, #{usuarioLogado.nome}" style="color: rgb(248, 248, 255); font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px; top: 2px; position: relative;" rendered="#{usuarioLogado.nome != null}" />
+					<h:outputLabel value="Olá, #{usuarioLogado.nome}" style="color: rgb(248, 248, 255); font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px; top: 2px; position: relative; width: auto; float: right" rendered="#{usuarioLogado.nome != null}" />
 				</div>
 				<div class="logoCabeRodape" />
 			</div>
@@ -37,27 +37,27 @@
 				<ui:insert name="menu">
 					<h:form id="logoutForm">
 
-						<div style="float: right; position: relative; width: 75px;" id="divAcoes">
-							<div style="float: left; position: relative; width: 25px; top: -10px;" id="divHome">
-								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
-							</div>
-							<div style="float: left; position: relative; width: 20px; top: -6px; left: 5px;" id="divSenha">
-								<h:commandLink action="#{loginController.irParaAlterarSenha()}">
-									<p:graphicImage url="/resources/images/senha.png" title="Alterar Senha" />
-								</h:commandLink>
-							</div>
-							<div style="float: left; position: relative; width: 20px; top: -6px; left: 10px;" id="divLogout">
+						<div style="float: right; position: relative; width: 350px; height: 5px;" id="divAcoes">
+							<div style="float: right; position: relative; width: 20px; top: -6px; left: 0px;" id="divLogout">
 								<h:commandLink action="#{loginController.logout}">
 									<p:graphicImage url="/resources/images/logout.png" title="Logout" />
 								</h:commandLink>
 							</div>
-						</div>
-						<div class="divContSaldo">
-							<div style="float:right;" >
-								<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;"/>
+							<div style="float: right; position: relative; width: 20px; top: -6px; left: -5px;" id="divSenha">
+								<h:commandLink action="#{loginController.irParaAlterarSenha()}">
+									<p:graphicImage url="/resources/images/senha.png" title="Alterar Senha" />
+								</h:commandLink>
 							</div>
-							<div class="divSaldo" title="Saldo">
-								<label style="right: 10px; height: 20px; position: relative; width: 183px; float:left; z-index:-1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</label>
+							<div style="float: right; position: relative; width: 25px; top: -10px; left: -10px;" id="divHome">
+								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
+							</div>
+							<div class="divContSaldo" style="left: -18px;">
+								<div style="float: right;">
+									<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;" />
+								</div>
+								<div class="divSaldo" title="Saldo">
+									<label style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</label>
+								</div>
 							</div>
 						</div>
 						<p:menubar style="top:20px;">
