@@ -9,6 +9,7 @@
 			<!-- BreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Projeto" action="#{projetoMnt.irParaConsultar()}" immediate="true" />
 					<p:menuitem value="Equipe" action="#{usuarioProjetoMnt.irParaConsultar()}" immediate="true" />
 					<p:menuitem value="Consultar" action="#{usuarioProjetoMnt.irParaConsultar()}" immediate="true" />
 				</p:breadCrumb>
@@ -37,37 +38,43 @@
 				</p:fieldset>
 				<br />
 
-				<div id="divDT" style="top: 2px; position: relative;">
-					<p:dataTable id="usuariosDT" style="top:10%;" rowKey="#{usuarios.id}" var="usuarios" 
-									value="#{usuarioProjetoMnt.listaUsuarioProjeto}" selection="#{usuarioProjetoMnt.usuariosProjetos}" 
-									scrollable="true" scrollHeight="270" emptyMessage="Nenhum registro encontrado." >
-						<f:facet name="header">
+						<div id="divDT" style="top: 2px; position: relative;">
+							<p:dataTable id="usuariosDT" style="top:10%;" rowKey="#{usuarios.id}" var="usuarios" 
+							value="#{usuarioProjetoMnt.listaUsuarioProjeto}" selection="#{usuarioProjetoMnt.usuariosProjetos}"
+								scrollable="true" scrollHeight="170" emptyMessage="Nenhum registro encontrado.">
+								<f:facet name="header">
           					 Equipe
        					 </f:facet>
-       					 
-						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-						
-						<p:column headerText="Código" style="width:10%; text-align:center">
-							<h:outputText value="#{usuarios.id}" />
-						</p:column>
-						<p:column headerText="Nome" style="width:60%;">
-							<h:outputText value="#{usuarios.usuario.nome}" />
-						</p:column>
-						<p:column headerText="Cargo" style="width:30%;">
-							<h:outputText value="#{usuarios.usuario.cargo.nome}" />
-						</p:column>
 
-						<f:facet name="footer">
-							<div style="text-align: right; width: 100%">
-								<p:commandLink value="Cadastrar" action="#{usuarioProjetoMnt.irParaCadastrar()}" />
-								/
-								<p:commandLink value="Excluir" actionListener="#{usuarioProjetoMnt.beforeRemoveUsuarioProjeto()}" />
-							</div>
-						</f:facet>
-					</p:dataTable>
-				</div>
+								<p:column selectionMode="multiple" style="width:16px;text-align:center" />
 
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
+								<p:column headerText="Código" style="width:10%; text-align:center">
+									<h:outputText value="#{usuarios.id}" />
+								</p:column>
+								<p:column headerText="Nome" style="width:60%;">
+									<h:outputText value="#{usuarios.usuario.nome}" />
+								</p:column>
+								<p:column headerText="Cargo" style="width:30%;">
+									<h:outputText value="#{usuarios.usuario.cargo.nome}" />
+								</p:column>
+
+								<f:facet name="footer">
+									<div style="width: 100%; height: 23px; position: relative;">
+									<div style="text-align: left; width: 50%; position: relative;">
+										<p:commandLink value="Projeto" action="#{projetoMnt.irParaConsultar()}" />
+									</div>
+									
+								<div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;">
+										<p:commandLink value="Cadastrar" action="#{usuarioProjetoMnt.irParaCadastrar()}" />
+										/
+										<p:commandLink value="Excluir" actionListener="#{usuarioProjetoMnt.beforeRemoveUsuarioProjeto()}" />
+									</div>
+									</div>
+								</f:facet>
+							</p:dataTable>
+						</div>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Exclusão" message="#{msg['msg.warning.confirmacao.exclusao']}" widgetVar="confirmExclusao">
 					<div class="divDialog">
 						<h:commandButton value="Sim" actionListener="#{usuarioProjetoMnt.removerUsuarioDaEquipe()}" onclick="confirmExclusao.hide()" update="mainForm:usuariosDT messages" styleClass="botao3d" style="width: 109px;" />
 						<h:commandButton value="Não" onclick="confirmExclusao.hide()" ajax="false" styleClass="botao3d" style="left: 7px; position: relative; width: 109px;" />

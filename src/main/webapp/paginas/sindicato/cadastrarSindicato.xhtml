@@ -17,7 +17,11 @@
 				<p:messages id="messages" showDetail="true" showSummary="false" />
 				<br />
 
-				<div style="top: 15px; left: 170px; position: relative; width: 250px">
+		<!-- Div Corpo -->
+				<div class="divCorpo" style="padding-bottom: 8%;">
+					<!-- Div conteudo -->
+					<div style="left: 0px; position: relative; width: 100%;top: -23px;">
+				<div style="top:15px;; left: 170px; position: relative; width: 250px">
 
 					<h:outputLabel value="Nome:" style="width:50px;" />
 					<h:inputText type="text" value="#{sindicatoCad.sindicatoSelecionado.descricao}" maxlength="40" required="true" requiredMessage="Informe o nome do Sindicato." />
@@ -60,7 +64,8 @@
 					<h:commandButton styleClass="botao3d" style=" width:100px; float:left;" action="#{sindicatoCad.confirmar()}" value="Confirmar" />
 					<h:commandButton styleClass="botao3d" style="float:right; width:100px;position:relative;left:15px" action="#{sindicatoCad.cancelar()}" value="Cancelar" immediate="true" />
 				</div>
-
+			</div>
+		</div>
 			</ui:insert>
 		</h:form>
 	</ui:define>
