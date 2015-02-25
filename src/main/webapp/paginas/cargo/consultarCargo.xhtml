@@ -11,12 +11,12 @@
 				</div>
 
 				<p:breadCrumb styleClass="breadCrumb">
-    				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Cargo" action="#{cargoMnt.irParaConsultar()}" />
-    				<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" />
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Cargo" action="#{cargoMnt.irParaConsultar()}" />
+					<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
-				
+
 				<!-- Div Corpo -->
 				<div class="divCorpo" style="padding-bottom: 7%;">
 					<!-- Div Pesquisar -->
@@ -27,7 +27,7 @@
 					</div>
 
 					<!-- Tabela -->
-					<p:dataTable style="top:10%;" rowKey="#{cargo.id}" selection="#{cargoMnt.cargosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="cargoDt" var="cargo" value="#{cargoMnt.listaCargos}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable sortMode="multiple" style="top:10%;" rowKey="#{cargo.id}" selection="#{cargoMnt.cargosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="cargoDt" var="cargo" value="#{cargoMnt.listaCargos}" emptyMessage="Nenhum registro encontrado.">
 						<!-- Cabeçalho -->
 						<f:facet name="header">
 							Cargos
@@ -38,15 +38,13 @@
 						</p:column>
 
 						<!-- Código -->
-						<p:column headerText="Código" style="width:10%; text-align:center;">
+						<p:column headerText="Código" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
 							<h:outputText value="#{cargo.id}" />
 						</p:column>
 
 						<!-- Nome -->
-						<p:column headerText="Nome">
-							<div>
-								<h:outputText value="#{cargo.nome}" />
-							</div>
+						<p:column headerText="Nome" sortBy="#{cargo.nome}">
+							<h:outputText value="#{cargo.nome}" />
 						</p:column>
 
 						<!-- Ação -->

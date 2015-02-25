@@ -45,7 +45,7 @@
 					</div>
 
 					<!-- Tabela -->
-					<p:dataTable style="position: relative; top: -75px;" rowKey="#{usuario.id}" selection="#{usuarioMnt.usuariosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="usuarioDt" var="usuario" value="#{usuarioMnt.listaUsuarios}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable sortMode="multiple" style="position: relative; top: -75px;" rowKey="#{usuario.id}" selection="#{usuarioMnt.usuariosSelecionados}" paginatorPosition="bottom" paginator="true" rows="10" id="usuarioDt" var="usuario" value="#{usuarioMnt.listaUsuarios}" emptyMessage="Nenhum registro encontrado.">
 						<!-- Cabeçalho -->
 						<f:facet name="header">
 							Usuarios
@@ -56,24 +56,24 @@
 						</p:column>
 
 						<!-- Código -->
-						<p:column headerText="Código" style="width:10%">
+						<p:column headerText="Código" style="width:10%" sortBy="#{usuario.id}" >
 							<h:outputText value="#{usuario.id}" />
 						</p:column>
 
 						<!-- Nome -->
-						<p:column headerText="Nome">
+						<p:column headerText="Nome" sortBy="#{usuario.nome}">
 							<div>
 								<h:outputText value="#{usuario.nome}" />
 							</div>
 						</p:column>
 
 						<!-- Cargo -->
-						<p:column headerText="Cargo">
+						<p:column headerText="Cargo" sortBy="#{usuario.cargo}">
 							<h:outputText value="#{usuario.cargo.nome}" />
 						</p:column>
 
 						<!-- Matricula -->
-						<p:column headerText="Matricula" style="width:60px;">
+						<p:column headerText="Matricula" style="width:60px;" sortBy="#{usuario.matricula}">
 							<div style="text-align: center;">
 								<h:outputText value="#{usuario.matricula}" />
 							</div>
