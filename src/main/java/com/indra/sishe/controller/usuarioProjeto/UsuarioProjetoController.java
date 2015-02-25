@@ -65,6 +65,7 @@ public class UsuarioProjetoController extends BaseController implements Serializ
 		return "/paginas/equipe/cadastrarEquipe.xhtml?faces-redirect=true";
 	}
 
+		
 	public List<UsuarioProjeto> getUsuarioProjeto() {
 		return usuarioProjeto;
 	}
