@@ -102,7 +102,7 @@ public class UsuarioLogado extends BaseController implements Serializable {
 		Calendar dataAtual = Calendar.getInstance();
 		Calendar dataAntiga = (Calendar) getSessionAttr("dataAtualizacao");
 		int tempoEspera = 5;//Espera de 5 min
-		if(dataAntiga == null || (dataAntiga.get(Calendar.MINUTE) + tempoEspera <= dataAtual.get(Calendar.MINUTE)) || (dataAntiga.get(Calendar.HOUR) < dataAtual.get(Calendar.HOUR))){//Se passaram 5 min depois da ultima atualização ou a hora foi alterada?
+		if(dataAntiga == null || (dataAntiga.get(Calendar.MINUTE) + tempoEspera <= dataAtual.get(Calendar.MINUTE)) || (dataAntiga.get(Calendar.HOUR) < dataAtual.get(Calendar.HOUR))){//Se passar 5 min depois da ultima atualização ou a hora foi alterada será atualizado o saldo (de 5 em 5 min pode se atualizar)
 			putSessionAttr("dataAtualizacao", dataAtual);
 			putSessionAttr("saldo", bancoService.findByUsuario(new Usuario(getId())).getSaldo());
 		}
