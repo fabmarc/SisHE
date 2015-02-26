@@ -58,6 +58,7 @@ public class UsuarioLogado extends BaseController implements Serializable {
 	}
 
 	public String getSaldoFormatado() {
+		
 		Long saldo = (Long) getSessionAttr("saldo");
 		Long min, horas;
 		horas = saldo / 60;
@@ -79,6 +80,7 @@ public class UsuarioLogado extends BaseController implements Serializable {
 	}
 
 	public String alterarSenha() {
+		
 		try {
 			usuario.setId(getId());
 			usuarioService.alterarSenha(usuario);
@@ -99,6 +101,7 @@ public class UsuarioLogado extends BaseController implements Serializable {
 	}
 	
 	public void atualizarSaldo(){
+		
 		Calendar dataAtual = Calendar.getInstance();
 		Calendar dataAntiga = (Calendar) getSessionAttr("dataAtualizacao");
 		int tempoEspera = 5;//Tempo de espera igual a 5 min.
