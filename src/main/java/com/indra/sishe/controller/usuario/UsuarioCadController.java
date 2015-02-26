@@ -88,7 +88,7 @@ public class UsuarioCadController extends UsuarioController {
 			return irParaConsultar();
 		} catch (ApplicationException e) {
 			returnErrorMessage(e.getMessage());
-			return irParaAlterar(usuarioSelecionado);
+			return "";
 		}
 	}
 
@@ -128,9 +128,6 @@ public class UsuarioCadController extends UsuarioController {
 	}
 
 	public List<EstadoEnum> obterEstados() {
-		// List<EstadoEnum> listaEstados = new
-		// ArrayList<EstadoEnum>(Arrays.asList(EstadoEnum.values()));
-		// return listaEstados;
 		return EstadoEnum.listaEstados();
 	}
 

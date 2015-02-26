@@ -56,7 +56,7 @@
 									<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;" />
 								</div>
 								<div id="divSaldo" class="divSaldo" title="Saldo" onmouseout="atualizarSaldo()" >
-									<p:outputLabel id="labelSaldo" style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</p:outputLabel>
+									<p:outputLabel id="labelSaldo" style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo: #{usuarioLogado.saldoFormatado}</p:outputLabel>
 									<!-- Botão oculto para atualizar o saldo, sendo executado via JS -->
 									<p:commandButton id="btnAtualizarSaldo" value="refresh" action="#{usuarioLogado.atualizarSaldo()}" style="display:none;" update="labelSaldo"/>
 								</div>
