@@ -28,21 +28,17 @@ public class ProjetoCadController extends ProjetoController {
 
 	@PostConstruct
 	private void init() {
-		
+
 		MessageProvider.setInstance(messageProvider);
 		setListaGerentes(obterGerentes());
-		
+
 		searched = (Boolean) getFlashAttr("searched");
 		projetoSelecionado = (Projeto) getFlashAttr("projetoSelecionado");
 		if (projetoSelecionado == null) {
 			projetoSelecionado = new Projeto();
 		}
-		
+
 		projetoFiltro = (Projeto) getFlashAttr("projetoFiltro");
-		if (listaGerentes.size() < 1) {
-//			returnInfoMessage(messageProvider.getMessage("msg.error.senha.gerentes.indisponiveis"));
-//			RequestContext.getCurrentInstance().execute("gerentesIndisponiveis.show()");
-		}
 	}
 
 	public String cadastrarProjeto() {
@@ -97,6 +93,12 @@ public class ProjetoCadController extends ProjetoController {
 		}
 	}
 
+	public void verificaGerentes() {
+		if (listaGerentes.isEmpty()) {
+			returnInfoMessage(messageProvider.getMessage("msg.error.senha.gerentes.indisponiveis"));
+		}
+	}
+	
 	public Projeto getProjetoSelecionado() {
 		return projetoSelecionado;
 	}

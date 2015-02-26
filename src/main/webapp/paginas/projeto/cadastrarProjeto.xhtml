@@ -29,7 +29,7 @@
 
 					<div style="position: relative; top: 10px">
 						<p:outputLabel for="selecionarGerente" value="Gerente:" />
-						<p:selectOneMenu id="selecionarGerente" value="#{projetoCad.projetoSelecionado.gerente}" converter="omnifaces.SelectItemsConverter" style="width:218px" required="true" requiredMessage="O campo Gerente é Obrigatório">
+						<p:selectOneMenu  id="selecionarGerente" value="#{projetoCad.projetoSelecionado.gerente}" converter="omnifaces.SelectItemsConverter" style="width:218px" required="true" requiredMessage="O campo Gerente é Obrigatório">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{projetoCad.listaGerentes}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario}" />
 						</p:selectOneMenu>
@@ -39,11 +39,6 @@
 						<h:commandButton style="width:100px; float:left;" action="#{projetoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
 						<h:commandButton style="float:right; width:100px;" action="#{projetoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />
 					</div>
-					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Gerentes indisponíveis" message="#{msg['msg.error.senha.gerentes.indisponiveis']}" widgetVar="gerentesIndisponiveis">
-						<div class="divDialog">
-							<h:commandButton value="OK" styleClass="botao3d" onclick="gerentesIndisponiveis.hide()" ajax="false" style="width:109px;" />
-						</div>
-					</p:confirmDialog>
 				</div>
 			</ui:insert>
 		</h:form>
