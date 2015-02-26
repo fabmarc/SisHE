@@ -36,7 +36,7 @@
 							<!-- Div Matricula -->
 							<div style="position: absolute; float: right; left: 235px;">
 								<p:outputLabel value="Matrícula" style="width:50px;" />
-								<p:inputMask mask="9?999999" id="matricula" value="#{usuarioCad.usuarioSelecionado.matricula}" maxlength="20" />
+								<p:inputMask mask="9?999999" id="matricula" value="#{usuarioCad.usuarioSelecionado.matricula}" maxlength="20" required="true" requiredMessage="Preencha o campo Matrícula"/>
 							</div>
 						</div>
 						

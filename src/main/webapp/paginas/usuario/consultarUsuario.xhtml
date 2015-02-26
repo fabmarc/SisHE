@@ -56,15 +56,13 @@
 						</p:column>
 
 						<!-- Código -->
-						<p:column headerText="Código" style="width:10%" sortBy="#{usuario.id}" >
+						<p:column headerText="Código" style="width:10%; text-align: center; " sortBy="#{usuario.id}" >
 							<h:outputText value="#{usuario.id}" />
 						</p:column>
 
 						<!-- Nome -->
-						<p:column headerText="Nome" sortBy="#{usuario.nome}">
-							<div>
-								<h:outputText value="#{usuario.nome}" />
-							</div>
+						<p:column headerText="Nome" sortBy="#{usuario.nome}" style="width: 230px; max-width:200px; text-overflow:ellipsis">
+							<h:outputText value="#{usuario.nome}" />
 						</p:column>
 
 						<!-- Cargo -->
@@ -73,10 +71,8 @@
 						</p:column>
 
 						<!-- Matricula -->
-						<p:column headerText="Matricula" style="width:60px;" sortBy="#{usuario.matricula}">
-							<div style="text-align: center;">
-								<h:outputText value="#{usuario.matricula}" />
-							</div>
+						<p:column headerText="Matricula" style="width:60px; text-align: center;" sortBy="#{usuario.matricula}">
+							<h:outputText value="#{usuario.matricula}" />
 						</p:column>
 
 						<!-- Ação -->
