@@ -18,5 +18,7 @@ public interface UsuarioService extends BaseService<Usuario> {
 	public void alterarSenha(Usuario usuario) throws ApplicationException;
 
 	public Usuario findByLogin(String login);
+	
+	public List<Usuario> findGerentesDisponiveis();
 
 }

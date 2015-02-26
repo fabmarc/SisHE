@@ -181,4 +181,9 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 		return usuarioDao.findByLogin(login);
 	}
 
+	@Override
+	public List<Usuario> findGerentesDisponiveis() {
+		return usuarioDao.findGerentesDisponiveis();
+	}
+
 }
