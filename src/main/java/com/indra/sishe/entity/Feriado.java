@@ -5,32 +5,31 @@ import java.util.Date;
 
 import com.indra.sishe.enums.EstadoEnum;
 
-
-public class Feriado implements Serializable{
+public class Feriado implements Serializable {
 
 	private static final long serialVersionUID = 3382942206529054226L;
 
 	private Long id;
-	
+
 	private Date data;
 
 	private Character tipo;
-	
-	private String nome;	
-	
+
+	private String nome;
+
 	private String abrangencia;
-	
+
 	private EstadoEnum estado;
-	
+
 	private Cidade cidade;
-	
+
 	public Feriado(Cidade cidade) {
 		this.cidade = cidade;
 	}
-	
+
 	public Feriado() {
 	}
-	
+
 	public EstadoEnum getEstado() {
 		return estado;
 	}
@@ -48,6 +47,13 @@ public class Feriado implements Serializable{
 	}
 
 	public String getAbrangencia() {
+		if (estado == null) {
+			abrangencia = "Nacional";
+		} else if (estado != null) {
+			abrangencia = estado.getNome();
+		} else {
+			abrangencia = cidade + " (" + estado.getSigla() + ")";
+		}
 		return abrangencia;
 	}
 
@@ -62,7 +68,7 @@ public class Feriado implements Serializable{
 	public void setId(Long idFeriado) {
 		this.id = idFeriado;
 	}
-		
+
 	public Date getData() {
 		return data;
 	}
@@ -74,7 +80,7 @@ public class Feriado implements Serializable{
 	public Character getTipo() {
 		return tipo;
 	}
-	
+
 	public void setTipo(Character tipo) {
 		this.tipo = tipo;
 	}
@@ -86,8 +92,6 @@ public class Feriado implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	
 
 	@Override
 	public int hashCode() {
@@ -108,15 +112,5 @@ public class Feriado implements Serializable{
 		} else if (!id.equals(other.id)) return false;
 		return true;
 	}
-//, Comparable<Feriado>
-//	@Override
-//	public int compareTo(Feriado o) {
-//		int valor = nome.toLowerCase().compareTo(o.nome.toLowerCase());
-//		if(valor != 0 ){
-//			return valor;
-//		}else {
-//			return 1;
-//		}
-//	}
-	
+
 }

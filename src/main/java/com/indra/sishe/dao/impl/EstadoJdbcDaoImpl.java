@@ -65,31 +65,25 @@ public class EstadoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements
 
 	@Override
 	public Estado save(Estado entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Estado update(Estado entity) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Estado findById(Object id) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
