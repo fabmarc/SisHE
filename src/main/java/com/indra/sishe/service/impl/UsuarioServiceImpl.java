@@ -58,7 +58,7 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 		} catch (RegistroDuplicadoException d) {
 			if (d.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) { 
 				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "matrícula"); }
-			if (d.toString().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) {
+			if (d.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) {
 				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "login");
 				}
 			throw new ApplicationException(d, "Erro");
