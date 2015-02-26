@@ -1,6 +1,7 @@
 package com.indra.sishe.controller.usuario;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -98,7 +99,12 @@ public class UsuarioLogado extends BaseController implements Serializable {
 	}
 	
 	public void atualizarSaldo(){
-		putSessionAttr("saldo", bancoService.findByUsuario(new Usuario(getId())).getSaldo());
+		Calendar c = Calendar.getInstance();
+		Calendar temp = (Calendar) getSessionAttr("dataAtualizacao");
+		if(temp == null || (temp.get(Calendar.MINUTE) + 5 <= c.get(Calendar.MINUTE)) || (temp.get(Calendar.HOUR) < c.get(Calendar.HOUR))){//Se passaram 5 min depois da ultima atualização ou a hora foi alterada?
+			putSessionAttr("dataAtualizacao", c);
+			putSessionAttr("saldo", bancoService.findByUsuario(new Usuario(getId())).getSaldo());
+		}
 	}
 
 }

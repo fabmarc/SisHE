@@ -56,13 +56,12 @@
 									<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;" />
 								</div>
 								<div id="divSaldo" class="divSaldo" title="Saldo" onmouseout="atualizarSaldo()" >
-									<label id="labelSaldo" style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</label>
+									<p:outputLabel id="labelSaldo" style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</p:outputLabel>
+									<!-- Botão oculto para atualizar o saldo, sendo executado via JS -->
+									<p:commandButton id="btnAtualizarSaldo" value="refresh" action="#{usuarioLogado.atualizarSaldo()}" style="display:none;" update="labelSaldo"/>
 								</div>
 							</div>
 						</div>
-						<h:commandButton id="btnAtualizarSaldo" value="refresh" action="#{usuarioLogado.atualizarSaldo()}" style="display:none;">
-							<f:ajax execute="@form" render="@none" />
-						</h:commandButton>
 						<p:menubar style="top:20px;">
 							<sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_GERENTE">
 								<p:submenu label="Administração">
