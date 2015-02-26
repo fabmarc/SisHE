@@ -1,6 +1,8 @@
 package com.indra.sishe.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.indra.sishe.enums.EstadoEnum;
 
@@ -21,6 +23,8 @@ public class Sindicato implements Serializable, Comparable<Sindicato> {
 	private Integer periodoAcerto;
 	
 	private Integer diasAntecedencia;
+	
+	private Calendar ultimoAcerto;
 
 	public Sindicato() {
 
@@ -80,6 +84,16 @@ public class Sindicato implements Serializable, Comparable<Sindicato> {
 
 	public void setDiasAntecedencia(Integer diasAntecedencia) {
 		this.diasAntecedencia = diasAntecedencia;
+	}
+
+	
+
+	public Calendar getUltimoAcerto() {
+		return ultimoAcerto;
+	}
+
+	public void setUltimoAcerto(Calendar ultimoAcerto) {
+		this.ultimoAcerto = ultimoAcerto;
 	}
 
 	@Override

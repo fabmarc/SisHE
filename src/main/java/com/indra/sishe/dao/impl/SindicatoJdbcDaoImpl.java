@@ -2,7 +2,10 @@ package com.indra.sishe.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -51,10 +54,11 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT s.id AS idSindicato , s.descricao, e.sigla, e.id AS idEstado, e.nome as nome, s.periodo_acerto, s.dias_antecedencia ,"
+		sql.append("SELECT s.id AS idSindicato ,s.id_estado as idEstado, s.descricao, s.periodo_acerto, s.dias_antecedencia ,"
 							+" limite_positivo, limite_negativo ");
-		sql.append("FROM estado e INNER JOIN sindicato s ON e.id = s.id_estado ");
-
+		sql.append("FROM sindicato s ");
+		sql.append("WHERE 1 = 1");
+		
 		if (sindicato != null && sindicato.getDescricao() != null
 				&& !sindicato.getDescricao().isEmpty()) {
 			sql.append("AND UPPER(s.descricao) LIKE '%' || :descricao || '%'");
@@ -63,8 +67,8 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 
 		if (sindicato != null && sindicato.getEstado() != null
 				&& !sindicato.getEstado().getNome().isEmpty()) {
-			sql.append("AND e.nome = :nome ");
-			params.addValue("nome", sindicato.getEstado().getNome());
+			sql.append("AND s.id_estado = :idEstado");
+			params.addValue("idEstado", sindicato.getEstado().getId());
 		}
 
 		List<Sindicato> lista = getNamedParameterJdbcTemplate().query(
@@ -76,10 +80,6 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 							throws SQLException {
 
 						Sindicato sind = new Sindicato();
-						Estado estado = new Estado();
-						estado.setSigla(rs.getString("sigla"));
-						estado.setNome(rs.getString("nome"));
-						estado.setId(rs.getLong("idEstado"));
 						sind.setEstado(EstadoEnum.obterEstado(rs.getLong("idEstado")));
 
 						sind.setId(rs.getLong("idSindicato"));
@@ -98,16 +98,21 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 	@Override
 	public Sindicato save(Sindicato entity) throws RegistroDuplicadoException {
 
-		try {
+		try {		
+			
+			Calendar hj = Calendar.getInstance();
+			entity.setUltimoAcerto(hj);
+			
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 			parms.addValue("id_estado", entity.getEstado().getId());
-			parms.addValue("descricao", entity.getDescricao());
-			
+			parms.addValue("descricao", entity.getDescricao());			
 		
 			parms.addValue("limite_positivo", (entity.getLimPositivo() * 60)); // transforma de hora para minuto 	
 			parms.addValue("limite_negativo", (entity.getLimNegativo() * 60)); // transforma de hora para minuto 	
 			parms.addValue("periodo_acerto", (entity.getPeriodoAcerto() ));	
 			parms.addValue("dias_antecedencia", entity.getDiasAntecedencia());
+			parms.addValue("ultimo_acerto", entity.getUltimoAcerto()); // no cadastro do sindicato, insere a data do dia como a data do último acerto 
+																	  // para realizar o calculo para o envio da notificação
 			
 			Number key = insertSindicato.executeAndReturnKey(parms);
 			entity.setId(key.longValue());
