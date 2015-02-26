@@ -7,6 +7,7 @@
 		<h:outputStylesheet library="bootstrap/css" name="bootstrap.css" />
 		<h:outputStylesheet library="css" name="sishe.css" />
 		<h:outputScript library="bootstrap/js" name="bootstrap.js" />
+		<h:outputScript library="js" name="Sishe.js" />
 
 		<ui:insert name="title">
 			<title>Banco de Horas</title>
@@ -54,8 +55,10 @@
 								<div style="float: right;">
 									<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;" />
 								</div>
-								<div class="divSaldo" title="Saldo">
-									<label style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</label>
+								<div id="divSaldo" class="divSaldo" title="Saldo" onmouseout="atualizarSaldo()" >
+									<p:outputLabel id="labelSaldo" style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo = #{usuarioLogado.saldoFormatado}</p:outputLabel>
+									<!-- Botão oculto para atualizar o saldo, sendo executado via JS -->
+									<p:commandButton id="btnAtualizarSaldo" value="refresh" action="#{usuarioLogado.atualizarSaldo()}" style="display:none;" update="labelSaldo"/>
 								</div>
 							</div>
 						</div>

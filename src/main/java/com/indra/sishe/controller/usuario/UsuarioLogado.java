@@ -1,6 +1,7 @@
 package com.indra.sishe.controller.usuario;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -13,6 +14,7 @@ import com.indra.infra.controller.BaseController;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.UsuarioService;
 
 @ViewScoped
@@ -25,6 +27,9 @@ public class UsuarioLogado extends BaseController implements Serializable {
 
 	@Inject
 	private UsuarioService usuarioService;
+	
+	@Inject
+	private BancoHorasService bancoService;
 
 	@PostConstruct
 	private void init() {
@@ -91,6 +96,15 @@ public class UsuarioLogado extends BaseController implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	public void atualizarSaldo(){
+		Calendar c = Calendar.getInstance();
+		Calendar temp = (Calendar) getSessionAttr("dataAtualizacao");
+		if(temp == null || (temp.get(Calendar.MINUTE) + 5 <= c.get(Calendar.MINUTE)) || (temp.get(Calendar.HOUR) < c.get(Calendar.HOUR))){//Se passaram 5 min depois da ultima atualização ou a hora foi alterada?
+			putSessionAttr("dataAtualizacao", c);
+			putSessionAttr("saldo", bancoService.findByUsuario(new Usuario(getId())).getSaldo());
+		}
 	}
 
 }
