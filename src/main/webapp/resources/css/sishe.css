@@ -154,10 +154,10 @@ html {
 }
 
 .divSaldo {
-	left: 23px;
+	left: 26px;
 	position: relative;
 	overflow: hidden;
-	width: 16px;
+	width: 21px;
 	float: right;
 	right: 8px;
 	-webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
