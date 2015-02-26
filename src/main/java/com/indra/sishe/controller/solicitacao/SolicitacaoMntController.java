@@ -37,6 +37,8 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	private boolean todasSolicitacoes;
 
+	private boolean minhasSolicitacoes;
+
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
 
@@ -63,14 +65,28 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	public void pesquisar() {
+		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
+			pesquisarGerente();
+		} else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
+			pesquisarLider();
+		} else {
+			pesquisarPorUsuarioLogado();
+		}
+	}
+
+	private void pesquisarGerente() {
 		if (todasSolicitacoes == false) {
 			pesquisarPendentes();
 		} else {
-			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
-				pesquisarPorProjeto();
-			} else {
-				pesquisarPorUsuarioLogado();
-			}
+			pesquisarPorProjeto();
+		}
+	}
+
+	private void pesquisarLider() {
+		if (minhasSolicitacoes == false) {
+			pesquisarPendentes();
+		} else {
+			pesquisarPorUsuarioLogado();
 		}
 	}
 
@@ -166,7 +182,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		List<HistoricoDetalhes> detalhes = new ArrayList<HistoricoDetalhes>();
 		try {
 			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
-				for (Solicitacao solicitacao : solicitacoesSelecionadas){
+				for (Solicitacao solicitacao : solicitacoesSelecionadas) {
 					if (solicitacao.getStatusGerente().getId() == 3) {
 						ids.add(solicitacao.getId());
 					}
@@ -176,7 +192,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 					detalhes = bancoHorasService.contabilizarHorasBanco(ids);
 				}
 			} else {
-				for (Solicitacao solicitacao : solicitacoesSelecionadas){
+				for (Solicitacao solicitacao : solicitacoesSelecionadas) {
 					if (solicitacao.getStatusLider().getId() == 3) {
 						ids.add(solicitacao.getId());
 					}
@@ -254,6 +270,14 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setTodasSolicitacoes(boolean todosUsuarios) {
 		this.todasSolicitacoes = todosUsuarios;
+	}
+
+	public boolean isMinhasSolicitacoes() {
+		return minhasSolicitacoes;
+	}
+
+	public void setMinhasSolicitacoes(boolean minhasSolicitacoes) {
+		this.minhasSolicitacoes = minhasSolicitacoes;
 	}
 
 }

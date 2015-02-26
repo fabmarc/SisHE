@@ -20,20 +20,20 @@
 				<div class="divCorpo" style="padding-bottom: 5%;position: relative;top: 10%;">
 					<div style="width: 730px; position: relative; height: 60px;">
 						<div id="divData" style="position: relative; width: 110px; height: 41px;">
-							<p:outputLabel value="Data:" for="calendarioBusca" />
-							<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" id="calendarioBusca" style="position:relative; top: -6px;width:70px;!" />
+							<p:outputLabel value="Data:" />
+							<p:calendar styleClass="calendario" value="#{solicitacaoMnt.solicitacaoFiltro.data}" disabled="#{!solicitacaoMnt.todasSolicitacoes}" id="inputCalendario" style="position:relative; top: -6px;width:70px;!" />
 						</div>
 
 						<div id="divSistema" style="position: relative; top: -41px; left: 111px;">
 							<p:outputLabel value="Sistema:" />
-							<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 135px;">
+							<p:selectOneMenu disabled="#{!solicitacaoMnt.todasSolicitacoes}" id="inputSistema" value="#{solicitacaoMnt.solicitacaoFiltro.sistema}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 135px;">
 								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 								<f:selectItems value="#{solicitacaoMnt.listaSistemas}" var="sistema" itemLabel="#{sistema.nome}" itemValue="#{sistema}" />
 							</p:selectOneMenu>
 						</div>
 						<div id="divStatus" style="position: relative; top: -96px; left: 256px; width: 270px;">
 							<p:outputLabel value="Status:" />
-							<p:selectOneMenu value="#{solicitacaoMnt.solicitacaoFiltro.statusGeral}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 120px;">
+							<p:selectOneMenu disabled="#{!solicitacaoMnt.todasSolicitacoes}" id="inputStatus" value="#{solicitacaoMnt.solicitacaoFiltro.statusGeral}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 120px;">
 								<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 								<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
 							</p:selectOneMenu>
@@ -41,18 +41,19 @@
 						<ui:fragment rendered="#{solicitacaoMnt.verificarCargo()}">
 							<div id="divSolicitante" style="position: relative; top: -151px; left: 384px; width: 129px;">
 								<p:outputLabel value="Solicitante:" />
-								<p:inputText value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 110px;" />
+								<p:inputText id="inputSolicitante" disabled="#{!solicitacaoMnt.todasSolicitacoes}" value="#{solicitacaoMnt.solicitacaoFiltro.usuario.nome}" style="position:relative; top: -6px;width: 110px;" />
 							</div>
 							<div id="divConsultarTodos" style="width: 110px; position: relative; top: -232px; left: 523px;">
 								<p:outputLabel value="Minhas Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{solicitacaoMnt.verificarLider()}" />
 								<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{!solicitacaoMnt.verificarLider()}" />
-								<p:selectBooleanCheckbox value="#{solicitacaoMnt.todasSolicitacoes}" style="top: 4px;position: relative;" />
+								<p:selectBooleanCheckbox value="#{solicitacaoMnt.todasSolicitacoes}" style="top: 4px;position: relative;" rendered="#{solicitacaoMnt.verificarCargo()}">
+								<f:ajax event="change" render="inputSolicitante inputStatus inputCalendario inputSistema" />
+								</p:selectBooleanCheckbox>
 							</div>
 						</ui:fragment>
 					</div>
 					<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
 						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" rendered="#{solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
-						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisarPorUsuarioLogado()}" rendered="#{!solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
 					</div>
 
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}"
