@@ -2,7 +2,10 @@ package com.indra.sishe.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -98,16 +101,21 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 	@Override
 	public Sindicato save(Sindicato entity) throws RegistroDuplicadoException {
 
-		try {
+		try {		
+			
+			Calendar hj = Calendar.getInstance();
+			entity.setUltimoAcerto(hj);
+			
 			MapSqlParameterSource parms = new MapSqlParameterSource();
 			parms.addValue("id_estado", entity.getEstado().getId());
-			parms.addValue("descricao", entity.getDescricao());
-			
+			parms.addValue("descricao", entity.getDescricao());			
 		
 			parms.addValue("limite_positivo", (entity.getLimPositivo() * 60)); // transforma de hora para minuto 	
 			parms.addValue("limite_negativo", (entity.getLimNegativo() * 60)); // transforma de hora para minuto 	
 			parms.addValue("periodo_acerto", (entity.getPeriodoAcerto() ));	
 			parms.addValue("dias_antecedencia", entity.getDiasAntecedencia());
+			parms.addValue("ultimo_acerto", entity.getUltimoAcerto()); // no cadastro do sindicato, insere a data do dia como a data do último acerto 
+																	  // para realizar o calculo para o envio da notificação
 			
 			Number key = insertSindicato.executeAndReturnKey(parms);
 			entity.setId(key.longValue());
