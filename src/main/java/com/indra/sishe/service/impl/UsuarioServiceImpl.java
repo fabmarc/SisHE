@@ -127,6 +127,8 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Nome", "40");
 		} else if (entity.getNome().replace(" ", "").length() < 5) {
 			throw new ApplicationException("msg.error.campo.menor.esperado", "Nome", "5");
+		} else if (entity.getMatricula() != null && entity.getMatricula() == 0) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Matricula");
 		} else if (entity.getCargo() == null || entity.getCargo().getId() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Cargo");
 		} else if (entity.getSindicato() == null || entity.getSindicato().getId() == null) {
