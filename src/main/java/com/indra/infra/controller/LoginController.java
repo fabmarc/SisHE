@@ -1,5 +1,7 @@
 package com.indra.infra.controller;
 
+import java.util.Calendar;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -51,6 +53,7 @@ public class LoginController extends BaseController{
 			putSessionAttr("usuario_nome", user.getNome());
 			putSessionAttr("usuario_permissoes", result.getAuthorities().toString());
 			putSessionAttr("saldo", bancoService.findByUsuario(user).getSaldo());
+			putSessionAttr("dataAtualizacao", Calendar.getInstance());//Guardar a data/hora atual.
 		} catch (AuthenticationException e) {
 			messager.error(e.getMessage());
 			e.printStackTrace();

@@ -2,10 +2,8 @@ package com.indra.sishe.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +25,6 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.SindicatoDAO;
-import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.enums.EstadoEnum;
 
@@ -54,10 +51,11 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT s.id AS idSindicato , s.descricao, e.sigla, e.id AS idEstado, e.nome as nome, s.periodo_acerto, s.dias_antecedencia ,"
+		sql.append("SELECT s.id AS idSindicato ,s.id_estado as idEstado, s.descricao, s.periodo_acerto, s.dias_antecedencia ,"
 							+" limite_positivo, limite_negativo ");
-		sql.append("FROM estado e INNER JOIN sindicato s ON e.id = s.id_estado ");
-
+		sql.append("FROM sindicato s ");
+		sql.append("WHERE 1 = 1");
+		
 		if (sindicato != null && sindicato.getDescricao() != null
 				&& !sindicato.getDescricao().isEmpty()) {
 			sql.append("AND UPPER(s.descricao) LIKE '%' || :descricao || '%'");
@@ -66,8 +64,8 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 
 		if (sindicato != null && sindicato.getEstado() != null
 				&& !sindicato.getEstado().getNome().isEmpty()) {
-			sql.append("AND e.nome = :nome ");
-			params.addValue("nome", sindicato.getEstado().getNome());
+			sql.append("AND s.id_estado = :idEstado");
+			params.addValue("idEstado", sindicato.getEstado().getId());
 		}
 
 		List<Sindicato> lista = getNamedParameterJdbcTemplate().query(
@@ -79,10 +77,6 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 							throws SQLException {
 
 						Sindicato sind = new Sindicato();
-						Estado estado = new Estado();
-						estado.setSigla(rs.getString("sigla"));
-						estado.setNome(rs.getString("nome"));
-						estado.setId(rs.getLong("idEstado"));
 						sind.setEstado(EstadoEnum.obterEstado(rs.getLong("idEstado")));
 
 						sind.setId(rs.getLong("idSindicato"));
@@ -153,11 +147,11 @@ public class SindicatoJdbcDaoImpl extends NamedParameterJdbcDaoSupport
 		try {
 			return getJdbcTemplate()
 					.queryForObject(
-							"SELECT s.id AS idSindicato, s.descricao as descricao,"
+							"SELECT s.id AS idSindicato,s.id_estado AS idEstado, s.descricao as descricao,"
 							+"s.periodo_acerto, s.dias_antecedencia ,"
-							+" limite_positivo, limite_negativo,"
-							+ "e.id AS idEstado, e.nome as nome FROM estado e INNER JOIN sindicato s ON e.id = s.id_estado "
-							+ "WHERE s.id = ?  ", new Object[] { id },
+							+" s.limite_positivo, s.limite_negativo"
+							+ " FROM sindicato s"
+							+ " WHERE s.id = ?  ", new Object[] { id },
 							new RowMapper<Sindicato>() {
 
 								@Override
