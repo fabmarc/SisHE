@@ -39,6 +39,11 @@
 						<h:commandButton style="width:100px; float:left;" action="#{projetoCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
 						<h:commandButton style="float:right; width:100px;" action="#{projetoCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />
 					</div>
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" header="Gerentes indisponíveis" message="#{msg['msg.error.senha.gerentes.indisponiveis']}" widgetVar="gerentesIndisponiveis">
+						<div class="divDialog">
+							<h:commandButton value="OK" styleClass="botao3d" onclick="gerentesIndisponiveis.hide()" ajax="false" style="width:109px;" />
+						</div>
+					</p:confirmDialog>
 				</div>
 			</ui:insert>
 		</h:form>

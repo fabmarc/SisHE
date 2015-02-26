@@ -164,20 +164,32 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		int size = solicitacoesSelecionadas.size();
 		ArrayList<Long> ids = new ArrayList<Long>(size);
 		List<HistoricoDetalhes> detalhes = new ArrayList<HistoricoDetalhes>();
-		for (Solicitacao solicitacao : solicitacoesSelecionadas)
-			ids.add(solicitacao.getId());
 		try {
 			if ((UsuarioLogado.getPermissoes()).contains("ROLE_GERENTE")) {
+				for (Solicitacao solicitacao : solicitacoesSelecionadas){
+					if (solicitacao.getStatusGerente().getId() == 3) {
+						ids.add(solicitacao.getId());
+					}
+				}
 				solicitacaoService.gerenteAcaoSolicitacao(ids, status);
 				if (status == 1) {
 					detalhes = bancoHorasService.contabilizarHorasBanco(ids);
 				}
 			} else {
+				for (Solicitacao solicitacao : solicitacoesSelecionadas){
+					if (solicitacao.getStatusLider().getId() == 3) {
+						ids.add(solicitacao.getId());
+					}
+				}
 				solicitacaoService.liderAcaoSolicitacao(ids, status);
 			}
 			historicoService.gerarHistorico(ids, observacao, detalhes);
 			observacao = "";
-			messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
+			if (solicitacoesSelecionadas.size() > ids.size()) {
+				messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada.excecao"));
+			} else {
+				messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada"));
+			}
 		} catch (ApplicationException e) {
 			messager.error(e.getMessage());
 		}

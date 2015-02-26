@@ -6,6 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
+
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Projeto;
@@ -37,6 +39,10 @@ public class ProjetoCadController extends ProjetoController {
 		}
 		
 		projetoFiltro = (Projeto) getFlashAttr("projetoFiltro");
+		if (listaGerentes.size() < 1) {
+//			returnInfoMessage(messageProvider.getMessage("msg.error.senha.gerentes.indisponiveis"));
+//			RequestContext.getCurrentInstance().execute("gerentesIndisponiveis.show()");
+		}
 	}
 
 	public String cadastrarProjeto() {
@@ -74,7 +80,7 @@ public class ProjetoCadController extends ProjetoController {
 	}
 
 	private List<Usuario> obterGerentes() {
-		return usuarioService.findByCargo("ROLE_GERENTE");
+		return usuarioService.findGerentesDisponiveis();
 	}
 
 	public String cancelar() {
