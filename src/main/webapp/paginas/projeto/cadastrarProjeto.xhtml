@@ -27,9 +27,9 @@
 						<p:inputTextarea type="text" value="#{projetoCad.projetoSelecionado.descricao}" maxlength="500" style="width:210px" />
 					</div>
 
-					<div style="position: relative; top: 10px">
+					<div style="position: relative; top: 10px"  >
 						<p:outputLabel for="selecionarGerente" value="Gerente:" />
-						<p:selectOneMenu  id="selecionarGerente" value="#{projetoCad.projetoSelecionado.gerente}" converter="omnifaces.SelectItemsConverter" style="width:218px" required="true" requiredMessage="O campo Gerente é Obrigatório">
+						<p:selectOneMenu id="selecionarGerente" value="#{projetoCad.projetoSelecionado.gerente}" converter="omnifaces.SelectItemsConverter" style="width:218px" required="true" requiredMessage="O campo Gerente é Obrigatório">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{projetoCad.listaGerentes}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario}" />
 						</p:selectOneMenu>
