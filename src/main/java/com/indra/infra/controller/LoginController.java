@@ -41,7 +41,6 @@ public class LoginController extends BaseController{
 	}
 
 	public String login() {
-		
 		try {
 			Authentication request = new UsernamePasswordAuthenticationToken(getUsername(), getPassword());
 			Authentication result = authenticationManager.authenticate(request);
