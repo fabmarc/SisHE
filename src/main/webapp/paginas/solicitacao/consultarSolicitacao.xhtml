@@ -17,7 +17,7 @@
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
 
-				<div class="divCorpo" style="padding-bottom: 5%;position: relative;top: 10%;">
+				<div class="divCorpo" style="padding-bottom: 5%; position: relative; top: 10%;">
 					<div style="width: 730px; position: relative; height: 60px;">
 						<div id="divData" style="position: relative; width: 110px; height: 41px;">
 							<p:outputLabel value="Data:" />
@@ -47,7 +47,7 @@
 								<p:outputLabel value="Minhas Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{solicitacaoMnt.verificarLider()}" />
 								<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{!solicitacaoMnt.verificarLider()}" />
 								<p:selectBooleanCheckbox value="#{solicitacaoMnt.todasSolicitacoes}" style="top: 4px;position: relative;" rendered="#{solicitacaoMnt.verificarCargo()}">
-								<f:ajax event="change" render="inputSolicitante inputStatus inputCalendario inputSistema" />
+									<f:ajax event="change" render="inputSolicitante inputStatus inputCalendario inputSistema" />
 								</p:selectBooleanCheckbox>
 							</div>
 						</ui:fragment>
@@ -104,15 +104,23 @@
 						</p:column>
 
 						<f:facet name="footer">
+						
 							<!--	<div style="width: 100%; height: 23px; position: relative;">-->
 							<!-- 	<div style="text-align: left; width: 50%; position: relative;"> -->
-							
-							<p:commandLink id="aprovar" style="position: absolute;left: 12px;" value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}" rendered="#{!solicitacaoMnt.todasSolicitacoes}" />
-							<h:outputLabel id="barra" value=" / " rendered="#{!solicitacaoMnt.todasSolicitacoes}" style="width: 10px;position: absolute;left: 74px;color: #333;font-weight: bold;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);font-family: Arial,sans-serif;font-size: 1.1em;" />
-							<p:commandLink id="reprovar" style="position: absolute;left: 88px;" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}" rendered="#{!solicitacaoMnt.todasSolicitacoes}" />
-							
-							<!-- <div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;"> -->
-							<p:commandLink id="Excluir" style="position: relative;right: -325px;" value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
+							<div style="height: 23px; position: relative;">
+								<div style="text-align: right;width: 50%;left: 50%;position: relative;top: 2px;">
+									<p:commandLink id="Cadastrar"  value="Cadastrar" actionListener="#{solicitacaoMnt.irParaCadastrar()}" />
+									/
+									<p:commandLink id="Excluir"  value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
+								</div>
+								<div style="text-align: left; width: 50%;top: -19px; position: relative;">
+									<!-- style="position: absolute;left: 12px;" style="position: absolute;left: 88px;" style="position: relative;right: -325px;"-->
+									<p:commandLink id="aprovar"  value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}" rendered="#{!solicitacaoMnt.todasSolicitacoes}" />
+									<h:outputLabel id="barra" value=" / " rendered="#{!solicitacaoMnt.todasSolicitacoes}" style="width: 10px;position: relative;left: 65px;top: -19px;color: #333;font-weight: bold;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);font-family: Arial,sans-serif;font-size: 1.1em;" />
+									<p:commandLink id="reprovar" style="position: relative;left: 76px;top: -45px;" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}" rendered="#{!solicitacaoMnt.todasSolicitacoes}" />
+								</div>
+								<!-- <div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;"> -->
+							</div>
 						</f:facet>
 					</p:dataTable>
 
