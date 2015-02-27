@@ -42,7 +42,6 @@ public class RegraMntController extends RegraController {
 		if (regraFiltro == null) regraFiltro = new Regra();
 		
 		sindicatoSelecionado = (Sindicato) getSessionAttr("sindicadoSelecionadoFiltro");
-//		if (!searched) listaRegras = new ArrayList<Regra>(); else 
 		pesquisar();
 	}
 

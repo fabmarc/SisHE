@@ -89,8 +89,8 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT id, id_sindicato, data_inicio, data_fim FROM regra ");
-		sql.append("WHERE id_sindicato = :idSidicato AND ((:dataInicio BETWEEN data_inicio AND data_fim) OR (:dataFinal BETWEEN data_inicio AND data_fim)) ");
-		sql.append("OR ((data_inicio BETWEEN :dataInicio AND :dataFinal) OR (data_fim BETWEEN :dataInicio AND :dataFinal)) ");
+		sql.append("WHERE id_sindicato = :idSidicato AND (((:dataInicio BETWEEN data_inicio AND data_fim) OR (:dataFinal BETWEEN data_inicio AND data_fim)) ");
+		sql.append("OR ((data_inicio BETWEEN :dataInicio AND :dataFinal) OR (data_fim BETWEEN :dataInicio AND :dataFinal))) ");
 		params.addValue("idSidicato", regra.getSindicato().getId());
 		params.addValue("dataInicio", regra.getDataInicio());
 		params.addValue("dataFinal", regra.getDataFim());
