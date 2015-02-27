@@ -76,7 +76,7 @@ public class CargoCadController extends CargoController {
 		return irParaConsultar();
 	}
 
-	private boolean modoCadastrar() {
+	public boolean modoCadastrar() {
 		if (cargoSelecionado == null || cargoSelecionado.getId() == null) {
 			return true;
 		} else {

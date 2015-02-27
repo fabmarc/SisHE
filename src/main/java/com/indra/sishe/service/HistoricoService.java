@@ -8,12 +8,13 @@ import com.indra.infra.service.BaseService;
 import com.indra.sishe.entity.DadosRelatorio;
 import com.indra.sishe.entity.Historico;
 import com.indra.sishe.entity.HistoricoDetalhes;
+import com.indra.sishe.entity.Usuario;
 
 @Local
 public interface HistoricoService extends BaseService<Historico> {
 
 	public void gerarHistorico(List<Long> ids, String descricao, List<HistoricoDetalhes> detalhes);
 
-	public List<DadosRelatorio> gerarRelatorio(String mes, String ano);
+	public List<DadosRelatorio> gerarRelatorio(String mes, String ano, Usuario entity);
 
 }

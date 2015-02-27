@@ -12,7 +12,8 @@
     				<p:menuitem value="Sindicato" action="#{sindicatoMnt.irParaConsultar()}" immediate="true"/>
     				<p:menuitem value="Regra" action="#{regraMnt.irParaConsultar()}" immediate="true"/>
     				<p:menuitem value="Período" action="#{periodoMnt.irParaConsultar()}" immediate="true"/>
-    				<p:menuitem value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" immediate="true"/>
+    				<p:menuitem value="Cadastrar" action="#{periodoMnt.irParaCadastrar()}" rendered="#{periodoCad.modoCadastrar()}" immediate="true"/>
+    				<p:menuitem value="Alterar" action="#{periodoMnt.irParaAlterar()}" rendered="#{!periodoCad.modoCadastrar()}" immediate="true"/>
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;  top: -17px; position: relative;" />
 			

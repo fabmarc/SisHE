@@ -307,8 +307,10 @@ public class UsuarioProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impl
 		}
 		
 		if (usuarioProjeto.getProjeto() != null && usuarioProjeto.getProjeto().getGerente().getId() != 0) {
-			sql.append(" AND c.id <> 2");
+			sql.append(" AND c.id > 2");
 		}
+		
+		
 
 		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Usuario>() {

@@ -12,4 +12,5 @@ public interface SistemaDAO extends BaseDAO<Sistema> {
 		
 		public List<Sistema> findByProjetoByUsuarioLogado(Long idUsuarioLogado);
 		
+		
 }

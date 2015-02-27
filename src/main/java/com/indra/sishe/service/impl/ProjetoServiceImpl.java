@@ -13,6 +13,7 @@ import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.ProjetoDAO;
 import com.indra.sishe.entity.Projeto;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.ProjetoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -103,6 +104,11 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 	@Override
 	public List<Projeto> findByFilter(Projeto projeto) {
 		return projetoDAO.findByFilter(projeto);
+	}
+
+	@Override
+	public List<Projeto> findByGerente(Usuario usuario) {
+		return projetoDAO.findByGerente(usuario);
 	}
 
 }

@@ -12,6 +12,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.UsuarioDAO;
+import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioService;
@@ -34,15 +35,15 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 				return null;
 			}
 		} catch (RegistroDuplicadoException e) {
-			if (e.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) { 
-				throw new ApplicationException(e, "msg.error.campo.existente", "usuário", "matrícula");
-				}
-			if (e.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) { 
-				throw new ApplicationException(e, "msg.error.campo.existente", "usuário", "login");
-				}
-			if (e.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_email\"")) { 
-				throw new ApplicationException(e, "msg.error.campo.existente", "usuário", "email");
-				}
+			if (e.getMessageCode().contains(
+					"ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) { throw new ApplicationException(
+					e, "msg.error.campo.existente", "usuário", "matrícula"); }
+			if (e.getMessageCode().contains(
+					"ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) { throw new ApplicationException(
+					e, "msg.error.campo.existente", "usuário", "login"); }
+			if (e.getMessageCode().contains(
+					"ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_email\"")) { throw new ApplicationException(
+					e, "msg.error.campo.existente", "usuário", "email"); }
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Usuário");
 		}
 	}
@@ -59,15 +60,15 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Usuário");
 		} catch (RegistroDuplicadoException d) {
-			if (d.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) { 
-				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "matrícula");
-				}
-			if (d.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) {
-				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "login");
-				}
-			if (d.getMessageCode().contains("ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_email\"")) {
-				throw new ApplicationException(d, "msg.error.campo.existente", "usuário", "email");
-				}
+			if (d.getMessageCode().contains(
+					"ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_matricula\"")) { throw new ApplicationException(
+					d, "msg.error.campo.existente", "usuário", "matrícula"); }
+			if (d.getMessageCode().contains(
+					"ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_login\"")) { throw new ApplicationException(
+					d, "msg.error.campo.existente", "usuário", "login"); }
+			if (d.getMessageCode().contains(
+					"ERRO: duplicar valor da chave viola a restrição de unicidade \"uq_email\"")) { throw new ApplicationException(
+					d, "msg.error.campo.existente", "usuário", "email"); }
 			throw new ApplicationException(d, "Erro");
 		}
 	}
@@ -193,6 +194,16 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 	@Override
 	public List<Usuario> findGerentesDisponiveis() {
 		return usuarioDao.findGerentesDisponiveis();
+	}
+
+	@Override
+
+	public List<Usuario> findByProjetos(List<Long> ids) {
+		return usuarioDao.findByProjetos(ids);
+	}
+
+	public List<Usuario> findLideresDisponiveis(Projeto projeto) {
+		return usuarioDao.findLideresDisponiveis(projeto);
 	}
 
 }

@@ -3,6 +3,7 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +27,7 @@ import com.indra.sishe.dao.UsuarioDAO;
 import com.indra.sishe.entity.Cargo;
 import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
+import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sindicato;
 import com.indra.sishe.entity.Usuario;
 
@@ -197,7 +199,7 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
 		return consultar(sql, params);
 	}
-
+		
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
 
@@ -207,7 +209,8 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			params.add(param);
 		}
 		try {
-			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM BANCO_HORAS WHERE ID_USUARIO = ?", params);
+			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM BANCO_HORAS WHERE ID_USUARIO = ?",
+					params);
 			for (int rows : affectedRows)
 				if (rows == 0) throw new RegistroInexistenteException();
 			affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM usuario WHERE id = ?", params);
@@ -310,16 +313,75 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT usuario.id,usuario.id_cargo AS id_cargo,cargo.nome AS nome_cargo,usuario.nome AS nome,usuario.matricula," +
-				"usuario.email AS email,usuario.LOGIN AS LOGIN,usuario.senha AS senha,usuario.id_sindicato AS id_sindicato," +
-				"sindicato.descricao AS sindicato_descricao,cidade.id AS id_cidade,cidade.id_estado AS id_cidade_estado,cidade.nome " +
-				"AS cidade_nome " +
-				"FROM usuario " +
-				"LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) " +
-				"LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) " +
-				"LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) " +
-				"WHERE usuario.id not in (select id_gerente from projeto) and cargo.role like 'ROLE_GERENTE'");
+		sql.append("SELECT usuario.id,usuario.id_cargo AS id_cargo,cargo.nome AS nome_cargo,usuario.nome AS nome,usuario.matricula,"
+				+ "usuario.email AS email,usuario.LOGIN AS LOGIN,usuario.senha AS senha,usuario.id_sindicato AS id_sindicato,"
+				+ "sindicato.descricao AS sindicato_descricao,cidade.id AS id_cidade,cidade.id_estado AS id_cidade_estado,cidade.nome "
+				+ "AS cidade_nome "
+				+ "FROM usuario "
+				+ "LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) "
+				+ "LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) "
+				+ "LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) "
+				+ "WHERE usuario.id not in (select id_gerente from projeto) and cargo.role like 'ROLE_GERENTE'");
 		return consultar(sql, params);
+	}
+	
+	
+	@Override
+	public List<Usuario> findByProjetos(List<Long> ids) {
+
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("SELECT usuario.id, nome ");
+		sql.append("FROM usuario INNER JOIN USUARIO_PROJETO ON (USUARIO_PROJETO.ID_USUARIO = USUARIO.ID) WHERE USUARIO_PROJETO.ID_PROJETO in (:ids) ");
+		//params2.addValue("idUsuario", params);
+		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), Collections.singletonMap("ids", ids),
+				new RowMapper<Usuario>() {
+			@Override
+			public Usuario mapRow(ResultSet rs, int idx) throws SQLException {
+
+				Usuario usuario = new Usuario();
+
+				usuario.setId(rs.getLong("id"));
+				usuario.setNome(rs.getString("nome"));
+
+				return usuario;
+			}
+		});
+		
+		return lista;
+	}
+
+	@Override
+	public List<Usuario> findLideresDisponiveis(Projeto projeto) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT u.id AS idUsuario, u.nome AS nomeUsuario,u.id_cargo");
+		sql.append(" FROM usuario u");
+		sql.append(" INNER JOIN usuario_projeto up ON (up.id_usuario = u.id) ");
+		sql.append(" WHERE u.id_cargo = 3 ");
+		
+		if(projeto != null && projeto.getId() != null){
+			sql.append("AND  up.id_projeto = :idProjeto");
+			params.addValue("idProjeto", projeto.getId());
+		}
+		
+		sql.append(" AND (SELECT id FROM sistema WHERE id_lider = u.id LIMIT 1) IS NULL");
+		
+		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+
+				new RowMapper<Usuario>() {
+					@Override
+					public Usuario mapRow(ResultSet rs, int idx) throws SQLException {						
+						Usuario usuario = new Usuario();						
+						usuario.setId(rs.getLong("idUsuario"));
+						usuario.setNome(rs.getString("nomeUsuario"));	
+
+						return usuario;
+					}
+				});
+		
+		return lista;
 	}
 
 }

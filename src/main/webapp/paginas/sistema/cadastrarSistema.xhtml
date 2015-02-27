@@ -9,7 +9,8 @@
 				<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" immediate="true" />
 					<p:menuitem value="Sistema" action="#{sistemaCad.irParaConsultar()}" immediate="true" />
-					<p:menuitem value="Cadastrar " action="#{sistemaCad.irParaCadastrar()}" immediate="true" />
+					<p:menuitem value="Cadastrar " action="#{sistemaCad.irParaCadastrar()}" rendered="#{sistemaCad.modoCadastrar()}" immediate="true" />
+					<p:menuitem value="Alterar " action="#{sistemaCad.irParaAlterar()}" rendered="#{!sistemaCad.modoCadastrar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 
@@ -24,19 +25,20 @@
 						</h:inputText>
 						<br />
 
-						<h:outputLabel value="Lider:" style="width:50px;" />
-						<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o lider." value="#{sistemaCad.sistemaSelecionado.lider}" style="width:216px">
-							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-							<f:selectItems value="#{sistemaCad.listaLider}" var="lider" itemLabel="#{lider.nome}" itemValue="#{lider}" />
-						</p:selectOneMenu>
-						<br />
-
 						<h:outputLabel value="Projeto:" style="width:50px;" />
 						<p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o projeto." value="#{sistemaCad.sistemaSelecionado.projeto}" style="width:216px">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{sistemaCad.listaProjetos}" var="projeto" itemLabel="#{projeto.nome}" itemValue="#{projeto}" />
+							<f:ajax event="change" render="mainForm:lider" />
 						</p:selectOneMenu>
 						<br />
+				
+						<h:outputLabel value="Lider:" style="width:50px;" />
+						<p:selectOneMenu id="lider" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Informe o lider." value="#{sistemaCad.sistemaSelecionado.lider}" style="width:216px">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{sistemaCad.listarLideres()}" var="lider" itemLabel="#{lider.nome}" itemValue="#{lider}" />
+						</p:selectOneMenu>
+						<br />					
 
 						<h:outputLabel value="Descrição:" style="width:50px;" />
 						<p:inputTextarea rows="3" cols="40" autoResize="false" maxlength="200" value="#{sistemaCad.sistemaSelecionado.descricao}" />

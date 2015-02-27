@@ -99,7 +99,7 @@ public class UsuarioCadController extends UsuarioController {
 		return irParaConsultar();
 	}
 
-	private boolean modoCadastrar() {
+	public boolean modoCadastrar() {
 		if (usuarioSelecionado == null || usuarioSelecionado.getId() == null) {
 			return true;
 		} else {
