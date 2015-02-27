@@ -63,7 +63,7 @@ public class SistemaCadController extends SistemaController {
 		return listaProjetos;
 	}
 
-	private boolean modoCadastrar() {
+	public boolean modoCadastrar() {
 		if (sistemaSelecionado == null || sistemaSelecionado.getId() == null) {
 			return true;
 		} else {

@@ -108,7 +108,7 @@ public class SindicatoCadController extends SindicatoController {
 		}
 	}
 
-	private boolean modoCadastrar() {
+	public boolean modoCadastrar() {
 		if (sindicatoSelecionado == null || sindicatoSelecionado.getId() == null) {			
 			return true;
 		} else {						

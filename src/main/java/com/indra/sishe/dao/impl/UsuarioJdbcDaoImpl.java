@@ -28,7 +28,6 @@ import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Estado;
 import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Sindicato;
-import com.indra.sishe.entity.Sistema;
 import com.indra.sishe.entity.Usuario;
 
 @Repository
