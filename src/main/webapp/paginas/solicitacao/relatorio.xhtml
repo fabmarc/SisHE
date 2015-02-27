@@ -20,16 +20,23 @@
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 				<div class="divCorpo" style="padding-bottom: 12%;">
-					<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 340px; left: 200px; top: -10px;">
+					<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 443px; left: 150px; top: -10px;">
 						<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
 							<div style="position: relative; width: 263px; height: 41px;">
 								<h:outputLabel value="Mês" style="width:50px;" />
-								<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" id="cargoIpt" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
+								<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
 									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-									<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes} / #{mes.ano}" itemValue="#{mes}" />
+									<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes}" />
 								</h:selectOneMenu>
 							</div>
-							<div style="width: 130px; height: 40px; position: relative; top: -15px; left: 177px;">
+							<div style="position: relative; position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
+								<h:outputLabel value="Ano" style="width:50px;" />
+								<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
+								</h:selectOneMenu>
+							</div>
+							<div style="width: 130px; height: 40px; position: relative; top: -56px; left: 281px;">
 								<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
 							</div>
 						</div>

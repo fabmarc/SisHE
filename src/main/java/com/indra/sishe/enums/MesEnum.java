@@ -1,6 +1,7 @@
 package com.indra.sishe.enums;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -46,6 +47,20 @@ public enum MesEnum {
 			if (valorMes == mes.getValor()) return mes;
 		}
 		return null;
+	}
+	
+	public static List<MesEnum> listaMeses() {
+		List<MesEnum> listaMeses = new ArrayList<MesEnum>(Arrays.asList(MesEnum.values()));
+		return listaMeses;
+	}
+	
+	public static List<Integer> anosAtuais(){
+		List<Integer> anos = new ArrayList<Integer>();
+		Calendar cal = Calendar.getInstance();
+		anos.add(cal.get(Calendar.YEAR)-1);
+		anos.add(cal.get(Calendar.YEAR));
+		anos.add(cal.get(Calendar.YEAR) + 1);
+		return anos;
 	}
 
 	public static List<MesEnum> seisMeses() {
