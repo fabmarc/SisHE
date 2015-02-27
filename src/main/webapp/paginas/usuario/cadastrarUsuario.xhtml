@@ -11,7 +11,8 @@
 				<p:breadCrumb styleClass="breadCrumb" style="top:-10px;">
 					<p:menuitem value="Home" url="/index.jsf" immediate="true" />
 					<p:menuitem value="Usuário" action="#{usuarioMnt.irParaConsultar()}" immediate="true" />
-					<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" immediate="true" />
+					<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" rendered="#{usuarioCad.modoCadastrar()}" immediate="true" />
+					<p:menuitem value="Alterar" action="#{usuarioMnt.irParaCadastrar()}" rendered="#{!usuarioCad.modoCadastrar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0; top: -17px; position: relative;" />
 
