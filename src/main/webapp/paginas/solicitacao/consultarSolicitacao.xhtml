@@ -106,9 +106,11 @@
 						<f:facet name="footer">
 							<!--	<div style="width: 100%; height: 23px; position: relative;">-->
 							<!-- 	<div style="text-align: left; width: 50%; position: relative;"> -->
-							<p:commandLink id="aprovar" style="position: absolute;left: 12px;" value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}" rendered="#{solicitacaoMnt.verificarCargo()}" />
-							<h:outputLabel value=" / " rendered="#{solicitacaoMnt.verificarCargo()}" style="width: 10px;position: absolute;left: 74px;color: #333;font-weight: bold;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);font-family: Arial,sans-serif;font-size: 1.1em;" />
-							<p:commandLink id="reprovar" style="position: absolute;left: 88px;" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}" rendered="#{solicitacaoMnt.verificarCargo()}" />
+							
+							<p:commandLink id="aprovar" style="position: absolute;left: 12px;" value="Aprovar" actionListener="#{solicitacaoMnt.beforeAprovarSolicitacao()}" rendered="#{!solicitacaoMnt.todasSolicitacoes}" />
+							<h:outputLabel id="barra" value=" / " rendered="#{!solicitacaoMnt.todasSolicitacoes}" style="width: 10px;position: absolute;left: 74px;color: #333;font-weight: bold;text-shadow: 0px 1px 0px rgba(255,255,255,0.7);font-family: Arial,sans-serif;font-size: 1.1em;" />
+							<p:commandLink id="reprovar" style="position: absolute;left: 88px;" value="Reprovar" actionListener="#{solicitacaoMnt.beforeReprovarSolicitacao()}" rendered="#{!solicitacaoMnt.todasSolicitacoes}" />
+							
 							<!-- <div style="text-align: right; width: 50%; left: 50%; position: relative; top: -20px;"> -->
 							<p:commandLink id="Excluir" style="position: relative;right: -325px;" value="Excluir" actionListener="#{solicitacaoMnt.beforeRemoverSolicitacao()}" />
 						</f:facet>
