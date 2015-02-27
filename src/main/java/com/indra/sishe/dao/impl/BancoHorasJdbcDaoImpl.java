@@ -132,7 +132,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 			sql = new StringBuilder();
 			params = new MapSqlParameterSource();
 			// Consultar data, hora inicio e hora fim da solicitação atual.
-			sql.append("SELECT	solicitacao.data, hora_inicio, hora_final, id_usuario, feriado.data as data_feriado, CASE WHEN FERIADO.DATA IS NOT NULL THEN (SELECT regra.porcentagem_feriado FROM REGRA WHERE REGRA.ID_SINDICATO = SINDICATO.ID AND REGRA.DATA_FIM > SOLICITACAO.DATA AND REGRA.DATA_INICIO <SOLICITACAO.DATA ORDER BY REGRA.DATA_FIM LIMIT 1) END AS porcentagem FROM SOLICITACAO  LEFT JOIN USUARIO ON (USUARIO.ID = SOLICITACAO.ID_USUARIO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) LEFT JOIN ESTADO ON (ESTADO.ID = CIDADE.ID_ESTADO) LEFT JOIN FERIADO ON (((FERIADO.ID_ESTADO = ESTADO.ID AND FERIADO.ID_CIDADE=CIDADE.ID) OR (FERIADO.ID_ESTADO = ESTADO.ID AND FERIADO.ID_CIDADE IS NULL))AND solicitacao.data = feriado.data) LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) WHERE solicitacao.id = :id ");
+			sql.append("SELECT solicitacao.data ,hora_inicio ,hora_final ,id_usuario ,feriado.data AS data_feriado ,CASE WHEN FERIADO.DATA IS NOT NULL THEN ( SELECT regra.porcentagem_feriado FROM REGRA WHERE REGRA.ID_SINDICATO = SINDICATO.ID AND REGRA.DATA_FIM > SOLICITACAO.DATA AND REGRA.DATA_INICIO < SOLICITACAO.DATA ORDER BY REGRA.DATA_FIM LIMIT 1 ) END AS porcentagem FROM SOLICITACAO LEFT JOIN USUARIO ON (USUARIO.ID = SOLICITACAO.ID_USUARIO) LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE)LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) LEFT JOIN FERIADO ON ( ( ( FERIADO.ID_ESTADO = SINDICATO.ID_ESTADO AND FERIADO.ID_CIDADE = CIDADE.ID ) OR ( FERIADO.ID_ESTADO = SINDICATO.ID_ESTADO AND FERIADO.ID_CIDADE IS NULL ) OR ( FERIADO.ID_ESTADO IS NULL ) ) AND solicitacao.data = feriado.data ) WHERE solicitacao.id = :id ");
 			params.addValue("id", id);
 
 			// obter uma solicitação.
@@ -290,10 +290,10 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				// para o feriado na regra.
 				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
 						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
-				historicoDetalhes.add(new HistoricoDetalhes(diferenca, porcentagemFeriado, (int) (minutoTotal
-						* (float) porcentagemFeriado / 100), new Historico(new Solicitacao(id))));
-
+				diferenca = minutoTotal;
 				minutos = (int) (minutoTotal + (minutoTotal * ((float) porcentagemFeriado / 100)));
+				historicoDetalhes.add(new HistoricoDetalhes(diferenca, porcentagemFeriado, (int) (minutos), new Historico(new Solicitacao(id))));
+
 			}
 			// Adicionar novo saldo ao banco de horas.
 			getJdbcTemplate()

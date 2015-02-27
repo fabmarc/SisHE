@@ -503,7 +503,7 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT solicitacao.id AS idSolicitacao, hora_inicio, hora_final, solicitacao.descricao AS descricao, data_aprovacao_lider, data_aprovacao_gerente, data, status_lider, status_gerente, id_usuario, usuario.nome AS nomeUsuario, id_sistema, sistema.nome AS nomeSistema, id_aprovador_lider, lider.nome AS nomeLider, projeto.nome AS nomeProjeto, projeto.id AS idprojeto, id_aprovador_gerente, gerente.nome AS nomeGerente ");
 		sql.append("FROM solicitacao INNER JOIN usuario ON (usuario.id = solicitacao.id_usuario) INNER JOIN sistema ON (sistema.id = solicitacao.id_sistema) LEFT JOIN usuario lider ON (lider.id = solicitacao.id_aprovador_lider) LEFT JOIN usuario gerente ON (gerente.id = solicitacao.id_aprovador_gerente) INNER JOIN projeto ON (projeto.id = sistema.id_projeto) ");
-		sql.append("WHERE projeto.id = (SELECT id FROM projeto WHERE id_gerente = :idGerente) ");
+		sql.append("WHERE projeto.id IN (SELECT id FROM projeto WHERE id_gerente = :idGerente) ");
 		params.addValue("idGerente", solicitacaoFiltro.getGerente().getId());
 
 		if (solicitacaoFiltro.getData() != null) {
