@@ -248,16 +248,6 @@ public class SolicitacaoJdbcDaoImpl extends NamedParameterJdbcDaoSupport impleme
 		sql.append("AND projeto.id_gerente = :idGerente ");
 		params.addValue("idGerente", solicitacaoFiltro.getGerente().getId());
 
-		if (solicitacaoFiltro.getSistema() != null) {
-			sql.append("AND solicitacao.id_sistema = :idSistema ");
-			params.addValue("idSistema", solicitacaoFiltro.getSistema().getId());
-		}
-
-		if (solicitacaoFiltro.getUsuario().getNome() != null
-				&& !"".equals(solicitacaoFiltro.getUsuario().getNome())) {
-			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
-			params.addValue("nomeUsuario", solicitacaoFiltro.getUsuario().getNome().toLowerCase());
-		}
 		sql.append("ORDER BY data ASC ");
 		List<Solicitacao> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 				new RowMapper<Solicitacao>() {
