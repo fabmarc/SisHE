@@ -259,7 +259,11 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 						} else {// caso o periodo atenda a todos os minutos da
 								// solicitação.
 							// obter minutos que representam o periodo atual.
-							diferenca = minutoSolicitacaoFinal - minutoInicioPeriodo;
+							if(minutoSolicitacaoInicial<=minutoInicioPeriodo){
+								diferenca = minutoSolicitacaoFinal - minutoInicioPeriodo;
+							}else{
+								diferenca = minutoTotal;
+							}
 							// obter minutos que ainda não foram utilizados no
 							// calculo.
 							minutoTotal = minutoTotal - diferenca;

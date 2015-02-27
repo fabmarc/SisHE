@@ -14,7 +14,7 @@
 		</ui:insert>
 	</h:head>
 
-	<h:body style="height:100%; overflow:visible">
+	<h:body style="height:100%; overflow:visible;">
 		<div class="container" style="height: auto;">
 			<div id="cabecalho" style="width: 100%; position: absolute; left: 0px;">
 				<div class="logoCabeLeft">
@@ -49,7 +49,9 @@
 								</h:commandLink>
 							</div>
 							<div style="float: right; position: relative; width: 25px; top: -10px; left: -10px;" id="divHome">
-								<a href="#{request.contextPath}/index.jsf"><p:graphicImage url="/resources/images/home.png" title="Home" /></a>
+								<a href="#{request.contextPath}/index.jsf">
+									<p:graphicImage url="/resources/images/home.png" title="Home" />
+								</a>
 							</div>
 							<div class="divContSaldo" style="left: -18px;">
 								<div style="float: right;">
