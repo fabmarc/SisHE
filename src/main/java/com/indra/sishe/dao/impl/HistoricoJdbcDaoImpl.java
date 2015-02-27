@@ -24,6 +24,7 @@ import com.indra.sishe.dao.HistoricoDAO;
 import com.indra.sishe.entity.DadosRelatorio;
 import com.indra.sishe.entity.Historico;
 import com.indra.sishe.entity.HistoricoDetalhes;
+import com.indra.sishe.entity.Usuario;
 
 @Repository
 public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements HistoricoDAO {
@@ -130,11 +131,11 @@ public class HistoricoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implement
 		});
 	}
 
-	public List<DadosRelatorio> gerarRelatorio(String mes, String ano) {
+	public List<DadosRelatorio> gerarRelatorio(String mes, String ano, Usuario entity) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("select historico_detalhes.id, solicitacao.id as idSolicitacao, TO_CHAR(solicitacao.data, 'DD/MM/YYYY') as dataSolicitacao, historico.data, id_historico as idHistorico, TO_CHAR(solicitacao.data, 'MM') , solicitacao.hora_inicio, solicitacao.hora_final, minutos, porcentagem, valor, (SELECT SUM(VALOR) FROM historico_detalhes WHERE HISTORICO.ID = historico_detalhes.ID_HISTORICO AND historico.id_solicitacao = solicitacao.id LIMIT 1) as total from  historico_detalhes inner join historico on (historico.id = historico_detalhes.id_historico) inner join solicitacao on (historico.id_solicitacao = solicitacao.id) inner join usuario on (usuario.id = solicitacao.id_usuario) where usuario.id = :idUsuario ");
-		params.addValue("idUsuario", UsuarioLogado.getId());
+		params.addValue("idUsuario", entity.getId());
 		if (mes != null && !mes.isEmpty()) {
 			sql.append(" and TO_CHAR(solicitacao.data, 'MM') = :mes ");
 			params.addValue("mes", mes);

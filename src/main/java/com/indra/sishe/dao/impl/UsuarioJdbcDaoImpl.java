@@ -207,7 +207,8 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			params.add(param);
 		}
 		try {
-			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM BANCO_HORAS WHERE ID_USUARIO = ?", params);
+			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM BANCO_HORAS WHERE ID_USUARIO = ?",
+					params);
 			for (int rows : affectedRows)
 				if (rows == 0) throw new RegistroInexistenteException();
 			affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM usuario WHERE id = ?", params);
@@ -310,15 +311,15 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 
-		sql.append("SELECT usuario.id,usuario.id_cargo AS id_cargo,cargo.nome AS nome_cargo,usuario.nome AS nome,usuario.matricula," +
-				"usuario.email AS email,usuario.LOGIN AS LOGIN,usuario.senha AS senha,usuario.id_sindicato AS id_sindicato," +
-				"sindicato.descricao AS sindicato_descricao,cidade.id AS id_cidade,cidade.id_estado AS id_cidade_estado,cidade.nome " +
-				"AS cidade_nome " +
-				"FROM usuario " +
-				"LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) " +
-				"LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) " +
-				"LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) " +
-				"WHERE usuario.id not in (select id_gerente from projeto) and cargo.role like 'ROLE_GERENTE'");
+		sql.append("SELECT usuario.id,usuario.id_cargo AS id_cargo,cargo.nome AS nome_cargo,usuario.nome AS nome,usuario.matricula,"
+				+ "usuario.email AS email,usuario.LOGIN AS LOGIN,usuario.senha AS senha,usuario.id_sindicato AS id_sindicato,"
+				+ "sindicato.descricao AS sindicato_descricao,cidade.id AS id_cidade,cidade.id_estado AS id_cidade_estado,cidade.nome "
+				+ "AS cidade_nome "
+				+ "FROM usuario "
+				+ "LEFT JOIN CARGO ON (CARGO.ID = USUARIO.ID_CARGO) "
+				+ "LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) "
+				+ "LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) "
+				+ "WHERE usuario.id not in (select id_gerente from projeto) and cargo.role like 'ROLE_GERENTE'");
 		return consultar(sql, params);
 	}
 

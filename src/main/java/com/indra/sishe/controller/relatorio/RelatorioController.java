@@ -11,7 +11,9 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 import com.indra.infra.controller.BaseController;
+import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.entity.DadosRelatorio;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.enums.MesEnum;
 import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.HistoricoService;
@@ -79,8 +81,9 @@ public class RelatorioController extends BaseController implements Serializable 
 	public TreeNode gerarHistorico() {
 
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
-		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(),
-				Integer.toString(this.mes.getAno()));
+		List<DadosRelatorio> dados;
+		dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()),
+				new Usuario(UsuarioLogado.getId()));
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;

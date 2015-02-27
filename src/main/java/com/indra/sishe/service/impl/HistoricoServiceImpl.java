@@ -11,6 +11,7 @@ import com.indra.sishe.dao.HistoricoDAO;
 import com.indra.sishe.entity.DadosRelatorio;
 import com.indra.sishe.entity.Historico;
 import com.indra.sishe.entity.HistoricoDetalhes;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.HistoricoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -67,8 +68,8 @@ public class HistoricoServiceImpl extends StatelessServiceAb implements Historic
 	}
 
 	@Override
-	public List<DadosRelatorio> gerarRelatorio(String mes, String ano) {
-		return historicoDao.gerarRelatorio(mes, ano);
+	public List<DadosRelatorio> gerarRelatorio(String mes, String ano, Usuario entity) {
+		return historicoDao.gerarRelatorio(mes, ano, entity);
 	}
 
 }

@@ -36,6 +36,13 @@
 									<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
 								</h:selectOneMenu>
 							</div>
+							<div style="position: relative; position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
+								<h:outputLabel value="Usuário" style="width:50px;" />
+								<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
+									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+									<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
+								</h:selectOneMenu>
+							</div>
 							<div style="width: 130px; height: 40px; position: relative; top: -56px; left: 281px;">
 								<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
 							</div>
