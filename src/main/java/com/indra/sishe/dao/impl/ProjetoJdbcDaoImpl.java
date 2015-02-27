@@ -183,6 +183,42 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				});
 		return lista;
 	}
+	
+	@Override
+	public List<Projeto> findByGerente(Usuario usuario) {
+
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT projeto.id AS id, projeto.nome AS nome, usuario.nome AS nomeGerente, "
+				+ "usuario.id AS idGerente, projeto.descricao AS descricao ");
+		sql.append("FROM projeto INNER JOIN usuario ON (projeto.id_gerente=usuario.id) WHERE 1=1 ");
+
+		if (usuario != null && usuario.getId() != null) {
+			sql.append("AND projeto.id_gerente = :idGerente ");
+			params.addValue("idGerente", usuario.getId());
+		}
+
+		sql.append("ORDER BY projeto.id ");
+		List<Projeto> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+				new RowMapper<Projeto>() {
+					@Override
+					public Projeto mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Projeto projeto = new Projeto();
+						Usuario usuario = new Usuario();
+
+						usuario.setId(rs.getLong("idGerente"));
+						usuario.setNome(rs.getString("nomeGerente"));
+
+						projeto.setId(rs.getLong("id"));
+						projeto.setGerente(usuario);
+						projeto.setNome(rs.getString("nome"));
+						projeto.setDescricao(rs.getString("descricao"));
+						return projeto;
+					}
+
+				});
+		return lista;
+	}
 
 	public SimpleJdbcInsert getInsertProjeto() {
 		return insertProjeto;

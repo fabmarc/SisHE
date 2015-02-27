@@ -34,6 +34,11 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	public Usuario(Long id) {
 		this.id = id;
 	}
+	
+	public Usuario(Long id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
 
 	public Long getId() {
 		return id;

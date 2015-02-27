@@ -3,6 +3,7 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -321,6 +322,32 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				+ "LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) "
 				+ "WHERE usuario.id not in (select id_gerente from projeto) and cargo.role like 'ROLE_GERENTE'");
 		return consultar(sql, params);
+	}
+	
+	
+	@Override
+	public List<Usuario> findByProjetos(List<Long> ids) {
+
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("SELECT usuario.id, nome ");
+		sql.append("FROM usuario INNER JOIN USUARIO_PROJETO ON (USUARIO_PROJETO.ID_USUARIO = USUARIO.ID) WHERE USUARIO_PROJETO.ID_PROJETO in (:ids) ");
+		//params2.addValue("idUsuario", params);
+		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), Collections.singletonMap("ids", ids),
+				new RowMapper<Usuario>() {
+			@Override
+			public Usuario mapRow(ResultSet rs, int idx) throws SQLException {
+
+				Usuario usuario = new Usuario();
+
+				usuario.setId(rs.getLong("id"));
+				usuario.setNome(rs.getString("nome"));
+
+				return usuario;
+			}
+		});
+		
+		return lista;
 	}
 
 }

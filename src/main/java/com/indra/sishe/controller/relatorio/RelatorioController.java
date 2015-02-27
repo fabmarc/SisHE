@@ -1,6 +1,7 @@
 package com.indra.sishe.controller.relatorio;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -13,10 +14,13 @@ import org.primefaces.model.TreeNode;
 import com.indra.infra.controller.BaseController;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.entity.DadosRelatorio;
+import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.enums.MesEnum;
 import com.indra.sishe.service.BancoHorasService;
 import com.indra.sishe.service.HistoricoService;
+import com.indra.sishe.service.ProjetoService;
+import com.indra.sishe.service.UsuarioService;
 
 @ManagedBean(name = "relatorioController")
 @ViewScoped
@@ -37,6 +41,23 @@ public class RelatorioController extends BaseController implements Serializable 
 
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
+
+	@Inject
+	protected transient ProjetoService projetoService;
+	
+	@Inject
+	protected transient UsuarioService usuarioService;
+	
+	private Usuario usuarioFiltro;
+	
+	
+	public Usuario getUsuarioFiltro() {
+		return usuarioFiltro;
+	}
+
+	public void setUsuarioFiltro(Usuario usuarioFiltro) {
+		this.usuarioFiltro = usuarioFiltro;
+	}
 
 	public TreeNode getTable() {
 		return table;
@@ -82,8 +103,7 @@ public class RelatorioController extends BaseController implements Serializable 
 
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
 		List<DadosRelatorio> dados;
-		dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()),
-				new Usuario(UsuarioLogado.getId()));
+		dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()), new Usuario(UsuarioLogado.getId()));
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;
@@ -132,6 +152,29 @@ public class RelatorioController extends BaseController implements Serializable 
 
 	public String irParaRelatorio() {
 		return "/paginas/solicitacao/relatorio.xhtml?faces-redirect=true";
+	}
+	
+	public List<Usuario> obterUsuariosProjeto() {
+		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+			List<Projeto> projetos = projetoService.findByGerente(new Usuario(UsuarioLogado.getId()));
+			ArrayList<Long> ids = new ArrayList<Long>(projetos.size());
+			for (Projeto p : projetos) {
+				ids.add(p.getId());
+			}
+			List<Usuario> usuarios = usuarioService.findByProjetos(ids);
+			usuarios.add(new Usuario(UsuarioLogado.getId(), (String) getSessionAttr("usuario_nome")));
+			return usuarios;
+		} else {
+			return null;
+		}
+	}
+	
+	public boolean verificarGerente() {
+		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

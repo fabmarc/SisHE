@@ -17,4 +17,6 @@ public interface UsuarioDAO extends BaseDAO<Usuario> {
 	public Usuario findByLogin(String login);
 	
 	public List<Usuario> findGerentesDisponiveis();
+	
+	public List<Usuario> findByProjetos(List<Long> ids);
 }
