@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.indra.infra.dao.BaseDAO;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
+import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 
 public interface UsuarioDAO extends BaseDAO<Usuario> {
@@ -19,4 +20,7 @@ public interface UsuarioDAO extends BaseDAO<Usuario> {
 	public List<Usuario> findGerentesDisponiveis();
 	
 	public List<Usuario> findByProjetos(List<Long> ids);
+
+	public List<Usuario> findLideresDisponiveis(Projeto projeto);
+
 }

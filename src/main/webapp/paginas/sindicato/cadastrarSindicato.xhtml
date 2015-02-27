@@ -9,8 +9,9 @@
 			
 			<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" immediate="true" />
-					<p:menuitem value="Sindicato" action="#{sindicatoMnt.irParaConsultar()}" immediate="true" />
-					<p:menuitem value="Cadastrar " action="#{sindicatoMnt.irParaCadastrar()}" immediate="true" />
+					<p:menuitem value="Sindicato" action="#{sindicatoCad.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Cadastrar " action="#{sindicatoCad.irParaCadastrar()}" rendered="#{sindicatoCad.modoCadastrar()}" immediate="true" />
+					<p:menuitem value="Alterar " action="#{sindicatoCad.irParaAlterar()}" rendered="#{!sindicatoCad.modoCadastrar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 			

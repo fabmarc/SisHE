@@ -47,14 +47,14 @@ public class SistemaCadController extends SistemaController {
 			sistemaSelecionado = new Sistema();
 
 		}
-		sistemaFiltro = (Sistema) getFlashAttr("sistemaFiltro");
-		listarLideres();
+		sistemaFiltro = (Sistema) getFlashAttr("sistemaFiltro");		
 		listarProjeto();
 	}
 
 	public List<Usuario> listarLideres() {
-
-		listaLideres = usuarioService.findByCargo("ROLE_LIDER");
+		if(sistemaSelecionado != null && sistemaSelecionado.getProjeto() != null){
+			listaLideres = usuarioService.findLideresDisponiveis(sistemaSelecionado.getProjeto());
+		}		
 		return listaLideres;
 	}
 
@@ -63,7 +63,7 @@ public class SistemaCadController extends SistemaController {
 		return listaProjetos;
 	}
 
-	private boolean modoCadastrar() {
+	public boolean modoCadastrar() {
 		if (sistemaSelecionado == null || sistemaSelecionado.getId() == null) {
 			return true;
 		} else {
