@@ -195,12 +195,9 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			sql.append("SELECT regra.id AS id, regra.id_sindicato AS idSindicato, sindicato.descricao AS nomeSindicato, "
 					+ "regra.descricao AS descricao, regra.data_inicio AS dataInicio, regra.data_fim AS dataFim, "
-					+ "regra.porcentagem_feriado AS porcentagem, estado.id AS idEstado, estado.nome AS nomeEstado, "
-					+ "estado.sigla AS siglaEstado ");
+					+ "regra.porcentagem_feriado AS porcentagem ");
 			sql.append("FROM regra INNER JOIN sindicato ON (regra.id_sindicato = sindicato.id) "
-					+ "INNER JOIN estado ON (sindicato.id_estado = estado.id) WHERE 1=1 ");
-
-			sql.append("AND regra.id = :id");
+					+ "WHERE regra.id = :id");
 			params.addValue("id", id);
 
 			return getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new RowMapper<Regra>() {

@@ -227,6 +227,24 @@ public class SolicitacaoMntController extends SolicitacaoController {
 			return false;
 		}
 	}
+	
+	public boolean filtroLider(){
+		if (UsuarioLogado.verificarPermissao("ROLE_LIDER") && todasSolicitacoes == false) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean filtroLiderSolicitante(){
+		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+			return false;
+		}else if (UsuarioLogado.verificarPermissao("ROLE_LIDER") && todasSolicitacoes == false) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	public List<StatusEnum> listaStatus() {
 		return StatusEnum.status();
