@@ -259,9 +259,9 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 						} else {// caso o periodo atenda a todos os minutos da
 								// solicitação.
 							// obter minutos que representam o periodo atual.
-							if(minutoSolicitacaoInicial<=minutoInicioPeriodo){
+							if (minutoSolicitacaoInicial <= minutoInicioPeriodo) {
 								diferenca = minutoSolicitacaoFinal - minutoInicioPeriodo;
-							}else{
+							} else {
 								diferenca = minutoTotal;
 							}
 							// obter minutos que ainda não foram utilizados no
@@ -292,7 +292,8 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 				diferenca = minutoTotal;
 				minutos = (int) (minutoTotal + (minutoTotal * ((float) porcentagemFeriado / 100)));
-				historicoDetalhes.add(new HistoricoDetalhes(diferenca, porcentagemFeriado, (int) (minutos), new Historico(new Solicitacao(id))));
+				historicoDetalhes.add(new HistoricoDetalhes(diferenca, porcentagemFeriado, (int) (minutos),
+						new Historico(new Solicitacao(id))));
 
 			}
 			// Adicionar novo saldo ao banco de horas.
