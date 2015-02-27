@@ -29,7 +29,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	private String ano;
 
 	private MesEnum mes;
-
+	
 	@Inject
 	protected transient HistoricoService historicoService;
 
@@ -118,8 +118,12 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public List<MesEnum> obterListaMes() {
-		List<MesEnum> listaDias = MesEnum.seisMeses();
+		List<MesEnum> listaDias = MesEnum.listaMeses();
 		return listaDias;
+	}
+	
+	public List<Integer> obterListaAnos() {
+		return MesEnum.anosAtuais();
 	}
 
 	public String irParaRelatorio() {
