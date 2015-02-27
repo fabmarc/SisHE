@@ -40,8 +40,8 @@ public class ProjetoCadController extends ProjetoController {
 
 		projetoFiltro = (Projeto) getFlashAttr("projetoFiltro");
 		if (listaGerentes.isEmpty()) {
-			returnInfoMessage(messageProvider.getMessage("msg.error.senha.gerentes.indisponiveis"));
-			RequestContext.getCurrentInstance().execute("selectAtleastOne.show()");
+			returnErrorMessage(messageProvider.getMessage("msg.error.senha.gerentes.indisponiveis"));
+			RequestContext.getCurrentInstance().execute("gerentesIndisponiveis.show()");
 		}
 	}
 

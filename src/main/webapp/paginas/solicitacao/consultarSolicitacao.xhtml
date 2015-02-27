@@ -53,7 +53,7 @@
 						</ui:fragment>
 					</div>
 					<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
-						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" rendered="#{solicitacaoMnt.verificarCargo()}" value="Pesquisar" />
+						<h:commandButton styleClass="botao3d" actionListener="#{solicitacaoMnt.pesquisar()}" value="Pesquisar" />
 					</div>
 
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}"
@@ -122,17 +122,20 @@
 							</h:outputText>
 							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> às <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br /> Duração: <b>#{solicitacaoMnt.solicitacaoDetalhe.duracao}</b><br />
 							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.lider.nome}">
-								Líder avaliador: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
+								<h:outputText style="font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.id == 1}" />
+								<h:outputText style="font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.id == 2}" />
+								pelo Líder: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 								<br />
 							</ui:fragment>
 							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.gerente.nome}">
-								Gerente avaliador: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
+								<h:outputText style="font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 1}" />
+								<h:outputText style="font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 2}" />
+								pelo Gerente: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</ui:fragment>
-							<div style="height: 4px;"></div>
 							Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
 						</div>
 						<div class="divDialog">

@@ -37,8 +37,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	private boolean todasSolicitacoes;
 
-	private boolean minhasSolicitacoes;
-
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
 
@@ -53,6 +51,10 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 		MessageProvider.setInstance(messageProvider);
 		setListaSistemas(obterSistemas());
+		
+		if (UsuarioLogado.getPermissoes().contains("ROLE_FUNCIONARIO")) {
+			todasSolicitacoes = true;
+		}
 
 		searched = (Boolean) getFlashAttr("searched");
 		if (searched == null) searched = false;
@@ -60,7 +62,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 		solicitacaoFiltro = (Solicitacao) getFlashAttr("solicitacaoFiltro");
 		if (solicitacaoFiltro == null) solicitacaoFiltro = new Solicitacao();
 
-		// if (!searched) listaSolicitacoes = new ArrayList<Solicitacao>(); else
 		pesquisar();
 	}
 
@@ -83,7 +84,7 @@ public class SolicitacaoMntController extends SolicitacaoController {
 	}
 
 	private void pesquisarLider() {
-		if (minhasSolicitacoes == false) {
+		if (todasSolicitacoes == false) {
 			pesquisarPendentes();
 		} else {
 			pesquisarPorUsuarioLogado();
@@ -270,14 +271,6 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 	public void setTodasSolicitacoes(boolean todosUsuarios) {
 		this.todasSolicitacoes = todosUsuarios;
-	}
-
-	public boolean isMinhasSolicitacoes() {
-		return minhasSolicitacoes;
-	}
-
-	public void setMinhasSolicitacoes(boolean minhasSolicitacoes) {
-		this.minhasSolicitacoes = minhasSolicitacoes;
 	}
 
 }
