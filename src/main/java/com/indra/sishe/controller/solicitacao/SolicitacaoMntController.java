@@ -51,9 +51,8 @@ public class SolicitacaoMntController extends SolicitacaoController {
 
 		MessageProvider.setInstance(messageProvider);
 		setListaSistemas(obterSistemas());
-		
 		if (UsuarioLogado.getPermissoes().contains("ROLE_FUNCIONARIO")) {
-			todasSolicitacoes = true;
+			todasSolicitacoes = true; // Para habilitar campos do filtro
 		}
 
 		searched = (Boolean) getFlashAttr("searched");
