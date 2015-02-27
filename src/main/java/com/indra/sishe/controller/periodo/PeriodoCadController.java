@@ -74,7 +74,7 @@ public class PeriodoCadController extends PeriodoController {
 		return irParaConsultar();
 	}
 
-	private boolean modoCadastrar() {
+	public boolean modoCadastrar() {
 		if (periodoSelecionado == null || periodoSelecionado.getId() == null) {
 			return true;
 		} else {

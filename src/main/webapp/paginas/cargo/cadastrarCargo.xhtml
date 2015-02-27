@@ -10,7 +10,8 @@
 				<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" />
 					<p:menuitem value="Cargo" action="#{cargoMnt.irParaConsultar()}" immediate="true" />
-					<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" immediate="true" />
+					<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" rendered="#{cargoCad.modoCadastrar()}" immediate="true" />
+					<p:menuitem value="Alterar" action="#{cargoMnt.irParaCadastrar()}" rendered="#{!cargoCad.modoCadastrar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 
