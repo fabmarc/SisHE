@@ -29,7 +29,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	private String ano;
 
 	private MesEnum mes;
-	
+
 	@Inject
 	protected transient HistoricoService historicoService;
 
@@ -79,7 +79,8 @@ public class RelatorioController extends BaseController implements Serializable 
 	public TreeNode gerarHistorico() {
 
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
-		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()));
+		List<DadosRelatorio> dados = historicoService.gerarRelatorio(this.mes.getNumero(),
+				Integer.toString(this.mes.getAno()));
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;
@@ -99,7 +100,7 @@ public class RelatorioController extends BaseController implements Serializable 
 					dadoTemp.getPorcentagem() + "%", dadoTemp.getValor() + "min"), work);
 			total = total + Integer.parseInt(dadoTemp.getValor());
 		}
-		
+
 		// exibir o saldo
 		if (!(table == null || table.getChildren().size() < 1)) {
 			new DefaultTreeNode(new DadosRelatorio("Total", "-", "-", "-", saldoMinu.toString() + "min ("
@@ -121,7 +122,7 @@ public class RelatorioController extends BaseController implements Serializable 
 		List<MesEnum> listaDias = MesEnum.listaMeses();
 		return listaDias;
 	}
-	
+
 	public List<Integer> obterListaAnos() {
 		return MesEnum.anosAtuais();
 	}
