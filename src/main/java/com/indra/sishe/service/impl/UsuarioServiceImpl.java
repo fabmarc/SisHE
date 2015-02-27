@@ -12,6 +12,7 @@ import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.UsuarioDAO;
+import com.indra.sishe.entity.Projeto;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.StatelessServiceAb;
 import com.indra.sishe.service.UsuarioService;
@@ -193,6 +194,11 @@ public class UsuarioServiceImpl extends StatelessServiceAb implements UsuarioSer
 	@Override
 	public List<Usuario> findGerentesDisponiveis() {
 		return usuarioDao.findGerentesDisponiveis();
+	}
+
+	@Override
+	public List<Usuario> findLideresDisponiveis(Projeto projeto) {		
+		return usuarioDao.findLideresDisponiveis(projeto);
 	}
 
 }
