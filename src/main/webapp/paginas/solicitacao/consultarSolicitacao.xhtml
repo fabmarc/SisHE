@@ -140,8 +140,8 @@
 								<br />
 							</ui:fragment>
 							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.gerente.nome}">
-								<h:outputText style="font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 1}" />
-								<h:outputText style="font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 2}" />
+								<h:outputText style="margin-left: 53px;font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 1}" />
+								<h:outputText style="margin-left: 53px;font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 2}" />
 								pelo Gerente: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
