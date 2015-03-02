@@ -16,9 +16,10 @@
 				<!-- DreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
     				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" />
+    				<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" immediate="true"/>
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
+				
 				<div class="divCorpo" style="padding-bottom: 12%;">
 					<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 443px; left: 150px; top: -10px;">
 						<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
