@@ -15,4 +15,5 @@ public interface ProjetoService extends BaseService<Projeto>{
 	
 	public List<Projeto> findByGerente(Usuario usuario);
 
+	public Projeto findByUsuario(Usuario usuario);
 }
