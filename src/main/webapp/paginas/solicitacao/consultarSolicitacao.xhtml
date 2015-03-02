@@ -146,6 +146,7 @@
 								pelo Gerente: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
 											<f:convertDateTime pattern="dd/MM/yyyy" />
 										</h:outputText>
+										<br />
 									</ui:fragment>
 								</ui:fragment>
 								<ui:fragment rendered="#{solicitacaoMnt.verificarCargo()}">
@@ -153,7 +154,7 @@
 								<h:outputText style="font-weight:bold;" value="#{solicitacaoMnt.solicitacaoDetalhe.status}" />
 									<br />
 								</ui:fragment>
-								<br /> Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
+								Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
 							</div>
 						</p:fieldset>
 						<p:fieldset id="fsObsLider" legend="Observações do Líder (#{solicitacaoMnt.solicitacaoDetalhe.lider.nome})" rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.obsLider}" styleClass="classFieldSet" style="margin-top: 10px;">
