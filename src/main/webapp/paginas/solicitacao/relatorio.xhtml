@@ -65,7 +65,7 @@
 								</div>
 								<div style="position: relative; width: 159px; height: 41px; top: -82px; left: 281px;">
 									<h:outputLabel value="Usuário" style="width:50px;" />
-									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.usuarioFiltro}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
+									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.usuarioFiltro}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um usuário.">
 										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 										<f:selectItems value="#{relatorioController.obterUsuariosProjeto()}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario}" />
 									</h:selectOneMenu>
