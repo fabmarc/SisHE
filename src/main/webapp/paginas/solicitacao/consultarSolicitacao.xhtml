@@ -122,39 +122,48 @@
 						</f:facet>
 					</p:dataTable>
 
-					<p:dialog header="Detalhes" dynamic="true" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="auto" width="490px">
-						<div>
-							Solicitante: <b>#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome} </b> <br /> Sistema: <b>#{solicitacaoMnt.solicitacaoDetalhe.sistema.nome}</b> <br /> Data:
-							<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.data}" style="font-weight: bold;">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
-							<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> às <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br /> Duração: <b>#{solicitacaoMnt.solicitacaoDetalhe.duracao}</b><br />
-							<ui:fragment rendered="#{!solicitacaoMnt.verificarCargo()}" >
-							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.lider.nome}">
+					<p:dialog header="Detalhes" dynamic="true" id="modalDetalhesId" widgetVar="modalDetalhes" modal="true" height="auto" width="auto" minWidth="490" >
+						<p:fieldset id="fsDetalhes" legend="Detalhes da Solicitação" styleClass="classFieldSet">
+							<div style="margin-top: -25px;">
+								Solicitante: <b>#{solicitacaoMnt.solicitacaoDetalhe.usuario.nome} </b> <br /> Sistema: <b>#{solicitacaoMnt.solicitacaoDetalhe.sistema.nome}</b> <br /> Data:
+								<h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.data}" style="font-weight: bold;">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<br /> Período: <b>#{solicitacaoMnt.solicitacaoDetalhe.horaInicio}</b> às <b>#{solicitacaoMnt.solicitacaoDetalhe.horaFinal}</b> <br /> Duração: <b>#{solicitacaoMnt.solicitacaoDetalhe.duracao}</b><br />
+								<ui:fragment rendered="#{!solicitacaoMnt.verificarCargo()}">
+									<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.lider.nome}">
 							Status: 
 								<h:outputText style="font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.id == 1}" />
-								<h:outputText style="font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.id == 2}" />
+										<h:outputText style="font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusLider.id == 2}" />
 								pelo Líder: <b>#{solicitacaoMnt.solicitacaoDetalhe.lider.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoLider}" style="font-weight: bold;">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputText>
-								<br />
-							</ui:fragment>
-							<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.gerente.nome}">
-								<h:outputText style="margin-left: 53px;font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 1}" />
-								<h:outputText style="margin-left: 53px;font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 2}" />
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+										<br />
+									</ui:fragment>
+									<ui:fragment rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.gerente.nome}">
+										<h:outputText style="margin-left: 53px;font-weight:bold;color:green" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 1}" />
+										<h:outputText style="margin-left: 53px;font-weight:bold;color:red" value="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.nome}" rendered="#{solicitacaoMnt.solicitacaoDetalhe.statusGerente.id == 2}" />
 								pelo Gerente: <b>#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome}</b> em <h:outputText value="#{solicitacaoMnt.solicitacaoDetalhe.dataAprovacaoGerente}" style="font-weight: bold;">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputText>
-							</ui:fragment>
-							</ui:fragment>
-							<ui:fragment rendered="#{solicitacaoMnt.verificarCargo()}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+										<br />
+									</ui:fragment>
+								</ui:fragment>
+								<ui:fragment rendered="#{solicitacaoMnt.verificarCargo()}">
 							Status: 
 								<h:outputText style="font-weight:bold;" value="#{solicitacaoMnt.solicitacaoDetalhe.status}" />
-								<br />
-							</ui:fragment>
-							Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
-						</div>
-						<div class="divDialog">
+									<br />
+								</ui:fragment>
+								Descrição: <b>#{solicitacaoMnt.solicitacaoDetalhe.descricao}</b> <br />
+							</div>
+						</p:fieldset>
+						<p:fieldset id="fsObsLider" legend="Observações do Líder (#{solicitacaoMnt.solicitacaoDetalhe.lider.nome})" rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.obsLider}" styleClass="classFieldSet" style="margin-top: 10px;">
+							<div style="margin-top: -25px;">#{solicitacaoMnt.solicitacaoDetalhe.obsLider}</div>
+						</p:fieldset>
+						<p:fieldset id="fsObsGerente" legend="Observações do Gerente (#{solicitacaoMnt.solicitacaoDetalhe.gerente.nome})" rendered="#{not empty solicitacaoMnt.solicitacaoDetalhe.obsGerente}" styleClass="classFieldSet" style="margin-top: 10px;">
+							<div style="margin-top: -25px;">#{solicitacaoMnt.solicitacaoDetalhe.obsGerente}</div>
+						</p:fieldset>
+						<div class="divDialog" style="margin-top: 10px;">
 							<h:commandButton value="OK" styleClass="botao3d" onclick="modalDetalhes.hide()" style="width:109px;" />
 						</div>
 					</p:dialog>
