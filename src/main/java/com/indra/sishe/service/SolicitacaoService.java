@@ -8,7 +8,6 @@ import javax.ejb.Local;
 import com.indra.infra.service.BaseService;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Solicitacao;
-import com.indra.sishe.entity.Usuario;
 
 @Local
 public interface SolicitacaoService extends BaseService<Solicitacao> {

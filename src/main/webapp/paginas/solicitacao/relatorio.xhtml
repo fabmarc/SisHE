@@ -24,16 +24,16 @@
 					<!-- Fragmento para Funcionario -->
 					<ui:fragment rendered="#{relatorioController.verificarFuncionario()}">
 						<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 443px; left: 150px; top: -10px;">
-							<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
-								<div style="position: relative; width: 263px; height: 41px;">
-									<h:outputLabel value="Mês" style="width:50px;" />
+							<div style="width: 570px; position: relative; height: 60px; left: 10px; padding: 10px;">
+								<div style="position: relative; width: 155px; height: 41px;">
+									<h:outputLabel value="Mês" style="width:30px;" />
 									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
 										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 										<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes}" />
 									</h:selectOneMenu>
 								</div>
-								<div style="position: relative; position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
-									<h:outputLabel value="Ano" style="width:50px;" />
+								<div style="position: relative; position: relative; width: 115px; height: 41px; top: -41px; left: 161px;">
+									<h:outputLabel value="Ano" style="width:30px;" />
 									<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
 										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 										<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
@@ -48,16 +48,16 @@
 					<!-- Fragmento para Gerente e Lider -->
 					<ui:fragment rendered="#{!relatorioController.verificarFuncionario()}">
 						<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 603px; left: 71px; top: -10px;">
-							<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
-								<div style="position: relative; width: 263px; height: 41px;">
-									<h:outputLabel value="Mês" style="width:50px;" />
+							<div style="width: 570px; position: relative; height: 60px; left: 10px; padding: 10px;">
+								<div style="position: relative; width: 155px; height: 41px;">
+									<h:outputLabel value="Mês" style="width:30px;" />
 									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
 										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 										<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes}" />
 									</h:selectOneMenu>
 								</div>
-								<div style="position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
-									<h:outputLabel value="Ano" style="width:50px;" />
+								<div style="position: relative; width: 115px; height: 41px; top: -41px; left: 161px;">
+									<h:outputLabel value="Ano" style="width:30px;" />
 									<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
 										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 										<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
