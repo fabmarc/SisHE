@@ -37,6 +37,10 @@ public class Solicitacao implements Serializable{
 	private String descricao;
 	
 	private String duracao;
+	
+	private String obsLider;
+	
+	private String obsGerente;
 
 	public Solicitacao() {
 		this.usuario = new Usuario();
@@ -178,6 +182,22 @@ public class Solicitacao implements Serializable{
 
 	public void setDuracao(String duracao) {
 		this.duracao = duracao;
+	}
+
+	public String getObsLider() {
+		return obsLider;
+	}
+
+	public void setObsLider(String obsLider) {
+		this.obsLider = obsLider;
+	}
+
+	public String getObsGerente() {
+		return obsGerente;
+	}
+
+	public void setObsGerente(String obsGerente) {
+		this.obsGerente = obsGerente;
 	}
 
 	@Override
