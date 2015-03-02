@@ -181,14 +181,6 @@ public class RelatorioController extends BaseController implements Serializable 
 		}
 	}
 
-	public boolean verificarGerente() {
-		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public boolean verificarFuncionario() {
 		if (UsuarioLogado.verificarPermissao("ROLE_FUNCIONARIO")) {
 			return true;
