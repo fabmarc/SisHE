@@ -6,42 +6,76 @@
 		<h:form id="mainForm">
 			<ui:insert>
 				<style type="text/css">
-					.ui-growl {
-						top: 100px;
-						right: 6px;
-					}
-				</style>
+.ui-growl {
+	top: 100px;
+	right: 6px;
+}
+</style>
 				<p:growl id="message" showDetail="true" showSummary="false" />
-				
+
 				<!-- DreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
-    				<p:menuitem value="Home" url="/index.jsf" />
-    				<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" immediate="true"/>
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
-				
+
 				<div class="divCorpo" style="padding-bottom: 12%;">
-					<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 443px; left: 150px; top: -10px;">
-						<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
-							<div style="position: relative; width: 263px; height: 41px;">
-								<h:outputLabel value="Mês" style="width:50px;" />
-								<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
-									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-									<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes}" />
-								</h:selectOneMenu>
-							</div>
-							<div style="position: relative; position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
-								<h:outputLabel value="Ano" style="width:50px;" />
-								<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
-									<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-									<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
-								</h:selectOneMenu>
-							</div>
-							<div style="width: 130px; height: 40px; position: relative; top: -56px; left: 281px;">
-								<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
+					<!-- Fragmento para Funcionario -->
+					<ui:fragment rendered="#{relatorioController.verificarFuncionario()}">
+						<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 443px; left: 150px; top: -10px;">
+							<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
+								<div style="position: relative; width: 263px; height: 41px;">
+									<h:outputLabel value="Mês" style="width:50px;" />
+									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
+										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+										<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes}" />
+									</h:selectOneMenu>
+								</div>
+								<div style="position: relative; position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
+									<h:outputLabel value="Ano" style="width:50px;" />
+									<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
+										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+										<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
+									</h:selectOneMenu>
+								</div>
+								<div style="width: 130px; height: 40px; position: relative; top: -56px; left: 281px;">
+									<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
+								</div>
 							</div>
 						</div>
-					</div>
+					</ui:fragment>
+					<!-- Fragmento para Gerente e Lider -->
+					<ui:fragment rendered="#{!relatorioController.verificarFuncionario()}">
+						<div style="position: relative; border: 1px solid rgba(168, 168, 168, 1); -moz-box-shadow: 5px 5px 5px #ADADAD; border-radius: 9px; width: 603px; left: 71px; top: -10px;">
+							<div style="width: 305px; position: relative; height: 60px; left: 10px; padding: 10px;">
+								<div style="position: relative; width: 263px; height: 41px;">
+									<h:outputLabel value="Mês" style="width:50px;" />
+									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.mes}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um mês.">
+										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+										<f:selectItems value="#{relatorioController.obterListaMes()}" var="mes" itemLabel="#{mes}" itemValue="#{mes}" />
+									</h:selectOneMenu>
+								</div>
+								<div style="position: relative; width: 77px; height: 41px; top: -41px; left: 161px;">
+									<h:outputLabel value="Ano" style="width:50px;" />
+									<h:selectOneMenu style="width: 110px;" value="#{relatorioController.mes.ano}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um ano.">
+										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+										<f:selectItems value="#{relatorioController.obterListaAnos()}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
+									</h:selectOneMenu>
+								</div>
+								<div style="position: relative; width: 159px; height: 41px; top: -82px; left: 281px;">
+									<h:outputLabel value="Usuário" style="width:50px;" />
+									<h:selectOneMenu style="width: 150px;" value="#{relatorioController.usuarioFiltro}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Selecione um usuário.">
+										<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+										<f:selectItems value="#{relatorioController.obterUsuariosProjeto()}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario}" />
+									</h:selectOneMenu>
+								</div>
+								<div style="width: 130px; height: 40px; position: relative; top: -98px; left: 439px;">
+									<h:commandButton styleClass="botao3d" actionListener="#{relatorioController.pesquisar()}" value="Gerar Relatório" />
+								</div>
+							</div>
+						</div>
+					</ui:fragment>
 					<div style="top: 15px; position: relative;">
 						<p:treeTable value="#{relatorioController.table}" var="detalhe" rendered="#{relatorioController.mostrarTable()}">
 							<f:facet name="header">

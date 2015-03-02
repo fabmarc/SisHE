@@ -219,6 +219,34 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 				});
 		return lista;
 	}
+	
+	@Override
+	public Projeto findByUsuario(Usuario usuario) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT projeto.id AS id, projeto.nome AS nome, usuario.nome AS nomeGerente, usuario.id AS idGerente, projeto.descricao AS descricao ");
+		sql.append("FROM projeto INNER JOIN usuario ON (projeto.id_gerente = usuario.id) INNER JOIN usuario_projeto ON (usuario_projeto.id_projeto = projeto.id and usuario_projeto.id_usuario = :idUsuario) WHERE 1=1 LIMIT 1 ");
+
+		params.addValue("idUsuario", usuario.getId());
+
+		return getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params,
+				new RowMapper<Projeto>() {
+					@Override
+					public Projeto mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Projeto projeto = new Projeto();
+						Usuario usuario = new Usuario();
+
+						usuario.setId(rs.getLong("idGerente"));
+						usuario.setNome(rs.getString("nomeGerente"));
+
+						projeto.setId(rs.getLong("id"));
+						projeto.setGerente(usuario);
+						projeto.setNome(rs.getString("nome"));
+						projeto.setDescricao(rs.getString("descricao"));
+						return projeto;
+					}
+				});
+	}
 
 	public SimpleJdbcInsert getInsertProjeto() {
 		return insertProjeto;

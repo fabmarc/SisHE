@@ -11,4 +11,6 @@ public interface ProjetoDAO extends BaseDAO<Projeto> {
 	public List<Projeto> findByFilter(Projeto projeto);
 	
 	public List<Projeto> findByGerente(Usuario usuario);
+	
+	public Projeto findByUsuario(Usuario usuario);
 }

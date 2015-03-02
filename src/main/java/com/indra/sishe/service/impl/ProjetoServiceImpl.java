@@ -111,4 +111,9 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 		return projetoDAO.findByGerente(usuario);
 	}
 
+	@Override
+	public Projeto findByUsuario(Usuario usuario) {
+		return projetoDAO.findByUsuario(usuario);
+	}
+
 }

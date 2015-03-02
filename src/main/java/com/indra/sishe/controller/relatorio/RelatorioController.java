@@ -103,7 +103,11 @@ public class RelatorioController extends BaseController implements Serializable 
 
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
 		List<DadosRelatorio> dados;
-		dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()), new Usuario(UsuarioLogado.getId()));
+		if(usuarioFiltro == null){
+			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()), new Usuario(UsuarioLogado.getId()));
+		} else {
+			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()), usuarioFiltro);
+		}
 		Integer idMarcador = -1;
 		Integer total = 0;
 		TreeNode work = null;
@@ -155,14 +159,20 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 	
 	public List<Usuario> obterUsuariosProjeto() {
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+		ArrayList<Long> ids = new ArrayList<Long>();
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
 			List<Projeto> projetos = projetoService.findByGerente(new Usuario(UsuarioLogado.getId()));
-			ArrayList<Long> ids = new ArrayList<Long>(projetos.size());
 			for (Projeto p : projetos) {
 				ids.add(p.getId());
 			}
-			List<Usuario> usuarios = usuarioService.findByProjetos(ids);
+			usuarios = usuarioService.findByProjetos(ids);
 			usuarios.add(new Usuario(UsuarioLogado.getId(), (String) getSessionAttr("usuario_nome")));
+			return usuarios;
+		} else if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+			Projeto p = projetoService.findByUsuario(new Usuario(UsuarioLogado.getId(), (String) getSessionAttr("usuario_nome")));
+			ids.add(p.getId());
+			usuarios = usuarioService.findByProjetos(ids);
 			return usuarios;
 		} else {
 			return null;
@@ -171,6 +181,14 @@ public class RelatorioController extends BaseController implements Serializable 
 	
 	public boolean verificarGerente() {
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean verificarFuncionario() {
+		if (UsuarioLogado.verificarPermissao("ROLE_FUNCIONARIO")) {
 			return true;
 		} else {
 			return false;
