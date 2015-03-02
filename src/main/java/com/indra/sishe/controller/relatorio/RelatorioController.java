@@ -44,13 +44,12 @@ public class RelatorioController extends BaseController implements Serializable 
 
 	@Inject
 	protected transient ProjetoService projetoService;
-	
+
 	@Inject
 	protected transient UsuarioService usuarioService;
-	
+
 	private Usuario usuarioFiltro;
-	
-	
+
 	public Usuario getUsuarioFiltro() {
 		return usuarioFiltro;
 	}
@@ -103,10 +102,12 @@ public class RelatorioController extends BaseController implements Serializable 
 
 		TreeNode table = new DefaultTreeNode(new DadosRelatorio("-", "-", "-", "-", "-", "-", "-"), null);
 		List<DadosRelatorio> dados;
-		if(usuarioFiltro == null){
-			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()), new Usuario(UsuarioLogado.getId()));
+		if (usuarioFiltro == null) {
+			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()),
+					new Usuario(UsuarioLogado.getId()));
 		} else {
-			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()), usuarioFiltro);
+			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()),
+					usuarioFiltro);
 		}
 		Integer idMarcador = -1;
 		Integer total = 0;
@@ -157,28 +158,29 @@ public class RelatorioController extends BaseController implements Serializable 
 	public String irParaRelatorio() {
 		return "/paginas/solicitacao/relatorio.xhtml?faces-redirect=true";
 	}
-	
+
 	public List<Usuario> obterUsuariosProjeto() {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
-		ArrayList<Long> ids = new ArrayList<Long>();
+		ArrayList<Long> idsProjeto = new ArrayList<Long>();
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
 			List<Projeto> projetos = projetoService.findByGerente(new Usuario(UsuarioLogado.getId()));
 			for (Projeto p : projetos) {
-				ids.add(p.getId());
+				idsProjeto.add(p.getId());
 			}
-			usuarios = usuarioService.findByProjetos(ids);
+			usuarios = usuarioService.findByProjetos(idsProjeto);
 			usuarios.add(new Usuario(UsuarioLogado.getId(), (String) getSessionAttr("usuario_nome")));
 			return usuarios;
 		} else if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
-			Projeto p = projetoService.findByUsuario(new Usuario(UsuarioLogado.getId(), (String) getSessionAttr("usuario_nome")));
-			ids.add(p.getId());
-			usuarios = usuarioService.findByProjetos(ids);
+			Projeto p = projetoService.findByUsuario(new Usuario(UsuarioLogado.getId(),
+					(String) getSessionAttr("usuario_nome")));
+			idsProjeto.add(p.getId());
+			usuarios = usuarioService.findByProjetos(idsProjeto);
 			return usuarios;
 		} else {
 			return null;
 		}
 	}
-	
+
 	public boolean verificarGerente() {
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
 			return true;
@@ -186,7 +188,7 @@ public class RelatorioController extends BaseController implements Serializable 
 			return false;
 		}
 	}
-	
+
 	public boolean verificarFuncionario() {
 		if (UsuarioLogado.verificarPermissao("ROLE_FUNCIONARIO")) {
 			return true;

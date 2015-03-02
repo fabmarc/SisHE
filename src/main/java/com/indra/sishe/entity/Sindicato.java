@@ -2,7 +2,6 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 
 import com.indra.sishe.enums.EstadoEnum;
 
