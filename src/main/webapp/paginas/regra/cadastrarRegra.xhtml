@@ -19,35 +19,35 @@
 				</div>
 				<div style="top: 15px; left: 268px; position: relative; width: 250px">
 
-					<div>
+					<div style="margin-top: -7px;" >
 						<p:outputLabel value="Sindicato:" id="sindicato"  />
-						<p:inputText type="text" value="#{regraCad.sindicatoSelecionado.descricao}" disabled="true" immediate="true" />
+						<p:inputText style="position: relative;top: -6px;" type="text" value="#{regraCad.sindicatoSelecionado.descricao}" disabled="true" immediate="true" />
 					</div>
 					
-					<div>
+					<div style="margin-top: -7px;">
 						<p:outputLabel value="Nome:" id="nome" />
-						<p:inputText type="text" value="#{regraCad.regraSelecionada.descricao}" maxlength="100" required="true" requiredMessage="O campo Nome é Obrigatório." />
+						<p:inputText style="position: relative;top: -6px;" type="text" value="#{regraCad.regraSelecionada.descricao}" maxlength="100" required="true" requiredMessage="O campo Nome é Obrigatório." />
 					</div>
 
-					<div style="position: relative; top: 10px">
+					<div style="margin-top: -7px;">
 						<p:outputLabel value="Data Inicial:" style="width:100px;" />
-						<p:calendar type="text" value="#{regraCad.regraSelecionada.dataInicio}" required="true" requiredMessage="O campo Data Inicial é obrigatório." />
+						<p:calendar style="position: relative;top: -6px;" type="text" value="#{regraCad.regraSelecionada.dataInicio}" required="true" requiredMessage="O campo Data Inicial é obrigatório." />
 					</div>
 
-					<div style="position: relative; top: 10px">
+					<div style="margin-top: -7px;">
 						<p:outputLabel value="Data Final:" style="width:100px;" />
-						<p:calendar type="text" value="#{regraCad.regraSelecionada.dataFim}" required="true" requiredMessage="O campo Data Final é obrigatório." />
+						<p:calendar style="position: relative;top: -6px;" type="text" value="#{regraCad.regraSelecionada.dataFim}" required="true" requiredMessage="O campo Data Final é obrigatório." />
 					</div>
 					
-					<div style="position: relative; top: 10px">
+					<div style="margin-top: -7px;">
 						<p:outputLabel value="Porcentagem de Feriado:" style="width:170px;" />
-						<p:inputText type="number" value="#{regraCad.regraSelecionada.porcentagem}" required="true" validatorMessage="O campo Porcentagem deve possuir valor entre 0% e 100%." requiredMessage="O campo Data Final é obrigatório." converterId="javax.faces.Double">
+						<p:inputText style="position: relative;top: -6px;" type="number" value="#{regraCad.regraSelecionada.porcentagem}" required="true" validatorMessage="O campo Porcentagem deve possuir valor entre 0% e 100%." requiredMessage="O campo Data Final é obrigatório." converterId="javax.faces.Double">
 							<f:validateLongRange minimum="0" maximum="100" />
 						</p:inputText>
 					</div>
 					
 					<br />
-					<div style="position: relative; width: 220px; top: 5px;">
+					<div style="width: 220px; margin-top: -15px;">
 						<h:commandButton style="width:100px; float:left;" action="#{regraCad.confirmar()}" value="Confirmar" ajax="false" styleClass="botao3d" />
 						<h:commandButton style="float:right; width:100px;" action="#{regraCad.cancelar()}" value="Cancelar" ajax="false" immediate="true" styleClass="botao3d" />
 					</div>
