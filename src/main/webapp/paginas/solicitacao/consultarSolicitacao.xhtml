@@ -57,7 +57,7 @@
 					</div>
 
 					<p:dataTable style="top:10%;" rowKey="#{solicitacao.id}" selection="#{solicitacaoMnt.solicitacoesSelecionadas}" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="solicitacao" value="#{solicitacaoMnt.listaSolicitacoes}"
-						emptyMessage="Nenhum registro encontrado.">
+						emptyMessage="Não há solicitações a serem avaliadas.">
 						<f:facet name="header">Solicitações</f:facet>
 
 						<p:column style="width:5px; text-align:center" selectionMode="multiple">
