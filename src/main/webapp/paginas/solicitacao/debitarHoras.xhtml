@@ -15,40 +15,47 @@
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
 
-			<h:commandButton styleClass="botao3d" style="float:right;" actionListener="#{debitarHorasCont.pesquisar()}" value="Pesquisar" />
-					<p:dataTable style="top:10%;" sortMode="multiple" 
-					paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="usuario" value="#{debitarHorasCont.listaUsuarios}"
-						emptyMessage="Não há solicitações a serem avaliadas.">
+				<div class="divCorpo" style="padding-bottom: 5%; position: relative; top: 10%;">
+				
+				<div id="divUsuario" style="position: relative; width: 129px;">
+								<p:outputLabel value="Nome do Usuário" />
+								<p:inputText id="inputUsuario" value="#{debitarHorasCont.usuarioDebitoFiltro.nome}" style="position:relative; top: -6px;width: 150px;" />
+							</div>
+				<div style="position: relative;top: -44px;left: 174px;">
+					<h:commandButton styleClass="botao3d" actionListener="#{debitarHorasCont.pesquisar()}" value="Pesquisar" />
+					</div>
+					<div id="divDataTable" style="position: relative;margin-top: -27px;" >
+					<p:dataTable style="top:10%;" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="usuario" value="#{debitarHorasCont.listaUsuarios}" emptyMessage="Não há solicitações a serem avaliadas.">
 						<f:facet name="header">Solicitações</f:facet>
 
-					
 						<p:column headerText="Nome">
-							<h:outputText value="#{usuario.nome}"/>
+							<h:outputText value="#{usuario.nome}" />
 						</p:column>
 
-						<p:column headerText="Cargo" >
+						<p:column headerText="Cargo">
 							<h:outputText value="#{usuario.cargo.nome}" />
 						</p:column>
 
-						<p:column headerText="Saldo Atual"  >
+						<p:column headerText="Saldo Atual">
 							<h:outputText value="#{debitarHorasCont.findByUser(usuario)}" />
 						</p:column>
 
-						<p:column headerText="Debitar:" style="text-align: center;" >
+						<p:column headerText="Debitar:" style="text-align: center;">
 							<div style="height: 26px;">
 								<p:inputText style="width:70px;height: 16px;" type="number" value="#{usuario.debito}" validatorMessage="Digite apenas números.">
-									<f:validateLongRange minimum="0" maximum="2147483647"/>
+									<f:validateLongRange minimum="0" maximum="2147483647" />
 								</p:inputText>
 							</div>
 						</p:column>
-						
+
 						<f:facet name="footer">
 							<div style="text-align: right;">
 								<h:commandLink action="#{debitarHorasCont.debitarHoras()}" value="Debitar" />
-							</div> 
+							</div>
 						</f:facet>
 					</p:dataTable>
-
+					</div>
+				</div>
 			</ui:insert>
 		</h:form>
 	</ui:define>

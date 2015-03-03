@@ -33,6 +33,8 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 	protected transient BancoHorasService  bancoHorasService;
 	
 	private HistoricoDebito historicoDebito = new HistoricoDebito();
+	
+	private Usuario usuarioDebitoFiltro;
 
 	public List<Usuario> listaUsuarios;
 	
@@ -81,6 +83,14 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 	
 	public Long findByUser(Usuario user){
 		return bancoHorasService.findByUsuario(user).getSaldo();
+	}
+
+	public Usuario getUsuarioDebitoFiltro() {
+		return usuarioDebitoFiltro;
+	}
+
+	public void setUsuarioDebitoFiltro(Usuario usuarioDebitoFiltro) {
+		this.usuarioDebitoFiltro = usuarioDebitoFiltro;
 	}
 	
 	
