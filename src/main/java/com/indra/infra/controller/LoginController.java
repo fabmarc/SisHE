@@ -68,10 +68,7 @@ public class LoginController extends BaseController{
 
 	public String logout() {
 		SecurityContextHolder.clearContext();
-		removeSessionAttr("usuario_login");
-		removeSessionAttr("usuario_id");
-		removeSessionAttr("usuario_nome");
-		removeSessionAttr("usuario_permissoes");
+		limparTodaSessao();
 		return "/paginas/unsecure/login.jsf";
 	}
 	
