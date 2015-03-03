@@ -49,15 +49,14 @@
 								</h:commandLink>
 							</div>
 							<div style="float: right; position: relative; width: 25px; top: -10px; left: -10px;" id="divHome">
-								<a href="#{request.contextPath}/index.jsf">
-									<p:graphicImage url="/resources/images/home.png" title="Home" />
+								<a href="#{request.contextPath}/index.jsf"> <p:graphicImage url="/resources/images/home.png" title="Home" />
 								</a>
 							</div>
 							<div class="divContSaldo" style="left: -18px;">
 								<div style="float: right;">
 									<p:graphicImage url="/resources/images/saldo.png" style="height: 24px;top: -3px;right: -3px;position: relative;" />
 								</div>
-								<div id="divSaldo" class="divSaldo" title="Saldo" onmouseout="atualizarSaldo()" >
+								<div id="divSaldo" class="divSaldo" title="Saldo" onmouseout="atualizarSaldo()">
 									<p:outputLabel id="labelSaldo" style="right: 10px; height: 20px; position: relative; width: 183px; float: left; z-index: -1; font-family: 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif; font-size: 15px;">Saldo: #{usuarioLogado.saldoFormatado}</p:outputLabel>
 									<!-- Botão oculto para atualizar o saldo, sendo executado via JS -->
 									<p:commandButton id="btnAtualizarSaldo" value="refresh" action="#{relatorioController.atualizarSaldo()}" style="display:none;" update="labelSaldo"/>
@@ -99,6 +98,9 @@
 									<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
 									<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard" />
 								</p:submenu>
+							</sec:authorize>
+							<sec:authorize ifAnyGranted="ROLE_GERENTE">
+									<p:menuitem value="Débito de Horas" action="#{solicitacaoMnt.irParaDebitarHoras()}" icon="ui-icon ui-icon-scissors" />
 							</sec:authorize>
 						</p:menubar>
 					</h:form>

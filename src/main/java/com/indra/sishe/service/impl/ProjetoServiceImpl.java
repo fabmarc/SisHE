@@ -95,8 +95,8 @@ public class ProjetoServiceImpl extends StatelessServiceAb implements ProjetoSer
 			projetoDAO.remove(pks);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Projeto");
-		} catch (DeletarRegistroViolacaoFK e) {
-			throw new ApplicationException(e, "msg.error.excluir.registro.relacionado", "Projeto");
+		} catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Projeto");
 		}
 
 	}

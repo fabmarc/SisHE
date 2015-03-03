@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -138,9 +139,13 @@ public class ProjetoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 			Object[] param = new Object[] { id };
 			params.add(param);
 		}
-		int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM projeto WHERE id = ?", params);
-		for (int rows : affectedRows)
-			if (rows == 0) throw new RegistroInexistenteException();
+		try {
+			int[] affectedRows = getJdbcTemplate().batchUpdate("DELETE FROM projeto WHERE id = ?", params);
+			for (int rows : affectedRows)
+				if (rows == 0) throw new RegistroInexistenteException();
+		} catch (DataIntegrityViolationException d) {
+			throw new DeletarRegistroViolacaoFK();
+		}
 	}
 
 	@Override
