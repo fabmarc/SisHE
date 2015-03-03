@@ -99,6 +99,9 @@
 									<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard" />
 								</p:submenu>
 							</sec:authorize>
+							<sec:authorize ifAnyGranted="ROLE_GERENTE">
+									<p:menuitem value="Débito de Horas" action="#{solicitacaoMnt.irParaDebitarHoras()}" icon="ui-icon ui-icon-scissors" />
+							</sec:authorize>
 						</p:menubar>
 					</h:form>
 				</ui:insert>

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<ui:insert>
+				<!-- BreadCrumb -->
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Debitar Horas" action="#{solicitacaoMnt.irParaDebitarHoras()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+				<div class="divMsg">
+					<p:messages id="messages" showDetail="true" showSummary="false" />
+				</div>
+
+			<h:commandButton styleClass="botao3d" style="float:right;" actionListener="#{DebitarHorasCont.pesquisar()}" value="Pesquisar" />
+					<p:dataTable style="top:10%;" sortMode="multiple" 
+					paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="usuario" value="#{DebitarHorasCont.listaUsuarios}"
+						emptyMessage="Não há solicitações a serem avaliadas.">
+						<f:facet name="header">Solicitações</f:facet>
+
+					
+						<p:column headerText="Nome">
+							<h:outputText value="#{usuario.nome}"/>
+						</p:column>
+
+						<p:column headerText="Cargo" >
+							<h:outputText value="cargo XXX" />
+						</p:column>
+
+						<p:column headerText="Projeto" >
+							<h:outputText value="Projeto XX" />
+						</p:column>
+
+						<p:column headerText="Saldo Atual"  >
+							<h:outputText value="0 XXX" />
+						</p:column>
+
+						<p:column headerText="Debitar:" style="text-align: center;" >
+							<div style="height: 21px;">
+								<p:inputText type="number"  style="width:70px;height: 11px;"/>
+							</div>
+						</p:column>
+						
+						<f:facet name="footer">
+							<!-- <h:commandLink action="" value="Debitar" /> -->
+						</f:facet>
+					</p:dataTable>
+
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
