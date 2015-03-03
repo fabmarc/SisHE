@@ -61,6 +61,7 @@ public class SolicitacaoCadController extends SolicitacaoController {
 				if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
 					List<Long> id = new ArrayList<Long>();
 					id.add(solicitacaoParaHistorico.getId());
+					solicitacaoService.liderAcaoSolicitacao(id, 1);
 					solicitacaoService.gerenteAcaoSolicitacao(id, 1);
 					List<HistoricoDetalhes> relatorio = new ArrayList<HistoricoDetalhes>();
 					relatorio =  bancoHorasService.contabilizarHorasBanco(id);

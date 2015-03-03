@@ -45,23 +45,23 @@
 				</div>
 
 				<div style="top: -79px; position: relative;">
-					<p:dataTable style="top:10%;" rowKey="#{sistema.id}" selection="#{sistemaMnt.sistemasSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sistemaDt" var="sistema"
-						value="#{sistemaMnt.listaSistema}" emptyMessage="Nenhum registro encontrado.">
+					<p:dataTable sortMode="multiple" style="top:10%;" rowKey="#{sistema.id}" selection="#{sistemaMnt.sistemasSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" 
+					id="sistemaDt" var="sistema" value="#{sistemaMnt.listaSistema}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">
 							Sistemas
 						</f:facet>
 						<p:column style="width:5px; text-align:center" selectionMode="multiple" />
-						<p:column headerText="Código" style="width:10%; text-align:center; ">
+						<p:column headerText="Código" style="width:10%; text-align:center;" sortBy="#{sistema.id}">
 							<h:outputText value="#{sistema.id}" />
 						</p:column>
-						<p:column headerText="Nome" style="max-width:290px; text-overflow:ellipsis;">
+						<p:column headerText="Nome" style="max-width:290px; text-overflow:ellipsis;" sortBy="#{sistema.nome}">
 							<h:outputText value="#{sistema.nome}" />
 						</p:column>
-						<p:column headerText="Líder" style="width:15%;">
+						<p:column headerText="Líder" style="width:15%;" sortBy="#{sistema.lider.nome}">
 							<h:outputText value="#{sistema.lider.nome}" />
 						</p:column>
 
-						<p:column headerText="Projeto" style="width:15%; ">
+						<p:column headerText="Projeto" style="width:15%;" sortBy="#{sistema.projeto.nome}">
 							<h:outputText value="#{sistema.projeto.nome}" />
 						</p:column>
 
