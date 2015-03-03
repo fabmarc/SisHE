@@ -75,4 +75,9 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 		return bancoHorasDao.findByUsuario(entity);
 	}
 
+	@Override
+	public void alterarHoras(Long idUsuario, Integer minutos) {
+		bancoHorasDao.alterarHoras(idUsuario, minutos);
+	}
+
 }

@@ -63,37 +63,29 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 
 	@Override
 	public BancoHoras update(BancoHoras entity) throws RegistroInexistenteException, RegistroDuplicadoException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<BancoHoras> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public BancoHoras findById(Object id) throws RegistroInexistenteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -169,12 +161,9 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 			minutoSolicitacaoInicial = (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 			minutoSolicitacaoFinal = (horaFimSolicitacao * 60) + minutoFimSolicitacao;
 
-			// se porcentagem do feriado para a regra for menor que zero, é
-			// porque não existe feriado
-			// para a data da solicitação.
+			// se porcentagem do feriado para a regra for menor que zero, é porque não existe feriado para a data da solicitação.
 			if (porcentagemFeriado < 0) {
-				// consultar os periodos que correspondem a data e hora da
-				// solicitação.
+				// consultar os periodos que correspondem a data e hora da solicitação.
 				sql = new StringBuilder();
 				params = new MapSqlParameterSource();
 				// comando SQL para obter dados do periodo.
@@ -205,10 +194,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 
 				// verificar se existe periodos que correspondem a solicitação.
 				if (periodos.size() < 1) {
-					// caso não exista nenhum periodo, será adicionado todos os
-					// minutos sem cálculo.
-					// historicoDetalhes.add(new HistoricoDetalhes(minutoTotal,
-					// 0 ,minutoTotal, new Historico(new Solicitacao(id))));
+					// caso não exista nenhum periodo, será adicionado todos os minutos sem cálculo.
 					minutos = minutoTotal;
 				} else {// Caso existam periodos.
 					// percorrer todos os periodos.
@@ -222,62 +208,43 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 						minutoInicioPeriodo = (horaInicioPeriodo * 60) + minutoInicioPeriodo;
 						minutoFimPeriodo = (horaFimPeriodo * 60) + minutoFimPeriodo;
 
-						// Obter sobra entre o fim do periodo e o fim da
-						// solicitação.
+						// Obter sobra entre o fim do periodo e o fim da solicitação.
 						sobra = minutoSolicitacaoFinal - minutoFimPeriodo;
 
-						if (sobra > 0) {// se o periodo não atender a todos os
-										// minutos da solicitação.
-							if (minutoSolicitacaoInicial >= minutoInicioPeriodo) {// se
-																					// o
-																					// inicio
-																					// da
-																					// solicitação
-																					// estiver
-																					// entre
-																					// o
-																					// inicio
-																					// do
-																					// periodo.
-								// obter os minutos que representam o periodo
-								// atual.
+						if (sobra > 0) {// se o periodo não atender a todos os minutos da solicitação.
+							// se o inicio da solicitação estiver entre o inicio do periodo.
+							if (minutoSolicitacaoInicial >= minutoInicioPeriodo) {
+								// obter os minutos que representam o periodo atual.
 								diferenca = minutoFimPeriodo - minutoSolicitacaoInicial;
 							} else {
-								// obter os minutos que representam o periodo
-								// atual.
+								// obter os minutos que representam o periodo atual.
 								diferenca = minutoFimPeriodo - minutoInicioPeriodo;
 							}
-							// obter minutos que ainda não foram utilizados no
-							// calculo.
+							// obter minutos que ainda não foram utilizados no calculo.
 							minutoTotal = minutoTotal - diferenca;
-							// Cálcular os minutos que correspondem ao periodo
-							// de acordo com a porcentagem do mesmo.
+							// Calcular os minutos que correspondem ao periodo de acordo com a porcentagem do mesmo.
 							historicoDetalhes.add(new HistoricoDetalhes(diferenca, p.getPorcentagem(),
 									(int) (diferenca + (diferenca * (float) p.getPorcentagem() / 100)),
 									new Historico(new Solicitacao(id))));
 							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
-						} else {// caso o periodo atenda a todos os minutos da
-								// solicitação.
+						} else {// caso o periodo atenda a todos os minutos da solicitação.
 							// obter minutos que representam o periodo atual.
 							if (minutoSolicitacaoInicial <= minutoInicioPeriodo) {
 								diferenca = minutoSolicitacaoFinal - minutoInicioPeriodo;
 							} else {
 								diferenca = minutoTotal;
 							}
-							// obter minutos que ainda não foram utilizados no
-							// calculo.
+							// obter minutos que ainda não foram utilizados no calculo.
 							minutoTotal = minutoTotal - diferenca;
 							historicoDetalhes.add(new HistoricoDetalhes(diferenca, p.getPorcentagem(),
 									(int) (diferenca + (diferenca * (float) p.getPorcentagem() / 100)),
 									new Historico(new Solicitacao(id))));
-							// Cálcular os minutos que correspondem ao periodo
-							// de acordo com a porcentagem do mesmo.
+							// Calcular os minutos que correspondem ao periodo de acordo com a porcentagem do mesmo.
 							minutos = (int) (minutos + (diferenca + (diferenca * ((float) p.getPorcentagem() / 100))));
 						}
 					}
 				}
-				// caso exista algum registro sem porcentagem será adicionado os
-				// minutos sem cálculo da porcentagem.
+				// caso exista algum registro sem porcentagem será adicionado os minutos sem cálculo da porcentagem.
 				if (minutoTotal > 0) {
 					if (periodos.size() > 0) {
 						minutos = minutos + minutoTotal;
@@ -286,8 +253,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 							new Solicitacao(id))));
 				}
 			} else {
-				// se for feriado calcular de acordo com a porcentagem definida
-				// para o feriado na regra.
+				// se for feriado calcular de acordo com a porcentagem definida para o feriado na regra.
 				minutoTotal = (int) (horaFimSolicitacao * 60) + minutoFimSolicitacao
 						- (horaInicioSolicitacao * 60) + minutoInicioSolicitacao;
 				diferenca = minutoTotal;
@@ -297,9 +263,7 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 
 			}
 			// Adicionar novo saldo ao banco de horas.
-			getJdbcTemplate()
-					.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
-							solicitacao.getUsuario().getId(), minutos, solicitacao.getUsuario().getId());
+			alterarHoras(solicitacao.getUsuario().getId(), minutos);
 		}
 		return historicoDetalhes;
 	}
@@ -326,6 +290,14 @@ public class BancoHorasJdbcDaoImpl extends NamedParameterJdbcDaoSupport implemen
 				});
 		banco.setUsuario(entity);
 		return banco;
+	}
+
+	@Override
+	public void alterarHoras(Long idUsuario, Integer minutos) {
+		getJdbcTemplate()
+		.update("UPDATE banco_horas SET saldo = (select saldo from banco_horas where id_usuario= ?) + ? WHERE id_usuario = ?;",
+				idUsuario, minutos, idUsuario);
+
 	}
 
 }

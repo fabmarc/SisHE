@@ -161,7 +161,6 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio> 
 
 	@Override
 	public int compareTo(DadosRelatorio o) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

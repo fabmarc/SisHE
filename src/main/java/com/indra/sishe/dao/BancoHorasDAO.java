@@ -13,4 +13,6 @@ public interface BancoHorasDAO extends BaseDAO<BancoHoras> {
 
 	public BancoHoras findByUsuario(Usuario entity);
 
+	public void alterarHoras(Long idUsuario, Integer minutos);
+	
 }

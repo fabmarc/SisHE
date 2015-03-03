@@ -27,6 +27,8 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 	private Integer matricula;
 
 	private String email;
+	
+	private Integer debito;
 
 	public Usuario() {
 	}
@@ -126,6 +128,14 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Integer getDebito() {
+		return debito;
+	}
+
+	public void setDebito(Integer debito) {
+		this.debito = debito;
 	}
 
 	@Override

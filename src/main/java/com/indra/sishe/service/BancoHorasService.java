@@ -15,5 +15,7 @@ public interface BancoHorasService extends BaseService<BancoHoras> {
 	public List<HistoricoDetalhes> contabilizarHorasBanco(List<Long> idsSolicitacoes);
 
 	public BancoHoras findByUsuario(Usuario entity);
+	
+	public void alterarHoras(Long idUsuario, Integer minutos);
 
 }
