@@ -37,27 +37,23 @@
 				</div>
 				
 				<div style="top: -43px; position: relative;">
-					<p:dataTable style="top:10%;" rowKey="#{sindicato.id}" selection="#{sindicatoMnt.sindicatosSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sindicatosDt" var="sindicato"
+					<p:dataTable sortMode="multiple" style="top:10%;" rowKey="#{sindicato.id}" selection="#{sindicatoMnt.sindicatosSelecionados}" paginator="true" paginatorPosition="bottom" rows="10" id="sindicatosDt" var="sindicato"
 						value="#{sindicatoMnt.listaSindicato}" emptyMessage="Nenhum registro encontrado.">
 						<f:facet name="header">
 							Sindicatos
 						</f:facet>
 						<p:column style="width:5px; text-align:center" selectionMode="multiple" />
 						
-						<p:column headerText="Código" style="width:10%; text-align:center; ">
+						<p:column headerText="Código" style="width:10%; text-align:center; " sortBy="#{sindicato.id}">
 							<h:outputText value="#{sindicato.id}" />
 						</p:column>
 						
-						<p:column headerText="Nome">
-							<div>
+						<p:column headerText="Nome" sortBy="#{sindicato.descricao}" >
 								<h:outputText value="#{sindicato.descricao}" />
-							</div>
 						</p:column>
 						
-						<p:column headerText="UF" style="width:15%; text-align:center">
-							<div>
+						<p:column headerText="UF" style="width:15%; text-align:center" sortBy="#{sindicato.estado.sigla}">
 								<h:outputText value="#{sindicato.estado.sigla}" />
-							</div>
 						</p:column>
 
 						<p:column headerText="Ação" style="width:10%; text-align:center">
