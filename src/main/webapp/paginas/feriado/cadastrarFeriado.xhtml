@@ -5,14 +5,14 @@
 	<ui:define name="content">
 		<h:form id="mainForm">
 			<ui:insert>
-			
+
 				<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" immediate="true" />
 					<p:menuitem value="Feriado" action="#{feriadoCad.irParaConsultar()}" immediate="true" />
 					<p:menuitem value="Cadastrar" action="#{feriadoCad.irParaCadastrar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
-			
+
 				<div class="divMsg">
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
@@ -20,11 +20,13 @@
 
 					<div>
 						<p:outputLabel value="Nome:" id="nome" />
-						<p:inputText type="text" value="#{feriadoCad.feriadoSelecionado.nome}" maxlength="30" required="true" requiredMessage="O campo Nome é obrigatório."/>
+						<p:inputText type="text" value="#{feriadoCad.feriadoSelecionado.nome}" maxlength="30" required="true" requiredMessage="O campo Nome é obrigatório." />
 					</div>
 					<div>
 						<p:outputLabel value="Data:" style="width:50px;" />
-						<p:calendar type="text" value="#{feriadoCad.feriadoSelecionado.data}" required="true" requiredMessage="O campo Data é obrigatório." />
+						<p:calendar locale="pt" type="text" value="#{feriadoCad.feriadoSelecionado.data}" required="true" requiredMessage="O campo Data é obrigatório.">
+							<f:convertDateTime pattern="dd/MM/YYYY" />
+						</p:calendar>
 					</div>
 
 					<h:panelGrid columns="2" style="left: -6px;position: relative;margin-bottom:10px" cellpadding="5">
