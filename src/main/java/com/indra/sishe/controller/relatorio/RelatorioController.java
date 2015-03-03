@@ -75,6 +75,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public void pesquisar() {
+		
 		table = null;
 		this.table = gerarHistorico();
 		if (!mostrarTable()) {
@@ -139,6 +140,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public boolean mostrarTable() {
+		
 		if (table == null || table.getChildren().size() < 1) {
 			return false;
 		} else {
@@ -160,6 +162,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public List<Usuario> obterUsuariosProjeto() {
+		
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		ArrayList<Long> idsProjeto = new ArrayList<Long>();
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
@@ -182,6 +185,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public boolean verificarFuncionario() {
+		
 		if (UsuarioLogado.verificarPermissao("ROLE_FUNCIONARIO")) {
 			return true;
 		} else {

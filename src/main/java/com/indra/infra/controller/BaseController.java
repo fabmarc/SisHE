@@ -51,5 +51,16 @@ public class BaseController {
 	protected void removeSessionAttr(String key){
 		getSession().removeAttribute(key);
 	}
+	
+	protected void limparTodaSessao(){
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().clear();
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
+		/*removeSessionAttr("usuario_login");
+		removeSessionAttr("usuario_id");
+		removeSessionAttr("usuario_nome");
+		removeSessionAttr("usuario_permissoes");
+		removeSessionAttr("saldo");
+		removeSessionAttr("dataAtualizacao");*/
+	}
 
 }
