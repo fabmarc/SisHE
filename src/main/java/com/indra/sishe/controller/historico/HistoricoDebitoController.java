@@ -36,7 +36,7 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 
 	private HistoricoDebito historicoDebito = new HistoricoDebito();
 
-	private Usuario usuarioFiltro;
+	private Usuario usuarioFiltro = new Usuario();
 
 	private List<Usuario> listaUsuarios;
 
@@ -44,7 +44,6 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 	private void init() {
 		MessageProvider.setInstance(messageProvider);
 		usuarioFiltro = new Usuario();
-		pesquisar();
 	}
 
 	public String irParaDebitarHoras() {
@@ -54,6 +53,13 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 	public void pesquisar() {
 		usuarioFiltro.setId(UsuarioLogado.getId());
 		listaUsuarios = usuarioService.findUsuarioByGerente(usuarioFiltro);
+		if (usuarioFiltro.getNome() != null && "".equals(usuarioFiltro.getNome())) {
+			try {
+				listaUsuarios.add(0, usuarioService.findById(UsuarioLogado.getId()));
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void debitarHoras() {
@@ -72,8 +78,8 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 				}
 				u.setDebito(null);
 			}
-			if(!debitoRealizado){
-				
+			if (!debitoRealizado) {
+
 			} else {
 				messager.info(messageProvider.getMessage("msg.success.saldo.debitado"));
 			}

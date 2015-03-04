@@ -25,7 +25,9 @@
 						<h:commandButton styleClass="botao3d" actionListener="#{debitarHorasCont.pesquisar()}" value="Pesquisar" />
 					</div>
 					<div id="divDataTable" style="position: relative; margin-top: -27px;">
-						<p:dataTable style="top:10%;" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="usuario" value="#{debitarHorasCont.listaUsuarios}" emptyMessage="Não há usuários que atendam as condições de busca.">
+						<p:dataTable style="top:10%;" sortMode="multiple" paginatorPosition="bottom" paginator="true" paginatorTemplate="{CurrentPageReport}  
+						{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,30,40,50,60" 
+						rows="10" id="solicitacaoDt" var="usuario" value="#{debitarHorasCont.listaUsuarios}" emptyMessage="Não há usuários que atendam as condições de busca.">
 							<f:facet name="header">Debitar Horas</f:facet>
 
 							<p:column headerText="Nome">

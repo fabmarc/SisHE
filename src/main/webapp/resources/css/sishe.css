@@ -22,7 +22,7 @@ html {
 	height: 400px;
 	background-size: 80%;
 	opacity: 0.1;
-	filter: alpha(opacity =     10); /* IE8 e anteriores */
+	filter: alpha(opacity =       10); /* IE8 e anteriores */
 }
 
 .botao3d {
@@ -141,7 +141,6 @@ html {
 	background: #FFFFFF
 		-webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255,
 		0.8)), to(rgba(255, 255, 255, 0)));
-		
 	border: 1px solid #FFFFFF;
 }
 
@@ -171,7 +170,6 @@ html {
 }
 
 /* Fim Bloco Rodrigo */
-
 
 /*Incluído por Diego*/
 .divNomeProjeto {
@@ -221,3 +219,11 @@ html {
 }
 
 /*Fim Bloco Diego*/
+
+/* Incluido por Igor */
+.ui-paginator .ui-paginator-rpp-options  {
+	width: 62px;
+	position: relative;
+	top: 5px;
+}
+/* Fim do Bloco de Igor */

@@ -45,7 +45,7 @@ public class RelatorioController extends BaseController implements Serializable 
 
 	@Inject
 	protected transient BancoHorasService bancoHorasService;
-	
+
 	@Inject
 	protected transient HistoricoDebitoService historicoDebitoService;
 
@@ -82,7 +82,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public void pesquisar() {
-		
+
 		table = null;
 		this.table = gerarHistorico();
 		if (!mostrarTable()) {
@@ -116,11 +116,13 @@ public class RelatorioController extends BaseController implements Serializable 
 		if (usuarioFiltro == null) {
 			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()),
 					new Usuario(UsuarioLogado.getId()));
-			debitos = historicoDebitoService.findByUsuarioEMes(new Usuario(UsuarioLogado.getId()), this.mes.getNumero(), Integer.toString(this.mes.getAno()));
+			debitos = historicoDebitoService.findByUsuarioEMes(new Usuario(UsuarioLogado.getId()),
+					this.mes.getNumero(), Integer.toString(this.mes.getAno()));
 		} else {
 			dados = historicoService.gerarRelatorio(this.mes.getNumero(), Integer.toString(this.mes.getAno()),
 					usuarioFiltro);
-			debitos = historicoDebitoService.findByUsuarioEMes(usuarioFiltro, this.mes.getNumero(), Integer.toString(this.mes.getAno()));
+			debitos = historicoDebitoService.findByUsuarioEMes(usuarioFiltro, this.mes.getNumero(),
+					Integer.toString(this.mes.getAno()));
 		}
 		Integer idMarcador = -1;
 		Integer total = 0;
@@ -144,23 +146,27 @@ public class RelatorioController extends BaseController implements Serializable 
 					+ DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min ("
 					+ DadosRelatorio.formatarHora(saldo) + " horas)"), credito);
 		}
-		
+
 		int totalNegativo = 0;
-		for (HistoricoDebito histoTemp : debitos){
-			SimpleDateFormat formatarData = new SimpleDateFormat( "dd/MM/yyyy" );
-				work = new DefaultTreeNode(new DadosRelatorio(formatarData.format(histoTemp.getData()).toString(), "-", "-", "-", "-", "-","- " + histoTemp.getMinutos().toString() + "min (" + DadosRelatorio.formatarHora(histoTemp.getMinutos()) + " horas)"), debito);
-				saldo = saldo - histoTemp.getMinutos();
-				saldoMinu = saldoMinu - histoTemp.getMinutos();
-				totalNegativo = totalNegativo + histoTemp.getMinutos();
-			
+		for (HistoricoDebito histoTemp : debitos) {
+			SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
+			work = new DefaultTreeNode(new DadosRelatorio(formatarData.format(histoTemp.getData()).toString(),
+					"-", "-", "-", "-", "-", "- " + histoTemp.getMinutos().toString() + "min ("
+							+ DadosRelatorio.formatarHora(histoTemp.getMinutos()) + " horas)"), debito);
+			saldo = saldo - histoTemp.getMinutos();
+			saldoMinu = saldoMinu - histoTemp.getMinutos();
+			totalNegativo = totalNegativo + histoTemp.getMinutos();
+
 			total = total + histoTemp.getMinutos();
 		}
-		if(debitos.size()>0){
-			new DefaultTreeNode(new DadosRelatorio("Total", "-", "-", "-", "-", "-", "- " + totalNegativo + "min"), debito);
+		if (debitos.size() > 0) {
+			new DefaultTreeNode(
+					new DadosRelatorio("Total", "-", "-", "-", "-", "-", "- " + totalNegativo + "min"), debito);
 		}
 
 		// exibir o saldo
-		if (!(table == null || (table.getChildren().get(0).getChildren().size() < 1 || table.getChildren().get(1).getChildren().size() < 1))) {
+		if (!(table == null || (table.getChildren().get(0).getChildren().size() < 1 || table.getChildren().get(1)
+				.getChildren().size() < 1))) {
 			new DefaultTreeNode(new DadosRelatorio("Total Geral", "-", "-", "-", saldoMinu.toString() + "min ("
 					+ DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min ("
 					+ DadosRelatorio.formatarHora(saldo) + " horas)"), table);
@@ -172,7 +178,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public boolean mostrarTable() {
-		
+
 		if (table == null || table.getChildren().size() < 1) {
 			return false;
 		} else {
@@ -194,7 +200,7 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public List<Usuario> obterUsuariosProjeto() {
-		
+
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		ArrayList<Long> idsProjeto = new ArrayList<Long>();
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
@@ -217,24 +223,26 @@ public class RelatorioController extends BaseController implements Serializable 
 	}
 
 	public boolean verificarFuncionario() {
-		
+
 		if (UsuarioLogado.verificarPermissao("ROLE_FUNCIONARIO")) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	private void carregarSaldo(){
-		putSessionAttr("dataAtualizacao", Calendar.getInstance());//Guardar a data/hora atual.
-		putSessionAttr("saldo", bancoHorasService.findByUsuario(new Usuario(UsuarioLogado.getId())).getSaldo());//Atualizar saldo do usuário logado.
+
+	private void carregarSaldo() {
+		putSessionAttr("dataAtualizacao", Calendar.getInstance());// Guardar a data/hora atual.
+		putSessionAttr("saldo", bancoHorasService.findByUsuario(new Usuario(UsuarioLogado.getId())).getSaldo());// Atualizar saldo do usuário logado.
 	}
-	
-	public void atualizarSaldo(){
+
+	public void atualizarSaldo() {
 		Calendar dataAtual = Calendar.getInstance();
 		Calendar dataAntiga = (Calendar) getSessionAttr("dataAtualizacao");
-		int tempoEspera = 5;//Tempo de espera igual a 5 min.
-		if(dataAntiga == null || (dataAntiga.get(Calendar.MINUTE) + tempoEspera <= dataAtual.get(Calendar.MINUTE)) || (dataAntiga.get(Calendar.HOUR) < dataAtual.get(Calendar.HOUR))){//Se passar 5 min depois da ultima atualização ou a hora foi alterada será atualizado o saldo (de 5 em 5 min pode se atualizar)
+		int tempoEspera = 5;// Tempo de espera igual a 5 min.
+		if (dataAntiga == null
+				|| (dataAntiga.get(Calendar.MINUTE) + tempoEspera <= dataAtual.get(Calendar.MINUTE))
+				|| (dataAntiga.get(Calendar.HOUR) < dataAtual.get(Calendar.HOUR))) {// Se passar 5 min depois da ultima atualização ou a hora foi alterada será atualizado o saldo (de 5 em 5 min pode se atualizar)
 			carregarSaldo();
 		}
 	}

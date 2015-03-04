@@ -29,6 +29,15 @@ public class Cargo implements Serializable, Comparable<Cargo> {
 	public Cargo() {
 	}
 
+	public Cargo(Long id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
+
+	public Cargo(String nome) {
+		this.nome = nome;
+	}
+
 	public Long getId() {
 		return id;
 	}
