@@ -146,15 +146,23 @@ public class DadosRelatorio implements Serializable, Comparable<DadosRelatorio> 
 	}
 
 	public static String formatarHora(Integer minutos) {
+		boolean negativo = false;
 		Integer hora = minutos / 60;
 		Integer minuto = minutos % 60;
 		String h = Integer.toString(hora);
 		String m = Integer.toString(minuto);
+		if (hora < 0) {
+			hora = hora * -1;
+			negativo = true;
+		}
 		if (hora < 10) {
 			h = "0" + Integer.toString(hora);
 		}
 		if (minuto < 10) {
 			m = "0" + Integer.toString(minuto);
+		}
+		if(negativo){
+			h = "-" + h;
 		}
 		return h + ":" + m;
 	}

@@ -165,7 +165,7 @@ public class RelatorioController extends BaseController implements Serializable 
 		}
 
 		// exibir o saldo
-		if (!(table == null || (table.getChildren().get(0).getChildren().size() < 1 || table.getChildren().get(1)
+		if (!(table == null || (table.getChildren().get(0).getChildren().size() < 1 && table.getChildren().get(1)
 				.getChildren().size() < 1))) {
 			new DefaultTreeNode(new DadosRelatorio("Total Geral", "-", "-", "-", saldoMinu.toString() + "min ("
 					+ DadosRelatorio.formatarHora(saldoMinu) + " horas)", "-", saldo.toString() + "min ("
