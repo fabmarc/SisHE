@@ -1,7 +1,6 @@
 package com.indra.sishe.controller.historico;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -58,26 +57,24 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 	}
 
 	public void debitarHoras() {
-		List<Usuario> listaUsuariosDebito = new ArrayList<Usuario>(listaUsuarios);
-		for (Usuario u : listaUsuariosDebito) {
-			if (u.getDebito() != null && u.getDebito() < 1) {
-				listaUsuariosDebito.remove(u);
-			}
-		}
+		boolean debitoRealizado = false;
 		try {
-			if (listaUsuariosDebito.size() > 0) {
-				for (Usuario u : listaUsuariosDebito) {
-					if (u.getDebito() != null && u.getDebito() > 0) {
-						historicoDebito.setData(Calendar.getInstance().getTime());
-						historicoDebito.setBanco(bancoHorasService.findByUsuario(u));
-						historicoDebito.setGerente(new Usuario(UsuarioLogado.getId()));
-						historicoDebito.setMinutos(u.getDebito());
-						historicoDebitoService.save(historicoDebito);
-						bancoHorasService.alterarHoras(u.getId(), u.getDebito() * -1);
-						historicoDebito = new HistoricoDebito();
-					}
-					u.setDebito(null);
+			for (Usuario u : listaUsuarios) {
+				if (u.getDebito() != null && u.getDebito() > 0) {
+					historicoDebito.setData(Calendar.getInstance().getTime());
+					historicoDebito.setBanco(bancoHorasService.findByUsuario(u));
+					historicoDebito.setGerente(new Usuario(UsuarioLogado.getId()));
+					historicoDebito.setMinutos(u.getDebito());
+					historicoDebitoService.save(historicoDebito);
+					bancoHorasService.alterarHoras(u.getId(), u.getDebito() * -1);
+					historicoDebito = new HistoricoDebito();
+					debitoRealizado = true;
 				}
+				u.setDebito(null);
+			}
+			if(!debitoRealizado){
+				
+			} else {
 				messager.info(messageProvider.getMessage("msg.success.saldo.debitado"));
 			}
 		} catch (ApplicationException e) {

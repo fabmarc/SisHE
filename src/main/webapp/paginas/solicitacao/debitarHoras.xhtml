@@ -25,7 +25,7 @@
 						<h:commandButton styleClass="botao3d" actionListener="#{debitarHorasCont.pesquisar()}" value="Pesquisar" />
 					</div>
 					<div id="divDataTable" style="position: relative; margin-top: -27px;">
-						<p:dataTable style="top:10%;" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="usuario" value="#{debitarHorasCont.listaUsuarios}" emptyMessage="Não há solicitações a serem avaliadas.">
+						<p:dataTable style="top:10%;" sortMode="multiple" paginatorPosition="bottom" paginator="true" rows="10" id="solicitacaoDt" var="usuario" value="#{debitarHorasCont.listaUsuarios}" emptyMessage="Não há usuários que atendam as condições de busca.">
 							<f:facet name="header">Debitar Horas</f:facet>
 
 							<p:column headerText="Nome">
@@ -42,9 +42,7 @@
 
 							<p:column headerText="Debitar: (min)" style="text-align: center;width: 86px;">
 								<div style="height: 26px;width: 86px;">
-									<p:inputText  style="width:70px;height: 16px;" type="number" value="#{usuario.debito}" validatorMessage="#{msg['msg.error.saldo.debitado.negativo']}">
-										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="0" pattern="########" integerOnly="true" />  
-									</p:inputText>
+									<p:inputText style="width:70px;height: 16px;" type="text" value="#{usuario.debito}" pattern="[0-9]+$" converterMessage="Digite apenas números inteiros positivos."/>
 								</div>
 							</p:column>
 
