@@ -35,7 +35,6 @@ public class CargoJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Ca
 	private SimpleJdbcInsert insertCargo;
 
 	public CargoJdbcDaoImpl() {
-		System.out.println("Criou CargoDaoImpl");
 	}
 
 	@PostConstruct

@@ -25,7 +25,6 @@ public class ClienteServiceImpl extends StatelessServiceAb implements ClienteSer
 	private ClienteDAO clienteDao;
 
 	public ClienteServiceImpl() {
-		System.out.println("Criou ClienteServiceImpl");
 	}
 
 	@Override
@@ -33,7 +32,6 @@ public class ClienteServiceImpl extends StatelessServiceAb implements ClienteSer
 		try {
 			return clienteDao.save(entity);
 		} catch (RegistroDuplicadoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return entity;

@@ -100,7 +100,7 @@
 								</p:submenu>
 							</sec:authorize>
 							<sec:authorize ifAnyGranted="ROLE_GERENTE">
-									<p:menuitem value="Débito de Horas" action="#{debitarHorasCont.irParaDebitarHoras()}" icon="ui-icon ui-icon-scissors" />
+									<p:menuitem value="Débito de Horas" action="#{debitarHorasCont.irParaDebitarHoras()}"/>
 							</sec:authorize>
 						</p:menubar>
 					</h:form>

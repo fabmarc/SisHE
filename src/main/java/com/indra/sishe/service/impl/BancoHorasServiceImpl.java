@@ -38,31 +38,25 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 
 	@Override
 	public BancoHoras update(BancoHoras entity) throws ApplicationException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<BancoHoras> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public BancoHoras findById(Long id) throws ApplicationException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -78,6 +72,16 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 	@Override
 	public void alterarHoras(Long idUsuario, Integer minutos) {
 		bancoHorasDao.alterarHoras(idUsuario, minutos);
+	}
+
+	@Override
+	public String findSaldoFormatadoByUsuario(Usuario entity) {
+		Long saldo = bancoHorasDao.findByUsuario(entity).getSaldo();
+		Long min, horas;
+		horas = saldo / 60;
+		min = saldo % 60;
+		String saldoFormatado = horas+"h e " + min + "min";
+		return saldoFormatado;
 	}
 
 }

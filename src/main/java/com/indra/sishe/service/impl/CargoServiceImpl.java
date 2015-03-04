@@ -25,8 +25,6 @@ public class CargoServiceImpl extends StatelessServiceAb implements CargoService
 	private CargoDAO cargoDao;
 
 	public CargoServiceImpl() {
-
-		System.out.println("Criou o CargoServiceImpl");
 	}
 
 	@Override

@@ -32,7 +32,6 @@ public class RegraJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Re
 	private DataSource dataSource;
 
 	public RegraJdbcDaoImpl() {
-		System.out.print("Criou RegraDAOImpl");
 	}
 
 	private SimpleJdbcInsert insertRegra;

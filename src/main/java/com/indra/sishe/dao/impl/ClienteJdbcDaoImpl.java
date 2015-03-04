@@ -37,7 +37,6 @@ public class ClienteJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	}
 
 	public ClienteJdbcDaoImpl() {
-		System.out.println("Criou ClienteDaoImpl");
 	}
 
 	@Override

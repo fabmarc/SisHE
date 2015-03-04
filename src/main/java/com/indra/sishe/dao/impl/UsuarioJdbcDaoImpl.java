@@ -386,4 +386,43 @@ public class UsuarioJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements 
 		return lista;
 	}
 
+	@Override
+	public List<Usuario> findUsuarioByGerente(Usuario usuarioFiltro) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		sql.append("SELECT usuario.id AS idUsuario, usuario.nome AS nomeUsuario, cargo.nome AS nomeCargo, cargo.id AS idCargo " +
+				"FROM usuario usuario " +
+				"INNER JOIN cargo ON (cargo.id = usuario.id_cargo) " +
+				"LEFT JOIN usuario_projeto up ON (up.id_usuario = usuario.id) " +
+				"INNER JOIN projeto proj ON (proj.id = up.id_projeto) " +
+				"WHERE proj.id IN ( SELECT id FROM projeto WHERE id_gerente = :idGerente) ");
+		params.addValue("idGerente", usuarioFiltro.getId());
+		
+		if(usuarioFiltro.getNome() != null && !"".equals(usuarioFiltro.getNome())){
+			sql.append("AND LOWER(usuario.nome) LIKE '%' || :nomeUsuario || '%' ");
+			params.addValue("nomeUsuario", usuarioFiltro.getNome().toLowerCase());
+		}
+		
+		List<Usuario> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+
+				new RowMapper<Usuario>() {
+					@Override
+					public Usuario mapRow(ResultSet rs, int idx) throws SQLException {						
+						Cargo cargo = new Cargo();
+						cargo.setId(rs.getLong("idCargo"));
+						cargo.setNome(rs.getString("nomeCargo"));
+						
+						Usuario usuario = new Usuario();						
+						usuario.setId(rs.getLong("idUsuario"));
+						usuario.setNome(rs.getString("nomeUsuario"));	
+						usuario.setCargo(cargo);
+						return usuario;
+					}
+				});
+		
+		return lista;
+	}
+
+
 }

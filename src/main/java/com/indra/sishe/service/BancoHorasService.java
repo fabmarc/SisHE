@@ -16,6 +16,8 @@ public interface BancoHorasService extends BaseService<BancoHoras> {
 
 	public BancoHoras findByUsuario(Usuario entity);
 	
+	public String findSaldoFormatadoByUsuario(Usuario entity);
+	
 	public void alterarHoras(Long idUsuario, Integer minutos);
 
 }

@@ -20,6 +20,8 @@ public interface UsuarioDAO extends BaseDAO<Usuario> {
 	public List<Usuario> findGerentesDisponiveis();
 	
 	public List<Usuario> findByProjetos(List<Long> ids);
+	
+	public List<Usuario> findUsuarioByGerente(Usuario usuarioFiltro);
 
 	public List<Usuario> findLideresDisponiveis(Projeto projeto);
 

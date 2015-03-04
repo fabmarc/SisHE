@@ -22,6 +22,8 @@ public interface UsuarioService extends BaseService<Usuario> {
 	
 	public List<Usuario> findGerentesDisponiveis();
 	
+	public List<Usuario> findUsuarioByGerente(Usuario usuarioFiltro);
+	
 	public List<Usuario> findLideresDisponiveis(Projeto projeto);
 
 	public List<Usuario> findByProjetos(List<Long> ids);
