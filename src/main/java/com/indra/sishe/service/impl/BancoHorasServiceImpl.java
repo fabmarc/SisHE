@@ -76,11 +76,24 @@ public class BancoHorasServiceImpl extends StatelessServiceAb implements BancoHo
 
 	@Override
 	public String findSaldoFormatadoByUsuario(Usuario entity) {
+		String saldoFormatado;
 		Long saldo = bancoHorasDao.findByUsuario(entity).getSaldo();
 		Long min, horas;
 		horas = saldo / 60;
 		min = saldo % 60;
-		String saldoFormatado = horas+"h e " + min + "min";
+		if (saldo < 0) {
+			if (horas == 0 && min < 0) {
+				saldoFormatado = "- " + Math.abs(min) + "min";
+			} else {
+				saldoFormatado = "- " + Math.abs(horas) + "h e " + Math.abs(min) + "min";
+			}
+		} else {
+			if (horas == 0) {
+				saldoFormatado = Math.abs(min) + "min";
+			} else {
+				saldoFormatado = horas + "h e " + min + "min";
+			}
+		}
 		return saldoFormatado;
 	}
 

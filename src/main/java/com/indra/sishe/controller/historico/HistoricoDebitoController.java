@@ -79,7 +79,7 @@ public class HistoricoDebitoController extends BaseController implements Seriali
 				u.setDebito(null);
 			}
 			if (!debitoRealizado) {
-
+				messager.info(messageProvider.getMessage("msg.error.saldo.nao.debitado"));
 			} else {
 				messager.info(messageProvider.getMessage("msg.success.saldo.debitado"));
 			}
