@@ -3,6 +3,8 @@ package com.indra.sishe.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.indra.sishe.enums.StatusEnum;
+
 public class Folga implements Serializable {
 
 	private static final long serialVersionUID = 1192553411222129954L;
@@ -20,6 +22,8 @@ public class Folga implements Serializable {
 	private Date dataAprovacao;
 	
 	private String observacao;
+	
+	private StatusEnum status;
 
 	public Long getId() {
 		return id;
@@ -75,6 +79,14 @@ public class Folga implements Serializable {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public StatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEnum status) {
+		this.status = status;
 	}
 
 	
