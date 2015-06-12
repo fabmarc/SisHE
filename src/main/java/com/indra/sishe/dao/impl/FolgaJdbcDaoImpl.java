@@ -68,8 +68,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	public Folga update(Folga entity) throws RegistroInexistenteException, RegistroDuplicadoException {
 		int rows = 0;
 		try {
-			rows = getJdbcTemplate().update("UPDATE folga SET data_folga = ?, observacao = ? WHERE id = ?",
-					entity.getDataFolga(), entity.getObservacao());
+			rows = getJdbcTemplate().update("UPDATE folga SET data_folga = ?, observacao = ? WHERE id = ?", entity.getDataFolga(), entity.getObservacao());
 			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
@@ -81,19 +80,16 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	public List<Folga> findAll() {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, " +
-				"f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, " +
-				"f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " +
-				"cs.id as idCargoSolicitante, ca.id as idCargoAprovador  " +
-				"FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " +
-				"			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)" +
-				"			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" +
-				"			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id)");
+		sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, "
+				+ "f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
+				+ "f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " + "cs.id as idCargoSolicitante, ca.id as idCargoAprovador  "
+				+ "FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)"
+				+ "			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id)");
 		sql.append("ORDER BY f.id DESC ");
 
 		List<Folga> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 
-				new RowMapper<Folga>() {
+		new RowMapper<Folga>() {
 			@Override
 			public Folga mapRow(ResultSet rs, int idx) throws SQLException {
 				Cargo cargoSolicitante = new Cargo();
@@ -106,12 +102,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				cargoSolicitante.setNome(rs.getString("cargoSolicitante"));
 				cargoAprovador.setId(rs.getLong("idCargoAprovador"));
 				cargoAprovador.setNome(rs.getString("cargoSolicitante"));
-				
+
 				solicitante.setId(rs.getLong("idSolicitante"));
 				solicitante.setNome(rs.getString("nomeSolicitante"));
 				aprovador.setId(rs.getLong("idAprovador"));
 				aprovador.setNome(rs.getString("nomeAprovador"));
-				
+
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
 				folga.setDataFolga(rs.getDate("dataFolga"));
@@ -131,48 +127,44 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		try {
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
-			sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, " +
-					"f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, " +
-					"f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " +
-					"cs.id as idCargoSolicitante, ca.id as idCargoAprovador  " +
-					"FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " +
-					"			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)" +
-					"			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" +
-					"			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " +
-					"WHERE f.id = :idFolga ");
+			sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, "
+					+ "f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
+					+ "f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, "
+					+ "cs.id as idCargoSolicitante, ca.id as idCargoAprovador  " + "FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) "
+					+ "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)" + "			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) "
+					+ "WHERE f.id = :idFolga ");
 			params.addValue("idFolga", id);
 
-			return getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params,
-					new RowMapper<Folga>() {
-						@Override
-						public Folga mapRow(ResultSet rs, int idx) throws SQLException {
-							Cargo cargoSolicitante = new Cargo();
-							Cargo cargoAprovador = new Cargo();
-							Usuario solicitante = new Usuario();
-							Usuario aprovador = new Usuario();
-							Folga folga = new Folga();
+			return getNamedParameterJdbcTemplate().queryForObject(sql.toString(), params, new RowMapper<Folga>() {
+				@Override
+				public Folga mapRow(ResultSet rs, int idx) throws SQLException {
+					Cargo cargoSolicitante = new Cargo();
+					Cargo cargoAprovador = new Cargo();
+					Usuario solicitante = new Usuario();
+					Usuario aprovador = new Usuario();
+					Folga folga = new Folga();
 
-							cargoSolicitante.setId(rs.getLong("idCargoSolicitante"));
-							cargoSolicitante.setNome(rs.getString("cargoSolicitante"));
-							cargoAprovador.setId(rs.getLong("idCargoAprovador"));
-							cargoAprovador.setNome(rs.getString("cargoSolicitante"));
-							
-							solicitante.setId(rs.getLong("idSolicitante"));
-							solicitante.setNome(rs.getString("nomeSolicitante"));
-							aprovador.setId(rs.getLong("idAprovador"));
-							aprovador.setNome(rs.getString("nomeAprovador"));
-							
-							folga.setId(rs.getLong("idFolga"));
-							folga.setDataAprovacao(rs.getDate("dataAprovacao"));
-							folga.setDataFolga(rs.getDate("dataFolga"));
-							folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
-							folga.setAprovador(aprovador);
-							folga.setSolicitante(solicitante);
-							folga.setObservacao(rs.getString("observacao"));
-							folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
-							return folga;
-						}
-					});
+					cargoSolicitante.setId(rs.getLong("idCargoSolicitante"));
+					cargoSolicitante.setNome(rs.getString("cargoSolicitante"));
+					cargoAprovador.setId(rs.getLong("idCargoAprovador"));
+					cargoAprovador.setNome(rs.getString("cargoSolicitante"));
+
+					solicitante.setId(rs.getLong("idSolicitante"));
+					solicitante.setNome(rs.getString("nomeSolicitante"));
+					aprovador.setId(rs.getLong("idAprovador"));
+					aprovador.setNome(rs.getString("nomeAprovador"));
+
+					folga.setId(rs.getLong("idFolga"));
+					folga.setDataAprovacao(rs.getDate("dataAprovacao"));
+					folga.setDataFolga(rs.getDate("dataFolga"));
+					folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+					folga.setAprovador(aprovador);
+					folga.setSolicitante(solicitante);
+					folga.setObservacao(rs.getString("observacao"));
+					folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
+					return folga;
+				}
+			});
 		} catch (EmptyResultDataAccessException e) {
 			throw new RegistroInexistenteException();
 		}
@@ -184,7 +176,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 	@Override
 	public void remove(List<Object> ids) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
-		
+
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { id };
@@ -208,23 +200,19 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	public List<Folga> findByFilter(Folga folga) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, " +
-				"f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, " +
-				"f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " +
-				"cs.id as idCargoSolicitante, ca.id as idCargoAprovador  " +
-				"FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " +
-				"			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)" +
-				"			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" +
-				"			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " +
-				"WHERE 1 = 1 ");
-		
+		sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, "
+				+ "f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
+				+ "f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " + "cs.id as idCargoSolicitante, ca.id as idCargoAprovador  "
+				+ "FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)"
+				+ "			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "WHERE 1 = 1 ");
+
 		if (folga != null) {
-			
+
 			if (folga.getStatus() != null) {
 				sql.append("AND f.id_status = :status");
 				params.addValue("status", folga.getStatus());
 			}
-			
+
 			if (folga.getSolicitante() != null && folga.getSolicitante().getId() != null) {
 				sql.append("AND f.id_solicitante = :solicitante");
 				params.addValue("solicitante", folga.getSolicitante().getId());
@@ -245,14 +233,14 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				sql.append("AND f.data_solicitacao = :dataSolicitacao");
 				params.addValue("dataSolicitacao", folga.getDataSolicitacao());
 			}
-			
+
 		}
-		
+
 		sql.append("ORDER BY f.id DESC ");
 
 		List<Folga> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 
-				new RowMapper<Folga>() {
+		new RowMapper<Folga>() {
 			@Override
 			public Folga mapRow(ResultSet rs, int idx) throws SQLException {
 				Cargo cargoSolicitante = new Cargo();
@@ -265,12 +253,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				cargoSolicitante.setNome(rs.getString("cargoSolicitante"));
 				cargoAprovador.setId(rs.getLong("idCargoAprovador"));
 				cargoAprovador.setNome(rs.getString("cargoSolicitante"));
-				
+
 				solicitante.setId(rs.getLong("idSolicitante"));
 				solicitante.setNome(rs.getString("nomeSolicitante"));
 				aprovador.setId(rs.getLong("idAprovador"));
 				aprovador.setNome(rs.getString("nomeAprovador"));
-				
+
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
 				folga.setDataFolga(rs.getDate("dataFolga"));
@@ -286,32 +274,100 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	}
 
 	@Override
-	public List<Folga> findFolgasByGerente(Folga folgaFiltro, Usuario gerenteLogado, StatusEnum status ) {
-		// tipoFiltro: 1 = Folgas não avaliadas| 2 = Folgas aprovadas | 3 = Folgas Reprovadas 
+	public List<Folga> findFolgasByGerente(Folga folgaFiltro, Usuario gerenteLogado) {
+
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT f.id AS idFolga ,proj.id ,proj.nome ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante ," +
-				"cs.nome AS cargoSolicitante ,f.id_aprovador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ," +
-				"f.data_solicitacao AS dataSolicitacao ,f.data_aprovacao AS dataAprovacao ,f.data_folga AS dataFolga ," +
-				"f.observacao AS observacao,  f.id_status AS statusFolga, cs.id AS idCargoSolicitante ,ca.id AS idCargoAprovador " +
-				"FROM folga f " +
-				"INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " +
-				"INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " +
-				"LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id) " +
-				"LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " +
-				"LEFT JOIN usuario_projeto up ON (f.id_solicitante = up.id_usuario) " +
-				"INNER JOIN projeto proj ON (up.id_projeto = proj.id) " +
-				"WHERE proj.id_gerente = :idGerente ");
+		sql.append("SELECT f.id AS idFolga ,proj.id ,proj.nome ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante ,"
+				+ "cs.nome AS cargoSolicitante ,f.id_aprovador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ,"
+				+ "f.data_solicitacao AS dataSolicitacao ,f.data_aprovacao AS dataAprovacao ,f.data_folga AS dataFolga ,"
+				+ "f.observacao AS observacao,  f.id_status AS statusFolga, cs.id AS idCargoSolicitante ,ca.id AS idCargoAprovador " + "FROM folga f "
+				+ "INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " + "LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id) "
+				+ "LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "LEFT JOIN usuario_projeto up ON (f.id_solicitante = up.id_usuario) " + "INNER JOIN projeto proj ON (up.id_projeto = proj.id) "
+				+ "WHERE proj.id_gerente = :idGerente ");
 		params.addValue("idGerente", gerenteLogado.getId());
-		
-		if (status != null) {
-			sql.append("AND f.id_status = :status");
-			params.addValue("status", status);
+
+		if (folgaFiltro != null) {
+
+			if (folgaFiltro.getStatus() != null) {
+				sql.append("AND f.id_status = :status ");
+				params.addValue("status", folgaFiltro.getStatus());
+			}
+
+			if (folgaFiltro.getSolicitante() != null && folgaFiltro.getSolicitante().getId() != null) {
+				sql.append("AND f.id_solicitante = :solicitante ");
+				params.addValue("solicitante", folgaFiltro.getSolicitante().getId());
+			}
+			if (folgaFiltro.getAprovador() != null && folgaFiltro.getAprovador().getId() != null) {
+				sql.append("AND f.id_aprovador = :aprovador ");
+				params.addValue("aprovador", folgaFiltro.getAprovador().getId());
+			}
+			if (folgaFiltro.getDataAprovacao() != null) {
+				sql.append("AND f.data_aprovacao = :dataAprovacao ");
+				params.addValue("dataAprovacao", folgaFiltro.getDataAprovacao());
+			}
+			if (folgaFiltro.getDataFolga() != null) {
+				sql.append("AND f.data_folgaFiltro = :datafolgaFiltro ");
+				params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
+			}
+			if (folgaFiltro.getDataSolicitacao() != null) {
+				sql.append("AND f.data_solicitacao = :dataSolicitacao ");
+				params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
+			}
 		}
-		
-		if (folgaFiltro.getSolicitante() != null && folgaFiltro.getSolicitante().getId() != null) {
-			sql.append("AND f.id_solicitante = :solicitante");
-			params.addValue("solicitante", folgaFiltro.getSolicitante().getId());
+		sql.append("ORDER BY f.id DESC ");
+
+		List<Folga> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+
+		new RowMapper<Folga>() {
+			@Override
+			public Folga mapRow(ResultSet rs, int idx) throws SQLException {
+				Cargo cargoSolicitante = new Cargo();
+				Cargo cargoAprovador = new Cargo();
+				Usuario solicitante = new Usuario();
+				Usuario aprovador = new Usuario();
+				Folga folga = new Folga();
+
+				cargoSolicitante.setId(rs.getLong("idCargoSolicitante"));
+				cargoSolicitante.setNome(rs.getString("cargoSolicitante"));
+				cargoAprovador.setId(rs.getLong("idCargoAprovador"));
+				cargoAprovador.setNome(rs.getString("cargoSolicitante"));
+
+				solicitante.setId(rs.getLong("idSolicitante"));
+				solicitante.setNome(rs.getString("nomeSolicitante"));
+				aprovador.setId(rs.getLong("idAprovador"));
+				aprovador.setNome(rs.getString("nomeAprovador"));
+
+				folga.setId(rs.getLong("idFolga"));
+				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
+				folga.setDataFolga(rs.getDate("dataFolga"));
+				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+				folga.setAprovador(aprovador);
+				folga.setSolicitante(solicitante);
+				folga.setObservacao(rs.getString("observacao"));
+				folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
+				return folga;
+			}
+		});
+		return lista;
+	}
+
+	@Override
+	public List<Folga> findByFilterByUsuario(Folga folgaFiltro) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT f.id AS idFolga ,proj.id ,proj.nome ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante ,"
+				+ "cs.nome AS cargoSolicitante ,f.id_aprovador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ,"
+				+ "f.data_solicitacao AS dataSolicitacao ,f.data_aprovacao AS dataAprovacao ,f.data_folga AS dataFolga ,"
+				+ "f.observacao AS observacao,  f.id_status AS statusFolga, cs.id AS idCargoSolicitante ,ca.id AS idCargoAprovador " + "FROM folga f "
+				+ "INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " + "LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id) "
+				+ "LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "LEFT JOIN usuario_projeto up ON (f.id_solicitante = up.id_usuario) " + "INNER JOIN projeto proj ON (up.id_projeto = proj.id) "
+				+ "WHERE f.id_solicitante = :idsolicitante ");
+		params.addValue("idsolicitante", folgaFiltro.getSolicitante().getId());
+
+		if (folgaFiltro.getStatus() != null) {
+			sql.append("AND f.id_status = :status");
+			params.addValue("status", folgaFiltro.getStatus());
 		}
 		if (folgaFiltro.getAprovador() != null && folgaFiltro.getAprovador().getId() != null) {
 			sql.append("AND f.id_aprovador = :aprovador");
@@ -329,12 +385,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			sql.append("AND f.data_solicitacao = :dataSolicitacao");
 			params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
 		}
-		
+
 		sql.append("ORDER BY f.id DESC ");
 
 		List<Folga> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
 
-				new RowMapper<Folga>() {
+		new RowMapper<Folga>() {
 			@Override
 			public Folga mapRow(ResultSet rs, int idx) throws SQLException {
 				Cargo cargoSolicitante = new Cargo();
@@ -347,12 +403,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				cargoSolicitante.setNome(rs.getString("cargoSolicitante"));
 				cargoAprovador.setId(rs.getLong("idCargoAprovador"));
 				cargoAprovador.setNome(rs.getString("cargoSolicitante"));
-				
+
 				solicitante.setId(rs.getLong("idSolicitante"));
 				solicitante.setNome(rs.getString("nomeSolicitante"));
 				aprovador.setId(rs.getLong("idAprovador"));
 				aprovador.setNome(rs.getString("nomeAprovador"));
-				
+
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
 				folga.setDataFolga(rs.getDate("dataFolga"));
@@ -365,12 +421,6 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			}
 		});
 		return lista;
-		//
-	}
-
-	@Override
-	public List<Folga> findByFilterByUsuario(Folga folga) {
-		return null;
 	}
 
 }

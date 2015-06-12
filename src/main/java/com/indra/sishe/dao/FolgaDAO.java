@@ -13,6 +13,6 @@ public interface FolgaDAO extends BaseDAO<Folga> {
 	
 	public List<Folga> findByFilterByUsuario(Folga folga);
 	
-	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Usuario gerenteLogado, StatusEnum status);
+	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Usuario gerenteLogado);
 	
 }
