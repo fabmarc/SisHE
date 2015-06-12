@@ -53,6 +53,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			params.addValue("data_solicitacao", entity.getDataSolicitacao());
 			params.addValue("data_aprovacao", entity.getDataAprovacao());
 			params.addValue("data_folga", entity.getDataFolga());
+			params.addValue("id_status", entity.getObservacao());
 			params.addValue("observacao", entity.getObservacao());
 
 			Number key = insertFolga.executeAndReturnKey(params);
@@ -421,6 +422,11 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			}
 		});
 		return lista;
+	}
+
+	@Override
+	public void avaliarFolga(Folga folgaAvaliar) {
+		
 	}
 
 }

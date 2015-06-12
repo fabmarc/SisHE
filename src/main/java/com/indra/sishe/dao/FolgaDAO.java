@@ -15,4 +15,6 @@ public interface FolgaDAO extends BaseDAO<Folga> {
 	
 	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Usuario gerenteLogado);
 	
+	public void avaliarFolga (Folga folgaAvaliar);
+	
 }
