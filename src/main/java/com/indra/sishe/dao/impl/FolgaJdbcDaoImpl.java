@@ -220,6 +220,11 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		
 		if (folga != null) {
 			
+			if (folga.getStatus() != null) {
+				sql.append("AND f.id_status = :status");
+				params.addValue("status", folga.getStatus());
+			}
+			
 			if (folga.getSolicitante() != null && folga.getSolicitante().getId() != null) {
 				sql.append("AND f.id_solicitante = :solicitante");
 				params.addValue("solicitante", folga.getSolicitante().getId());
@@ -281,7 +286,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	}
 
 	@Override
-	public List<Folga> findFolgasByGerente(Usuario gerenteProjeto, Integer tipoFiltro ) {
+	public List<Folga> findFolgasByGerente(Folga folgaFiltro, Usuario gerenteLogado, StatusEnum status ) {
 		// tipoFiltro: 1 = Folgas não avaliadas| 2 = Folgas aprovadas | 3 = Folgas Reprovadas 
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -297,13 +302,33 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				"LEFT JOIN usuario_projeto up ON (f.id_solicitante = up.id_usuario) " +
 				"INNER JOIN projeto proj ON (up.id_projeto = proj.id) " +
 				"WHERE proj.id_gerente = :idGerente ");
-		if (tipoFiltro == 1) {
-			sql.append("AND f.data_aprovacao IS NULL ");
-		}else {
-			sql.append("AND f.data_aprovacao IS NOT NULL ");
-		}
-		params.addValue("idGerente", gerenteProjeto.getId());
+		params.addValue("idGerente", gerenteLogado.getId());
 		
+		if (status != null) {
+			sql.append("AND f.id_status = :status");
+			params.addValue("status", status);
+		}
+		
+		if (folgaFiltro.getSolicitante() != null && folgaFiltro.getSolicitante().getId() != null) {
+			sql.append("AND f.id_solicitante = :solicitante");
+			params.addValue("solicitante", folgaFiltro.getSolicitante().getId());
+		}
+		if (folgaFiltro.getAprovador() != null && folgaFiltro.getAprovador().getId() != null) {
+			sql.append("AND f.id_aprovador = :aprovador");
+			params.addValue("aprovador", folgaFiltro.getAprovador().getId());
+		}
+		if (folgaFiltro.getDataAprovacao() != null) {
+			sql.append("AND f.data_aprovacao = :dataAprovacao");
+			params.addValue("dataAprovacao", folgaFiltro.getDataAprovacao());
+		}
+		if (folgaFiltro.getDataFolga() != null) {
+			sql.append("AND f.data_folgaFiltro = :datafolgaFiltro");
+			params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
+		}
+		if (folgaFiltro.getDataSolicitacao() != null) {
+			sql.append("AND f.data_solicitacao = :dataSolicitacao");
+			params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
+		}
 		
 		sql.append("ORDER BY f.id DESC ");
 
