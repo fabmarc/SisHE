@@ -174,8 +174,6 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
 		} else if (solicitacao.getDescricao() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
-		} else if (solicitacao.getDescricao() != null && (solicitacao.getDescricao().length() > 500)) {
-			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
 		} else if (solicitacao.getSistema() == null || solicitacao.getSistema().getId() == 0) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
 		} else if (!hoje.equalsIgnoreCase(dtEscolhida)

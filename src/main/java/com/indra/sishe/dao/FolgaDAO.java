@@ -3,6 +3,7 @@ package com.indra.sishe.dao;
 import java.util.List;
 
 import com.indra.infra.dao.BaseDAO;
+import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.entity.Folga;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.enums.StatusEnum;
@@ -15,6 +16,6 @@ public interface FolgaDAO extends BaseDAO<Folga> {
 	
 	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Usuario gerenteLogado);
 	
-	public void avaliarFolga (Folga folgaAvaliar);
+	public void avaliarFolga (List<Long> ids, Integer acao) throws RegistroInexistenteException;
 	
 }

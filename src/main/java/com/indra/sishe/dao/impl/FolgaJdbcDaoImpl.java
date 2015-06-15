@@ -210,28 +210,28 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		if (folga != null) {
 
 			if (folga.getStatus() != null) {
-				sql.append("AND f.id_status = :status");
+				sql.append("AND f.id_status = :status ");
 				params.addValue("status", folga.getStatus());
 			}
 
 			if (folga.getSolicitante() != null && folga.getSolicitante().getId() != null) {
-				sql.append("AND f.id_solicitante = :solicitante");
+				sql.append("AND f.id_solicitante = :solicitante ");
 				params.addValue("solicitante", folga.getSolicitante().getId());
 			}
 			if (folga.getAprovador() != null && folga.getAprovador().getId() != null) {
-				sql.append("AND f.id_aprovador = :aprovador");
+				sql.append("AND f.id_aprovador = :aprovador ");
 				params.addValue("aprovador", folga.getAprovador().getId());
 			}
 			if (folga.getDataAprovacao() != null) {
-				sql.append("AND f.data_aprovacao = :dataAprovacao");
+				sql.append("AND f.data_aprovacao = :dataAprovacao ");
 				params.addValue("dataAprovacao", folga.getDataAprovacao());
 			}
 			if (folga.getDataFolga() != null) {
-				sql.append("AND f.data_folga = :dataFolga");
+				sql.append("AND f.data_folga = :dataFolga ");
 				params.addValue("dataFolga", folga.getDataFolga());
 			}
 			if (folga.getDataSolicitacao() != null) {
-				sql.append("AND f.data_solicitacao = :dataSolicitacao");
+				sql.append("AND f.data_solicitacao = :dataSolicitacao ");
 				params.addValue("dataSolicitacao", folga.getDataSolicitacao());
 			}
 
@@ -367,23 +367,23 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		params.addValue("idsolicitante", folgaFiltro.getSolicitante().getId());
 
 		if (folgaFiltro.getStatus() != null) {
-			sql.append("AND f.id_status = :status");
+			sql.append("AND f.id_status = :status ");
 			params.addValue("status", folgaFiltro.getStatus());
 		}
 		if (folgaFiltro.getAprovador() != null && folgaFiltro.getAprovador().getId() != null) {
-			sql.append("AND f.id_aprovador = :aprovador");
+			sql.append("AND f.id_aprovador = :aprovador ");
 			params.addValue("aprovador", folgaFiltro.getAprovador().getId());
 		}
 		if (folgaFiltro.getDataAprovacao() != null) {
-			sql.append("AND f.data_aprovacao = :dataAprovacao");
+			sql.append("AND f.data_aprovacao = :dataAprovacao ");
 			params.addValue("dataAprovacao", folgaFiltro.getDataAprovacao());
 		}
 		if (folgaFiltro.getDataFolga() != null) {
-			sql.append("AND f.data_folgaFiltro = :datafolgaFiltro");
+			sql.append("AND f.data_folgaFiltro = :datafolgaFiltro ");
 			params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
 		}
 		if (folgaFiltro.getDataSolicitacao() != null) {
-			sql.append("AND f.data_solicitacao = :dataSolicitacao");
+			sql.append("AND f.data_solicitacao = :dataSolicitacao ");
 			params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
 		}
 
@@ -425,8 +425,17 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	}
 
 	@Override
-	public void avaliarFolga(Folga folgaAvaliar) {
+	public void avaliarFolga(List<Long> ids, Integer acao) throws RegistroInexistenteException {
 		
+		// Ação: 1 - Aprovado | 2 - Reprovado | 3 - Pendente
+		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
+		for (Object id : ids) {
+			Object[] param = new Object[] { acao, id };
+			params.add(param);
+		}
+		int[] affectedRows = getJdbcTemplate().batchUpdate("UPDATE folga SET id_status = ?  WHERE id = ?", params);
+		for (int rows : affectedRows)
+			if (rows == 0) throw new RegistroInexistenteException();
 	}
 
 }

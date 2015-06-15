@@ -1,5 +1,7 @@
 package com.indra.sishe.service.impl;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,20 @@ public class FolgaServiceImpl implements FolgaService {
 		} catch (DeletarRegistroViolacaoFK d) {
 			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Folga");
 		}
+	}
+
+	@Override
+	public Boolean validarFolga(Folga folga) {
+		
+		Date hoje = new Date();
+		
+//		if (folga.getDataFolga().before(hoje)) {
+//			throw new ApplicationException("msg.error.data.superior");
+//		}else if (folga.get) {
+//			
+//		}
+		
+		return true;
 	}
 
 }
