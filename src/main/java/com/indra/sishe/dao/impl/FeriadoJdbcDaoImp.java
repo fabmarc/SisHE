@@ -3,6 +3,7 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.sishe.dao.FeriadoDAO;
 import com.indra.sishe.entity.Cidade;
 import com.indra.sishe.entity.Feriado;
+import com.indra.sishe.entity.Folga;
 import com.indra.sishe.enums.EstadoEnum;
 
 @Repository
@@ -228,6 +230,37 @@ public class FeriadoJdbcDaoImp extends NamedParameterJdbcDaoSupport implements F
 		} catch (DataIntegrityViolationException d) {
 			throw new DeletarRegistroViolacaoFK();
 		}
+	}
+
+	@Override
+	public Boolean verificaFeriadoPorData(Folga folga) {
+		StringBuilder sql = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sql.append("SELECT feriado.data AS data " + "FROM FOLGA LEFT JOIN USUARIO ON (USUARIO.ID = FOLGA.ID_SOLICITANTE) " + "LEFT JOIN CIDADE ON (CIDADE.ID = USUARIO.ID_CIDADE) "
+				+ "LEFT JOIN SINDICATO ON (SINDICATO.ID = USUARIO.ID_SINDICATO) " + "LEFT JOIN FERIADO ON ( ( ( FERIADO.ID_ESTADO = SINDICATO.ID_ESTADO AND FERIADO.ID_CIDADE = CIDADE.ID ) "
+				+ "OR ( FERIADO.ID_ESTADO = SINDICATO.ID_ESTADO AND FERIADO.ID_CIDADE IS NULL ) OR (FERIADO.ID_ESTADO IS NULL) ) "
+				+ "AND ( (folga.data_folga = feriado.data) OR ( TO_CHAR(folga.data_folga, 'MM') = TO_CHAR(feriado.data, 'MM') "
+				+ "AND TO_CHAR(folga.data_folga, 'DD') = TO_CHAR(feriado.data, 'DD') AND feriado.tipo = 'F' ) ) ) ");
+
+		sql.append(" WHERE folga.id = :idFolga AND feriado.data is not null ");
+		params.addValue("idFolga", folga.getId());
+
+		List<Feriado> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
+
+		new RowMapper<Feriado>() {
+			@Override
+			public Feriado mapRow(ResultSet rs, int idx) throws SQLException {
+				Feriado feriado = new Feriado();
+				feriado.setData(rs.getDate("data"));
+				return feriado;
+			}
+		});
+		if (lista.size() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }

@@ -101,9 +101,9 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 			List<Object> pks = new ArrayList<Object>(ids);
 			solicitacaoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
-			e.printStackTrace();
-		} catch (DeletarRegistroViolacaoFK e) {
-			e.printStackTrace();
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
+		} catch (DeletarRegistroViolacaoFK d) {
+			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Solicitação");
 		}
 	}
 

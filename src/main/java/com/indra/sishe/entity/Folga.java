@@ -2,27 +2,28 @@ package com.indra.sishe.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.indra.sishe.enums.StatusEnum;
 
 public class Folga implements Serializable {
 
 	private static final long serialVersionUID = 1192553411222129954L;
-	
+
 	private Long id;
-	
+
 	private Usuario solicitante;
-	
-	private Usuario Aprovador;
-	
+
+	private Usuario avaliador;
+
 	private Date dataSolicitacao;
-	
-	private Date dataFolga;
-	
+
+	private List<DatasFolga> datasFolga;
+
 	private Date dataAprovacao;
-	
+
 	private String observacao;
-	
+
 	private StatusEnum status;
 
 	public Long getId() {
@@ -41,12 +42,12 @@ public class Folga implements Serializable {
 		this.solicitante = solicitante;
 	}
 
-	public Usuario getAprovador() {
-		return Aprovador;
+	public Usuario getAvaliador() {
+		return avaliador;
 	}
 
-	public void setAprovador(Usuario aprovador) {
-		Aprovador = aprovador;
+	public void setAvaliador(Usuario aprovador) {
+		avaliador = aprovador;
 	}
 
 	public Date getDataSolicitacao() {
@@ -55,14 +56,6 @@ public class Folga implements Serializable {
 
 	public void setDataSolicitacao(Date dataSolicitacao) {
 		this.dataSolicitacao = dataSolicitacao;
-	}
-
-	public Date getDataFolga() {
-		return dataFolga;
-	}
-
-	public void setDataFolga(Date dataFolga) {
-		this.dataFolga = dataFolga;
 	}
 
 	public Date getDataAprovacao() {
@@ -89,5 +82,12 @@ public class Folga implements Serializable {
 		this.status = status;
 	}
 
-	
+	public List<DatasFolga> getDatasFolga() {
+		return datasFolga;
+	}
+
+	public void setDatasFolga(List<DatasFolga> datasFolga) {
+		this.datasFolga = datasFolga;
+	}
+
 }

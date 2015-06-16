@@ -3,6 +3,7 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -49,10 +50,9 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		try {
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("id_solicitante", UsuarioLogado.getId());
-			params.addValue("id_aprovador", entity.getAprovador().getId());
+			params.addValue("id_avaliador", entity.getAvaliador().getId());
 			params.addValue("data_solicitacao", entity.getDataSolicitacao());
 			params.addValue("data_aprovacao", entity.getDataAprovacao());
-			params.addValue("data_folga", entity.getDataFolga());
 			params.addValue("id_status", entity.getObservacao());
 			params.addValue("observacao", entity.getObservacao());
 
@@ -69,7 +69,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	public Folga update(Folga entity) throws RegistroInexistenteException, RegistroDuplicadoException {
 		int rows = 0;
 		try {
-			rows = getJdbcTemplate().update("UPDATE folga SET data_folga = ?, observacao = ? WHERE id = ?", entity.getDataFolga(), entity.getObservacao());
+			rows = getJdbcTemplate().update("UPDATE folga SET observacao = ? WHERE id = ?", entity.getObservacao());
 			if (rows == 0) throw new RegistroInexistenteException();
 		} catch (DuplicateKeyException e) {
 			throw new RegistroDuplicadoException(e.toString());
@@ -82,10 +82,10 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, "
-				+ "f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
+				+ "f.id_avaliador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
 				+ "f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " + "cs.id as idCargoSolicitante, ca.id as idCargoAprovador  "
 				+ "FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)"
-				+ "			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id)");
+				+ "			  LEFT JOIN usuario aprov ON (f.id_avaliador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id)");
 		sql.append("ORDER BY f.id DESC ");
 
 		List<Folga> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
@@ -111,9 +111,8 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
-				folga.setDataFolga(rs.getDate("dataFolga"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
-				folga.setAprovador(aprovador);
+				folga.setAvaliador(aprovador);
 				folga.setSolicitante(solicitante);
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
@@ -129,10 +128,10 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			StringBuilder sql = new StringBuilder();
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, "
-					+ "f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
+					+ "f.id_avaliador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
 					+ "f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, "
 					+ "cs.id as idCargoSolicitante, ca.id as idCargoAprovador  " + "FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) "
-					+ "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)" + "			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) "
+					+ "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)" + "			  LEFT JOIN usuario aprov ON (f.id_avaliador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) "
 					+ "WHERE f.id = :idFolga ");
 			params.addValue("idFolga", id);
 
@@ -157,9 +156,8 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 					folga.setId(rs.getLong("idFolga"));
 					folga.setDataAprovacao(rs.getDate("dataAprovacao"));
-					folga.setDataFolga(rs.getDate("dataFolga"));
 					folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
-					folga.setAprovador(aprovador);
+					folga.setAvaliador(aprovador);
 					folga.setSolicitante(solicitante);
 					folga.setObservacao(rs.getString("observacao"));
 					folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
@@ -202,10 +200,10 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT f.id as idFolga, f.id_solicitante as idSolicitante, solic.nome as nomeSolicitante, cs.nome as cargoSolicitante, "
-				+ "f.id_aprovador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
+				+ "f.id_avaliador as idAprovador, aprov.nome as nomeAprovador, ca.nome as cargoAprovador, f.data_solicitacao as dataSolicitacao, "
 				+ "f.data_aprovacao as dataAprovacao, f.data_folga as dataFolga, f.observacao as observacao, f.id_status AS statusFolga, " + "cs.id as idCargoSolicitante, ca.id as idCargoAprovador  "
 				+ "FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "			  INNER JOIN cargo cs ON (solic.id_cargo = cs.id)"
-				+ "			  LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "WHERE 1 = 1 ");
+				+ "			  LEFT JOIN usuario aprov ON (f.id_avaliador = aprov.id)" + "			  LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "WHERE 1 = 1 ");
 
 		if (folga != null) {
 
@@ -218,18 +216,18 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				sql.append("AND f.id_solicitante = :solicitante ");
 				params.addValue("solicitante", folga.getSolicitante().getId());
 			}
-			if (folga.getAprovador() != null && folga.getAprovador().getId() != null) {
-				sql.append("AND f.id_aprovador = :aprovador ");
-				params.addValue("aprovador", folga.getAprovador().getId());
+			if (folga.getAvaliador() != null && folga.getAvaliador().getId() != null) {
+				sql.append("AND f.id_avaliador = :aprovador ");
+				params.addValue("aprovador", folga.getAvaliador().getId());
 			}
 			if (folga.getDataAprovacao() != null) {
 				sql.append("AND f.data_aprovacao = :dataAprovacao ");
 				params.addValue("dataAprovacao", folga.getDataAprovacao());
 			}
-			if (folga.getDataFolga() != null) {
-				sql.append("AND f.data_folga = :dataFolga ");
-				params.addValue("dataFolga", folga.getDataFolga());
-			}
+//			if (folga.getDataFolga() != null) {
+//				sql.append("AND f.data_folga = :dataFolga ");
+//				params.addValue("dataFolga", folga.getDataFolga());
+//			}
 			if (folga.getDataSolicitacao() != null) {
 				sql.append("AND f.data_solicitacao = :dataSolicitacao ");
 				params.addValue("dataSolicitacao", folga.getDataSolicitacao());
@@ -262,9 +260,8 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
-				folga.setDataFolga(rs.getDate("dataFolga"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
-				folga.setAprovador(aprovador);
+				folga.setAvaliador(aprovador);
 				folga.setSolicitante(solicitante);
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
@@ -275,18 +272,18 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	}
 
 	@Override
-	public List<Folga> findFolgasByGerente(Folga folgaFiltro, Usuario gerenteLogado) {
+	public List<Folga> findFolgasByGerente(Folga folgaFiltro, Long idGerenteLogado) {
 
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT f.id AS idFolga ,proj.id ,proj.nome ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante ,"
-				+ "cs.nome AS cargoSolicitante ,f.id_aprovador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ,"
+				+ "cs.nome AS cargoSolicitante ,f.id_avaliador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ,"
 				+ "f.data_solicitacao AS dataSolicitacao ,f.data_aprovacao AS dataAprovacao ,f.data_folga AS dataFolga ,"
 				+ "f.observacao AS observacao,  f.id_status AS statusFolga, cs.id AS idCargoSolicitante ,ca.id AS idCargoAprovador " + "FROM folga f "
-				+ "INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " + "LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id) "
+				+ "INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " + "LEFT JOIN usuario aprov ON (f.id_avaliador = aprov.id) "
 				+ "LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "LEFT JOIN usuario_projeto up ON (f.id_solicitante = up.id_usuario) " + "INNER JOIN projeto proj ON (up.id_projeto = proj.id) "
 				+ "WHERE proj.id_gerente = :idGerente ");
-		params.addValue("idGerente", gerenteLogado.getId());
+		params.addValue("idGerente", idGerenteLogado);
 
 		if (folgaFiltro != null) {
 
@@ -299,18 +296,18 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				sql.append("AND f.id_solicitante = :solicitante ");
 				params.addValue("solicitante", folgaFiltro.getSolicitante().getId());
 			}
-			if (folgaFiltro.getAprovador() != null && folgaFiltro.getAprovador().getId() != null) {
-				sql.append("AND f.id_aprovador = :aprovador ");
-				params.addValue("aprovador", folgaFiltro.getAprovador().getId());
+			if (folgaFiltro.getAvaliador() != null && folgaFiltro.getAvaliador().getId() != null) {
+				sql.append("AND f.id_avaliador = :aprovador ");
+				params.addValue("aprovador", folgaFiltro.getAvaliador().getId());
 			}
 			if (folgaFiltro.getDataAprovacao() != null) {
 				sql.append("AND f.data_aprovacao = :dataAprovacao ");
 				params.addValue("dataAprovacao", folgaFiltro.getDataAprovacao());
 			}
-			if (folgaFiltro.getDataFolga() != null) {
-				sql.append("AND f.data_folgaFiltro = :datafolgaFiltro ");
-				params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
-			}
+//			if (folgaFiltro.getDataFolga() != null) {
+//				sql.append("AND f.data_folgaFiltro = :datafolgaFiltro ");
+//				params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
+//			}
 			if (folgaFiltro.getDataSolicitacao() != null) {
 				sql.append("AND f.data_solicitacao = :dataSolicitacao ");
 				params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
@@ -341,9 +338,8 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
-				folga.setDataFolga(rs.getDate("dataFolga"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
-				folga.setAprovador(aprovador);
+				folga.setAvaliador(aprovador);
 				folga.setSolicitante(solicitante);
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
@@ -358,10 +354,10 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		sql.append("SELECT f.id AS idFolga ,proj.id ,proj.nome ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante ,"
-				+ "cs.nome AS cargoSolicitante ,f.id_aprovador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ,"
+				+ "cs.nome AS cargoSolicitante ,f.id_avaliador AS idAprovador ,aprov.nome AS nomeAprovador ,ca.nome AS cargoAprovador ,"
 				+ "f.data_solicitacao AS dataSolicitacao ,f.data_aprovacao AS dataAprovacao ,f.data_folga AS dataFolga ,"
 				+ "f.observacao AS observacao,  f.id_status AS statusFolga, cs.id AS idCargoSolicitante ,ca.id AS idCargoAprovador " + "FROM folga f "
-				+ "INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " + "LEFT JOIN usuario aprov ON (f.id_aprovador = aprov.id) "
+				+ "INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " + "INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " + "LEFT JOIN usuario aprov ON (f.id_avaliador = aprov.id) "
 				+ "LEFT JOIN cargo ca ON (aprov.id_cargo = ca.id) " + "LEFT JOIN usuario_projeto up ON (f.id_solicitante = up.id_usuario) " + "INNER JOIN projeto proj ON (up.id_projeto = proj.id) "
 				+ "WHERE f.id_solicitante = :idsolicitante ");
 		params.addValue("idsolicitante", folgaFiltro.getSolicitante().getId());
@@ -370,18 +366,18 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			sql.append("AND f.id_status = :status ");
 			params.addValue("status", folgaFiltro.getStatus());
 		}
-		if (folgaFiltro.getAprovador() != null && folgaFiltro.getAprovador().getId() != null) {
-			sql.append("AND f.id_aprovador = :aprovador ");
-			params.addValue("aprovador", folgaFiltro.getAprovador().getId());
+		if (folgaFiltro.getAvaliador() != null && folgaFiltro.getAvaliador().getId() != null) {
+			sql.append("AND f.id_avaliador = :aprovador ");
+			params.addValue("aprovador", folgaFiltro.getAvaliador().getId());
 		}
 		if (folgaFiltro.getDataAprovacao() != null) {
 			sql.append("AND f.data_aprovacao = :dataAprovacao ");
 			params.addValue("dataAprovacao", folgaFiltro.getDataAprovacao());
 		}
-		if (folgaFiltro.getDataFolga() != null) {
-			sql.append("AND f.data_folgaFiltro = :datafolgaFiltro ");
-			params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
-		}
+//		if (folgaFiltro.getDataFolga() != null) {
+//			sql.append("AND f.data_folgaFiltro = :datafolgaFiltro ");
+//			params.addValue("datafolgaFiltro", folgaFiltro.getDataFolga());
+//		}
 		if (folgaFiltro.getDataSolicitacao() != null) {
 			sql.append("AND f.data_solicitacao = :dataSolicitacao ");
 			params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
@@ -412,9 +408,8 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 				folga.setId(rs.getLong("idFolga"));
 				folga.setDataAprovacao(rs.getDate("dataAprovacao"));
-				folga.setDataFolga(rs.getDate("dataFolga"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
-				folga.setAprovador(aprovador);
+				folga.setAvaliador(aprovador);
 				folga.setSolicitante(solicitante);
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
