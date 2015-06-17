@@ -3,7 +3,6 @@ package com.indra.sishe.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -435,7 +434,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	@Override
 	public void avaliarFolga(List<Long> ids, Integer acao) throws RegistroInexistenteException {
 		
-		// Ação: 1 - Aprovado | 2 - Reprovado | 3 - Pendente
+		// Ação: 1 - Aprovado | 2 - Reprovado | 3 - P endente
 		ArrayList<Object[]> params = new ArrayList<Object[]>(ids.size());
 		for (Object id : ids) {
 			Object[] param = new Object[] { acao, id };
