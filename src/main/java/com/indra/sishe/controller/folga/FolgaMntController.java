@@ -1,6 +1,7 @@
 package com.indra.sishe.controller.folga;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -31,6 +32,10 @@ public class FolgaMntController extends FolgaController {
 	
 	private Folga folgaDetalhe;
 	
+	private Date dataFiltro;
+	
+	private Boolean gerenteLogado;
+	
 	@Inject
 	protected transient DatasFolgaService datasFolgaService;
 	
@@ -41,6 +46,7 @@ public class FolgaMntController extends FolgaController {
 		if (searched == null) searched = false;
 		folgaFiltro = (Folga) getFlashAttr("folgaFiltro");
 		if (folgaFiltro == null) folgaFiltro = new Folga();
+		verificarCargoGerente();
 	}
 	
 	public List<StatusEnum> listaStatus() {
@@ -48,7 +54,14 @@ public class FolgaMntController extends FolgaController {
 	}
 	
 	public void pesquisar() {
-		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) { // Gerente consulta folga de todos do Projeto dele
+		if (dataFiltro != null) {
+			List<DatasFolga> dataFolgaFiltro = new ArrayList<DatasFolga>(1);
+			DatasFolga dataFolga = new DatasFolga();
+			dataFolga.setData(dataFiltro);
+			dataFolgaFiltro.add(dataFolga);
+			folgaFiltro.setDatasFolga(dataFolgaFiltro);
+		}
+		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) { // Gerente consulta folga de recursos de todos do Projeto dele
 			listaFolgas = folgaService.findFolgasByGerente(folgaFiltro, UsuarioLogado.getId());
 		} else { // Usuários não gerentes consultam apenas suas próprias solicitações de folga
 			Usuario usuarioLogado = new Usuario();
@@ -124,6 +137,54 @@ public class FolgaMntController extends FolgaController {
 			messager.error(e.getMessage());
 		}
 
+	}
+	
+	public void verificarCargoGerente() {
+		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+			gerenteLogado = true;
+		} else {
+			gerenteLogado = false;
+		}
+	}
+
+	public List<Folga> getListaFolgas() {
+		return listaFolgas;
+	}
+
+	public void setListaFolgas(List<Folga> listaFolgas) {
+		this.listaFolgas = listaFolgas;
+	}
+
+	public List<Folga> getFolgasSelecionadas() {
+		return folgasSelecionadas;
+	}
+
+	public void setFolgasSelecionadas(List<Folga> folgasSelecionadas) {
+		this.folgasSelecionadas = folgasSelecionadas;
+	}
+
+	public Folga getFolgaDetalhe() {
+		return folgaDetalhe;
+	}
+
+	public void setFolgaDetalhe(Folga folgaDetalhe) {
+		this.folgaDetalhe = folgaDetalhe;
+	}
+
+	public Date getDataFiltro() {
+		return dataFiltro;
+	}
+
+	public void setDataFiltro(Date dataFiltro) {
+		this.dataFiltro = dataFiltro;
+	}
+
+	public Boolean getGerenteLogado() {
+		return gerenteLogado;
+	}
+
+	public void setGerenteLogado(Boolean gerenteLogado) {
+		this.gerenteLogado = gerenteLogado;
 	}
 
 }
