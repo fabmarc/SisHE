@@ -6,17 +6,19 @@ public class FolgaDebitar implements Serializable {
 
 	private static final long serialVersionUID = -7410617300374465301L;
 
-	private Integer id;
+	private Long id;
 	
 	private BancoHoras bancoHoras;
 	
 	private DatasFolga datasFolga;
+	
+	private Boolean flgContabilizado;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -34,6 +36,14 @@ public class FolgaDebitar implements Serializable {
 
 	public void setDatasFolga(DatasFolga datasFolga) {
 		this.datasFolga = datasFolga;
+	}
+
+	public Boolean getFlgContabilizado() {
+		return flgContabilizado;
+	}
+
+	public void setFlgContabilizado(Boolean flgContabilizado) {
+		this.flgContabilizado = flgContabilizado;
 	}
 	
 }

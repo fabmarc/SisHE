@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
+import com.indra.infra.dao.exception.RegistroDuplicadoException;
+import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.FolgaDebitarDAO;
 import com.indra.sishe.entity.FolgaDebitar;
@@ -19,7 +22,11 @@ public class FolgaDebitarServiceImpl extends StatelessServiceAb implements Folga
 
 	@Override
 	public FolgaDebitar save(FolgaDebitar entity) throws ApplicationException {
-		return null;
+		try {
+			return folgaDebitarDAO.save(entity);
+		} catch (RegistroDuplicadoException e) {
+			throw new ApplicationException(e, "msg.error.registro.duplicado", "Folga Debitar");
+		}
 	}
 
 	@Override
@@ -34,7 +41,11 @@ public class FolgaDebitarServiceImpl extends StatelessServiceAb implements Folga
 
 	@Override
 	public FolgaDebitar findById(Long id) throws ApplicationException {
-		return null;
+		try {
+			return folgaDebitarDAO.findById(id);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Folga Debitar");
+		}
 	}
 
 	@Override
@@ -43,6 +54,13 @@ public class FolgaDebitarServiceImpl extends StatelessServiceAb implements Folga
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
+		try {
+			folgaDebitarDAO.remove(ids);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Folga Debitar");
+		} catch (DeletarRegistroViolacaoFK e) {
+			throw new ApplicationException(e, "msg.error.excluir.registro.relacionado", "Folga Debitar");
+		}
 	}
 
 }

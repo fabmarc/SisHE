@@ -16,7 +16,6 @@ import com.indra.sishe.dao.FeriadoDAO;
 import com.indra.sishe.dao.FolgaDAO;
 import com.indra.sishe.entity.DatasFolga;
 import com.indra.sishe.entity.Folga;
-import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.FolgaService;
 
 public class FolgaServiceImpl implements FolgaService {
@@ -142,7 +141,7 @@ public class FolgaServiceImpl implements FolgaService {
 	}
 	
 	private Boolean validaRemocao(Folga folga) {
-		if (folga.getStatus().getId() == 3) {
+		if (folga.getStatusGerente().getId() == 3 && folga.getStatusLider().getId() == 3) {
 			return true;
 		}else {
 			return false;
@@ -150,9 +149,18 @@ public class FolgaServiceImpl implements FolgaService {
 	}
 
 	@Override
-	public void avaliarFolga(List<Long> ids, Integer acao) throws ApplicationException {
+	public void avaliarFolgaGerente(List<Long> ids, Integer acao) throws ApplicationException {
 		try {
-			folgaDAO.avaliarFolga(ids, acao);
+			folgaDAO.avaliarFolgaGerente(ids, acao);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação de Folga");
+		}
+	}
+	
+	@Override
+	public void avaliarFolgaLider(List<Long> ids, Integer acao) throws ApplicationException {
+		try {
+			folgaDAO.avaliarFolgaLider(ids, acao);
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação de Folga");
 		}

@@ -117,15 +117,24 @@ public class FolgaMntController extends FolgaController {
 	
 	private void avaliarFolga(int acao) {
 
+		int size = folgasSelecionadas.size();
+		ArrayList<Long> ids = new ArrayList<Long>(size);
 		try {
-			int size = folgasSelecionadas.size();
-			ArrayList<Long> ids = new ArrayList<Long>(size);
-			for (Folga folga : folgasSelecionadas) {
-				if (folga.getStatus().getId() == 3) { //retira as solicitações que já foram aprovadas/reprovadas
-					ids.add(folga.getId());
+			if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) {
+				for (Folga folga : folgasSelecionadas) {
+					if (folga.getStatusGerente().getId() == 3) { //retira as solicitações que já foram aprovadas/reprovadas
+						ids.add(folga.getId());
+					}
 				}
+				folgaService.avaliarFolgaGerente(ids, acao);
+			} else if(UsuarioLogado.getPermissoes().contains("ROLE_LIDER")){
+				for(Folga folga : folgasSelecionadas){
+					if (folga.getStatusLider().getId() == 3) { //retira as solicitações que já foram aprovadas/reprovadas
+						ids.add(folga.getId());
+					}
+				}
+				folgaService.avaliarFolgaLider(ids, acao);
 			}
-			folgaService.avaliarFolga(ids, acao);
 			
 			if (size != ids.size()) {
 				messager.info(messageProvider.getMessage("msg.success.solicitacao.aprovada.excecao"));

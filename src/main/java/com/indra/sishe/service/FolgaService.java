@@ -23,6 +23,8 @@ public List<Folga> findByFilter(Folga folga);
 	
 	public void folgasParaRemocao(List<Folga> listaFolgasParaRemocao) throws ApplicationException;
 	
-	public void avaliarFolga (List<Long> ids, Integer acao) throws ApplicationException;
+	public void avaliarFolgaLider (List<Long> ids, Integer acao) throws ApplicationException;
+	
+	public void avaliarFolgaGerente (List<Long> ids, Integer acao) throws ApplicationException;
 
 }
