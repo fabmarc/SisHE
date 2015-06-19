@@ -62,13 +62,14 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 		try {
 			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("id_status", entity.getObservacao());
 			params.addValue("id_solicitante", UsuarioLogado.getId());
 			params.addValue("id_lider", entity.getLider().getId());
 			params.addValue("id_gerente", entity.getGerente().getId());
 			params.addValue("data_solicitacao", entity.getDataSolicitacao());
 			params.addValue("data_aprovacao_lider", entity.getDataAprovacaoLider());
 			params.addValue("data_aprovacao_gerente", entity.getDataAprovacaoGerente());
+			params.addValue("id_status_lider", entity.getStatusLider().getId());
+			params.addValue("id_status_gerente", entity.getStatusGerente().getId());
 			params.addValue("observacao", entity.getObservacao());
 
 			Number key = insertFolga.executeAndReturnKey(params);
