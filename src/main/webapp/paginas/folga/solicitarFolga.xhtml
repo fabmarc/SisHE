@@ -8,8 +8,8 @@
 			<!-- BreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" />
-					<p:menuitem value="Folga" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
-					<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Folga" action="#{folgaMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Cadastrar" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 				<div class="divMsg">
@@ -18,6 +18,7 @@
 
 				<div class="divCorpo" style="top: 15px; left: 170px; position: relative; width: 250px">
 					<div style="left: 40%; position: relative; width: 100%">
+						
 						<div id="divsistema">
 							<p:outputLabel for="sistemasSelect" value="Sistema:" id="lblSistema"></p:outputLabel>
 							<p:selectOneMenu id="sistemasSelect" converter="omnifaces.SelectItemsConverter" 
