@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/templates/base_template.xhtml">
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<ui:insert>
+				<!-- BreadCrumb -->
+				<p:breadCrumb styleClass="breadCrumb">
+					<p:menuitem value="Home" url="/index.jsf" />
+					<p:menuitem value="Folga" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
+				</p:breadCrumb>
+				<hr style="margin: 10px 0;" />
+				<div class="divMsg">
+					<p:messages id="messages" showDetail="true" showSummary="false" />
+				</div>
+
+				<div class="divCorpo" style="top: 15px; position: relative; width: 100%">
+					
+					<h:panelGrid columnClasses="value">
+						<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false">
+							<p:ajax event="dateSelect" listener="#{folgaCad.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
+							<p:ajax event="eventSelect" listener="#{folgaCad.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
+							<p:ajax event="eventMove" listener="#{folgaCad.onEventMove}" update="messages" />
+							<p:ajax event="eventResize" listener="#{folgaCad.onEventResize}" update="messages" />
+						</p:schedule>
+					</h:panelGrid>
+					
+					
+					<!-- Dialog -->
+					
+					
+					<p:dialog widgetVar="eventDialog" id="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+						<h:panelGrid id="eventDetails" columns="2">
+							<h:outputLabel for="title" value="Titulo:" />
+							<p:inputText id="title" value="#{folgaCad.folgaSelecionada.titulo}" required="true" />
+
+							<h:outputLabel for="from" value="De:" />
+							<p:inputMask id="from" value="#{folgaCad.folgaSelecionada.event.startDate}" mask="99/99/9999">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+							</p:inputMask>
+
+							<h:outputLabel for="to" value="Até:" />
+							<p:inputMask id="to" value="#{folgaCad.folgaSelecionada.event.endDate}" mask="99/99/9999">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+							</p:inputMask>
+
+							<h:outputLabel for="allDay" value="All Day:" />
+							<h:selectBooleanCheckbox id="allDay" value="#{folgaCad.folgaSelecionada.event.allDay}" />
+
+							<p:commandButton type="reset" value="Reset" />
+							<p:commandButton id="addButton" value="Save" actionListener="#{folgaCad.addEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
+							<p:commandButton id="removeButton" value="remove" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
+						</h:panelGrid>
+					</p:dialog>
+
+				</div>
+				<div id="divButtons" style="position: relative; top: 23px; left: 40%;" />
+				<div id="divDown" style="width: 0px; position: relative; height: 60px;" />
+
+			</ui:insert>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
