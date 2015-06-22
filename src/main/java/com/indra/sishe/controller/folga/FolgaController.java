@@ -1,7 +1,6 @@
 package com.indra.sishe.controller.folga;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.inject.Inject;
 

@@ -13,6 +13,13 @@ public class DatasFolga implements Serializable{
 	
 	private Date data;
 	
+	public DatasFolga(){
+	}
+	
+	public DatasFolga(Date data){
+		this.data = data;
+	}
+	
 	public Long getId() {
 		return id;
 	}

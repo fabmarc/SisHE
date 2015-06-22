@@ -2,8 +2,11 @@ package com.indra.sishe.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.ejb.Stateless;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,10 +19,11 @@ import com.indra.sishe.dao.FeriadoDAO;
 import com.indra.sishe.dao.FolgaDAO;
 import com.indra.sishe.entity.DatasFolga;
 import com.indra.sishe.entity.Folga;
-import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.FolgaService;
+import com.indra.sishe.service.StatelessServiceAb;
 
-public class FolgaServiceImpl implements FolgaService {
+@Stateless
+public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService {
 
 	private static final long serialVersionUID = -6545774307270513446L;
 	
@@ -35,7 +39,21 @@ public class FolgaServiceImpl implements FolgaService {
 	@Override
 	public Folga save(Folga entity) throws ApplicationException {
 		try {
+			Calendar dataIndex = Calendar.getInstance();
+			Calendar dataFim = Calendar.getInstance();
+			
+			dataIndex.setTime(entity.getEvent().getStartDate());
+			dataIndex.add(Calendar.DATE, 1);
+			dataFim.setTime(entity.getEvent().getEndDate());
+			List<DatasFolga> datas = new ArrayList<DatasFolga>();
+			
+			for(;dataIndex.getTime().before(dataFim.getTime()) || dataIndex.getTime().equals(dataFim.getTime()); dataIndex.add(Calendar.DATE, 1)){
+				datas.add(new DatasFolga(dataIndex.getTime()));
+			}
+			entity.setDatasFolga(datas);
+			
 			Folga folga = folgaDAO.save(entity);
+			
 			datasFolgaDAO.insereTodasDatasPorFolga(entity.getDatasFolga());
 			return folga;
 		} catch (RegistroDuplicadoException e) {

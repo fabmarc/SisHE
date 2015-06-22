@@ -1,8 +1,12 @@
 package com.indra.sishe.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.ScheduleEvent;
 
 import com.indra.sishe.enums.StatusEnum;
 
@@ -12,11 +16,15 @@ public class Folga implements Serializable {
 
 	private Long id;
 
+	private String titulo;
+	
 	private Usuario solicitante;
 
 	private Usuario avaliador;
 
 	private Date dataSolicitacao;
+	
+	private ScheduleEvent event = new DefaultScheduleEvent();
 
 	private List<DatasFolga> datasFolga;
 
@@ -25,6 +33,10 @@ public class Folga implements Serializable {
 	private String observacao;
 
 	private StatusEnum status;
+	
+	public Folga(){
+		datasFolga = new ArrayList<DatasFolga>();
+	}
 
 	public Long getId() {
 		return id;
@@ -90,4 +102,20 @@ public class Folga implements Serializable {
 		this.datasFolga = datasFolga;
 	}
 
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public ScheduleEvent getEvent() {
+		return event;
+	}
+
+	public void setEvent(ScheduleEvent event) {
+		this.event = event;
+	}
+	
 }
