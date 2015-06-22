@@ -30,6 +30,7 @@ public class FolgaController extends BaseController implements Serializable{
 		return "/paginas/folga/cadastrarFolga.xhtml?faces-redirect=true";
 	}
 	
+
 	public String irParaAlterar(Folga folgaSelecionada){
 		putFlashAttr("searched", this.searched);
 		putFlashAttr("folgaFiltro", this.folgaFiltro);
@@ -37,4 +38,11 @@ public class FolgaController extends BaseController implements Serializable{
 		return "/paginas/folga/cadastrarFolga.xhtml?faces-redirect=true";
 	}
 
+	public Folga getFolgaFiltro() {
+		return folgaFiltro;
+	}
+	
+	public void setFolgaFiltro(Folga folgaFiltro) {
+		this.folgaFiltro = folgaFiltro;
+	}
 }
