@@ -67,7 +67,7 @@ public class FolgaMntController extends FolgaController {
 			Usuario usuarioLogado = new Usuario();
 			usuarioLogado.setId(UsuarioLogado.getId());
 			folgaFiltro.setSolicitante(usuarioLogado);
-			listaFolgas = folgaService.findByFilterByUsuario(folgaFiltro);
+			//listaFolgas = folgaService.findByFilterByUsuario(folgaFiltro);
 		}
 	}
 	

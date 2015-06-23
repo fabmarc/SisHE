@@ -100,7 +100,7 @@ public class DatasFolgaDaoImpl extends NamedParameterJdbcDaoSupport implements D
 	public List<DatasFolga> findDatasBySolicitacaoFolga(Long idFolga) {
 		StringBuilder sql = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		sql.append("SELECT id, id_folga, data FROM data_folga WHERE id = :idFolga ORDER BY data ASC");
+		sql.append("SELECT id, id_folga, data FROM datas_folga WHERE id_folga = :idFolga ORDER BY data ASC");
 		params.addValue("idFolga", idFolga);
 	
 		List<DatasFolga> lista = getNamedParameterJdbcTemplate().query(sql.toString(), params,
@@ -125,7 +125,7 @@ public class DatasFolgaDaoImpl extends NamedParameterJdbcDaoSupport implements D
 
 	@Override
 	public void removeTodasDatasPorFolga(Long idFolga) {
-		int rows = getJdbcTemplate().update("DELETE FROM datas_folga WHERE id_lider = ?", idFolga);
+		int rows = getJdbcTemplate().update("DELETE FROM datas_folga WHERE id_folga = ?", idFolga);
 	}
 
 	@Override

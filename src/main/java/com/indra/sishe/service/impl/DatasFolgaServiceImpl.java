@@ -13,12 +13,14 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.DatasFolgaDAO;
 import com.indra.sishe.entity.DatasFolga;
 import com.indra.sishe.service.DatasFolgaService;
-import com.indra.sishe.service.SolicitacaoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
 @Stateless
 public class DatasFolgaServiceImpl extends StatelessServiceAb implements DatasFolgaService{
 
+	private static final long serialVersionUID = -4179206047838774489L;
+	
+	
 	@Autowired
 	private DatasFolgaDAO datasFolgaDAO;
 	
@@ -66,6 +68,4 @@ public class DatasFolgaServiceImpl extends StatelessServiceAb implements DatasFo
 		return datasFolgaDAO.findDatasBySolicitacaoFolga(idFolga);
 	}
 
-	
-	
 }

@@ -24,7 +24,9 @@ public class Folga implements Serializable {
 
 	private Date dataSolicitacao;
 	
-	private ScheduleEvent event = new DefaultScheduleEvent();
+	private Date dataInicio;
+	
+	private Date dataFim;
 
 	private List<DatasFolga> datasFolga;
 
@@ -110,12 +112,20 @@ public class Folga implements Serializable {
 		this.titulo = titulo;
 	}
 
-	public ScheduleEvent getEvent() {
-		return event;
+	public Date getDataInicio() {
+		return dataInicio;
 	}
 
-	public void setEvent(ScheduleEvent event) {
-		this.event = event;
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
 	}
-	
+
+	public Date getDataFim() {
+		return dataFim;
+	}
+
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
+	}
+
 }

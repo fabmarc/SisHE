@@ -33,23 +33,20 @@
 					<p:dialog widgetVar="eventDialog" id="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
 						<h:panelGrid id="eventDetails" columns="2">
 							<h:outputLabel for="title" value="Titulo:" />
-							<p:inputText id="title" value="#{folgaCad.folgaSelecionada.titulo}" required="true" />
+							<p:inputText id="title" value="#{folgaCad.event.folga.titulo}" required="true" />
 
 							<h:outputLabel for="from" value="De:" />
-							<p:inputMask id="from" value="#{folgaCad.folgaSelecionada.event.startDate}" mask="99/99/9999">
+							<p:inputMask id="from" value="#{folgaCad.event.folga.dataInicio}" mask="99/99/9999">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 							</p:inputMask>
 
 							<h:outputLabel for="to" value="Até:" />
-							<p:inputMask id="to" value="#{folgaCad.folgaSelecionada.event.endDate}" mask="99/99/9999">
+							<p:inputMask id="to" value="#{folgaCad.event.folga.dataFim}" mask="99/99/9999">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 							</p:inputMask>
 
-							<h:outputLabel for="allDay" value="All Day:" />
-							<h:selectBooleanCheckbox id="allDay" value="#{folgaCad.folgaSelecionada.event.allDay}" />
-
 							<p:commandButton type="reset" value="Reset" />
-							<p:commandButton id="addButton" value="Save" actionListener="#{folgaCad.addEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
+							<p:commandButton id="addButton" value="Save" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" />
 							<p:commandButton id="removeButton" value="remove" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
 						</h:panelGrid>
 					</p:dialog>

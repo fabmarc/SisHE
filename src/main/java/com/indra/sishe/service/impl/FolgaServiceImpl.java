@@ -19,6 +19,7 @@ import com.indra.sishe.dao.FeriadoDAO;
 import com.indra.sishe.dao.FolgaDAO;
 import com.indra.sishe.entity.DatasFolga;
 import com.indra.sishe.entity.Folga;
+import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.service.FolgaService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -39,34 +40,45 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	@Override
 	public Folga save(Folga entity) throws ApplicationException {
 		try {
-			Calendar dataIndex = Calendar.getInstance();
-			Calendar dataFim = Calendar.getInstance();
-			
-			dataIndex.setTime(entity.getEvent().getStartDate());
-			dataIndex.add(Calendar.DATE, 1);
-			dataFim.setTime(entity.getEvent().getEndDate());
-			List<DatasFolga> datas = new ArrayList<DatasFolga>();
-			
-			for(;dataIndex.getTime().before(dataFim.getTime()) || dataIndex.getTime().equals(dataFim.getTime()); dataIndex.add(Calendar.DATE, 1)){
-				datas.add(new DatasFolga(dataIndex.getTime()));
-			}
-			entity.setDatasFolga(datas);
-			
 			Folga folga = folgaDAO.save(entity);
 			
-			datasFolgaDAO.insereTodasDatasPorFolga(entity.getDatasFolga());
+			associarDatas(folga);
+			
 			return folga;
 		} catch (RegistroDuplicadoException e) {
 			throw new ApplicationException(e, "msg.error.registro.duplicado", "Folga");
 		}
+	}
+	
+	private void associarDatas(Folga entity) {
+		
+		Calendar dataIndex = Calendar.getInstance();
+		Calendar dataFim = Calendar.getInstance();
+		
+		dataIndex.setTime(entity.getDataInicio());
+		dataFim.setTime(entity.getDataFim());
+		List<DatasFolga> datas = new ArrayList<DatasFolga>();
+		
+		for(;dataIndex.getTime().before(dataFim.getTime()) || dataIndex.getTime().equals(dataFim.getTime()); dataIndex.add(Calendar.DATE, 1)){
+			datas.add(new DatasFolga(dataIndex.getTime(), entity));
+		}
+		entity.setDatasFolga(datas);
+		
+		datasFolgaDAO.insereTodasDatasPorFolga(entity.getDatasFolga());
+	}
+	
+	private void desassociarDatas(Folga entity){
+		datasFolgaDAO.removeTodasDatasPorFolga(entity.getId());
 	}
 
 	@Override
 	public Folga update(Folga entity) throws ApplicationException {
 		try {
 			Folga folga = folgaDAO.update(entity);
-			datasFolgaDAO.removeTodasDatasPorFolga(entity.getId());
-			datasFolgaDAO.insereTodasDatasPorFolga(entity.getDatasFolga());
+			
+			desassociarDatas(folga);
+			associarDatas(folga);
+			
 			return folga;
 		} catch (RegistroInexistenteException e) {
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Folga");
@@ -130,8 +142,17 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	}
 
 	@Override
-	public List<Folga> findByFilterByUsuario(Folga folga) {
-		return folgaDAO.findByFilterByUsuario(folga);
+	public List<Folga> findFolgaByUsuario(Usuario usuario) {
+		List<Folga> folgas = new ArrayList<Folga>();
+		List<Folga> folgasRetorno = new ArrayList<Folga>();
+		folgas = folgaDAO.findFolgaByUsuario(usuario);
+		
+		for(Folga folga : folgas){
+			folga.setDatasFolga(datasFolgaDAO.findDatasBySolicitacaoFolga(folga.getId()));
+			folgasRetorno.add(folga);
+		}
+		
+		return folgasRetorno;
 	}
 
 	@Override

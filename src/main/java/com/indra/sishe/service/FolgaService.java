@@ -7,13 +7,14 @@ import javax.ejb.Local;
 import com.indra.infra.service.BaseService;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.entity.Folga;
+import com.indra.sishe.entity.Usuario;
 
 @Local
 public interface FolgaService extends BaseService<Folga>{
 	
 public List<Folga> findByFilter(Folga folga);
 	
-	public List<Folga> findByFilterByUsuario(Folga folga);
+	public List<Folga> findFolgaByUsuario(Usuario usuario);
 	
 	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Long idGerenteLogado);
 	

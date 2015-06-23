@@ -19,6 +19,11 @@ public class DatasFolga implements Serializable{
 	public DatasFolga(Date data){
 		this.data = data;
 	}
+
+	public DatasFolga(Date data, Folga f){
+		this.data = data;
+		this.folga = f;
+	}
 	
 	public Long getId() {
 		return id;
