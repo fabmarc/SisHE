@@ -198,7 +198,7 @@ public class FolgaCadController extends FolgaController{
 			if(f.getDatasFolga()!= null && !f.getDatasFolga().isEmpty()){
 				f.setDataInicio(f.getDatasFolga().get(0).getData());
 				f.setDataFim(f.getDatasFolga().get(f.getDatasFolga().size()-1).getData());
-				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f);
+				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f.getStatus().getNome(), f);
 				eventTemp.setAllDay(true);
 				eventModel.addEvent(eventTemp);
 			}

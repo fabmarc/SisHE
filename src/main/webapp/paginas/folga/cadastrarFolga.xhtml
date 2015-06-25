@@ -26,27 +26,56 @@
 						</p:schedule>
 					</h:panelGrid>
 					
-					
 					<!-- Dialog -->
 					
-					
-					<p:dialog widgetVar="eventDialog" id="eventDialog" header="Solicitação Folga" showEffect="clip" hideEffect="clip">
-						<h:panelGrid id="eventDetails" columns="2">
-							<h:outputLabel for="title" value="Titulo:" />
-							<p:inputText id="title" value="#{folgaCad.eventFolgaSelecionada.folga.titulo}" required="true" />
+					<p:dialog widgetVar="eventDialog" id="eventDialog" header="Solicitação de folga" showEffect="clip" hideEffect="clip" style="width:550px;">
+						
+						<h:panelGrid id="eventDetails" columns="1">
+						
+							<h:panelGrid columns="1">						
+								<h:outputLabel for="title" value="Titulo:" />
+								<p:inputText id="title" value="#{folgaCad.eventFolgaSelecionada.folga.titulo}" required="true" style="width:430px;"/>
+							</h:panelGrid>
+							
+							<h:panelGrid columns="3">
+							
+								<h:panelGroup styleClass="field">
+									<h:outputLabel for="from" value="De:" />
+									<p:inputMask id="from" value="#{folgaCad.eventFolgaSelecionada.folga.dataInicio}" mask="99/99/9999" style="width: 125px;">
+										<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+									</p:inputMask>
+								</h:panelGroup>
+								
+								
+								<h:panelGroup styleClass="field" style="left: 10px; position: relative;">
+									<h:outputLabel for="to" value="Até:" />
+									<p:inputMask id="to" value="#{folgaCad.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999" style="width: 125px;">
+										<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+									</p:inputMask>
+								</h:panelGroup>
+								
+								<h:panelGroup styleClass="field" style="left: 20px; position: relative;">
+									<h:outputLabel for="status" value="Status:" />
+									<p:inputText id="status" value="#{folgaCad.eventFolgaSelecionada.folga.status.nome}" style="width: 125px;" disabled="true"/>
+								</h:panelGroup>
+								
+							</h:panelGrid>
+							
+							<h:panelGrid columns="1">
+								<h:outputLabel for="observacao" value="Observação:" />
+								<h:inputTextarea value="#{folgaCad.eventFolgaSelecionada.folga.observacao}" style="width:430px;"/>
+							</h:panelGrid>	
 
-							<h:outputLabel for="from" value="De:" />
-							<p:inputMask id="from" value="#{folgaCad.eventFolgaSelecionada.folga.dataInicio}" mask="99/99/9999">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
-							</p:inputMask>
-
-							<h:outputLabel for="to" value="Até:" />
-							<p:inputMask id="to" value="#{folgaCad.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
-							</p:inputMask>
-
-							<p:commandButton id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
-							<p:commandButton id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" />
+							<h:panelGrid columns="1" style="width:100%">
+							
+								<h:panelGroup styleClass="field" style="float: right; position: relative;">
+									<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" disabled="#{folgaCad.eventFolgaSelecionada.folga.id == null}"/>
+									<div style="position: relative; float: right;"/>
+									<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" />
+								</h:panelGroup>
+								
+							</h:panelGrid>
+							
 						</h:panelGrid>
 					</p:dialog>
 

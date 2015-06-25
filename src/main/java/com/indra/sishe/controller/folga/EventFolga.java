@@ -22,6 +22,11 @@ public class EventFolga extends DefaultScheduleEvent {
 		this.folga = f;
 	}
 	
+	public EventFolga(String title, Date start, Date end, String style, Folga f){
+		super(title, start, end, style);
+		this.folga = f;
+	}
+	
 	public EventFolga(){
 		super();
 		folga = new Folga();
