@@ -124,8 +124,13 @@ public class DatasFolgaDaoImpl extends NamedParameterJdbcDaoSupport implements D
 	}
 
 	@Override
-	public void removeTodasDatasPorFolga(Long idFolga) {
-		int rows = getJdbcTemplate().update("DELETE FROM datas_folga WHERE id_folga = ?", idFolga);
+	public void removeTodasDatasPorFolga(Long idFolga) throws DeletarRegistroViolacaoFK  {
+		
+		try {
+			getJdbcTemplate().update("DELETE FROM datas_folga WHERE id_folga = ?", idFolga);
+		} catch (DataIntegrityViolationException d) {
+			throw new DeletarRegistroViolacaoFK();
+		}
 	}
 
 	@Override
@@ -137,7 +142,5 @@ public class DatasFolgaDaoImpl extends NamedParameterJdbcDaoSupport implements D
 				insertDatasFolga.execute(params);
 		}
 	}
-
-	
 
 }

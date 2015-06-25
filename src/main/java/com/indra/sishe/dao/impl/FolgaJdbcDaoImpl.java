@@ -170,6 +170,13 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 	@Override
 	public void remove(Object id) throws RegistroInexistenteException, DeletarRegistroViolacaoFK {
+		
+		try {
+			int rows = getJdbcTemplate().update("DELETE FROM folga WHERE id = ?", id);
+			if (rows == 0) throw new RegistroInexistenteException();
+		} catch (DataIntegrityViolationException d) {
+			throw new DeletarRegistroViolacaoFK();
+		}
 	}
 
 	@Override

@@ -1,15 +1,12 @@
 package com.indra.sishe.controller.folga;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 
@@ -17,9 +14,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import com.indra.infra.resource.MessageProvider;
@@ -35,180 +30,162 @@ public class FolgaCadController extends FolgaController{
 	
 	private static final long serialVersionUID = -3504568175362667869L;
 	
-	private Folga folgaSelecionada;
-	private Folga folga;
-	
 	private List<Folga> listaFolgas;
 	
 	@Inject
 	protected transient DatasFolgaService datasFolgaService;
 	
-	/*****************************************/
+	/******************** Atributos para o componente calendário *********************/
+	
 	private ScheduleModel eventModel;
     
-    private EventFolga event = new EventFolga();
-    /******************************************/
+    private EventFolga eventFolgaSelecionada = new EventFolga();
+    
+    /*******************************************************************************/
 	
 	@PostConstruct
 	private void init() {
-		 	/*********************************************************/
+		
+		/************************** Carregar dados do componente calendário *******************************/
+		
 		eventModel = new DefaultScheduleModel();
 
 		atualizarListaFolga();
 		
-		/*eventModel.addEvent(new DefaultScheduleEvent("Pendente", previousDay8Pm(), previousDay11Pm(), "pendente"));
-		eventModel.addEvent(new DefaultScheduleEvent("Cancelado", today1Pm(), today6Pm(), "cancelado"));
-        eventModel.addEvent(new DefaultScheduleEvent("Aprovado", nextDay9Am(), nextDay11Am(), "aprovado"));
-        eventModel.addEvent(new DefaultScheduleEvent("Plant the new garden stuff", theDayAfter3Pm(), fourDaysLater3pm()));*/
-        
-         
 		/**************************************************************/
 	         
 		MessageProvider.setInstance(messageProvider);
 
 		searched = (Boolean) getFlashAttr("searched");
-		folgaSelecionada = (Folga) getFlashAttr("folgaSelecionada");
-
-		if (folgaSelecionada == null) folgaSelecionada = new Folga();
 
 		folgaFiltro = (Folga) getFlashAttr("folgaFiltro");
 		
-		folga = new Folga();
-		
 	}
-/********************************************************************************************/
 	
-     
+    /********************** Ações do componente calendário ********************************/ 
+	
     public ScheduleModel getEventModel() {
         return eventModel;
     }
      
-     
-   /************************************************************/
-    
-    public EventFolga getEvent() {
-        return event;
+    public EventFolga getEventFolgaSelecionada() {
+        return eventFolgaSelecionada;
     }
  
-    public void setEvent(EventFolga event) {
-        this.event = event;
+    public void setEventFolgaSelecionada(EventFolga eventFolgaSelecionada) {
+        this.eventFolgaSelecionada = eventFolgaSelecionada;
     }
      
-    
     // Ao salvar
     public void confirmar(ActionEvent actionEvent) {
-        if(event.getId() == null){
-            event.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
+        if(eventFolgaSelecionada.getId() == null){
+            eventFolgaSelecionada.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
            
             // Corrigir a data, pois o componente obtém uma data a menos.
             Calendar dataCerta = Calendar.getInstance();
-            dataCerta.setTime(event.getStartDate());
+            dataCerta.setTime(eventFolgaSelecionada.getStartDate());
             dataCerta.add(Calendar.DATE, 1);
-            event.getFolga().setDataInicio(dataCerta.getTime());
-            dataCerta.setTime(event.getEndDate());
+            eventFolgaSelecionada.getFolga().setDataInicio(dataCerta.getTime());
+            dataCerta.setTime(eventFolgaSelecionada.getEndDate());
             dataCerta.add(Calendar.DATE, 1);
-            event.getFolga().setDataFim(dataCerta.getTime());
+            eventFolgaSelecionada.getFolga().setDataFim(dataCerta.getTime());
             
-            save(event.getFolga());
-            event.setTitle(event.getFolga().getTitulo());
+            save(eventFolgaSelecionada.getFolga());
+            eventFolgaSelecionada.setTitle(eventFolgaSelecionada.getFolga().getTitulo());
         } else {
-        	event.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
+        	eventFolgaSelecionada.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
         	// Corrigir a data, pois o componente obtém uma data a menos.
         	Calendar dataCerta = Calendar.getInstance();
-            dataCerta.setTime(event.getFolga().getDataInicio());
+            dataCerta.setTime(eventFolgaSelecionada.getFolga().getDataInicio());
             dataCerta.add(Calendar.DATE, 1);
-            event.getFolga().setDataInicio(dataCerta.getTime());
-            dataCerta.setTime(event.getFolga().getDataFim());
+            eventFolgaSelecionada.getFolga().setDataInicio(dataCerta.getTime());
+            dataCerta.setTime(eventFolgaSelecionada.getFolga().getDataFim());
             dataCerta.add(Calendar.DATE, 1);
-            event.getFolga().setDataFim(dataCerta.getTime());
-        	update(event.getFolga());
-        	event.setTitle(event.getFolga().getTitulo());
+            eventFolgaSelecionada.getFolga().setDataFim(dataCerta.getTime());
+        	update(eventFolgaSelecionada.getFolga());
+        	eventFolgaSelecionada.setTitle(eventFolgaSelecionada.getFolga().getTitulo());
         }
-        eventModel.clear();
+
         atualizarListaFolga();
-        RequestContext.getCurrentInstance().execute("myschedule.update();");
-        event = new EventFolga();
+
+        eventFolgaSelecionada = new EventFolga();
+        
     }
     
     public void removeEvent(ActionEvent actionEvent) {
-        if(event.getId() != null)
-        	eventModel.deleteEvent(event);
-         
-        event = new EventFolga();
+    	
+        if(eventFolgaSelecionada.getId() != null) {
+        	remove(eventFolgaSelecionada.getFolga());
+        }
+        atualizarListaFolga();
+        eventFolgaSelecionada = new EventFolga();
     }
      
     // Ao selecionar um evento existente na data
     public void onEventSelect(SelectEvent selectEvent) {
-    	event = (EventFolga) selectEvent.getObject();
+    	eventFolgaSelecionada = (EventFolga) selectEvent.getObject();
     }
      
     // Ao selecionar uma data vazia
     public void onDateSelect(SelectEvent selectEvent) {
-        event = new EventFolga("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
-        event.getFolga().setDataInicio(event.getStartDate());
-        event.getFolga().setDataFim(event.getEndDate());
+    	
+        eventFolgaSelecionada = new EventFolga("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+        eventFolgaSelecionada.getFolga().setDataInicio(eventFolgaSelecionada.getStartDate());
+        eventFolgaSelecionada.getFolga().setDataFim(eventFolgaSelecionada.getEndDate());
     }
      
     public void onEventMove(ScheduleEntryMoveEvent event) {
-    	this.event = (EventFolga) event.getScheduleEvent();
-        this.event.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
+    	
+    	this.eventFolgaSelecionada = (EventFolga) event.getScheduleEvent();
+        this.eventFolgaSelecionada.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
         
-        if(event.getDayDelta() != 0 && this.event.getStartDate().equals(this.event.getEndDate())){
+        if(event.getDayDelta() != 0 && this.eventFolgaSelecionada.getStartDate().equals(this.eventFolgaSelecionada.getEndDate())){
         	Calendar c = Calendar.getInstance();
-        	c.setTime(this.event.getStartDate());
+        	c.setTime(this.eventFolgaSelecionada.getStartDate());
         	c.add(Calendar.DATE, -event.getDayDelta());
-        	this.event.getFolga().setDataInicio(c.getTime());
-        	this.event.getFolga().setDataFim(c.getTime());
+        	this.eventFolgaSelecionada.getFolga().setDataInicio(c.getTime());
+        	this.eventFolgaSelecionada.getFolga().setDataFim(c.getTime());
         }  else {
-        	this.event.getFolga().setDataInicio(this.event.getStartDate());
-        	this.event.getFolga().setDataFim(this.event.getEndDate());
+        	this.eventFolgaSelecionada.getFolga().setDataInicio(this.eventFolgaSelecionada.getStartDate());
+        	this.eventFolgaSelecionada.getFolga().setDataFim(this.eventFolgaSelecionada.getEndDate());
         }
     	
-    	update(this.event.getFolga());
-    	this.event.setTitle(this.event.getFolga().getTitulo());
+    	update(this.eventFolgaSelecionada.getFolga());
+    	this.eventFolgaSelecionada.setTitle(this.eventFolgaSelecionada.getFolga().getTitulo());
     	
-    	eventModel.clear();
     	atualizarListaFolga();
-        RequestContext.getCurrentInstance().execute("myschedule.update();");
         
-        this.event = new EventFolga();
-    	//FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-         
-        //addMessage(message);
+        this.eventFolgaSelecionada = new EventFolga();
+
     }
      
     public void onEventResize(ScheduleEntryResizeEvent event) {
-        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-        this.event = (EventFolga) event.getScheduleEvent();
-        this.event.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
-        if(event.getDayDelta()>0 && this.event.getStartDate().equals(this.event.getEndDate())){
+
+    	this.eventFolgaSelecionada = (EventFolga) event.getScheduleEvent();
+        this.eventFolgaSelecionada.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
+        if(event.getDayDelta()>0 && this.eventFolgaSelecionada.getStartDate().equals(this.eventFolgaSelecionada.getEndDate())){
         	Calendar c = Calendar.getInstance();
-        	c.setTime(this.event.getStartDate());
+        	c.setTime(this.eventFolgaSelecionada.getStartDate());
         	c.add(Calendar.DATE, -event.getDayDelta());
-        	this.event.getFolga().setDataInicio(c.getTime());
-        	this.event.getFolga().setDataFim(this.event.getEndDate());
+        	this.eventFolgaSelecionada.getFolga().setDataInicio(c.getTime());
+        	this.eventFolgaSelecionada.getFolga().setDataFim(this.eventFolgaSelecionada.getEndDate());
         }  else {
-        	this.event.getFolga().setDataInicio(this.event.getStartDate());
-        	this.event.getFolga().setDataFim(this.event.getEndDate());
+        	this.eventFolgaSelecionada.getFolga().setDataInicio(this.eventFolgaSelecionada.getStartDate());
+        	this.eventFolgaSelecionada.getFolga().setDataFim(this.eventFolgaSelecionada.getEndDate());
         }
         
         
-    	update(this.event.getFolga());
-    	this.event.setTitle(this.event.getFolga().getTitulo());
+    	update(this.eventFolgaSelecionada.getFolga());
+    	this.eventFolgaSelecionada.setTitle(this.eventFolgaSelecionada.getFolga().getTitulo());
     	
-    	eventModel.clear();
     	atualizarListaFolga();
-        RequestContext.getCurrentInstance().execute("myschedule.update();");
         
-        this.event = new EventFolga();
-       // addMessage(message);
-    }
-     
-    private void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        this.eventFolgaSelecionada = new EventFolga();
+
     }
     
-/*********************************************************/
+    
+    /************************** Métodos de folga *******************************/
     
     private void atualizarListaFolga(){
     	
@@ -226,12 +203,14 @@ public class FolgaCadController extends FolgaController{
 				eventModel.addEvent(eventTemp);
 			}
 		}
+		
+		RequestContext.getCurrentInstance().execute("myschedule.update();");
     }
     
 	public String save(Folga entity) {
 		try {
 			if (folgaService.validarFolga(entity)) {
-				folgaSelecionada = folgaService.save(entity);
+				folgaService.save(entity);
 				putFlashAttr("folgaFiltro", folgaFiltro);
 				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação de Folga"));
 				putFlashAttr("searched", searched);
@@ -246,7 +225,7 @@ public class FolgaCadController extends FolgaController{
 	public String update(Folga entity){
 		
 		try {
-			folgaSelecionada = folgaService.update(entity);
+			folgaService.update(entity);
 			putFlashAttr("folgaFiltro", folgaFiltro);
 			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação de Folga"));
 			putFlashAttr("searched", searched);
@@ -257,6 +236,15 @@ public class FolgaCadController extends FolgaController{
 		return null;
 	}
 	
+	public void remove(Folga entity){
+		
+		try {
+			folgaService.remove(entity.getId());
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+		}
+	}
+	/*
 	public String alterarFolga(){
 		try {
 			folgaService.update(folgaSelecionada);
@@ -269,7 +257,9 @@ public class FolgaCadController extends FolgaController{
 			return irParaAlterar(folgaSelecionada);
 		}
 	}
+	*/
 	
+	/*
 	public Boolean modoCadastrar(){
 		if (folgaSelecionada.equals(new Folga())) {
 			return true;
@@ -277,32 +267,17 @@ public class FolgaCadController extends FolgaController{
 			return false;
 		}
 	}
-
+*/
 	public String cancelar(){
 		putFlashAttr("searched", searched);
 		putFlashAttr("folgaFiltro", folgaFiltro);
 		return irParaConsultar();
 	}
 
-	
-	public Folga getFolgaSelecionada() {
-		return folgaSelecionada;
-	}
-	
-	public void setFolgaSelecionada(Folga folgaSelecionada) {
-		this.folgaSelecionada = folgaSelecionada;
-	}
-	
-	public Folga getFolga() {
-		return folga;
-	}
-	
-	public void setFolga(Folga folga) {
-		this.folga = folga;
-	}
 	public List<Folga> getListaFolgas() {
 		return listaFolgas;
 	}
+	
 	public void setListaFolgas(List<Folga> listaFolgas) {
 		this.listaFolgas = listaFolgas;
 	}

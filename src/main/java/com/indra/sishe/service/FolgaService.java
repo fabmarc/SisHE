@@ -12,7 +12,7 @@ import com.indra.sishe.entity.Usuario;
 @Local
 public interface FolgaService extends BaseService<Folga>{
 	
-public List<Folga> findByFilter(Folga folga);
+	public List<Folga> findByFilter(Folga folga);
 	
 	public List<Folga> findFolgaByUsuario(Usuario usuario);
 	

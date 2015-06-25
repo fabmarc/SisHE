@@ -67,7 +67,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 		datasFolgaDAO.insereTodasDatasPorFolga(entity.getDatasFolga());
 	}
 	
-	private void desassociarDatas(Folga entity){
+	private void desassociarDatas(Folga entity) throws DeletarRegistroViolacaoFK{
 		datasFolgaDAO.removeTodasDatasPorFolga(entity.getId());
 	}
 
@@ -84,6 +84,8 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Folga");
 		} catch (RegistroDuplicadoException d) {
 			throw new ApplicationException(d, "msg.error.registro.duplicado", "Folga", "nome");
+		} catch (DeletarRegistroViolacaoFK e) {
+			throw new ApplicationException(e, "msg.error.excluir.registro.relacionado", "Folga");
 		}
 	}
 
@@ -103,6 +105,16 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 
 	@Override
 	public void remove(Long id) throws ApplicationException {
+		
+		try {
+			datasFolgaDAO.removeTodasDatasPorFolga(id);
+			folgaDAO.remove(id);
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Folga");
+		} catch (DeletarRegistroViolacaoFK e) {
+			throw new ApplicationException(e, "msg.error.excluir.registro.relacionado", "Folga");
+		}
+		
 	}
 
 	@Override
