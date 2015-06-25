@@ -150,9 +150,31 @@ public class FolgaCadController extends FolgaController{
     }
      
     public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+    	this.event = (EventFolga) event.getScheduleEvent();
+        this.event.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
+        
+        if(event.getDayDelta() != 0 && this.event.getStartDate().equals(this.event.getEndDate())){
+        	Calendar c = Calendar.getInstance();
+        	c.setTime(this.event.getStartDate());
+        	c.add(Calendar.DATE, -event.getDayDelta());
+        	this.event.getFolga().setDataInicio(c.getTime());
+        	this.event.getFolga().setDataFim(c.getTime());
+        }  else {
+        	this.event.getFolga().setDataInicio(this.event.getStartDate());
+        	this.event.getFolga().setDataFim(this.event.getEndDate());
+        }
+    	
+    	update(this.event.getFolga());
+    	this.event.setTitle(this.event.getFolga().getTitulo());
+    	
+    	eventModel.clear();
+    	atualizarListaFolga();
+        RequestContext.getCurrentInstance().execute("myschedule.update();");
+        
+        this.event = new EventFolga();
+    	//FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
          
-        addMessage(message);
+        //addMessage(message);
     }
      
     public void onEventResize(ScheduleEntryResizeEvent event) {
@@ -200,7 +222,7 @@ public class FolgaCadController extends FolgaController{
 				f.setDataInicio(f.getDatasFolga().get(0).getData());
 				f.setDataFim(f.getDatasFolga().get(f.getDatasFolga().size()-1).getData());
 				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f);
-				eventTemp.setId(f.getId().toString());
+				eventTemp.setAllDay(true);
 				eventModel.addEvent(eventTemp);
 			}
 		}

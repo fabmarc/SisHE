@@ -30,7 +30,7 @@
 					<!-- Dialog -->
 					
 					
-					<p:dialog widgetVar="eventDialog" id="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+					<p:dialog widgetVar="eventDialog" id="eventDialog" header="Solicitação Folga" showEffect="clip" hideEffect="clip">
 						<h:panelGrid id="eventDetails" columns="2">
 							<h:outputLabel for="title" value="Titulo:" />
 							<p:inputText id="title" value="#{folgaCad.event.folga.titulo}" required="true" />
@@ -45,9 +45,8 @@
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 							</p:inputMask>
 
-							<p:commandButton type="reset" value="Reset" />
-							<p:commandButton id="addButton" value="Save" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" />
-							<p:commandButton id="removeButton" value="remove" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
+							<p:commandButton id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" />
+							<p:commandButton id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" />
 						</h:panelGrid>
 					</p:dialog>
 
