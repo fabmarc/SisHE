@@ -117,9 +117,13 @@
 								<h:panelGrid columns="1" style="width:100%">
 
 									<h:panelGroup styleClass="field" style="float: right; position: relative;">
-										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" disabled="#{folgaCad.eventFolgaSelecionada.folga.id == null || !folgaCad.eventFolgaSelecionada.editable}" />
+										<h:commandButton styleClass="botao3d" id="cancelarButton" value="Cancelar" onclick="myschedule.update();eventDialog.hide();" rendered="#{folgaCad.eventFolgaSelecionada.folga.id == null || !folgaCad.eventFolgaSelecionada.editable}" >
+											<p:ajax process="@this" />
+										</h:commandButton>
 										<div style="position: relative; float: right;" />
-										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" disabled="#{!folgaCad.eventFolgaSelecionada.editable}"/>
+										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCad.eventFolgaSelecionada.folga.id != null and folgaCad.eventFolgaSelecionada.editable}" />
+										<div style="position: relative; float: right;" />
+										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCad.eventFolgaSelecionada.editable}"/>
 									</h:panelGroup>
 
 								</h:panelGrid>
