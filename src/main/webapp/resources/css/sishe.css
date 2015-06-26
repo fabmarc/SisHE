@@ -169,6 +169,29 @@ html {
 	width: 210px;
 }
 
+.value {
+	width: 1000px;
+}
+
+.Reprovada .fc-event-skin {
+	background: rgb(255, 58, 0) !important;
+	color: black !important;
+}
+
+.Aprovada .fc-event-skin {
+	background: rgb(62, 173, 62) !important;
+	color: black !important;
+}
+
+.Pendente .fc-event-skin {
+	background: rgb(236, 236, 14) !important;
+	color: black !important;
+}
+
+.AprovadoLider .fc-event-skin{
+	linear-gradient(to bottom, rgb(62, 173, 62) , rgb(236, 236, 14) )
+}
+
 /* Fim Bloco Rodrigo */
 
 /*Incluído por Diego*/

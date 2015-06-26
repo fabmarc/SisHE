@@ -1,5 +1,7 @@
 package com.indra.sishe.controller.folga;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +24,7 @@ import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.entity.Folga;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.enums.StatusEnum;
 import com.indra.sishe.service.DatasFolgaService;
 
 @ViewScoped
@@ -136,9 +139,26 @@ public class FolgaCadController extends FolgaController{
     // Ao selecionar uma data vazia
     public void onDateSelect(SelectEvent selectEvent) {
     	
-        eventFolgaSelecionada = new EventFolga("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
-        eventFolgaSelecionada.getFolga().setDataInicio(eventFolgaSelecionada.getStartDate());
-        eventFolgaSelecionada.getFolga().setDataFim(eventFolgaSelecionada.getEndDate());
+    	eventFolgaSelecionada = new EventFolga("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+    	SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
+    	Calendar dtIni = Calendar.getInstance();
+    	Calendar hoje = Calendar.getInstance();
+    	
+    	try {
+			dtIni.setTime(formatarData.parse(formatarData.format(eventFolgaSelecionada.getStartDate())));
+			dtIni.add(Calendar.DATE, 1);
+			hoje.setTime(formatarData.parse(formatarData.format(new Date())));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	
+    	if(!dtIni.getTime().before(hoje.getTime())){
+    		eventFolgaSelecionada.getFolga().setDataInicio(eventFolgaSelecionada.getStartDate());
+    		eventFolgaSelecionada.getFolga().setDataFim(eventFolgaSelecionada.getEndDate());
+    		
+    		RequestContext.getCurrentInstance().execute("eventDialog.show();");
+    	}
+    	
     }
      
     public void onEventMove(ScheduleEntryMoveEvent event) {
@@ -206,6 +226,9 @@ public class FolgaCadController extends FolgaController{
 				f.setDataInicio(f.getDatasFolga().get(0).getData());
 				f.setDataFim(f.getDatasFolga().get(f.getDatasFolga().size()-1).getData());
 				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f.getStatus().getNome(), f);
+				if(!(eventTemp.getFolga().getStatus().equals(StatusEnum.Pendente))) {
+					eventTemp.setEditable(false);
+				}
 				eventTemp.setAllDay(true);
 				eventModel.addEvent(eventTemp);
 			}

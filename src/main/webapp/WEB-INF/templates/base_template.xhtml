@@ -34,27 +34,6 @@
     };
 </script>
 
-		<style type="text/css">
-.value {
-	width: 1000px;
-}
-
-.Reprovada .fc-event-skin {
-	background: rgb(255, 58, 0) !important;
-	color: black !important;
-}
-
-.Aprovada .fc-event-skin {
-	background: rgb(62, 173, 62) !important;
-	color: black !important;
-}
-
-.Pendente .fc-event-skin {
-	background: rgb(236, 236, 14) !important;
-	color: black !important;
-}
-</style>
-
 		<ui:insert name="title">
 			<title>Banco de Horas</title>
 		</ui:insert>
@@ -156,7 +135,7 @@
 									<p:submenu label="Folga">
 										<p:menuitem value="Consultar" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
 										<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER">
-											<p:menuitem value="Em tratativa" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
+											<p:menuitem value="Da equipe" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
 										</sec:authorize>
 									</p:submenu>
 									

@@ -42,16 +42,20 @@
 								Folgas
 							</f:facet>
 
-							<p:column headerText="Titulo" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
+							<p:column headerText="Titulo" style="width:10%; text-align:center;" sortBy="#{folga.titulo}">
 								<h:outputText value="#{folga.titulo}" />
 							</p:column>
 							
-							<p:column headerText="De" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
-								<h:outputText value="#{folga.dataInicio}" />
+							<p:column headerText="De" style="width:10%; text-align:center;" sortBy="#{folga.dataInicio}">
+								<h:outputText id="de" value="#{folga.dataInicio}" style="width: 125px;">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+								</h:outputText>
 							</p:column>
 							
-							<p:column headerText="Até" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
-								<h:outputText value="#{folga.dataFim}" />
+							<p:column headerText="Até" style="width:10%; text-align:center;" sortBy="#{folga.dataFim}">
+								<h:outputText id="ate" value="#{folga.dataFim}" style="width: 125px;">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+								</h:outputText>
 							</p:column>
 							
 						</p:dataTable>
@@ -60,8 +64,8 @@
 					
 					<ui:fragment id="fragCalendario" rendered="#{folgaCad.exibirCalendario}">
 						<h:panelGrid columnClasses="value">
-							<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false">
-								<p:ajax event="dateSelect" listener="#{folgaCad.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
+							<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" rightHeaderTemplate="">
+								<p:ajax event="dateSelect" listener="#{folgaCad.onDateSelect}" update="eventDetails" />
 								<p:ajax event="eventSelect" listener="#{folgaCad.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
 								<p:ajax event="eventMove" listener="#{folgaCad.onEventMove}" update="messages" />
 								<p:ajax event="eventResize" listener="#{folgaCad.onEventResize}" update="messages" />
@@ -100,6 +104,7 @@
 									<h:panelGroup styleClass="field" style="left: 20px; position: relative;">
 										<h:outputLabel for="status" value="Status:" />
 										<p:inputText id="status" value="#{folgaCad.eventFolgaSelecionada.folga.status.nome}" style="width: 125px;" disabled="true" />
+										<p:watermark for="status" value="Pendente" />
 									</h:panelGroup>
 
 								</h:panelGrid>
@@ -112,9 +117,9 @@
 								<h:panelGrid columns="1" style="width:100%">
 
 									<h:panelGroup styleClass="field" style="float: right; position: relative;">
-										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" disabled="#{folgaCad.eventFolgaSelecionada.folga.id == null}" />
+										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" disabled="#{folgaCad.eventFolgaSelecionada.folga.id == null || !folgaCad.eventFolgaSelecionada.editable}" />
 										<div style="position: relative; float: right;" />
-										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" />
+										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" disabled="#{!folgaCad.eventFolgaSelecionada.editable}"/>
 									</h:panelGroup>
 
 								</h:panelGrid>
