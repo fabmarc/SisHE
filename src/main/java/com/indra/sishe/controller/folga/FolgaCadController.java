@@ -296,5 +296,15 @@ public class FolgaCadController extends FolgaController{
 		putSessionAttr("exibirCalendario", exibirCalendario);
 	}
 	
+	public void mostrarCalendario(){
+		this.exibirCalendario = true;
+		putSessionAttr("exibirCalendario", true);
+	}
+	
+	public void mostrarLista(){
+		this.exibirCalendario = false;
+		putSessionAttr("exibirCalendario", false);
+	}
+	
 	
 }

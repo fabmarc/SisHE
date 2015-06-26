@@ -17,6 +17,44 @@
 
 				<div class="divCorpo" style="top: 15px; position: relative; width: 100%">
 					
+					<h:panelGrid id="Btns" columns="1" style="width: 100%;">
+						<h:panelGrid columns="3" style="float: right; position: relative;">
+							<h:commandLink action="#{folgaCad.mostrarCalendario()}" immediate="true" disabled="#{folgaCad.exibirCalendario}">
+								<p:graphicImage style="width: 30px;" url="/resources/images/iconCalendario.png" title="Calendário" />
+							</h:commandLink>
+							<div style="position: relative; width:4px;" />
+							<h:commandLink action="#{folgaCad.mostrarLista()}" immediate="true" disabled="#{!folgaCad.exibirCalendario}">
+								<p:graphicImage style="width: 34px; height: 35px; top: -1px; position: relative;" url="/resources/images/iconLista.png" title="Lista" />
+							</h:commandLink>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<div style="position: relative; height: 20px;"></div>
+					
+					<ui:fragment id="fragLista" rendered="#{!folgaCad.exibirCalendario}">
+						
+						<p:dataTable id="folgaDt" var="folga" value="#{folgaCad.listaFolgas}" paginatorPosition="bottom" paginator="true" rows="10" emptyMessage="Nenhum registro encontrado.">
+
+							<f:facet name="header">
+								Folgas
+							</f:facet>
+
+							<p:column headerText="Titulo" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
+								<h:outputText value="#{folga.titulo}" />
+							</p:column>
+							
+							<p:column headerText="De" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
+								<h:outputText value="#{folga.dataInicio}" />
+							</p:column>
+							
+							<p:column headerText="Até" style="width:10%; text-align:center;" sortBy="#{cargo.id}">
+								<h:outputText value="#{folga.dataFim}" />
+							</p:column>
+							
+						</p:dataTable>
+						
+					</ui:fragment>
+					
 					<ui:fragment id="fragCalendario" rendered="#{folgaCad.exibirCalendario}">
 						<h:panelGrid columnClasses="value">
 							<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false">
