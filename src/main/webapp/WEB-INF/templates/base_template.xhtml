@@ -110,42 +110,61 @@
 								</div>
 							</div>
 						</div>
+						
 						<p:menubar style="top:20px;">
 							<sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_GERENTE">
 								<p:submenu label="Administração">
+								
 									<p:submenu label="Cargo">
 										<p:menuitem value="Cadastrar" action="#{cargoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 										<p:menuitem value="Consultar" action="#{cargoMnt.irParaConsultar()}" icon="ui-icon-search" />
 									</p:submenu>
+									
 									<p:submenu label="Usuário">
 										<p:menuitem value="Cadastrar" action="#{usuarioMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 										<p:menuitem value="Consultar" action="#{usuarioMnt.irParaConsultar()}" icon="ui-icon-search" />
 									</p:submenu>
+									
 									<p:submenu label="Projeto">
 										<p:menuitem value="Cadastrar" action="#{projetoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 										<p:menuitem value="Consultar" action="#{projetoMnt.irParaConsultar()}" icon="ui-icon-search" />
 									</p:submenu>
+									
 									<p:submenu label="Sistema">
 										<p:menuitem value="Cadastrar" action="#{sistemaMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 										<p:menuitem value="Consultar" action="#{sistemaMnt.irParaConsultar()}" icon="ui-icon-search" />
 									</p:submenu>
+									
 									<p:submenu label="Sindicato">
 										<p:menuitem value="Cadastrar" action="#{sindicatoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 										<p:menuitem value="Consultar" action="#{sindicatoMnt.irParaConsultar()}" icon="ui-icon-search" />
 									</p:submenu>
+									
 									<p:submenu label="Feriado">
 										<p:menuitem value="Cadastrar" action="#{feriadoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
 										<p:menuitem value="Consultar" action="#{feriadoMnt.irParaConsultar()}" icon="ui-icon-search" />
 									</p:submenu>
 								</p:submenu>
 							</sec:authorize>
+							
 							<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER, ROLE_FUNCIONARIO">
 								<p:submenu label="Solicitação">
-									<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
-									<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									<p:submenu label="Hora extra">
+										<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaCadastrar()}" icon="ui-icon ui-icon-document-b" />
+										<p:menuitem value="Consultar" action="#{solicitacaoMnt.irParaConsultar()}" icon="ui-icon-search" />
+									</p:submenu>
+									
+									<p:submenu label="Folga">
+										<p:menuitem value="Consultar" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
+										<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER">
+											<p:menuitem value="Em tratativa" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
+										</sec:authorize>
+									</p:submenu>
+									
 									<p:menuitem value="Relatório" action="#{relatorioController.irParaRelatorio()}" icon="ui-icon ui-icon-clipboard" />
 								</p:submenu>
 							</sec:authorize>
+							
 							<sec:authorize ifAnyGranted="ROLE_GERENTE">
 									<p:menuitem value="Débito de Horas" action="#{debitarHorasCont.irParaDebitarHoras()}"/>
 							</sec:authorize>

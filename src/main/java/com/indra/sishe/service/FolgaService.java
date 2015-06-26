@@ -18,10 +18,10 @@ public interface FolgaService extends BaseService<Folga>{
 	
 	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Long idGerenteLogado);
 	
-	public Boolean validarFolga(Folga folga) throws ApplicationException;
-	
 	public void folgasParaRemocao(List<Folga> listaFolgasParaRemocao) throws ApplicationException;
 	
 	public void avaliarFolga (List<Long> ids, Integer acao) throws ApplicationException;
+	
+	public void remove(Folga entity) throws ApplicationException;
 
 }

@@ -18,6 +18,9 @@
 			
 		<sec:intercept-url pattern="/paginas/solicitacao/debitarHoras.jsf"
 			access="hasAnyRole('ROLE_GERENTE')" />
+			
+		<sec:intercept-url pattern="/paginas/folga/folga.jsf"
+			access="hasAnyRole('ROLE_GERENTE', 'ROLE_LIDER', 'ROLE_FUNCIONARIO')" />
 
 		<sec:intercept-url pattern="/paginas/usuario/alterarSenha.jsf"
 			access="hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_LIDER', 'ROLE_FUNCIONARIO')" />

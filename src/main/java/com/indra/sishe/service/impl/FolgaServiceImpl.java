@@ -1,5 +1,6 @@
 package com.indra.sishe.service.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +21,7 @@ import com.indra.sishe.dao.FolgaDAO;
 import com.indra.sishe.entity.DatasFolga;
 import com.indra.sishe.entity.Folga;
 import com.indra.sishe.entity.Usuario;
+import com.indra.sishe.enums.StatusEnum;
 import com.indra.sishe.service.FolgaService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -40,6 +42,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	@Override
 	public Folga save(Folga entity) throws ApplicationException {
 		try {
+			validarFolgaCadastro(entity);
 			Folga folga = folgaDAO.save(entity);
 			
 			associarDatas(folga);
@@ -74,6 +77,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	@Override
 	public Folga update(Folga entity) throws ApplicationException {
 		try {
+			validarFolgaAlteracao(entity);
 			Folga folga = folgaDAO.update(entity);
 			
 			desassociarDatas(folga);
@@ -116,6 +120,19 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 		}
 		
 	}
+	
+	public void remove(Folga entity) throws ApplicationException {
+		
+		try {
+			validarStatus(entity);
+			datasFolgaDAO.removeTodasDatasPorFolga(entity.getId());
+			folgaDAO.remove(entity.getId());
+		} catch (RegistroInexistenteException e) {
+			throw new ApplicationException(e, "msg.error.registro.inexistente", "Folga");
+		} catch (DeletarRegistroViolacaoFK e) {
+			throw new ApplicationException(e, "msg.error.excluir.registro.relacionado", "Folga");
+		}
+	}
 
 	@Override
 	public void remove(List<Long> ids) throws ApplicationException {
@@ -131,20 +148,61 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 		}
 	}
 
-	@Override
-	public Boolean validarFolga(Folga folga) throws ApplicationException {
+	private boolean validarCamposObrigatorios(Folga folga) throws ApplicationException { 
+		
+		if (folga.getDataInicio() == null || "".equals(folga.getDataInicio())) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "De");
+		} else if (folga.getDataFim() == null || "".equals(folga.getDataFim())) {
+			throw new ApplicationException("msg.error.campo.obrigatorio", "Até");
+		}
+
+		return true;
+	}
+	
+	private Boolean validarFolgaCadastro(Folga folga) throws ApplicationException {
+		
+		if(folga.getTitulo() == null || "".equals(folga.getTitulo())){
+			folga.setTitulo("Folga");
+		}
+		
+		validarCamposObrigatorios(folga);
+		validarData(folga);
+		return true;
+	}
+	
+	private Boolean validarFolgaAlteracao(Folga folga) throws ApplicationException {
+		if(folga.getTitulo() == null || "".equals(folga.getTitulo())){
+			folga.setTitulo("Folga");
+		}
+		validarCamposObrigatorios(folga);
+		validarStatus(folga);
+		validarData(folga);
+		return true;
+	}
+	
+	private boolean validarStatus(Folga folga) throws ApplicationException {
+		
+		if(!(folga.getStatus().getId() == StatusEnum.Pendente.getId())){
+			throw new ApplicationException("msg.error.alterar.bloqueado.status", StatusEnum.Pendente.getNome());
+		}
+		return true;
+	}
+	
+	private boolean validarData(Folga folga) throws ApplicationException {
+		
 		SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
 		Date hoje = new Date();
-		
-		for (DatasFolga data : folga.getDatasFolga()){
-			if (data.getData().before(hoje)) {
-				throw new ApplicationException("msg.error.data.superior", formatarData.format(data.getData()).toString());
-			}
+		Date dataInicial = new Date();
+		try {
+			hoje = formatarData.parse(formatarData.format(hoje));
+			dataInicial = formatarData.parse(formatarData.format(folga.getDataInicio()));
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-//		if (feriadoDAO.verificaFeriadoPorData(folga)) {
-//			throw new ApplicationException("msg.error.data.superior");
-//		}
-		
+
+		if(dataInicial.before(hoje)){
+			throw new ApplicationException("msg.error.data.superior", formatarData.format(folga.getDataInicio()).toString());
+		}
 		return true;
 	}
 

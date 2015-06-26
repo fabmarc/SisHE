@@ -32,6 +32,8 @@ public class FolgaCadController extends FolgaController{
 	
 	private List<Folga> listaFolgas;
 	
+	private boolean exibirCalendario;
+	
 	@Inject
 	protected transient DatasFolgaService datasFolgaService;
 	
@@ -59,6 +61,11 @@ public class FolgaCadController extends FolgaController{
 		searched = (Boolean) getFlashAttr("searched");
 
 		folgaFiltro = (Folga) getFlashAttr("folgaFiltro");
+		
+		if(getSessionAttr("exibirCalendario") != null && !"".equals(getSessionAttr("exibirCalendario")))
+			exibirCalendario = (Boolean) getSessionAttr("exibirCalendario");
+		
+		exibirCalendario = true;
 		
 	}
 	
@@ -209,13 +216,11 @@ public class FolgaCadController extends FolgaController{
     
 	public String save(Folga entity) {
 		try {
-			if (folgaService.validarFolga(entity)) {
-				folgaService.save(entity);
-				putFlashAttr("folgaFiltro", folgaFiltro);
-				returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação de Folga"));
-				putFlashAttr("searched", searched);
-				return irParaConsultar();
-			}
+			folgaService.save(entity);
+			putFlashAttr("folgaFiltro", folgaFiltro);
+			returnInfoMessage(messageProvider.getMessage("msg.success.registro.cadastrado", "Solicitação de Folga"));
+			putFlashAttr("searched", searched);
+			return irParaConsultar();
 		} catch (ApplicationException e) {
 			returnErrorMessage(e.getMessage());
 		}
@@ -239,9 +244,9 @@ public class FolgaCadController extends FolgaController{
 	public void remove(Folga entity){
 		
 		try {
-			folgaService.remove(entity.getId());
+			folgaService.remove(entity);
 		} catch (ApplicationException e) {
-			e.printStackTrace();
+			returnErrorMessage(e.getMessage());
 		}
 	}
 	/*
@@ -281,5 +286,15 @@ public class FolgaCadController extends FolgaController{
 	public void setListaFolgas(List<Folga> listaFolgas) {
 		this.listaFolgas = listaFolgas;
 	}
+
+	public boolean isExibirCalendario() {
+		return exibirCalendario;
+	}
+
+	public void setExibirCalendario(boolean exibirCalendario) {
+		this.exibirCalendario = exibirCalendario;
+		putSessionAttr("exibirCalendario", exibirCalendario);
+	}
+	
 	
 }
