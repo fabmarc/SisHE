@@ -64,7 +64,7 @@
 					
 					<ui:fragment id="fragCalendario" rendered="#{folgaCad.exibirCalendario}">
 						<h:panelGrid columnClasses="value">
-							<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" rightHeaderTemplate="">
+							<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" resizable="false" draggable="false" rightHeaderTemplate="">
 								<p:ajax event="dateSelect" listener="#{folgaCad.onDateSelect}" update="eventDetails" />
 								<p:ajax event="eventSelect" listener="#{folgaCad.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
 								<p:ajax event="eventMove" listener="#{folgaCad.onEventMove}" update="messages" />

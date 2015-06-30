@@ -3,6 +3,7 @@ package com.indra.infra.controller;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.indra.infra.resource.MessageProvider;
@@ -61,6 +62,10 @@ public class BaseController {
 		removeSessionAttr("usuario_permissoes");
 		removeSessionAttr("saldo");
 		removeSessionAttr("dataAtualizacao");*/
+	}
+	
+	protected HttpServletRequest getHttpRequest(){
+		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}
 
 }

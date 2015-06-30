@@ -9,9 +9,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.resteasy.spi.HttpRequest;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -225,15 +228,14 @@ public class FolgaCadController extends FolgaController{
 			if(f.getDatasFolga()!= null && !f.getDatasFolga().isEmpty()){
 				f.setDataInicio(f.getDatasFolga().get(0).getData());
 				f.setDataFim(f.getDatasFolga().get(f.getDatasFolga().size()-1).getData());
-				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f.getStatus().getNome(), f);
-				if(!(eventTemp.getFolga().getStatus().equals(StatusEnum.Pendente))) {
+				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f);
+				/*if(!(eventTemp.getFolga().getStatus().equals(StatusEnum.Pendente))) {
 					eventTemp.setEditable(false);
-				}
+				}*/
 				eventTemp.setAllDay(true);
 				eventModel.addEvent(eventTemp);
 			}
 		}
-		
 		RequestContext.getCurrentInstance().execute("myschedule.update();");
     }
     

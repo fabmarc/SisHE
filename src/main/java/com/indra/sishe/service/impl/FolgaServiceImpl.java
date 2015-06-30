@@ -42,7 +42,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	@Override
 	public Folga save(Folga entity) throws ApplicationException {
 		try {
-			validarFolgaCadastro(entity);
+			//validarFolgaCadastro(entity);
 			Folga folga = folgaDAO.save(entity);
 			
 			associarDatas(folga);
@@ -77,7 +77,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	@Override
 	public Folga update(Folga entity) throws ApplicationException {
 		try {
-			validarFolgaAlteracao(entity);
+			//validarFolgaAlteracao(entity);
 			Folga folga = folgaDAO.update(entity);
 			
 			desassociarDatas(folga);
@@ -124,7 +124,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	public void remove(Folga entity) throws ApplicationException {
 		
 		try {
-			validarStatus(entity);
+			//validarStatus(entity);
 			datasFolgaDAO.removeTodasDatasPorFolga(entity.getId());
 			folgaDAO.remove(entity.getId());
 		} catch (RegistroInexistenteException e) {
