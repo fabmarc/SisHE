@@ -19,12 +19,12 @@
 					
 					<h:panelGrid id="iconesData" columns="1" style="width: 100%;">
 						<h:panelGrid columns="3" style="float: right; position: relative;">
-							<h:commandLink actionListener="#{folgaCad.mostrarCalendario()}" immediate="true">
+							<h:commandLink actionListener="#{folgaCont.mostrarCalendario()}" immediate="true">
 								<p:graphicImage style="width: 30px;" url="/resources/images/iconCalendario.png" title="Calendário" />
 								<p:ajax process="@this" update="mainForm" immediate="true"/>
 							</h:commandLink>
 							<div style="position: relative; width:4px;" />
-							<h:commandLink actionListener="#{folgaCad.mostrarLista()}" immediate="true">
+							<h:commandLink actionListener="#{folgaCont.mostrarLista()}" immediate="true">
 								<p:graphicImage style="width: 34px; height: 35px; top: -1px; position: relative;" url="/resources/images/iconLista.png" title="Lista" />
 								<p:ajax process="@this" update="mainForm" immediate="true"/>
 							</h:commandLink>
@@ -34,14 +34,22 @@
 					
 					<div style="position: relative; height: 20px;"/>
 					
-					<ui:fragment id="fragLista" rendered="#{!folgaCad.exibirCalendario}">
+					<ui:fragment id="fragLista" rendered="#{!folgaCont.exibirCalendario}">
 						
-						<p:dataTable id="folgaDt" var="folga" value="#{folgaCad.listaFolgas}" paginatorPosition="bottom" paginator="true" rows="10" emptyMessage="Nenhum registro encontrado.">
+						<p:dataTable id="folgaDt" var="folga" value="#{folgaCont.listaFolgas}" paginatorPosition="bottom" paginator="true" rows="10" emptyMessage="Nenhum registro encontrado.">
 
 							<f:facet name="header">
 								Folgas
 							</f:facet>
 
+							<p:column headerText="Solicitante" style="width:10%; text-align:center;" rendered="#{folgaCont.gerenteLogado}" sortBy="#{folga.solicitante.nome}">
+								<h:outputText value="#{folga.solicitante.nome}" />
+							</p:column>
+							
+							<p:column headerText="Status" style="width:10%; text-align:center;" sortBy="#{folga.statusGeral.nome}">
+								<h:outputText value="#{folga.statusGeral.nome}" />
+							</p:column>
+							
 							<p:column headerText="Titulo" style="width:10%; text-align:center;" sortBy="#{folga.titulo}">
 								<h:outputText value="#{folga.titulo}" />
 							</p:column>
@@ -62,13 +70,13 @@
 						
 					</ui:fragment>
 					
-					<ui:fragment id="fragCalendario" rendered="#{folgaCad.exibirCalendario}">
+					<ui:fragment id="fragCalendario" rendered="#{folgaCont.exibirCalendario}">
 						<h:panelGrid columnClasses="value">
-							<p:schedule id="schedule" value="#{folgaCad.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" resizable="false" draggable="false" rightHeaderTemplate="">
-								<p:ajax event="dateSelect" listener="#{folgaCad.onDateSelect}" update="eventDetails" />
-								<p:ajax event="eventSelect" listener="#{folgaCad.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
-								<p:ajax event="eventMove" listener="#{folgaCad.onEventMove}" update="messages" />
-								<p:ajax event="eventResize" listener="#{folgaCad.onEventResize}" update="messages" />
+							<p:schedule id="schedule" value="#{folgaCont.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" resizable="false" draggable="false" rightHeaderTemplate="">
+								<p:ajax event="dateSelect" listener="#{folgaCont.onDateSelect}" update="eventDetails" />
+								<p:ajax event="eventSelect" listener="#{folgaCont.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
+								<p:ajax event="eventMove" listener="#{folgaCont.onEventMove}" update="messages" />
+								<p:ajax event="eventResize" listener="#{folgaCont.onEventResize}" update="messages" />
 							</p:schedule>
 						</h:panelGrid>
 
@@ -80,7 +88,7 @@
 
 								<h:panelGrid columns="1">
 									<h:outputLabel for="title" value="Titulo:" />
-									<p:inputText id="title" value="#{folgaCad.eventFolgaSelecionada.folga.titulo}" style="width:430px;" />
+									<p:inputText id="title" value="#{folgaCont.eventFolgaSelecionada.folga.titulo}" style="width:430px;" />
 								</h:panelGrid>
 
 
@@ -88,7 +96,7 @@
 
 									<h:panelGroup styleClass="field">
 										<h:outputLabel for="from" value="De:" />
-										<p:inputMask id="from" value="#{folgaCad.eventFolgaSelecionada.folga.dataInicio}" mask="99/99/9999" style="width: 125px;" required="true">
+										<p:inputMask id="from" value="#{folgaCont.eventFolgaSelecionada.folga.dataInicio}" mask="99/99/9999" style="width: 125px;" required="true">
 											<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 										</p:inputMask>
 									</h:panelGroup>
@@ -96,14 +104,14 @@
 
 									<h:panelGroup styleClass="field" style="left: 10px; position: relative;">
 										<h:outputLabel for="to" value="Até:" />
-										<p:inputMask id="to" value="#{folgaCad.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999" style="width: 125px;" required="true">
+										<p:inputMask id="to" value="#{folgaCont.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999" style="width: 125px;" required="true">
 											<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 										</p:inputMask>
 									</h:panelGroup>
 
 									<h:panelGroup styleClass="field" style="left: 20px; position: relative;">
 										<h:outputLabel for="status" value="Status:" />
-										<p:inputText id="status" value="#{folgaCad.eventFolgaSelecionada.folga.status.nome}" style="width: 125px;" disabled="true" />
+										<p:inputText id="status" value="#{folgaCont.eventFolgaSelecionada.folga.statusGeral.nome}" style="width: 125px;" disabled="true" />
 										<p:watermark for="status" value="Pendente" />
 									</h:panelGroup>
 
@@ -111,19 +119,19 @@
 
 								<h:panelGrid columns="1">
 									<h:outputLabel for="observacao" value="Observação:" />
-									<h:inputTextarea id="observacao" value="#{folgaCad.eventFolgaSelecionada.folga.observacao}" style="width:430px;" />
+									<h:inputTextarea id="observacao" value="#{folgaCont.eventFolgaSelecionada.folga.observacao}" style="width:430px;" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="1" style="width:100%">
 
 									<h:panelGroup styleClass="field" style="float: right; position: relative;">
-										<h:commandButton styleClass="botao3d" id="cancelarButton" value="Cancelar" onclick="myschedule.update();eventDialog.hide();" rendered="#{folgaCad.eventFolgaSelecionada.folga.id == null || !folgaCad.eventFolgaSelecionada.editable}" >
+										<h:commandButton styleClass="botao3d" id="cancelarButton" value="Cancelar" onclick="myschedule.update();eventDialog.hide();" rendered="#{folgaCont.eventFolgaSelecionada.folga.id == null || !folgaCont.eventFolgaSelecionada.editable}" >
 											<p:ajax process="@this" />
 										</h:commandButton>
 										<div style="position: relative; float: right;" />
-										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCad.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCad.eventFolgaSelecionada.folga.id != null and folgaCad.eventFolgaSelecionada.editable}" />
+										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCont.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCont.eventFolgaSelecionada.folga.id != null and folgaCont.eventFolgaSelecionada.editable}" />
 										<div style="position: relative; float: right;" />
-										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCad.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCad.eventFolgaSelecionada.editable}"/>
+										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCont.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCont.eventFolgaSelecionada.editable}"/>
 									</h:panelGroup>
 
 								</h:panelGrid>
