@@ -133,9 +133,9 @@
 									</p:submenu>
 									
 									<p:submenu label="Folga">
-										<p:menuitem value="Consultar" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
+										<p:menuitem value="Consultar" action="#{folgaCont.irParaConsultar()}" icon="ui-icon-search" />
 										<sec:authorize ifAnyGranted="ROLE_GERENTE, ROLE_LIDER">
-											<p:menuitem value="Da equipe" action="#{folgaMnt.irParaConsultar()}" icon="ui-icon-search" />
+											<p:menuitem value="Da equipe" action="#{folgaCont.irParaConsultar()}" icon="ui-icon-search" />
 										</sec:authorize>
 									</p:submenu>
 									
