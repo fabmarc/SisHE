@@ -15,27 +15,65 @@
 					<p:messages id="messages" showDetail="true" showSummary="false" />
 				</div>
 
-				<div class="divCorpo" style="top: 15px; position: relative; width: 100%">
+				<div style="width: 730px; position: relative; height: 60px;">
+					<div id="divData" style="position: relative; width: 110px; height: 41px;">
+						<p:outputLabel value="Data:" />
+						<p:calendar locale="pt" styleClass="calendario" value="#{folgaCont.dataFiltro}" id="inputCalendario" style="position:relative; top: -6px;width:70px;!" />
+					</div>
+
+					<div id="divStatus" style="position: relative; top: -41px; left: 118px; width: 270px;">
+						<p:outputLabel value="Status:" />
+						<p:selectOneMenu id="inputStatus" value="#{folgaCont.folgaFiltro.statusGerente}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 120px;">
+							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+							<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
+						</p:selectOneMenu>
+					</div>
 					
-					<h:panelGrid id="iconesData" columns="1" style="width: 100%;">
+					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
+						<div id="divAprovador" style="position: relative; top: -96px; left: 254px; width: 131px;">
+							<p:outputLabel value="Aprovador:" />
+							<p:inputText id="inputAprovador" value="#{folgaCont.folgaFiltro.gerente.nome}" style="position:relative; top: -6px;width: 130px;" />
+						</div>
+					</ui:fragment>
+
+					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
+						<div id="divSolicitante" style="position: relative; top: -96px; left: 254px; width: 131px;">
+							<p:outputLabel value="Solicitante:" />
+							<p:inputText id="inputSolicitante" value="#{folgaCont.folgaFiltro.solicitante.nome}" style="position:relative; top: -6px;width: 130px;" />
+						</div>
+
+						<div id="divConsultarTodos" style="width: 110px; position: relative; top: -178px; left: 523px;">
+							<p:outputLabel value="Minhas Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{folgaCont.liderLogado}" />
+							<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{folgaCont.gerenteLogado}" />
+							<p:selectBooleanCheckbox value="#{folgaCont.todasSolicitacoes}" style="top: 4px;position: relative;" rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
+								<!-- <f:ajax event="change" render="inputSistema inputSolicitante inputStatus" /> -->
+							</p:selectBooleanCheckbox>
+						</div>
+					</ui:fragment>
+				</div>
+				<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
+					<h:commandButton styleClass="botao3d" actionListener="#{folgaCont.pesquisar()}" value="Pesquisar" />
+				</div>
+				<div class="divCorpo" style="padding-bottom: 5%; position: relative; top: 10%;">
+					<h:panelGrid id="iconesData" columns="1" style="width: 100%;position: relative; top: 62px;">
 						<h:panelGrid columns="3" style="float: right; position: relative;">
 							<h:commandLink actionListener="#{folgaCont.mostrarCalendario()}" immediate="true">
 								<p:graphicImage style="width: 30px;" url="/resources/images/iconCalendario.png" title="Calendário" />
-								<p:ajax process="@this" update="mainForm" immediate="true"/>
+								<p:ajax process="@this" update="mainForm" immediate="true" />
 							</h:commandLink>
-							<div style="position: relative; width:4px;" />
+							<div style="position: relative; width: 4px;" />
 							<h:commandLink actionListener="#{folgaCont.mostrarLista()}" immediate="true">
 								<p:graphicImage style="width: 34px; height: 35px; top: -1px; position: relative;" url="/resources/images/iconLista.png" title="Lista" />
-								<p:ajax process="@this" update="mainForm" immediate="true"/>
+								<p:ajax process="@this" update="mainForm" immediate="true" />
 							</h:commandLink>
 						</h:panelGrid>
 					</h:panelGrid>
-					
-					
-					<div style="position: relative; height: 20px;"/>
-					
+
+
+					<div style="position: relative; height: 20px;" />
+
 					<ui:fragment id="fragLista" rendered="#{!folgaCont.exibirCalendario}">
-						
+
 						<p:dataTable id="folgaDt" var="folga" value="#{folgaCont.listaFolgas}" paginatorPosition="bottom" paginator="true" rows="10" emptyMessage="Nenhum registro encontrado.">
 
 							<f:facet name="header">
@@ -45,34 +83,34 @@
 							<p:column headerText="Solicitante" style="width:10%; text-align:center;" rendered="#{folgaCont.gerenteLogado}" sortBy="#{folga.solicitante.nome}">
 								<h:outputText value="#{folga.solicitante.nome}" />
 							</p:column>
-							
+
 							<p:column headerText="Status" style="width:10%; text-align:center;" sortBy="#{folga.statusGeral.nome}">
 								<h:outputText value="#{folga.statusGeral.nome}" />
 							</p:column>
-							
+
 							<p:column headerText="Titulo" style="width:10%; text-align:center;" sortBy="#{folga.titulo}">
 								<h:outputText value="#{folga.titulo}" />
 							</p:column>
-							
+
 							<p:column headerText="De" style="width:10%; text-align:center;" sortBy="#{folga.dataInicio}">
 								<h:outputText id="de" value="#{folga.dataInicio}" style="width: 125px;">
 									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 								</h:outputText>
 							</p:column>
-							
+
 							<p:column headerText="Até" style="width:10%; text-align:center;" sortBy="#{folga.dataFim}">
 								<h:outputText id="ate" value="#{folga.dataFim}" style="width: 125px;">
 									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 								</h:outputText>
 							</p:column>
-							
+
 						</p:dataTable>
-						
+
 					</ui:fragment>
-					
+
 					<ui:fragment id="fragCalendario" rendered="#{folgaCont.exibirCalendario}">
 						<h:panelGrid columnClasses="value">
-							<p:schedule id="schedule" value="#{folgaCont.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" resizable="false" draggable="false" rightHeaderTemplate="">
+							<p:schedule id="schedule" value="#{folgaCont.eventModel}" widgetVar="myschedule" timeZone="GMT+2" locale="pt" showWeekends="false" resizable="false" draggable="true" rightHeaderTemplate="">
 								<p:ajax event="dateSelect" listener="#{folgaCont.onDateSelect}" update="eventDetails" />
 								<p:ajax event="eventSelect" listener="#{folgaCont.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show();" />
 								<p:ajax event="eventMove" listener="#{folgaCont.onEventMove}" update="messages" />
@@ -125,13 +163,16 @@
 								<h:panelGrid columns="1" style="width:100%">
 
 									<h:panelGroup styleClass="field" style="float: right; position: relative;">
-										<h:commandButton styleClass="botao3d" id="cancelarButton" value="Cancelar" onclick="myschedule.update();eventDialog.hide();" rendered="#{folgaCont.eventFolgaSelecionada.folga.id == null || !folgaCont.eventFolgaSelecionada.editable}" >
+										<h:commandButton styleClass="botao3d" id="cancelarButton" value="Cancelar" onclick="myschedule.update();eventDialog.hide();"
+											rendered="#{folgaCont.eventFolgaSelecionada.folga.id == null || !folgaCont.eventFolgaSelecionada.editable}">
 											<p:ajax process="@this" />
 										</h:commandButton>
 										<div style="position: relative; float: right;" />
-										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCont.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCont.eventFolgaSelecionada.folga.id != null and folgaCont.eventFolgaSelecionada.editable}" />
+										<h:commandButton styleClass="botao3d" id="removeButton" value="Remover" actionListener="#{folgaCont.removeEvent}" oncomplete="myschedule.update();eventDialog.hide();"
+											rendered="#{folgaCont.eventFolgaSelecionada.folga.id != null and folgaCont.eventFolgaSelecionada.editable}" />
 										<div style="position: relative; float: right;" />
-										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCont.confirmar}" oncomplete="myschedule.update();eventDialog.hide();" rendered="#{folgaCont.eventFolgaSelecionada.editable}"/>
+										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCont.confirmar}" oncomplete="myschedule.update();eventDialog.hide();"
+											rendered="#{folgaCont.eventFolgaSelecionada.editable}" />
 									</h:panelGroup>
 
 								</h:panelGrid>

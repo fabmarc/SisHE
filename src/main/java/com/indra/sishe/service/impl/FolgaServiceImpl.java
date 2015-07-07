@@ -15,6 +15,7 @@ import com.indra.infra.dao.exception.DeletarRegistroViolacaoFK;
 import com.indra.infra.dao.exception.RegistroDuplicadoException;
 import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
+import com.indra.sishe.controller.usuario.UsuarioLogado;
 import com.indra.sishe.dao.DatasFolgaDAO;
 import com.indra.sishe.dao.FeriadoDAO;
 import com.indra.sishe.dao.FolgaDAO;
@@ -43,6 +44,16 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	public Folga save(Folga entity) throws ApplicationException {
 		try {
 			//validarFolgaCadastro(entity);
+			if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
+				entity.setStatusGerente(StatusEnum.Aprovada);
+				entity.setStatusLider(StatusEnum.Aprovada);
+			}else if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+				entity.setStatusLider(StatusEnum.Aprovada);
+				entity.setStatusGerente(StatusEnum.Pendente);
+			} else {
+				entity.setStatusGerente(StatusEnum.Pendente);
+				entity.setStatusLider(StatusEnum.Pendente);
+			}
 			Folga folga = folgaDAO.save(entity);
 			
 			associarDatas(folga);
@@ -77,7 +88,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	@Override
 	public Folga update(Folga entity) throws ApplicationException {
 		try {
-			//validarFolgaAlteracao(entity);
+			validarFolgaAlteracao(entity);
 			Folga folga = folgaDAO.update(entity);
 			
 			desassociarDatas(folga);
@@ -182,7 +193,7 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	
 	private boolean validarStatus(Folga folga) throws ApplicationException {
 		
-		if(!(folga.getStatus().getId() == StatusEnum.Pendente.getId())){
+		if((!(folga.getStatusGerente().getId() == StatusEnum.Pendente.getId())) || (!(folga.getStatusLider().getId() == StatusEnum.Pendente.getId())) ){
 			throw new ApplicationException("msg.error.alterar.bloqueado.status", StatusEnum.Pendente.getNome());
 		}
 		return true;
@@ -224,10 +235,24 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 		
 		return folgasRetorno;
 	}
+	
+	@Override
+	public List<Folga> findFolgaByUsuario(Folga folga) {
+		List<Folga> folgas = new ArrayList<Folga>();
+		List<Folga> folgasRetorno = new ArrayList<Folga>();
+		folgas = folgaDAO.findFolgaByUsuario(folga);
+		
+		for(Folga f : folgas){
+			f.setDatasFolga(datasFolgaDAO.findDatasBySolicitacaoFolga(f.getId()));
+			folgasRetorno.add(f);
+		}
+		
+		return folgasRetorno;
+	}
 
 	@Override
-	public List<Folga> findFolgasByGerente(Folga folgaFiltro, Long idGerenteLogado) {
-		return folgaDAO.findFolgasByGerente(folgaFiltro, idGerenteLogado);
+	public List<Folga> findFolgasByGerente(Folga folgaFiltro) {
+		return folgaDAO.findFolgasByGerente(folgaFiltro);
 	}
 
 	@Override
@@ -251,11 +276,12 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 	}
 	
 	private Boolean validaRemocao(Folga folga) {
-		if (folga.getStatus().getId() == 3) {
-			return true;
-		}else {
-			return false;
-		}
+		return null;
+//		if (folga.getStatus().getId() == 3) {
+//			return true;
+//		}else {
+//			return false;
+//		}
 	}
 
 	@Override
@@ -266,5 +292,12 @@ public class FolgaServiceImpl extends StatelessServiceAb implements FolgaService
 			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação de Folga");
 		}
 	}
+
+	@Override
+	public List<Folga> findFolgasBylider(Folga folga) {
+		return folgaDAO.findFolgasBylider(folga);
+	}
+
+
 
 }

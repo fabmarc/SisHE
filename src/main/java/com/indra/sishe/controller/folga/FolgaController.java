@@ -58,7 +58,9 @@ public class FolgaController extends BaseController implements Serializable{
 	
 	private Date dataFiltro;
 	
-	private Boolean gerenteLogado;
+	private Boolean gerenteLogado = false;
+	
+	private Boolean liderLogado = false;
 	
 	private Boolean todasSolicitacoes;
 	
@@ -83,7 +85,7 @@ public class FolgaController extends BaseController implements Serializable{
 			exibirCalendario = (Boolean) getSessionAttr("exibirCalendario");
 		}
 		exibirCalendario = true;
-		verificarCargoGerente();
+		verificarCargoLogado();
 	}
     
 
@@ -239,10 +241,11 @@ public class FolgaController extends BaseController implements Serializable{
 			if(f.getDatasFolga()!= null && !f.getDatasFolga().isEmpty()){
 				f.setDataInicio(f.getDatasFolga().get(0).getData());
 				f.setDataFim(f.getDatasFolga().get(f.getDatasFolga().size()-1).getData());
-				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f);
-				/*if(!(eventTemp.getFolga().getStatusGeral().equals(StatusEnum.Pendente))) {
-					eventTemp.setEditable(false);
-				}*/
+				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f.getStatusGeral().getNome(), f);
+				
+//				if(!(eventTemp.getFolga().getStatusGeral().equals(StatusEnum.Pendente))) {
+//					eventTemp.setEditable(false);
+//				}
 				eventTemp.setAllDay(true);
 				eventModel.addEvent(eventTemp);
 			}
@@ -298,9 +301,7 @@ public class FolgaController extends BaseController implements Serializable{
 			return irParaAlterar(folgaSelecionada);
 		}
 	}
-	*/
-	
-	/*
+
 	public Boolean modoCadastrar(){
 		if (folgaSelecionada.equals(new Folga())) {
 			return true;
@@ -308,7 +309,7 @@ public class FolgaController extends BaseController implements Serializable{
 			return false;
 		}
 	}
-*/
+	 */
 	
 	public List<StatusEnum> listaStatus() {
 		return StatusEnum.status();
@@ -338,16 +339,13 @@ public class FolgaController extends BaseController implements Serializable{
 	
 	private void pesquisarLider() {
 		if (todasSolicitacoes) {
-			//pesquisar folgas pendentes lider
+			folgaService.findFolgasBylider(folgaFiltro);
 		}else {
-			//pesquisar próprias folgas
+			pesquisarPorUsuario();
 		}
 	}
 	
 	private void pesquisarPorUsuario(){
-		Usuario usuarioLogado = new Usuario();
-		usuarioLogado.setId(UsuarioLogado.getId());
-		folgaFiltro.setSolicitante(usuarioLogado);
 		listaFolgas = folgaService.findFolgaByUsuario(folgaFiltro);
 	}
 	
@@ -419,11 +417,25 @@ public class FolgaController extends BaseController implements Serializable{
 
 	}
 	
-	public void verificarCargoGerente() {
+	public Boolean permiteAlteracao(Folga folga){
+		Boolean retorno = false;
+		if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+			if (folga.getSolicitante().getId() == UsuarioLogado.getId() && folga.getStatusGerente() == StatusEnum.Pendente) {
+				retorno = true;
+			}
+		}else {
+			if (folga.getSolicitante().getId() == UsuarioLogado.getId() && folga.getStatusLider() == StatusEnum.Pendente) {
+				retorno = true;
+			}
+		}
+		return retorno;
+	}
+	
+	public void verificarCargoLogado() {
 		if (UsuarioLogado.verificarPermissao("ROLE_GERENTE")) {
 			gerenteLogado = true;
-		} else {
-			gerenteLogado = false;
+		} else if (UsuarioLogado.verificarPermissao("ROLE_LIDER")) {
+			setLiderLogado(true);
 		}
 	}
 
@@ -526,5 +538,15 @@ public class FolgaController extends BaseController implements Serializable{
 	
 	public void setFolgaFiltro(Folga folgaFiltro) {
 		this.folgaFiltro = folgaFiltro;
+	}
+
+
+	public Boolean getLiderLogado() {
+		return liderLogado;
+	}
+
+
+	public void setLiderLogado(Boolean liderLogado) {
+		this.liderLogado = liderLogado;
 	}
 }

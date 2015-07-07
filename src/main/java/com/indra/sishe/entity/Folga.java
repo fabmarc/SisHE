@@ -20,24 +20,39 @@ public class Folga implements Serializable {
 	
 	private Usuario solicitante;
 
-	private Usuario avaliador;
-
+	private Usuario lider;
+	
+	private Usuario gerente;
+	
 	private Date dataSolicitacao;
 	
+	private Date dataAprovacaoLider;
+	
+	private Date dataAprovacaoGerente;
+
+	private StatusEnum StatusLider;
+	
+	private StatusEnum StatusGerente;
+
 	private Date dataInicio;
 	
 	private Date dataFim;
 
 	private List<DatasFolga> datasFolga;
 
-	private Date dataAprovacao;
-
 	private String observacao;
 
-	private StatusEnum status;
 	
 	public Folga(){
 		datasFolga = new ArrayList<DatasFolga>();
+	}
+	
+	public StatusEnum getStatusGeral(){
+		if (this.StatusLider == StatusEnum.Reprovada) {
+			return StatusEnum.Reprovada;
+		}else {
+			return StatusGerente;
+		}
 	}
 
 	public Long getId() {
@@ -56,14 +71,6 @@ public class Folga implements Serializable {
 		this.solicitante = solicitante;
 	}
 
-	public Usuario getAvaliador() {
-		return avaliador;
-	}
-
-	public void setAvaliador(Usuario aprovador) {
-		avaliador = aprovador;
-	}
-
 	public Date getDataSolicitacao() {
 		return dataSolicitacao;
 	}
@@ -72,28 +79,12 @@ public class Folga implements Serializable {
 		this.dataSolicitacao = dataSolicitacao;
 	}
 
-	public Date getDataAprovacao() {
-		return dataAprovacao;
-	}
-
-	public void setDataAprovacao(Date dataAprovacao) {
-		this.dataAprovacao = dataAprovacao;
-	}
-
 	public String getObservacao() {
 		return observacao;
 	}
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
-	}
-
-	public StatusEnum getStatus() {
-		return status;
-	}
-
-	public void setStatus(StatusEnum status) {
-		this.status = status;
 	}
 
 	public List<DatasFolga> getDatasFolga() {
@@ -126,6 +117,54 @@ public class Folga implements Serializable {
 
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
+	}
+
+	public Usuario getLider() {
+		return lider;
+	}
+
+	public void setLider(Usuario lider) {
+		this.lider = lider;
+	}
+
+	public Usuario getGerente() {
+		return gerente;
+	}
+
+	public void setGerente(Usuario gerente) {
+		this.gerente = gerente;
+	}
+
+	public Date getDataAprovacaoLider() {
+		return dataAprovacaoLider;
+	}
+
+	public void setDataAprovacaoLider(Date dataAprovacaoLider) {
+		this.dataAprovacaoLider = dataAprovacaoLider;
+	}
+
+	public Date getDataAprovacaoGerente() {
+		return dataAprovacaoGerente;
+	}
+
+	public void setDataAprovacaoGerente(Date dataAprovacaoGerente) {
+		this.dataAprovacaoGerente = dataAprovacaoGerente;
+	}
+
+	public StatusEnum getStatusLider() {
+		return StatusLider;
+	}
+
+	public void setStatusLider(StatusEnum statusLider) {
+		StatusLider = statusLider;
+	}
+
+	public StatusEnum getStatusGerente() {
+		return StatusGerente;
+	}
+
+	public void setStatusGerente(StatusEnum statusGerente) {
+		StatusGerente = statusGerente;
 	}
 
 }

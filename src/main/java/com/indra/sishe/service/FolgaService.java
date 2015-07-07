@@ -16,7 +16,11 @@ public interface FolgaService extends BaseService<Folga>{
 	
 	public List<Folga> findFolgaByUsuario(Usuario usuario);
 	
-	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Long idGerenteLogado);
+	public List<Folga> findFolgaByUsuario(Folga folga);
+	
+	public List<Folga> findFolgasBylider (Folga folga);
+	
+	public List<Folga> findFolgasByGerente (Folga folgaFiltro);
 	
 	public void folgasParaRemocao(List<Folga> listaFolgasParaRemocao) throws ApplicationException;
 	

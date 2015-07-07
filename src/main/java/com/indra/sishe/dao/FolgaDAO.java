@@ -13,7 +13,11 @@ public interface FolgaDAO extends BaseDAO<Folga> {
 	
 	public List<Folga> findFolgaByUsuario(Usuario usuario);
 	
-	public List<Folga> findFolgasByGerente (Folga folgaFiltro, Long idGerenteLogado);
+	public List<Folga> findFolgaByUsuario(Folga folga);
+	
+	public List<Folga> findFolgasByGerente (Folga folgaFiltro);
+	
+	public List<Folga> findFolgasBylider (Folga folga);
 	
 	public void avaliarFolga (List<Long> ids, Integer acao) throws RegistroInexistenteException;
 	
