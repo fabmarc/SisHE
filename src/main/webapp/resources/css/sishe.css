@@ -1,4 +1,3 @@
-/* Incluído por Rodrigo */
 html {
 	height: 100%;
 	overflow: auto;
@@ -174,13 +173,13 @@ html {
 }
 
 .Reprovada .fc-event-skin {
-	background: rgb(255, 58, 0) !important;
-	color: black !important;
+	background: rgb(255, 0, 0) !important;
+	color: white !important;
 }
 
 .Aprovada .fc-event-skin {
-	background: rgb(62, 173, 62) !important;
-	color: black !important;
+	background: rgb(61, 161, 61) !important;
+	color: white !important;
 }
 
 .Pendente .fc-event-skin {
@@ -192,9 +191,6 @@ html {
 	linear-gradient(to bottom, rgb(62, 173, 62) , rgb(236, 236, 14) )
 }
 
-/* Fim Bloco Rodrigo */
-
-/*Incluído por Diego*/
 .divNomeProjeto {
 	position: relative;
 	right: initial;
@@ -241,12 +237,8 @@ html {
 	font-size: small;
 }
 
-/*Fim Bloco Diego*/
-
-/* Incluido por Igor */
 .ui-paginator .ui-paginator-rpp-options  {
 	width: 62px;
 	position: relative;
 	top: 5px;
 }
-/* Fim do Bloco de Igor */
