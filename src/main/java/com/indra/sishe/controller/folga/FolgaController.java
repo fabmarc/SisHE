@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
@@ -44,7 +45,7 @@ public class FolgaController extends BaseController implements Serializable{
 	@Inject
 	protected transient DatasFolgaService datasFolgaService;
 	
-	public Folga folgaFiltro;
+	private Folga folgaFiltro;
 	
 	private List<Folga> listaFolgas;
 
@@ -77,10 +78,14 @@ public class FolgaController extends BaseController implements Serializable{
 		eventModel = new DefaultScheduleModel();
 		atualizarListaFolga();
 		/**************************************************************/
+		dataFiltro = new Date();
 	         
 		MessageProvider.setInstance(messageProvider);
 		searched = (Boolean) getFlashAttr("searched");
 		folgaFiltro = (Folga) getFlashAttr("folgaFiltro");
+		if (folgaFiltro == null) {
+			folgaFiltro = new Folga();
+		}
 		if(getSessionAttr("exibirCalendario") != null && !"".equals(getSessionAttr("exibirCalendario"))){
 			exibirCalendario = (Boolean) getSessionAttr("exibirCalendario");
 		}
@@ -89,18 +94,6 @@ public class FolgaController extends BaseController implements Serializable{
 	}
     
 
-    public ScheduleModel getEventModel() {
-        return eventModel;
-    }
-     
-    public EventFolga getEventFolgaSelecionada() {
-        return eventFolgaSelecionada;
-    }
- 
-    public void setEventFolgaSelecionada(EventFolga eventFolgaSelecionada) {
-        this.eventFolgaSelecionada = eventFolgaSelecionada;
-    }
-     
     // Ao salvar
     public void confirmar(ActionEvent actionEvent) {
         if(eventFolgaSelecionada.getId() == null){
@@ -239,10 +232,7 @@ public class FolgaController extends BaseController implements Serializable{
         
 		for(Folga f : listaFolgas) {
 			if(f.getDatasFolga()!= null && !f.getDatasFolga().isEmpty()){
-				f.setDataInicio(f.getDatasFolga().get(0).getData());
-				f.setDataFim(f.getDatasFolga().get(f.getDatasFolga().size()-1).getData());
 				EventFolga eventTemp = new EventFolga(f.getTitulo(), f.getDatasFolga().get(0).getData(), f.getDatasFolga().get(f.getDatasFolga().size()-1).getData(), f.getStatusGeral().getNome(), f);
-				
 //				if(!(eventTemp.getFolga().getStatusGeral().equals(StatusEnum.Pendente))) {
 //					eventTemp.setEditable(false);
 //				}
@@ -318,8 +308,7 @@ public class FolgaController extends BaseController implements Serializable{
 	public void pesquisar() {
 		if (dataFiltro != null) {
 			List<DatasFolga> dataFolgaFiltro = new ArrayList<DatasFolga>(1);
-			DatasFolga dataFolga = new DatasFolga();
-			dataFolga.setData(dataFiltro);
+			DatasFolga dataFolga = new DatasFolga(dataFiltro);
 			dataFolgaFiltro.add(dataFolga);
 			folgaFiltro.setDatasFolga(dataFolgaFiltro);
 		}
@@ -439,68 +428,13 @@ public class FolgaController extends BaseController implements Serializable{
 		}
 	}
 
-	public List<Folga> getFolgasSelecionadas() {
-		return folgasSelecionadas;
-	}
-
-	public void setFolgasSelecionadas(List<Folga> folgasSelecionadas) {
-		this.folgasSelecionadas = folgasSelecionadas;
-	}
-
-	public Folga getFolgaDetalhe() {
-		return folgaDetalhe;
-	}
-
-	public void setFolgaDetalhe(Folga folgaDetalhe) {
-		this.folgaDetalhe = folgaDetalhe;
-	}
-
-	public Date getDataFiltro() {
-		return dataFiltro;
-	}
-
-	public void setDataFiltro(Date dataFiltro) {
-		this.dataFiltro = dataFiltro;
-	}
-
-	public Boolean getGerenteLogado() {
-		return gerenteLogado;
-	}
-
-	public void setGerenteLogado(Boolean gerenteLogado) {
-		this.gerenteLogado = gerenteLogado;
-	}
-
-	public Boolean getTodasSolicitacoes() {
-		return todasSolicitacoes;
-	}
-
-	public void setTodasSolicitacoes(Boolean todasSolicitacoes) {
-		this.todasSolicitacoes = todasSolicitacoes;
-	}
-	
 	public String cancelar(){
 		putFlashAttr("searched", searched);
 		putFlashAttr("folgaFiltro", folgaFiltro);
 		return irParaConsultar();
 	}
 
-	public List<Folga> getListaFolgas() {
-		return listaFolgas;
-	}
 	
-	public void setListaFolgas(List<Folga> listaFolgas) {
-		this.listaFolgas = listaFolgas;
-	}
-
-	public boolean isExibirCalendario() {
-		return exibirCalendario;
-	}
-
-	public void setExibirCalendario(boolean exibirCalendario) {
-		this.exibirCalendario = exibirCalendario;
-		putSessionAttr("exibirCalendario", exibirCalendario);
-	}
 	
 	public void mostrarCalendario(){
 		this.exibirCalendario = true;
@@ -532,12 +466,84 @@ public class FolgaController extends BaseController implements Serializable{
 		return irParaConsultar();
 	}
 
+
 	public Folga getFolgaFiltro() {
 		return folgaFiltro;
 	}
-	
+
+
 	public void setFolgaFiltro(Folga folgaFiltro) {
 		this.folgaFiltro = folgaFiltro;
+	}
+
+
+	public List<Folga> getListaFolgas() {
+		return listaFolgas;
+	}
+
+
+	public void setListaFolgas(List<Folga> listaFolgas) {
+		this.listaFolgas = listaFolgas;
+	}
+
+
+	public Boolean getSearched() {
+		return searched;
+	}
+
+
+	public void setSearched(Boolean searched) {
+		this.searched = searched;
+	}
+
+
+	public boolean isExibirCalendario() {
+		return exibirCalendario;
+	}
+
+
+	public void setExibirCalendario(boolean exibirCalendario) {
+		this.exibirCalendario = exibirCalendario;
+	}
+
+
+	public List<Folga> getFolgasSelecionadas() {
+		return folgasSelecionadas;
+	}
+
+
+	public void setFolgasSelecionadas(List<Folga> folgasSelecionadas) {
+		this.folgasSelecionadas = folgasSelecionadas;
+	}
+
+
+	public Folga getFolgaDetalhe() {
+		return folgaDetalhe;
+	}
+
+
+	public void setFolgaDetalhe(Folga folgaDetalhe) {
+		this.folgaDetalhe = folgaDetalhe;
+	}
+
+
+	public Date getDataFiltro() {
+		return dataFiltro;
+	}
+
+
+	public void setDataFiltro(Date dataFiltro) {
+		this.dataFiltro = dataFiltro;
+	}
+
+
+	public Boolean getGerenteLogado() {
+		return gerenteLogado;
+	}
+
+
+	public void setGerenteLogado(Boolean gerenteLogado) {
+		this.gerenteLogado = gerenteLogado;
 	}
 
 
@@ -549,4 +555,36 @@ public class FolgaController extends BaseController implements Serializable{
 	public void setLiderLogado(Boolean liderLogado) {
 		this.liderLogado = liderLogado;
 	}
+
+
+	public Boolean getTodasSolicitacoes() {
+		return todasSolicitacoes;
+	}
+
+
+	public void setTodasSolicitacoes(Boolean todasSolicitacoes) {
+		this.todasSolicitacoes = todasSolicitacoes;
+	}
+
+
+	public ScheduleModel getEventModel() {
+		return eventModel;
+	}
+
+
+	public void setEventModel(ScheduleModel eventModel) {
+		this.eventModel = eventModel;
+	}
+
+
+	public EventFolga getEventFolgaSelecionada() {
+		return eventFolgaSelecionada;
+	}
+
+
+	public void setEventFolgaSelecionada(EventFolga eventFolgaSelecionada) {
+		this.eventFolgaSelecionada = eventFolgaSelecionada;
+	}
+
+	
 }

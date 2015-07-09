@@ -7,8 +7,7 @@
 				<!-- BreadCrumb -->
 				<p:breadCrumb styleClass="breadCrumb">
 					<p:menuitem value="Home" url="/index.jsf" />
-					<p:menuitem value="Folga" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
-					<p:menuitem value="Cadastrar" action="#{solicitacaoMnt.irParaConsultar()}" immediate="true" />
+					<p:menuitem value="Folga" action="#{folgaCont.irParaConsultar()}" immediate="true" />
 				</p:breadCrumb>
 				<hr style="margin: 10px 0;" />
 				<div class="divMsg">
@@ -16,33 +15,41 @@
 				</div>
 
 				<div style="width: 730px; position: relative; height: 60px;">
-					<div id="divData" style="position: relative; width: 110px; height: 41px;">
+					<div id="divData" style="position: relative; width: 77px; height: 41px;">
 						<p:outputLabel value="Data:" />
 						<p:calendar locale="pt" styleClass="calendario" value="#{folgaCont.dataFiltro}" id="inputCalendario" style="position:relative; top: -6px;width:70px;!" />
 					</div>
 
-					<div id="divStatus" style="position: relative; top: -41px; left: 118px; width: 270px;">
+					<div id="divStatus" style="position: relative; top: -41px; left: 114px; width: 270px;">
 						<p:outputLabel value="Status:" />
-						<p:selectOneMenu id="inputStatus" value="#{folgaCont.folgaFiltro.statusGerente}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 120px;">
+						<p:selectOneMenu id="inputStatus" value="#{folgaCont.folgaFiltro.statusGerente}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 112px;">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
 						</p:selectOneMenu>
 					</div>
 					
-					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
-						<div id="divAprovador" style="position: relative; top: -96px; left: 254px; width: 131px;">
+					<ui:fragment rendered="#{!folgaCont.liderLogado and !folgaCont.gerenteLogado}">
+						<div id="divAprovador" style="position: relative; top: -96px; left: 237px; width: 131px;">
 							<p:outputLabel value="Aprovador:" />
-							<p:inputText id="inputAprovador" value="#{folgaCont.folgaFiltro.gerente.nome}" style="position:relative; top: -6px;width: 130px;" />
+							<p:inputText id="inputAprovador" value="#{folgaCont.folgaFiltro.gerente.nome}" style="position:relative; top: -6px;width: 123px;" />
+							<!-- O nome está sendo passado pelo Gerente, mas a consulta é feita buscando por líderes e Gerentes -->
 						</div>
 					</ui:fragment>
-
+					
 					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
-						<div id="divSolicitante" style="position: relative; top: -96px; left: 254px; width: 131px;">
+						<div id="divSolicitante" style="position: relative; top: -96px; left: 237px; width: 131px;">
 							<p:outputLabel value="Solicitante:" />
-							<p:inputText id="inputSolicitante" value="#{folgaCont.folgaFiltro.solicitante.nome}" style="position:relative; top: -6px;width: 130px;" />
+							<p:inputText id="inputSolicitante" value="#{folgaCont.folgaFiltro.solicitante.nome}" style="position:relative; top: -6px;width: 123px;" />
 						</div>
-
-						<div id="divConsultarTodos" style="width: 110px; position: relative; top: -178px; left: 523px;">
+					</ui:fragment>
+					
+					<div id="divTitulo" style="position: relative; top: -161px; left: 383px; width: 131px;">
+						<p:outputLabel value="Título:" />
+						<p:inputText id="inputTitulo" value="#{folgaCont.folgaFiltro.titulo}" style="position:relative; top: -6px;width: 123px;" />
+					</div>
+					
+					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">	
+						<div id="divConsultarTodos" style="width: 110px; position: relative; top: -242px;left: 528px;">
 							<p:outputLabel value="Minhas Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{folgaCont.liderLogado}" />
 							<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{folgaCont.gerenteLogado}" />
 							<p:selectBooleanCheckbox value="#{folgaCont.todasSolicitacoes}" style="top: 4px;position: relative;" rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
@@ -51,9 +58,11 @@
 						</div>
 					</ui:fragment>
 				</div>
+				
 				<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
-					<h:commandButton styleClass="botao3d" actionListener="#{folgaCont.pesquisar()}" value="Pesquisar" />
+					<h:commandButton styleClass="botao3d" immediate="true" actionListener="#{folgaCont.pesquisar()}" value="Pesquisar" />
 				</div>
+				
 				<div class="divCorpo" style="padding-bottom: 5%; position: relative; top: 10%;">
 					<h:panelGrid id="iconesData" columns="1" style="width: 100%;position: relative; top: 62px;">
 						<h:panelGrid columns="3" style="float: right; position: relative;">
@@ -127,6 +136,7 @@
 								<h:panelGrid columns="1">
 									<h:outputLabel for="title" value="Titulo:" />
 									<p:inputText id="title" value="#{folgaCont.eventFolgaSelecionada.folga.titulo}" style="width:430px;" />
+									<p:watermark for="title" value="(Opcional)" />
 								</h:panelGrid>
 
 
@@ -134,16 +144,16 @@
 
 									<h:panelGroup styleClass="field">
 										<h:outputLabel for="from" value="De:" />
-										<p:inputMask id="from" value="#{folgaCont.eventFolgaSelecionada.folga.dataInicio}" mask="99/99/9999" style="width: 125px;" required="true">
-											<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+										<p:inputMask id="from" value="#{folgaCont.eventFolgaSelecionada.folga.dataInicio}" mask="99/99/9999" style="width: 125px;">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
 										</p:inputMask>
 									</h:panelGroup>
 
 
 									<h:panelGroup styleClass="field" style="left: 10px; position: relative;">
 										<h:outputLabel for="to" value="Até:" />
-										<p:inputMask id="to" value="#{folgaCont.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999" style="width: 125px;" required="true">
-											<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+										<p:inputMask id="to" value="#{folgaCont.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999" style="width: 125px;">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
 										</p:inputMask>
 									</h:panelGroup>
 

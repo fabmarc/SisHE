@@ -44,18 +44,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 	private void init() {
 		setDataSource(dataSource);
 		insertFolga = new SimpleJdbcInsert(getJdbcTemplate()).withTableName("folga").usingGeneratedKeyColumns("id");
-		selectPadrao = "SELECT DISTINCT ON (f.id) f.id AS idFolga ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante ," +
-				"cs.id as idCargoSolicitante ,cs.nome AS cargoSolicitante ,f.id_lider AS idLider ,lider.nome AS nomeLider , " +
-				"f.id_gerente AS idGerente ,gerente.nome AS nomeGerente ,f.data_solicitacao AS dataSolicitacao , f.titulo AS titulo, " +
-				"f.data_aprovacao_lider AS dataAprovacaoLider ,f.data_aprovacao_gerente AS dataAprovacaoGerente ," +
-				"f.observacao AS observacao ,f.id_status_lider AS statusLider, f.id_status_gerente AS statusGerente " +
-				"FROM folga f " +
-				"INNER JOIN usuario solic ON (f.id_solicitante = solic.id) " +
-				"INNER JOIN cargo cs ON (solic.id_cargo = cs.id) " +
-				"LEFT JOIN usuario lider ON (f.id_lider = lider.id) " +
-				"LEFT JOIN usuario gerente ON (f.id_gerente = gerente.id) " +
-				"LEFT JOIN cargo ca ON (gerente.id_cargo = ca.id) " +
-				"LEFT JOIN datas_folga df ON (f.id = df.id_folga) ";
+		selectPadrao = "SELECT f.id AS idFolga ,f.id_solicitante AS idSolicitante ,solic.nome AS nomeSolicitante , cs.id as idCargoSolicitante ,cs.nome AS cargoSolicitante ,f.id_lider AS idLider ,lider.nome AS nomeLider , f.id_gerente AS idGerente ,gerente.nome AS nomeGerente ,f.data_solicitacao AS dataSolicitacao , f.titulo AS titulo, f.data_aprovacao_lider AS dataAprovacaoLider ,f.data_aprovacao_gerente AS dataAprovacaoGerente , f.observacao AS observacao ,f.id_status_lider AS statusLider, f.id_status_gerente AS statusGerente, (SELECT MIN(data) from datas_folga where datas_folga.id_folga = f.id) as dataInicio, (SELECT MAX(data) from datas_folga where datas_folga.id_folga = f.id) as dataFim FROM folga f INNER JOIN usuario solic ON (f.id_solicitante = solic.id) INNER JOIN cargo cs ON (solic.id_cargo = cs.id) LEFT JOIN usuario lider ON (f.id_lider = lider.id) LEFT JOIN usuario gerente ON (f.id_gerente = gerente.id) LEFT JOIN cargo ca ON (gerente.id_cargo = ca.id) ";
 	}
 
 	@Override
@@ -133,9 +122,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				folga.setDataAprovacaoLider(rs.getDate("dataAprovacaoLider"));
 				folga.setDataAprovacaoGerente(rs.getDate("dataAprovacaoGerente"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+				folga.setDataInicio(rs.getDate("dataInicio"));
+				folga.setDataFim(rs.getDate("dataFim"));
 				folga.setLider(lider);
 				folga.setGerente(gerente);
 				folga.setSolicitante(solicitante);
+				folga.setTitulo(rs.getString("titulo"));
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatusLider(StatusEnum.obterStatus(rs.getLong("statusLider")));
 				folga.setStatusGerente(StatusEnum.obterStatus(rs.getLong("statusGerente")));
@@ -182,9 +174,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 					folga.setDataAprovacaoLider(rs.getDate("dataAprovacaoLider"));
 					folga.setDataAprovacaoGerente(rs.getDate("dataAprovacaoGerente"));
 					folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+					folga.setDataInicio(rs.getDate("dataInicio"));
+					folga.setDataFim(rs.getDate("dataFim"));
 					folga.setLider(lider);
 					folga.setGerente(gerente);
 					folga.setSolicitante(solicitante);
+					folga.setTitulo(rs.getString("titulo"));
 					folga.setObservacao(rs.getString("observacao"));
 					folga.setStatusLider(StatusEnum.obterStatus(rs.getLong("statusLider")));
 					folga.setStatusGerente(StatusEnum.obterStatus(rs.getLong("statusGerente")));
@@ -241,7 +236,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 			if (folga.getStatusGerente() != null) {
 				if (folga.getStatusGerente().getId() == 2) {
-					sql.append("AND (f.id_status_lider = :status || f.id_status_gerente = :status )");
+					sql.append("AND (f.id_status_lider = :status OR f.id_status_gerente = :status )");
 				}else {
 					sql.append("AND f.id_status_gerente = :status ");
 				}
@@ -254,7 +249,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				params.addValue("solicitante", folga.getSolicitante().getId());
 			}
 			if (folga.getGerente() != null && folga.getGerente().getNome() != null) {
-				sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' || gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
+				sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' OR gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
 				params.addValue("nomeAprovador", folga.getGerente().getNome());
 			}
 			if (folga.getDataAprovacaoGerente() != null) {
@@ -270,7 +265,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				params.addValue("dataSolicitacao", folga.getDataSolicitacao());
 			}
 			if (folga.getTitulo() != null) {
-				sql.append("AND f.titulo LIKE '%' || :titulo || '%' || ");
+				sql.append("AND f.titulo LIKE '%' || :titulo || '%' ");
 				params.addValue("titulo", folga.getTitulo());
 			}
 
@@ -305,9 +300,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				folga.setDataAprovacaoLider(rs.getDate("dataAprovacaoLider"));
 				folga.setDataAprovacaoGerente(rs.getDate("dataAprovacaoGerente"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+				folga.setDataInicio(rs.getDate("dataInicio"));
+				folga.setDataFim(rs.getDate("dataFim"));
 				folga.setLider(lider);
 				folga.setGerente(gerente);
 				folga.setSolicitante(solicitante);
+				folga.setTitulo(rs.getString("titulo"));
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatusLider(StatusEnum.obterStatus(rs.getLong("statusLider")));
 				folga.setStatusGerente(StatusEnum.obterStatus(rs.getLong("statusGerente")));
@@ -334,7 +332,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 			if (folgaFiltro.getStatusGerente() != null) {
 				if (folgaFiltro.getStatusGerente().getId() == 2) {
-					sql.append("AND (f.id_status_lider = :status || f.id_status_gerente = :status )");
+					sql.append("AND (f.id_status_lider = :status OR f.id_status_gerente = :status )");
 				}else {
 					sql.append("AND f.id_status_gerente = :status ");
 				}
@@ -347,15 +345,15 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				params.addValue("solicitante", folgaFiltro.getSolicitante().getId());
 			}
 			if (folgaFiltro.getGerente() != null && folgaFiltro.getGerente().getNome() != null) { // Campo "Aprovado por:" na tela de consulta, pode ser gerente ou Lider
-				sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' || gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
+				sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' OR gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
 				params.addValue("nomeAprovador", folgaFiltro.getGerente().getNome());
 			}
 			if (folgaFiltro.getDataAprovacaoGerente() != null) {
 				sql.append("AND f.data_aprovacao = :dataAprovacao ");
 				params.addValue("dataAprovacao", folgaFiltro.getDataAprovacaoGerente());
 			}
-			if (folgaFiltro.getDatasFolga() != null && folgaFiltro.getDatasFolga().get(0) != null && folgaFiltro.getDatasFolga().get(0).getData() != null) {
-				sql.append("AND f.data_folga = :dataFolga ");
+			if (folgaFiltro.getDatasFolga().size() != 0 && folgaFiltro.getDatasFolga().get(0) != null && folgaFiltro.getDatasFolga().get(0).getData() != null) {
+				sql.append("AND :dataFolga BETWEEN ( SELECT MIN(data) FROM datas_folga WHERE datas_folga.id_folga = f.id ) AND ( SELECT MAX(data) FROM datas_folga WHERE datas_folga.id_folga = f.id ) ");
 				params.addValue("dataFolga", folgaFiltro.getDatasFolga().get(0).getData());
 			}
 			if (folgaFiltro.getDataSolicitacao() != null) {
@@ -391,9 +389,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				folga.setDataAprovacaoLider(rs.getDate("dataAprovacaoLider"));
 				folga.setDataAprovacaoGerente(rs.getDate("dataAprovacaoGerente"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+				folga.setDataInicio(rs.getDate("dataInicio"));
+				folga.setDataFim(rs.getDate("dataFim"));
 				folga.setLider(lider);
 				folga.setGerente(gerente);
 				folga.setSolicitante(solicitante);
+				folga.setTitulo(rs.getString("titulo"));
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatusLider(StatusEnum.obterStatus(rs.getLong("statusLider")));
 				folga.setStatusGerente(StatusEnum.obterStatus(rs.getLong("statusGerente")));
@@ -419,7 +420,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 
 			if (folgaFiltro.getStatusGerente() != null) {
 				if (folgaFiltro.getStatusGerente().getId() == 2) {
-					sql.append("AND (f.id_status_lider = :status || f.id_status_gerente = :status )");
+					sql.append("AND (f.id_status_lider = :status OR f.id_status_gerente = :status )");
 				}else {
 					sql.append("AND f.id_status_gerente = :status ");
 				}
@@ -432,14 +433,14 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				params.addValue("solicitante", folgaFiltro.getSolicitante().getId());
 			}
 			if (folgaFiltro.getGerente() != null && folgaFiltro.getGerente().getNome() != null) {
-				sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' || gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
+				sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' OR gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
 				params.addValue("nomeAprovador", folgaFiltro.getGerente().getNome());
 			}
 			if (folgaFiltro.getDataAprovacaoGerente() != null) {
 				sql.append("AND f.data_aprovacao = :dataAprovacao ");
 				params.addValue("dataAprovacao", folgaFiltro.getDataAprovacaoGerente());
 			}
-			if (folgaFiltro.getDatasFolga() != null && folgaFiltro.getDatasFolga().get(0) != null && folgaFiltro.getDatasFolga().get(0).getData() != null) {
+			if (folgaFiltro.getDatasFolga().size() != 0 && folgaFiltro.getDatasFolga().get(0) != null && folgaFiltro.getDatasFolga().get(0).getData() != null) {
 				sql.append("AND f.data_folga = :dataFolga ");
 				params.addValue("dataFolga", folgaFiltro.getDatasFolga().get(0).getData());
 			}
@@ -448,7 +449,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
 			}
 			if (folgaFiltro.getTitulo() != null) {
-				sql.append("AND f.titulo LIKE '%' || :titulo || '%' || ");
+				sql.append("AND f.titulo LIKE '%' || :titulo || '%' ");
 				params.addValue("titulo", folgaFiltro.getTitulo());
 			}
 		}
@@ -480,9 +481,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				folga.setDataAprovacaoLider(rs.getDate("dataAprovacaoLider"));
 				folga.setDataAprovacaoGerente(rs.getDate("dataAprovacaoGerente"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+				folga.setDataInicio(rs.getDate("dataInicio"));
+				folga.setDataFim(rs.getDate("dataFim"));
 				folga.setLider(lider);
 				folga.setGerente(gerente);
 				folga.setSolicitante(solicitante);
+				folga.setTitulo(rs.getString("titulo"));
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatusLider(StatusEnum.obterStatus(rs.getLong("statusLider")));
 				folga.setStatusGerente(StatusEnum.obterStatus(rs.getLong("statusGerente")));
@@ -529,8 +533,11 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				folga.setTitulo(rs.getString("titulo"));
 				//folga.setDataAprovacao(rs.getDate("dataAprovacao"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+//				folga.setDataInicio(rs.getDate("dataInicio"));
+//				folga.setDataFim(rs.getDate("dataFim"));
 				//folga.setAvaliador(aprovador);
 				//folga.setSolicitante(solicitante);
+				folga.setTitulo(rs.getString("titulo"));
 				folga.setObservacao(rs.getString("observacao"));
 				//folga.setStatus(StatusEnum.obterStatus(rs.getLong("statusFolga")));
 				return folga;
@@ -549,7 +556,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		
 		if (folgaFiltro.getStatusGerente() != null) {
 			if (folgaFiltro.getStatusGerente().getId() == 2) {
-				sql.append("AND (f.id_status_lider = :status || f.id_status_gerente = :status )");
+				sql.append("AND (f.id_status_lider = :status OR f.id_status_gerente = :status )");
 			}else {
 				sql.append("AND f.id_status_gerente = :status ");
 			}
@@ -557,7 +564,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			params.addValue("status", folgaFiltro.getStatusGerente());
 		}
 		if (folgaFiltro.getGerente() != null && folgaFiltro.getGerente().getNome() != null) {
-			sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' || gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
+			sql.append("AND (lider.nome LIKE '%' || :nomeAprovador || '%' OR gerente.nome LIKE '%' || :nomeAprovador || '%' ) ");
 			params.addValue("nomeAprovador", folgaFiltro.getGerente().getNome());
 		}
 		if (folgaFiltro.getDataAprovacaoGerente() != null) {
@@ -565,7 +572,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			params.addValue("dataAprovacao", folgaFiltro.getDataAprovacaoGerente());
 		}
 		if (folgaFiltro.getDatasFolga().size() != 0 && folgaFiltro.getDatasFolga().get(0) != null && folgaFiltro.getDatasFolga().get(0).getData() != null) {
-			sql.append("AND f.data_folga = :dataFolga ");
+			sql.append("AND :dataFolga BETWEEN ( SELECT MIN(data) FROM datas_folga WHERE datas_folga.id_folga = f.id ) AND ( SELECT MAX(data) FROM datas_folga WHERE datas_folga.id_folga = f.id ) ");
 			params.addValue("dataFolga", folgaFiltro.getDatasFolga().get(0).getData());
 		}
 		if (folgaFiltro.getDataSolicitacao() != null) {
@@ -573,7 +580,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 			params.addValue("dataSolicitacao", folgaFiltro.getDataSolicitacao());
 		}
 		if (folgaFiltro.getTitulo() != null) {
-			sql.append("AND f.titulo LIKE '%' || :titulo || '%' || ");
+			sql.append("AND f.titulo LIKE '%' || :titulo || '%' ");
 			params.addValue("titulo", folgaFiltro.getTitulo());
 		}
 
@@ -605,10 +612,12 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 				folga.setDataAprovacaoLider(rs.getDate("dataAprovacaoLider"));
 				folga.setDataAprovacaoGerente(rs.getDate("dataAprovacaoGerente"));
 				folga.setDataSolicitacao(rs.getDate("dataSolicitacao"));
+				folga.setDataInicio(rs.getDate("dataInicio"));
+				folga.setDataFim(rs.getDate("dataFim"));
 				folga.setLider(lider);
 				folga.setGerente(gerente);
 				folga.setSolicitante(solicitante);
-				folga.setObservacao(rs.getString("titulo"));
+				folga.setTitulo(rs.getString("titulo"));
 				folga.setObservacao(rs.getString("observacao"));
 				folga.setStatusLider(StatusEnum.obterStatus(rs.getLong("statusLider")));
 				folga.setStatusGerente(StatusEnum.obterStatus(rs.getLong("statusGerente")));

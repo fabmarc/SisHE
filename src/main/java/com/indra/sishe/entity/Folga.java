@@ -45,6 +45,9 @@ public class Folga implements Serializable {
 	
 	public Folga(){
 		datasFolga = new ArrayList<DatasFolga>();
+		gerente = new Usuario();
+		lider = new Usuario();
+		solicitante = new Usuario();
 	}
 	
 	public StatusEnum getStatusGeral(){
