@@ -139,7 +139,6 @@
 									<p:watermark for="title" value="(Opcional)" />
 								</h:panelGrid>
 
-
 								<h:panelGrid columns="3">
 
 									<h:panelGroup styleClass="field">
@@ -148,8 +147,6 @@
 											<f:convertDateTime pattern="dd/MM/yyyy" />
 										</p:inputMask>
 									</h:panelGroup>
-
-
 									<h:panelGroup styleClass="field" style="left: 10px; position: relative;">
 										<h:outputLabel for="to" value="Até:" />
 										<p:inputMask id="to" value="#{folgaCont.eventFolgaSelecionada.folga.dataFim}" mask="99/99/9999" style="width: 125px;">
@@ -184,16 +181,13 @@
 										<h:commandButton styleClass="botao3d" id="addButton" value="Confirmar" actionListener="#{folgaCont.confirmar}" oncomplete="myschedule.update();eventDialog.hide();"
 											rendered="#{folgaCont.eventFolgaSelecionada.editable}" />
 									</h:panelGroup>
-
-								</h:panelGrid>
-
+								</h:panelGrid>	
 							</h:panelGrid>
 						</p:dialog>
 					</ui:fragment>
 				</div>
 				<div id="divButtons" style="position: relative; top: 23px; left: 40%;" />
 				<div id="divDown" style="width: 0px; position: relative; height: 60px;" />
-
 			</ui:insert>
 		</h:form>
 	</ui:define>

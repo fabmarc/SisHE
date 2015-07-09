@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
@@ -112,14 +111,14 @@ public class FolgaController extends BaseController implements Serializable{
             eventFolgaSelecionada.setTitle(eventFolgaSelecionada.getFolga().getTitulo());
         } else {
         	eventFolgaSelecionada.getFolga().setSolicitante(new Usuario(UsuarioLogado.getId()));
-        	// Corrigir a data, pois o componente obtém uma data a menos.
-        	Calendar dataCerta = Calendar.getInstance();
-            dataCerta.setTime(eventFolgaSelecionada.getFolga().getDataInicio());
-            dataCerta.add(Calendar.DATE, 1);
-            eventFolgaSelecionada.getFolga().setDataInicio(dataCerta.getTime());
-            dataCerta.setTime(eventFolgaSelecionada.getFolga().getDataFim());
-            dataCerta.add(Calendar.DATE, 1);
-            eventFolgaSelecionada.getFolga().setDataFim(dataCerta.getTime());
+//        	Corrigir a data, pois o componente obtém uma data a menos.
+//        	Calendar dataCerta = Calendar.getInstance();
+//            dataCerta.setTime(eventFolgaSelecionada.getFolga().getDataInicio());
+//            dataCerta.add(Calendar.DATE, 1);
+//            eventFolgaSelecionada.getFolga().setDataInicio(dataCerta.getTime());
+//            dataCerta.setTime(eventFolgaSelecionada.getFolga().getDataFim());
+//            dataCerta.add(Calendar.DATE, 1);
+//            eventFolgaSelecionada.getFolga().setDataFim(dataCerta.getTime());
         	update(eventFolgaSelecionada.getFolga());
         	eventFolgaSelecionada.setTitle(eventFolgaSelecionada.getFolga().getTitulo());
         }
@@ -161,8 +160,8 @@ public class FolgaController extends BaseController implements Serializable{
 		}
     	
     	if(!dtIni.getTime().before(hoje.getTime())){
-    		eventFolgaSelecionada.getFolga().setDataInicio(eventFolgaSelecionada.getStartDate());
-    		eventFolgaSelecionada.getFolga().setDataFim(eventFolgaSelecionada.getEndDate());
+    		eventFolgaSelecionada.getFolga().setDataInicio(dtIni.getTime());
+    		eventFolgaSelecionada.getFolga().setDataFim(dtIni.getTime());
     		
     		RequestContext.getCurrentInstance().execute("eventDialog.show();");
     	}
@@ -306,12 +305,12 @@ public class FolgaController extends BaseController implements Serializable{
 	}
 	
 	public void pesquisar() {
-		if (dataFiltro != null) {
-			List<DatasFolga> dataFolgaFiltro = new ArrayList<DatasFolga>(1);
-			DatasFolga dataFolga = new DatasFolga(dataFiltro);
-			dataFolgaFiltro.add(dataFolga);
-			folgaFiltro.setDatasFolga(dataFolgaFiltro);
-		}
+//		if (dataFiltro != null) {
+//			List<DatasFolga> dataFolgaFiltro = new ArrayList<DatasFolga>(1);
+//			DatasFolga dataFolga = new DatasFolga(dataFiltro);
+//			dataFolgaFiltro.add(dataFolga);
+//			folgaFiltro.setDatasFolga(dataFolgaFiltro);
+//		}
 		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) { // Gerente consulta folga de recursos de todos do Projeto dele
 			pesquisarGerente();
 		} else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
@@ -586,5 +585,4 @@ public class FolgaController extends BaseController implements Serializable{
 		this.eventFolgaSelecionada = eventFolgaSelecionada;
 	}
 
-	
 }
