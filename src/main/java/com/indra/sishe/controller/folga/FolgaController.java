@@ -25,7 +25,6 @@ import com.indra.infra.controller.BaseController;
 import com.indra.infra.resource.MessageProvider;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.controller.usuario.UsuarioLogado;
-import com.indra.sishe.entity.DatasFolga;
 import com.indra.sishe.entity.Folga;
 import com.indra.sishe.entity.Usuario;
 import com.indra.sishe.enums.StatusEnum;
@@ -304,13 +303,9 @@ public class FolgaController extends BaseController implements Serializable{
 		return StatusEnum.status();
 	}
 	
-	public void pesquisar() {
-//		if (dataFiltro != null) {
-//			List<DatasFolga> dataFolgaFiltro = new ArrayList<DatasFolga>(1);
-//			DatasFolga dataFolga = new DatasFolga(dataFiltro);
-//			dataFolgaFiltro.add(dataFolga);
-//			folgaFiltro.setDatasFolga(dataFolgaFiltro);
-//		}
+	public String pesquisar() {
+
+		
 		if (UsuarioLogado.getPermissoes().contains("ROLE_GERENTE")) { // Gerente consulta folga de recursos de todos do Projeto dele
 			pesquisarGerente();
 		} else if (UsuarioLogado.getPermissoes().contains("ROLE_LIDER")) {
@@ -318,6 +313,7 @@ public class FolgaController extends BaseController implements Serializable{
 		} else { 
 			pesquisarPorUsuario();
 		}
+		return "";
 	}
 	
 	private void pesquisarGerente(){

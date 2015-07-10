@@ -556,7 +556,7 @@ public class FolgaJdbcDaoImpl extends NamedParameterJdbcDaoSupport implements Fo
 		
 		if (folgaFiltro.getStatusGerente() != null) {
 			if (folgaFiltro.getStatusGerente().getId() == 2) {
-				sql.append("AND (f.id_status_lider = :status OR f.id_status_gerente = :status )");
+				sql.append("AND (f.id_status_lider = :status OR f.id_status_gerente = :status ) ");
 			}else {
 				sql.append("AND f.id_status_gerente = :status ");
 			}

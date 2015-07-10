@@ -17,12 +17,12 @@
 				<div style="width: 730px; position: relative; height: 60px;">
 					<div id="divData" style="position: relative; width: 77px; height: 41px;">
 						<p:outputLabel value="Data:" />
-						<p:calendar locale="pt" styleClass="calendario" value="#{folgaCont.dataFiltro}" id="inputCalendario" style="position:relative; top: -6px;width:70px;!" />
+						<p:calendar locale="pt" styleClass="calendario" value="#{folgaMnt.folgaFiltro.dataInicio}" id="inputCalendario" style="position:relative; top: -6px;width:70px;!" />
 					</div>
 
 					<div id="divStatus" style="position: relative; top: -41px; left: 114px; width: 270px;">
 						<p:outputLabel value="Status:" />
-						<p:selectOneMenu id="inputStatus" value="#{folgaCont.folgaFiltro.statusGerente}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 112px;">
+						<p:selectOneMenu id="inputStatus" value="#{folgaMnt.folgaFiltro.statusGerente}" converter="omnifaces.SelectItemsConverter" style="position:relative; top: -6px;width: 112px;">
 							<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 							<f:selectItems value="#{solicitacaoMnt.listaStatus()}" var="status" itemLabel="#{status.nome}" itemValue="#{status}" />
 						</p:selectOneMenu>
@@ -31,7 +31,7 @@
 					<ui:fragment rendered="#{!folgaCont.liderLogado and !folgaCont.gerenteLogado}">
 						<div id="divAprovador" style="position: relative; top: -96px; left: 237px; width: 131px;">
 							<p:outputLabel value="Aprovador:" />
-							<p:inputText id="inputAprovador" value="#{folgaCont.folgaFiltro.gerente.nome}" style="position:relative; top: -6px;width: 123px;" />
+							<p:inputText id="inputAprovador" value="#{folgaMnt.folgaFiltro.gerente.nome}" style="position:relative; top: -6px;width: 123px;" />
 							<!-- O nome está sendo passado pelo Gerente, mas a consulta é feita buscando por líderes e Gerentes -->
 						</div>
 					</ui:fragment>
@@ -39,20 +39,20 @@
 					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
 						<div id="divSolicitante" style="position: relative; top: -96px; left: 237px; width: 131px;">
 							<p:outputLabel value="Solicitante:" />
-							<p:inputText id="inputSolicitante" value="#{folgaCont.folgaFiltro.solicitante.nome}" style="position:relative; top: -6px;width: 123px;" />
+							<p:inputText id="inputSolicitante" value="#{folgaMnt.folgaFiltro.solicitante.nome}" style="position:relative; top: -6px;width: 123px;" />
 						</div>
 					</ui:fragment>
 					
 					<div id="divTitulo" style="position: relative; top: -161px; left: 383px; width: 131px;">
 						<p:outputLabel value="Título:" />
-						<p:inputText id="inputTitulo" value="#{folgaCont.folgaFiltro.titulo}" style="position:relative; top: -6px;width: 123px;" />
+						<p:inputText id="inputTitulo" value="#{folgaMnt.folgaFiltro.titulo}" style="position:relative; top: -6px;width: 123px;" />
 					</div>
 					
 					<ui:fragment rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">	
 						<div id="divConsultarTodos" style="width: 110px; position: relative; top: -242px;left: 528px;">
 							<p:outputLabel value="Minhas Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{folgaCont.liderLogado}" />
 							<p:outputLabel value="Todas as Solicitações" style="line-height: 16px;position: relative;top: 34px;left: 25px;" rendered="#{folgaCont.gerenteLogado}" />
-							<p:selectBooleanCheckbox value="#{folgaCont.todasSolicitacoes}" style="top: 4px;position: relative;" rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
+							<p:selectBooleanCheckbox value="#{folgaMnt.todasSolicitacoes}" style="top: 4px;position: relative;" rendered="#{folgaCont.liderLogado or folgaCont.gerenteLogado}">
 								<!-- <f:ajax event="change" render="inputSistema inputSolicitante inputStatus" /> -->
 							</p:selectBooleanCheckbox>
 						</div>
@@ -60,7 +60,7 @@
 				</div>
 				
 				<div style="width: 100px; position: relative; top: -39px; right: -8px; float: right;">
-					<h:commandButton styleClass="botao3d" immediate="true" actionListener="#{folgaCont.pesquisar()}" value="Pesquisar" />
+					<h:commandButton styleClass="botao3d" immediate="true" actionListener="#{folgaMnt.pesquisar()}" value="Pesquisar" />
 				</div>
 				
 				<div class="divCorpo" style="padding-bottom: 5%; position: relative; top: 10%;">
