@@ -22,6 +22,7 @@ public class CargoCadController extends CargoController {
 	protected Cargo cargoSelecionado;
 
 	public CargoCadController() {
+		System.out.println("Controler CargoCad criado.");
 	}
 
 	@PostConstruct

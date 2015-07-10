@@ -101,9 +101,9 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 			List<Object> pks = new ArrayList<Object>(ids);
 			solicitacaoDao.remove(pks);
 		} catch (RegistroInexistenteException e) {
-			throw new ApplicationException(e, "msg.error.registro.inexistente", "Solicitação");
-		} catch (DeletarRegistroViolacaoFK d) {
-			throw new ApplicationException(d, "msg.error.excluir.registro.relacionado", "Solicitação");
+			e.printStackTrace();
+		} catch (DeletarRegistroViolacaoFK e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -174,6 +174,8 @@ public class SolicitacaoServiceImpl extends StatelessServiceAb implements Solici
 			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
 		} else if (solicitacao.getDescricao() == null) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Descricao");
+		} else if (solicitacao.getDescricao() != null && (solicitacao.getDescricao().length() > 500)) {
+			throw new ApplicationException("msg.error.campo.maior.esperado", "Descricao", "500");
 		} else if (solicitacao.getSistema() == null || solicitacao.getSistema().getId() == 0) {
 			throw new ApplicationException("msg.error.campo.obrigatorio", "Sistema");
 		} else if (!hoje.equalsIgnoreCase(dtEscolhida)

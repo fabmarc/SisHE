@@ -13,7 +13,6 @@ import com.indra.infra.dao.exception.RegistroInexistenteException;
 import com.indra.infra.service.exception.ApplicationException;
 import com.indra.sishe.dao.FeriadoDAO;
 import com.indra.sishe.entity.Feriado;
-import com.indra.sishe.entity.Folga;
 import com.indra.sishe.service.FeriadoService;
 import com.indra.sishe.service.StatelessServiceAb;
 
@@ -108,11 +107,6 @@ public class FeriadoServiceImpl extends StatelessServiceAb implements FeriadoSer
 	@Override
 	public List<Feriado> findByFilter(Feriado entity) {
 		return feriadoDAO.findByFilter(entity);
-	}
-
-	@Override
-	public Boolean verificaFeriadoPorData(Folga folga) {
-		return feriadoDAO.verificaFeriadoPorData(folga);
 	}
 
 }

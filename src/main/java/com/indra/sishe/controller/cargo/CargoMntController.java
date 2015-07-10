@@ -25,6 +25,7 @@ public class CargoMntController extends CargoController {
 	private List<Cargo> cargosSelecionados;
 
 	public CargoMntController() {
+		System.out.println("Controler CargoMnt criado.");
 	}
 
 	@PostConstruct

@@ -100,8 +100,8 @@ public class FeriadoMntController extends FeriadoController {
 		this.feriadosSelecionados = feriadosSelecionados;
 	}
 
-	public String obterTipo(Character letraTipo) {
-		return TipoFeriadoEnum.obterNomeTipo(letraTipo);
+	public TipoFeriadoEnum obterTipo(Character letraTipo) {
+		return TipoFeriadoEnum.obterTipo(letraTipo);
 	}
 
 }
